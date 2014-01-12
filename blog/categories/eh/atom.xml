@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Eh | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/eh/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-12T11:15:11-08:00</updated>
+  <updated>2014-01-12T11:26:33-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -22,70 +22,64 @@
 
 <p>Recall from my previous post that the AST consists of nodes, like this one for a method definition:</p>
 
-<p><div>
-  <pre><code class='ruby'>class DefNode
-  def initialize(name, params, body)&lt;/p&gt;
+<p>{% highlight ruby %}
+class DefNode
+  def initialize(name, params, body)</p>
 
-&lt;pre&gt;&lt;code&gt;@name = name
+<pre><code>@name = name
 @params = params
 @body = body
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;  end&lt;/p&gt;
+<p>  end</p>
 
-&lt;p&gt;  def eval(context)&lt;/p&gt;
+<p>  def eval(context)</p>
 
-&lt;pre&gt;&lt;code&gt;context.current_class.can_methods[@name] = CanMethod.new(@params, @body)
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>context.current_class.can_methods[@name] = CanMethod.new(@params, @body)
+</code></pre>
 
-&lt;p&gt;  end
-end</code></pre>
-</div>
-</p>
+<p>  end
+end{% endhighlight %}</p>
 
 <p>When a method definition node is evaluated it adds a new entry to the can_methods hash. The name of the method is its key, and the value is an object (CanMethod.new) that contains the details of method evaluation (parameters and the method body). The context is the scope of the evaluation &ndash; in the case of a method call, the context is the enclosing class.</p>
 
 <p>Ok, so when does the CanMethod get evaluated? It happens at runtime. A class node is built and all the method definitions are added, but the node tree will remain untouched until until a method is called.</p>
 
-<p><div>
-  <pre><code class='ruby'>class CanMethod
-  def initialize(params, body)&lt;/p&gt;
+<p>{% highlight ruby %}
+class CanMethod
+  def initialize(params, body)</p>
 
-&lt;pre&gt;&lt;code&gt;@params = params
+<pre><code>@params = params
 @body = body
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;  end&lt;/p&gt;
+<p>  end</p>
 
-&lt;p&gt;  def call(receiver, arguments)&lt;/p&gt;
+<p>  def call(receiver, arguments)</p>
 
-&lt;pre&gt;&lt;code&gt;@body.eval(Context.new(receiver))
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>@body.eval(Context.new(receiver))
+</code></pre>
 
-&lt;p&gt;  end
-end</code></pre>
-</div>
-</p>
+<p>  end
+end{% endhighlight %}</p>
 
 <p>When your program calls a method, a portion of the AST is evaluated. The body of the method object is called with the provided parameters in the context of the method receiver. For ruby newbies, the receiver is the object on the left side of the method call &mdash; ie. in foo.bar(3), foo is the receiver and bar is called with the parameter of 3 in the context of foo.  The runtime will create a new context for the method (recall that ruby is block scoped, meaning that all variables and blocks within the method are confined to that method&hellip; mostly).</p>
 
-<p><div>
-  <pre><code class='ruby'>class Context
-  attr_reader :locals, :current_self, :current_class&lt;/p&gt;
+<p>{% highlight ruby %}
+class Context
+  attr_reader :locals, :current_self, :current_class</p>
 
-&lt;p&gt;  @@constants = {}&lt;/p&gt;
+<p>  @@constants = {}</p>
 
-&lt;p&gt;  def initialize(current_self, current_class=current_self.can_class)&lt;/p&gt;
+<p>  def initialize(current_self, current_class=current_self.can_class)</p>
 
-&lt;pre&gt;&lt;code&gt;@locals = {}
+<pre><code>@locals = {}
 @current_self = current_self
 @current_class = current_class
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;  end
-end</code></pre>
-</div>
-</p>
+<p>  end
+end{% endhighlight %}</p>
 
 <p>The context contains all the local variables for the scope as well as a reference to what object is self, and which is super. We are getting very close to putting all these pieces together!</p>
 
@@ -107,81 +101,72 @@ end</code></pre>
 <p>The parser itself is can be written by hand, but I am using RACC: an LALR (Look Ahead, Left to right, Reverse) parser written by <a href="https://github.com/tenderlove/racc">tenderlove</a> to generate Ruby programs. How do we specify a grammar that RACC will understand?</p>
 
 <p>Each rule is formatted in the following way:
-<div>
-  <pre><code class='bash'>RuleName:
+{% highlight bash linenos%}
+RuleName:
   OtherRule TOKEN AnotherRule    { code to run }
-| OtherRule                      { &amp;hellip; }
-;</code></pre>
-</div>
-</p>
+| OtherRule                      { &hellip; }
+; {% endhighlight %}</p>
 
 <p>It is similar to an if/else statement that captures all possible expressions beginning with the most specific (ie: an expression with TWO rules matches line 2) to more general (all other single expressions are captured on line 3). When a token matches a rule, the code in the attached code block is run.</p>
 
 <p>The code blocks correspond to instructions on how to treat matching tokens. For example, the grammar should specify what happens when the code contains a class definition, labeled with &lsquo;A&rsquo; + &lsquo;CONSTANT&rsquo;.</p>
 
-<p><div>
-  <pre><code class='ruby'>&amp;hellip;&lt;/p&gt;
+<p>{% highlight ruby %}
+&hellip;</p>
 
-&lt;h1&gt;Class definition&lt;/h1&gt;
+<h1>Class definition</h1>
 
-&lt;p&gt;Class:
+<p>Class:
   A CONSTANT Block { result = ClassNode.new(val[1], val[2]) }
 ;
-&amp;hellip;</code></pre>
-</div>
-</p>
+&hellip; {% endhighlight %}</p>
 
 <p>When the parser catches a class token it will create a new ClassNode with the class name (CONSTANT) and the block as arguments. The val[] array refers to the grammar rule [A, CONSTANT, Block].</p>
 
 <p>Some tokens are parsed very close to AS IS:</p>
 
-<p><div>
-  <pre><code class='ruby'>Literal:
+<p>{% highlight ruby %}
+Literal:
   NUMBER { result = LiteralNode.new(val[0]) }
 | STRING { result = LiteralNode.new(val[0]) }
 | TRUE   { result = LiteralNode.new(true) }
 | FALSE  { result = LiteralNode.new(false) }
 | NIL    { result = LiteralNode.new(nil) }
-;</code></pre>
-</div>
-</p>
+; {% endhighlight %}</p>
 
 <p>Each literal triggers the creation of a new LiteralNode with its value as the only argument.</p>
 
 <p>The Nodes are outlined in a Nodes class, where the rules of evaluation are defined.</p>
 
-<p><div>
-  <pre><code class='ruby'>&amp;hellip;
+<p>{% highlight ruby %}
+&hellip;
 class ClassNode
-  def initialize(name, body)&lt;/p&gt;
+  def initialize(name, body)</p>
 
-&lt;pre&gt;&lt;code&gt;@name = name
+<pre><code>@name = name
 @body = body
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;  end&lt;/p&gt;
+<p>  end</p>
 
-&lt;p&gt;  def eval(context)&lt;/p&gt;
+<p>  def eval(context)</p>
 
-&lt;pre&gt;&lt;code&gt;eh_class = CanadianClass.new
+<pre><code>eh_class = CanadianClass.new
 context[@name] = eh_class
 @body.eval(Context.new(eh_class, eh_class))
 eh_class
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;  end
+<p>  end
 end
-&amp;hellip;</code></pre>
-</div>
-</p>
+&hellip;
+{% endhighlight %}</p>
 
 <p>A ClassNode is initialized with two params (recall from the grammar: ClassNode.new(val[1], val[2])), the class name and its code block. The context is like scope &ndash; it can hold modules, classes, methods, attributes, aliases, requires, and includes. Classes, modules, and files are all Contexts (definition from <a href="http://ruby-doc.org/stdlib-1.8.6/libdoc/rdoc/rdoc/RDoc/Context.html">Rdocs</a>). Evaluation of a ClassNode begins by assigning the class to a context and evaluating the code block, which adds more contexts. In this way, a tree structure is formed &ndash; an AST &ndash; which does all the interpreting work for the new language.</p>
 
 <p>When the grammar and node definitions are complete, RACC will generate a parser:
-<div>
-  <pre><code class='ruby'>$ racc -vo parser.rb grammar.y</code></pre>
-</div>
-</p>
+{% highlight ruby %}
+$ racc -vo parser.rb grammar.y {% endhighlight %}</p>
 
 <p>The parser is a relatively obtuse set of methods and state transition tables, and when you run code through the parser you get an AST that follows the grammar you have defined.</p>
 
@@ -198,59 +183,55 @@ end
     <id>http://www.katieleonard.ca/blog/2013/flex-your-lexer</id>
     <content type="html"><![CDATA[<p>A Lexer is a ruby class with a single method: tokenize(). Its purpose is to label each chunk of code with a particular token. Strings are labeled as strings, numbers as numbers, and class names as constants. For example,</p>
 
-<p><div>
-  <pre><code class='ruby'>Lexer.new.tokenize(&amp;ldquo;string&amp;rdquo;)&lt;/p&gt;
+<p>{% highlight ruby %}
+Lexer.new.tokenize(&ldquo;string&rdquo;)</p>
 
-&lt;h1&gt;=&gt;[[:STRING, &amp;ldquo;string&amp;rdquo;]]&lt;/h1&gt;
+<h1>=>[[:STRING, &ldquo;string&rdquo;]]</h1>
 
-&lt;p&gt;Lexer.new.tokenize(&amp;ldquo;True&amp;rdquo;)&lt;/p&gt;
+<p>Lexer.new.tokenize(&ldquo;True&rdquo;)</p>
 
-&lt;h1&gt;=&gt;[[:CONSTANT, &amp;ldquo;True&amp;rdquo;]]&lt;/h1&gt;
+<h1>=>[[:CONSTANT, &ldquo;True&rdquo;]]</h1>
 
-&lt;p&gt;Lexer.new.tokenize(&amp;ldquo;a Car&amp;rdquo;)&lt;/p&gt;
+<p>Lexer.new.tokenize(&ldquo;a Car&rdquo;)</p>
 
-&lt;h1&gt;=&gt;[[:A, &amp;lsquo;a&amp;rsquo;], [:CONSTANT, &amp;lsquo;Car&amp;rsquo;]])&lt;/h1&gt;
+<h1>=>[[:A, &lsquo;a&rsquo;], [:CONSTANT, &lsquo;Car&rsquo;]])</h1>
 
-&lt;p&gt;Lexer.new.tokenize(&amp;ldquo;+&amp;rdquo;)&lt;/p&gt;
+<p>Lexer.new.tokenize(&ldquo;+&rdquo;)</p>
 
-&lt;h1&gt;=&gt;[[&amp;ldquo;+&amp;rdquo;, &amp;ldquo;+&amp;rdquo;]]&lt;/h1&gt;
+<h1>=>[[&ldquo;+&rdquo;, &ldquo;+&rdquo;]]</h1>
 
-&lt;p&gt;</code></pre>
-</div>
-</p>
+<p>{% endhighlight %}</p>
 
 <p>&ldquo;Lexing&rdquo; is accomplished using regular expressions. The lexer treats the text string of your code like a shish kabob &ndash; it slides recognizable chunks off the skewer one at a time and categorizes them (onion, pepper, method definition, etc).</p>
 
-<p><div>
-  <pre><code class='ruby'>class Lexer
-  KEYWORDS = [&amp;lsquo;a&amp;rsquo;, &amp;lsquo;can&amp;rsquo;, &amp;lsquo;if&amp;rsquo;, &amp;lsquo;else&amp;rsquo;, &amp;lsquo;while&amp;rsquo;, &amp;lsquo;true&amp;rsquo;, &amp;lsquo;false&amp;rsquo;, &amp;lsquo;nil&amp;rsquo;]&lt;/p&gt;
+<p>{% highlight ruby %}
+class Lexer
+  KEYWORDS = [&lsquo;a&rsquo;, &lsquo;can&rsquo;, &lsquo;if&rsquo;, &lsquo;else&rsquo;, &lsquo;while&rsquo;, &lsquo;true&rsquo;, &lsquo;false&rsquo;, &lsquo;nil&rsquo;]</p>
 
-&lt;p&gt;  def tokenize(code)&lt;/p&gt;
+<p>  def tokenize(code)</p>
 
-&lt;pre&gt;&lt;code&gt;code.chomp!
+<pre><code>code.chomp!
 i = 0
 tokens = []
 
-while i &amp;lt; code.size
+while i &lt; code.size
   chunk = code[i..-1]
 
   # checks keywords
   if identifier = chunk[/\A(eh\?)/, 1]
-    tokens &amp;lt;&amp;lt; [&#39;}&#39;, &#39;}&#39;]
+    tokens &lt;&lt; ['}', '}']
     i += identifier.size
 
   elsif identifier = chunk[/\A([a-z]\w*)/, 1]
     if KEYWORDS.include?(identifier)
-      tokens &amp;lt;&amp;lt; [identifier.upcase.to_sym, identifier]
+      tokens &lt;&lt; [identifier.upcase.to_sym, identifier]
     else
-      tokens &amp;lt;&amp;lt; [:IDENTIFIER, identifier]
+      tokens &lt;&lt; [:IDENTIFIER, identifier]
     end
     i += identifier.size
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;&amp;hellip;</code></pre>
-</div>
-
+<p>&hellip;{% endhighlight %}
 In this example lexer I have defined my list of keywords, removed the trailing newline, and begun peeling identifiable chunks off the code example.
 * If the code chunk matches an &lsquo;eh?&rsquo; it will add a closing brace to the token array.
 * If the code chunk matches a KEYWORD it will be upcased and labeled as a keyword and added to the token array.
@@ -258,25 +239,23 @@ In this example lexer I have defined my list of keywords, removed the trailing n
 
 <p>I continued defining regex rules until I was able to completely tokenize a class definition:</p>
 
-<p><div>
-  <pre><code class='ruby'>code = &amp;lt;&amp;lt;-EOS
+<p>{% highlight ruby %}
+code = &lt;&lt;-EOS
 a Canadian
-  can curl&lt;/p&gt;
+  can curl</p>
 
-&lt;pre&gt;&lt;code&gt;if skip:
-  say &#39;Hurry!&#39;
+<pre><code>if skip:
+  say 'Hurry!'
 eh?
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;  eh?
+<p>  eh?
 eh?
 EOS
-&amp;hellip;
-Lexer.new.tokenize(code)&lt;/p&gt;
+&hellip;
+Lexer.new.tokenize(code)</p>
 
-&lt;h1&gt;=&gt; [[:A, &amp;ldquo;a&amp;rdquo;], [:CONSTANT, &amp;ldquo;Canadian&amp;rdquo;], [:CAN, &amp;ldquo;can&amp;rdquo;], [:IDENTIFIER, &amp;ldquo;curl&amp;rdquo;], [:IF, &amp;ldquo;if&amp;rdquo;], [:IDENTIFIER, &amp;ldquo;skip&amp;rdquo;], [&amp;ldquo;{&amp;rdquo;, &amp;ldquo;{&amp;rdquo;], [:IDENTIFIER, &amp;ldquo;say&amp;rdquo;], [:STRING, &amp;ldquo;Hurry!&amp;rdquo;], [&amp;ldquo;}&amp;rdquo;, &amp;ldquo;}&amp;rdquo;], [&amp;ldquo;}&amp;rdquo;, &amp;ldquo;}&amp;rdquo;], [&amp;ldquo;}&amp;rdquo;, &amp;ldquo;}&amp;rdquo;]]</code></pre>
-</div>
-</h1>
+<h1>=> [[:A, &ldquo;a&rdquo;], [:CONSTANT, &ldquo;Canadian&rdquo;], [:CAN, &ldquo;can&rdquo;], [:IDENTIFIER, &ldquo;curl&rdquo;], [:IF, &ldquo;if&rdquo;], [:IDENTIFIER, &ldquo;skip&rdquo;], [&ldquo;{&rdquo;, &ldquo;{&rdquo;], [:IDENTIFIER, &ldquo;say&rdquo;], [:STRING, &ldquo;Hurry!&rdquo;], [&ldquo;}&rdquo;, &ldquo;}&rdquo;], [&ldquo;}&rdquo;, &ldquo;}&rdquo;], [&ldquo;}&rdquo;, &ldquo;}&rdquo;]]{% endhighlight %}</h1>
 
 <p>Now that I have an array of tokens, it is time to write my grammar laws that will tell the parser what to do with them.</p>
 
@@ -319,34 +298,33 @@ Lexer.new.tokenize(code)&lt;/p&gt;
 
 <p>Here is what I would like the final result to look like:</p>
 
-<p><div>
-  <pre><code class='ruby'>a Canadian
+<p>{% highlight ruby %}
+a Canadian
   with toque
   with scarf
-  with broom&lt;/p&gt;
+  with broom</p>
 
-&lt;p&gt;  can curl&lt;/p&gt;
+<p>  can curl</p>
 
-&lt;pre&gt;&lt;code&gt;if skip:
-  say &quot;Hurry!&quot;
+<pre><code>if skip:
+  say "Hurry!"
 eh?
 if lead:
   pass
 eh?
-say &quot;How social the game...&quot;
-&lt;/code&gt;&lt;/pre&gt;
+say "How social the game..."
+</code></pre>
 
-&lt;p&gt;  eh?&lt;/p&gt;
+<p>  eh?</p>
 
-&lt;p&gt;  can say_aboot:&lt;/p&gt;
+<p>  can say_aboot:</p>
 
-&lt;pre&gt;&lt;code&gt;say &quot;What&#39;s it all aboot?&quot;
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>say "What's it all aboot?"
+</code></pre>
 
-&lt;p&gt;  eh?
-eh?</code></pre>
-</div>
-</p>
+<p>  eh?
+eh?
+{% endhighlight %}</p>
 
 <p>With this vague action plan and <a href="http://createyourproglang.com/?hop=rubyinside">&ldquo;Create Your Own Programming Language&rdquo;</a> by Marc-Andre Cournoyer in hand, off we go!</p>
 

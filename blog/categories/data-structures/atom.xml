@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Data_structures | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/data-structures/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-12T11:15:11-08:00</updated>
+  <updated>2014-01-12T11:26:33-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -121,48 +121,45 @@
 <h2>QuickUnion</h2>
 
 <p>Again following the basic API:
-<div>
-  <pre><code class='java'>&lt;/p&gt;
+{% highlight java %}</p>
 
-&lt;h2&gt;public class UF&lt;/h2&gt;
+<h2>public class UF</h2>
 
-&lt;p&gt;public UF(int N)
+<p>public UF(int N)
 public int find(int p, int q)
-public void union(int p, int q)</code></pre>
-</div>
-</p>
+public void union(int p, int q){% endhighlight %}</p>
 
 <p>I adapted the QuickUnion in ruby:
-<div>
-  <pre><code class='ruby'>class QuickUnion
-  def initialize(size)&lt;/p&gt;
+{% highlight ruby linenos %}
+class QuickUnion
+  def initialize(size)</p>
 
-&lt;pre&gt;&lt;code&gt;@find_array = Array.new(size){ |index| index }
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>@find_array = Array.new(size){ |index| index }
+</code></pre>
 
-&lt;p&gt;  end&lt;/p&gt;
+<p>  end</p>
 
-&lt;p&gt;  # check if p and q have the same root
-  def find(p, q)&lt;/p&gt;
+<p>  # check if p and q have the same root
+  def find(p, q)</p>
 
-&lt;pre&gt;&lt;code&gt;verify(p, q)
+<pre><code>verify(p, q)
 root(p) == root(q)
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;  end&lt;/p&gt;
+<p>  end</p>
 
-&lt;p&gt;  # set id of p&amp;rsquo;s root to the id of q&amp;rsquo;s root
-  def union(p, q)&lt;/p&gt;
+<p>  # set id of p&rsquo;s root to the id of q&rsquo;s root
+  def union(p, q)</p>
 
-&lt;pre&gt;&lt;code&gt;verify(p, q)
+<pre><code>verify(p, q)
 @find_array[root(p)] = root(q)
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;  end&lt;/p&gt;
+<p>  end</p>
 
-&lt;p&gt;  private&lt;/p&gt;
+<p>  private</p>
 
-&lt;pre&gt;&lt;code&gt;def root(index)
+<pre><code>def root(index)
   # get root until root(index) == index
   if @find_array[index] == index
     return index
@@ -175,46 +172,43 @@ def verify(p, q)
   raise NotAnElement if @find_array[p].nil?
   raise NotAnElement if @find_array[q].nil?
 end
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;end&lt;/p&gt;
+<p>end</p>
 
-&lt;p&gt;class NotAnElement &amp;lt; Exception
-end</code></pre>
-</div>
-</p>
+<p>class NotAnElement &lt; Exception
+end
+{% endhighlight %}</p>
 
 <p>This implementation is a QuickUnion because in an array of 1,000,000 entries, connecting element p to element q is easy: you only have to find the root of p, and then change q to match (one root() and one array access). Finding if p and q are connected takes a little bit longer, because you have to perform two root operations: one for p and one for q, but it is still faster than accessing every element in the array.</p>
 
 <h2>Benchmark</h2>
 
-<p><div>
-  <pre><code class='bash'>$ ruby lib/benchmark.rb
-=&gt; Array Size: 100&lt;/p&gt;
+<p>{% highlight bash %}
+$ ruby lib/benchmark.rb
+=> Array Size: 100</p>
 
-&lt;pre&gt;&lt;code&gt;   user     system      total        real
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>   user     system      total        real
+</code></pre>
 
-&lt;p&gt;   0.000000   0.000000   0.000000 (  0.001865)
+<p>   0.000000   0.000000   0.000000 (  0.001865)
    0.000000   0.000000   0.000000 (  0.000377)
 $ ruby lib/benchmark.rb
-=&gt; Array Size: 1000&lt;/p&gt;
+=> Array Size: 1000</p>
 
-&lt;pre&gt;&lt;code&gt;   user     system      total        real
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>   user     system      total        real
+</code></pre>
 
-&lt;p&gt;   0.120000   0.010000   0.130000 (  0.124929)
+<p>   0.120000   0.010000   0.130000 (  0.124929)
    0.010000   0.000000   0.010000 (  0.008825)
 $ ruby lib/benchmark.rb
-=&gt; Array Size: 10000&lt;/p&gt;
+=> Array Size: 10000</p>
 
-&lt;pre&gt;&lt;code&gt;   user     system      total        real
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>   user     system      total        real
+</code></pre>
 
-&lt;p&gt;  10.120000   0.030000  10.150000 ( 10.146124)
-   0.520000   0.000000   0.520000 (  0.520377)</code></pre>
-</div>
-</p>
+<p>  10.120000   0.030000  10.150000 ( 10.146124)
+   0.520000   0.000000   0.520000 (  0.520377){% endhighlight %}</p>
 
 <p>Comparing QuickFind (top line) with QuickUnion(bottom line), we can actually measure how well this small optimization of the union operation has increased performance with larger datasets.</p>
 
@@ -335,48 +329,45 @@ $ ruby lib/benchmark.rb
 
 <p>Using the java api provided by Kevin Wayne and Robert Sedgewick:</p>
 
-<p><div>
-  <pre><code class='java'>&lt;/p&gt;
+<p>{% highlight java %}</p>
 
-&lt;h2&gt;public class UF&lt;/h2&gt;
+<h2>public class UF</h2>
 
-&lt;p&gt;public UF(int N)
+<p>public UF(int N)
 public int find(int p, int q)
-public void union(int p, int q)</code></pre>
-</div>
-</p>
+public void union(int p, int q) {% endhighlight %}</p>
 
 <p>I adapted the basic union find in ruby:</p>
 
-<p><div>
-  <pre><code class='ruby'>class QuickFind&lt;/p&gt;
+<p>{% highlight ruby linenos%}
+class QuickFind</p>
 
-&lt;p&gt;  attr_accessor :find_array&lt;/p&gt;
+<p>  attr_accessor :find_array</p>
 
-&lt;p&gt;  def initialize(size)&lt;/p&gt;
+<p>  def initialize(size)</p>
 
-&lt;pre&gt;&lt;code&gt;@find_array = Array.new(size){ |index| index }
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>@find_array = Array.new(size){ |index| index }
+</code></pre>
 
-&lt;p&gt;  end&lt;/p&gt;
+<p>  end</p>
 
-&lt;p&gt;  def find(p, q)&lt;/p&gt;
+<p>  def find(p, q)</p>
 
-&lt;pre&gt;&lt;code&gt;location(p) == location(q)
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>location(p) == location(q)
+</code></pre>
 
-&lt;p&gt;  end&lt;/p&gt;
+<p>  end</p>
 
-&lt;p&gt;  def union(p, q)&lt;/p&gt;
+<p>  def union(p, q)</p>
 
-&lt;pre&gt;&lt;code&gt;@find_array = create_union(p, q)
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>@find_array = create_union(p, q)
+</code></pre>
 
-&lt;p&gt;  end&lt;/p&gt;
+<p>  end</p>
 
-&lt;p&gt;  private&lt;/p&gt;
+<p>  private</p>
 
-&lt;pre&gt;&lt;code&gt;def location(index)
+<pre><code>def location(index)
   raise NotAnElement if @find_array[index].nil?
   return @find_array[index]
 end
@@ -388,14 +379,13 @@ def create_union(p, q)
     element == target ? goal : element
   end
 end
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;end&lt;/p&gt;
+<p>end</p>
 
-&lt;p&gt;class NotAnElement &amp;lt; Exception
-end</code></pre>
-</div>
-</p>
+<p>class NotAnElement &lt; Exception
+end
+{% endhighlight %}</p>
 
 <p>Sets are arranged as a flat array of elements which all share the same value: they are all wearing the same t-shirt. When we connect elements from different sets, we must make sure that every element in the first set changes its t-shirt to match the elements in the other set. This is a time-consuming process, and uses a lot of t-shirts.</p>
 
@@ -404,106 +394,96 @@ end</code></pre>
 <h2>Benchmark</h2>
 
 <p>To compare efficiency of this and future UnionFind implementations, I built a basic benchmark that performs a set number of union and find operations and measures the time to completion:
-<div>
-  <pre><code class='ruby'>require &amp;lsquo;benchmark&amp;rsquo;
-@size = 10000&lt;/p&gt;
+{% highlight ruby %}
+require &lsquo;benchmark&rsquo;
+@size = 10000</p>
 
-&lt;p&gt;def testUnit(object)
-  @size.times do&lt;/p&gt;
+<p>def testUnit(object)
+  @size.times do</p>
 
-&lt;pre&gt;&lt;code&gt;object.union(rand(@size), rand(@size))
+<pre><code>object.union(rand(@size), rand(@size))
 object.find(rand(@size), rand(@size))
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;  end
-end&lt;/p&gt;
+<p>  end
+end</p>
 
-&lt;p&gt;Benchmark.bm do |x|
+<p>Benchmark.bm do |x|
   x.report { testUnit(QuickFind.new(@size)) }
-end</code></pre>
-</div>
-</p>
+end
+{% endhighlight %}</p>
 
 <p>Running the benchmark on QuickFind:</p>
 
-<p><div>
-  <pre><code class='bash'>$ ruby lib/benchmark.rb
-=&gt; Array size = 100&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;   user     system      total        real
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;   0.000000   0.000000   0.000000 (  0.002745)
+<p>{% highlight bash %}
 $ ruby lib/benchmark.rb
-=&gt; Array size = 1000&lt;/p&gt;
+=> Array size = 100</p>
 
-&lt;pre&gt;&lt;code&gt;   user     system      total        real
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>   user     system      total        real
+</code></pre>
 
-&lt;p&gt;   0.140000   0.000000   0.140000 (  0.137957)
+<p>   0.000000   0.000000   0.000000 (  0.002745)
 $ ruby lib/benchmark.rb
-=&gt; Array size = 10000&lt;/p&gt;
+=> Array size = 1000</p>
 
-&lt;pre&gt;&lt;code&gt;   user     system      total        real
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>   user     system      total        real
+</code></pre>
 
-&lt;p&gt;  13.790000   0.020000  13.810000 ( 13.866528)</code></pre>
-</div>
-</p>
+<p>   0.140000   0.000000   0.140000 (  0.137957)
+$ ruby lib/benchmark.rb
+=> Array size = 10000</p>
+
+<pre><code>   user     system      total        real
+</code></pre>
+
+<p>  13.790000   0.020000  13.810000 ( 13.866528){% endhighlight %}</p>
 
 <p>You can see from these measurements that increasing the size of the array by a factor of 10 each time comes with a logarithmic increase in processing time. There is definitely room for optimization, so stay tuned for more refinements. In the meantime,</p>
 
 <h2>Fun Rubyisms</h2>
 
 <p>Array initialization is a snap in ruby! Compare the initialization line in the QuickFind algorithm above with the equivalent java implementation:
-<div>
-  <pre><code class='ruby'>@find_array = Array.new(size){ |index| index }</code></pre>
-</div>
-
+{% highlight ruby %}
+@find_array = Array.new(size){ |index| index }
+{% endhighlight %}
 versus
-<div>
-  <pre><code class='java'>&amp;hellip;
+{% highlight java %}
+&hellip;
 int[] arry = new int[size]
-for (int i = 0; i &amp;lt; size; i++) {&lt;/p&gt;
+for (int i = 0; i &lt; size; i++) {</p>
 
-&lt;pre&gt;&lt;code&gt;id[i] = i;
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>id[i] = i;
+</code></pre>
 
-&lt;p&gt;}</code></pre>
-</div>
-</p>
+<p>}
+{% endhighlight %}</p>
 
 <p>Both result in an array of the specified size, but ruby is slightly less sprawling.</p>
 
 <p>Also, check out lines 27 &ndash; 29
-<div>
-  <pre><code class='ruby'>temp_array = @find_array.map do |element|
+{% highlight ruby %}
+temp_array = @find_array.map do |element|
   element == target ? goal : element
-end</code></pre>
-</div>
-</p>
+end
+{% endhighlight %}</p>
 
 <p>Using map() eliminates the need for a separate array declaration. It is the equivalent of:
-<div>
-  <pre><code class='ruby'>temp_array = []
+{% highlight ruby %}
+temp_array = []
 @find_array.each do |element|
-  temp_array &amp;lt;&amp;lt; element == target ? goal : element
+  temp_array &lt;&lt; element == target ? goal : element
 end
-return temp_array</code></pre>
-</div>
-</p>
+return temp_array {% endhighlight %}</p>
 
 <p>and is certainly more readable than the equivalent in java:
-<div>
-  <pre><code class='java'>int pid = id[p];
-for (int i = 0; i &amp;lt; id.length; i++)&lt;/p&gt;
+{% highlight java %}
+int pid = id[p];
+for (int i = 0; i &lt; id.length; i++)</p>
 
-&lt;pre&gt;&lt;code&gt;if (id[i] == pid) id[i] = id[q];
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>if (id[i] == pid) id[i] = id[q];
+</code></pre>
 
-&lt;p&gt;</code></pre>
-</div>
-</p>
+<p>{% endhighlight %}</p>
 
 <p>Awesome</p>
 ]]></content>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Testing | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-12T11:15:11-08:00</updated>
+  <updated>2014-01-12T11:26:33-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -24,29 +24,27 @@ I love that ruby has a built in framework &mdash; so easy to use!</p>
 
 <ul>
 <li><p>Use specs to rough out project logic
-<div>
-  <pre><code class='ruby'>describe &amp;ldquo;Car&amp;rdquo; do
-it &amp;lsquo;should have a color&amp;rsquo;
-it &amp;lsquo;should have a make&amp;rsquo;
-it &amp;lsquo;should have a unique serial number&amp;rsquo;
-it &amp;lsquo;should get a new serial number when it gets stolen&amp;rsquo;
-it &amp;lsquo;should accept passengers&amp;rsquo;
-it &amp;lsquo;should not accept more than 3 passengers&amp;rsquo;
-end</code></pre>
-</div>
-
+{% highlight ruby %}
+describe &ldquo;Car&rdquo; do
+it &lsquo;should have a color&rsquo;
+it &lsquo;should have a make&rsquo;
+it &lsquo;should have a unique serial number&rsquo;
+it &lsquo;should get a new serial number when it gets stolen&rsquo;
+it &lsquo;should accept passengers&rsquo;
+it &lsquo;should not accept more than 3 passengers&rsquo;
+end
+{% endhighlight %}
 All of these tests will be skipped until they are followed by a do&hellip;end block.</p></li>
 <li><p>Take one test at a time and write the code to make it pass
-<div>
-  <pre><code class='ruby'>describe &amp;ldquo;Car&amp;rdquo; do
-it &amp;lsquo;should have a color&amp;rsquo; do
-  car = Car.new(&amp;ldquo;black&amp;rdquo;)
-  car.color.must_equal &amp;ldquo;black&amp;rdquo;
+{% highlight ruby %}
+describe &ldquo;Car&rdquo; do
+it &lsquo;should have a color&rsquo; do
+  car = Car.new(&ldquo;black&rdquo;)
+  car.color.must_equal &ldquo;black&rdquo;
 end
-&amp;hellip;
-end</code></pre>
-</div>
-
+&hellip;
+end
+{% endhighlight %}
 If your tests exercise the project well enough, you end up with really tight code.
 More of a lasagna noodle than spaghetti!</p></li>
 </ul>

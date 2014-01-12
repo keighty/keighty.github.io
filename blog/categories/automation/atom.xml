@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Automation | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/automation/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-12T11:15:11-08:00</updated>
+  <updated>2014-01-12T11:26:33-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -21,136 +21,126 @@
     <content type="html"><![CDATA[<p>A few weeks ago I posted about <a href="http://www.katieleonard.ca/automation/2013/08/30/hammer-out-tasks-with-thor/">using Thor to generate system-wide notes files with a standard format</a>. Since then, I have been doing a lot of smaller code challenges, and I wanted to set up a Thor task for generating a standard project file tree.</p>
 
 <p>My Goal Tree:
-<div>
-  <pre><code class='bash'>project_name
+{% highlight bash %}
+project_name
 ├── lib
 │   └── project_name.rb
 ├── spec
 │   ├── project_name_spec.rb
 │   └── spec_helper.rb
 ├── Gemfile
-└── README.md</code></pre>
-</div>
-</p>
+└── README.md{% endhighlight %}</p>
 
 <p>I always begin with these files and this organization. A Gemfile and README are essential for setting up the environment and explaining the gist of the project. I am most comfortable with RSpec, and to get into the practice of TDD, setting up a testing environment right away is non-negotiable. All of these standard files contain some automatic content as well:</p>
 
 <h5>spec_helper.rb loads the library</h5>
 
-<p><div>
-  <pre><code class='ruby'>$LOAD_PATH.unshift(File.join(File.dirname(&lt;strong&gt;FILE&lt;/strong&gt;), &amp;lsquo;..&amp;rsquo;, &amp;lsquo;lib&amp;rsquo;))
-require &amp;lsquo;rspec&amp;rsquo;
-require &amp;lsquo;project_name&amp;rsquo;</code></pre>
-</div>
-</p>
+<p>{% highlight ruby %}
+$LOAD_PATH.unshift(File.join(File.dirname(<strong>FILE</strong>), &lsquo;..&rsquo;, &lsquo;lib&rsquo;))
+require &lsquo;rspec&rsquo;
+require &lsquo;project_name&rsquo;
+{% endhighlight %}</p>
 
 <h5>project_name_spec.rb sets up the first test</h5>
 
-<p><div>
-  <pre><code class='ruby'>require &amp;lsquo;spec_helper&amp;rsquo;&lt;/p&gt;
+<p>{% highlight ruby %}
+require &lsquo;spec_helper&rsquo;</p>
 
-&lt;p&gt;describe ProjectName do
+<p>describe ProjectName do
   before (:each) {  }
-  subject {  }&lt;/p&gt;
+  subject {  }</p>
 
-&lt;p&gt;  it &amp;ldquo;should pass&amp;rdquo;
-end</code></pre>
-</div>
-</p>
+<p>  it &ldquo;should pass&rdquo;
+end
+{% endhighlight %}</p>
 
 <h5>Gemfile specifies the right gems for setting up the project</h5>
 
-<p><div>
-  <pre><code class='ruby'>ruby &amp;lsquo;2.0.0&amp;rsquo;
-gem &amp;lsquo;rspec&amp;rsquo;</code></pre>
-</div>
-</p>
+<p>{% highlight ruby %}
+ruby &lsquo;2.0.0&rsquo;
+gem &lsquo;rspec&rsquo;
+{% endhighlight %}</p>
 
 <p>There are other files that could have auto-generated content as well, like a Rakefile, or a config.ru, but this is a good start.</p>
 
 <h4>Create a Thor task (rb_project.thor):</h4>
 
-<p><div>
-  <pre><code class='ruby'>&lt;/p&gt;
+<p>{% highlight ruby %}</p>
 
-&lt;h1&gt;!/usr/bin/env ruby&lt;/h1&gt;
+<h1>!/usr/bin/env ruby</h1>
 
-&lt;p&gt;require &amp;ldquo;rubygems&amp;rdquo;
-require &amp;ldquo;thor&amp;rdquo;&lt;/p&gt;
+<p>require &ldquo;rubygems&rdquo;
+require &ldquo;thor&rdquo;</p>
 
-&lt;p&gt;class RbProject &amp;lt; Thor
-  desc &amp;ldquo;init&amp;rdquo;, &amp;ldquo;creates a ruby project with rspec&amp;rdquo;&lt;/p&gt;
+<p>class RbProject &lt; Thor
+  desc &ldquo;init&rdquo;, &ldquo;creates a ruby project with rspec&rdquo;</p>
 
-&lt;p&gt;  def init(title=&amp;ldquo;new_project&amp;rdquo;)&lt;/p&gt;
+<p>  def init(title=&ldquo;new_project&rdquo;)</p>
 
-&lt;pre&gt;&lt;code&gt;Dir.mkdir(title)
+<pre><code>Dir.mkdir(title)
 Dir.chdir(title)
-Dir.mkdir(&quot;spec&quot;)
-Dir.mkdir(&quot;lib&quot;)
-filename = &quot;#{title}&quot;
+Dir.mkdir("spec")
+Dir.mkdir("lib")
+filename = "#{title}"
 
-open(File.new(&quot;README.md&quot;, &quot;w&quot;), &quot;w&quot;) do |note|
-  note.puts &quot;# #{title}&quot;
+open(File.new("README.md", "w"), "w") do |note|
+  note.puts "# #{title}"
 end
 
-open(File.new(&quot;Gemfile&quot;, &quot;w&quot;), &quot;w&quot;) do |my_gem|
-  my_gem.puts &quot;ruby &#39;2.0.0&#39;&quot;
-  my_gem.puts &quot;gem &#39;rspec&#39;&quot;
+open(File.new("Gemfile", "w"), "w") do |my_gem|
+  my_gem.puts "ruby '2.0.0'"
+  my_gem.puts "gem 'rspec'"
 end
 
-open(File.new(&quot;spec/spec_helper.rb&quot;, &quot;w&quot;), &quot;w&quot;) do |spec|
-  spec.puts &quot;$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), &#39;..&#39;, &#39;lib&#39;))&quot;
-  spec.puts &quot;require &#39;rspec&#39;&quot;
-  spec.puts &quot;require &#39;#{filename}&#39;&quot;
+open(File.new("spec/spec_helper.rb", "w"), "w") do |spec|
+  spec.puts "$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))"
+  spec.puts "require 'rspec'"
+  spec.puts "require '#{filename}'"
 end
 
-open(File.new(&quot;spec/#{filename}_spec.rb&quot;, &quot;w&quot;), &quot;w&quot;) do |spec|
-  spec.puts &quot;require &#39;spec_helper&#39;&quot;
-  spec.puts &quot;&quot;
-  spec.puts &quot;describe #{camelize(filename)} do&quot;
-  spec.puts &quot;  before (:each) {  }&quot;
-  spec.puts &quot;  xit &#39;should pass&#39;&quot;
-  spec.puts &quot;end&quot;
+open(File.new("spec/#{filename}_spec.rb", "w"), "w") do |spec|
+  spec.puts "require 'spec_helper'"
+  spec.puts ""
+  spec.puts "describe #{camelize(filename)} do"
+  spec.puts "  before (:each) {  }"
+  spec.puts "  xit 'should pass'"
+  spec.puts "end"
 end
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;  end&lt;/p&gt;
+<p>  end</p>
 
-&lt;p&gt;  private&lt;/p&gt;
+<p>  private</p>
 
-&lt;pre&gt;&lt;code&gt;def camelize(snake)
-  title = snake.split(&#39;_&#39;).each do |word|
+<pre><code>def camelize(snake)
+  title = snake.split('_').each do |word|
     word.capitalize!
   end
-  title.join(&#39;&#39;)
+  title.join('')
 end
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;end</code></pre>
-</div>
-</p>
+<p>end {% endhighlight %}</p>
 
 <p>I created a private method camelize in order to change the snake_case project name into a CamelCase class name.</p>
 
 <p>As before, I install my thor task system wide:
-<div>
-  <pre><code class='bash'>$ thor install rb_project.thor</code></pre>
-</div>
-</p>
+{% highlight bash %}
+$ thor install rb_project.thor {% endhighlight %}</p>
 
 <p>And now my project generation task can be run from any directory, anywhere on my system:
-<div>
-  <pre><code class='bash'>$ thor list&lt;/p&gt;
+{% highlight bash %}
+$ thor list</p>
 
-&lt;h2&gt;note&lt;/h2&gt;
+<h2>note</h2>
 
-&lt;p&gt;thor note:create  # creates a notes file in markdown&lt;/p&gt;
+<p>thor note:create  # creates a notes file in markdown</p>
 
-&lt;h2&gt;rb_project&lt;/h2&gt;
+<h2>rb_project</h2>
 
-&lt;p&gt;thor rb_project:init  # creates a ruby project with rspec&lt;/p&gt;
+<p>thor rb_project:init  # creates a ruby project with rspec</p>
 
-&lt;p&gt;$ thor rb_project:init test_project
+<p>$ thor rb_project:init test_project
 $ tree test_project/
 test_project/
 ├── lib
@@ -159,22 +149,15 @@ test_project/
 │   ├── spec_helper.rb
 │   └── test_project_spec.rb
 ├── Gemfile
-├── README.md&lt;/p&gt;
+├── README.md</p>
 
-&lt;p&gt;2 directories, 6 files</code></pre>
-</div>
-</p>
+<p>2 directories, 6 files
+{% endhighlight %}</p>
 
 <p>Awesome.</p>
 
-<p><div>
-  <pre><code class='bash'></code></pre>
-</div>
-
-<div>
-  <pre><code class='bash'></code></pre>
-</div>
-</p>
+<p>{% highlight bash %}{% endhighlight %}
+{% highlight bash %}{% endhighlight %}</p>
 ]]></content>
   </entry>
   
@@ -189,69 +172,59 @@ test_project/
 
 <p>Unlike Rake tasks, which are confined to the directory containing the Rakefile, Thor tasks can be installed on your system and called from anywhere. My note files are all formatted in a particular way. Before Thor, I used a rake task:</p>
 
-<p><div>
-  <pre><code class='bash'>$ cd notesDirWithRakefile
-$ rake post title=&amp;ldquo;new post title&amp;rdquo;
-$ Creating new post: &amp;ldquo;./130830_new_post_title&amp;rdquo;</code></pre>
-</div>
-</p>
+<p>{% highlight bash %}
+$ cd notesDirWithRakefile
+$ rake post title=&ldquo;new post title&rdquo;
+$ Creating new post: &ldquo;./130830_new_post_title&rdquo;{% endhighlight %}</p>
 
 <p>The Rake task auto-formats the filename, replacing spaces with underscores, and prepends today&rsquo;s date so that they will sort in the order they are made. This worked great for when I wanted to keep notes in that one folder, but later I wanted to be able to keep notes on a particular project. I would either have to copy the Rakefile (two places to update if I made any changes), or create a symbolic link (which would break if I ever moved my Rakefile). Neither of these options seemed to be the most practical. Enter Thor:</p>
 
 <p>Creating the Thor task is as easy as pie:
-<div>
-  <pre><code class='ruby'>require &amp;lsquo;thor&amp;rsquo;&lt;/p&gt;
+{% highlight ruby %}
+require &lsquo;thor&rsquo;</p>
 
-&lt;p&gt;class Note &amp;lt; Thor
-  desc &amp;ldquo;create&amp;rdquo;, &amp;ldquo;creates a notes file in markdown&amp;rdquo;
-  def create(title=&amp;ldquo;new note&amp;rdquo;)&lt;/p&gt;
+<p>class Note &lt; Thor
+  desc &ldquo;create&rdquo;, &ldquo;creates a notes file in markdown&rdquo;
+  def create(title=&ldquo;new note&rdquo;)</p>
 
-&lt;pre&gt;&lt;code&gt;slug = title.downcase.strip.gsub(&#39; &#39;, &#39;_&#39;).gsub(/[^\w-]/, &#39;&#39;)
-date = Time.parse(Time.now).strftime(&#39;%y%m%d&#39;)
-filename = File.join(&quot;./&quot;, &quot;#{date}_#{slug}.md&quot;)
+<pre><code>slug = title.downcase.strip.gsub(' ', '_').gsub(/[^\w-]/, '')
+date = Time.parse(Time.now).strftime('%y%m%d')
+filename = File.join("./", "#{date}_#{slug}.md")
 
 if File.exist?(filename)
-  abort(&quot;rake aborted!&quot;) if ask(&quot;#{filename} already exists. Do you want to overwrite?&quot;, [&#39;y&#39;, &#39;n&#39;]) == &#39;n&#39;
+  abort("rake aborted!") if ask("#{filename} already exists. Do you want to overwrite?", ['y', 'n']) == 'n'
 end
 
-puts &quot;Creating new post: #{filename}&quot;
-open(filename, &#39;w&#39;) do |post|
-  post.puts &quot;# #{title.gsub(/-/,&#39; &#39;).capitalize}&quot;
+puts "Creating new post: #{filename}"
+open(filename, 'w') do |post|
+  post.puts "# #{title.gsub(/-/,' ').capitalize}"
 end
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;  end
-end</code></pre>
-</div>
-</p>
+<p>  end
+end {% endhighlight %}</p>
 
 <p>Listing all Thor tasks is easy:
-<div>
-  <pre><code class='bash'>$ thor list&lt;/p&gt;
+{% highlight bash %}
+$ thor list</p>
 
-&lt;h2&gt;note&lt;/h2&gt;
+<h2>note</h2>
 
-&lt;p&gt;thor note:create  # creates a notes file in markdown</code></pre>
-</div>
-</p>
+<p>thor note:create  # creates a notes file in markdown {% endhighlight %}</p>
 
 <p>Installing a Thor task for system use is easy:
-<div>
-  <pre><code class='bash'>$ thor install notes.thor
-&amp;hellip;
+{% highlight bash %}
+$ thor install notes.thor
+&hellip;
 Do you wish to continue [y/N]? y
 Please specify a name for notes.thor in the system repository [notes.thor]: note
-Storing thor file in your system repository</code></pre>
-</div>
-</p>
+Storing thor file in your system repository {% endhighlight %}</p>
 
 <p>Uninstalling a Thor task is easy:
-<div>
-  <pre><code class='bash'>$ thor uninstall note
+{% highlight bash %}
+$ thor uninstall note
 Uninstalling note.
-Done.</code></pre>
-</div>
-</p>
+Done. {% endhighlight %}</p>
 
 <p>With my Thor notes task installed system-wide, I can create a note page in any directory, for any reason, without copying code.</p>
 
