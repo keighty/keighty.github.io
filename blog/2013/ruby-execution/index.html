@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Ruby Execution - keighty</title>
+  <meta name="author" content="katie leonard">
+
+  
+  <meta name="description" content="">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://keighty.github.io/blog/2013/ruby-execution">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">keighty</a></h1>
+  
+    <h2>a portfolio of sorts</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:keighty.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Ruby Execution</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-10T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I have started including an executable in my project setup. Many of the code challenges I have been practicing lately have included file I/O, and while TDD and code exercising with RSpec is still my main process, developing a stand-alone fully-functional project requires something more.</p>
+
+<h3>Blocks Code Challenge</h3>
+
+<p>I found the blocks code challenge on the <a href="http://uva.onlinejudge.org/index.php?option=com_onlinejudge&amp;Itemid=8&amp;category=3&amp;page=show_problem&amp;problem=37">UVa code competition website</a>. To sum up, you have to write a program that will parse and carry out a series of commands for stacking blocks.</p>
+
+<ol>
+<li>move a onto b</li>
+<li>move a over b</li>
+<li>pile a onto b</li>
+<li>pile a over b</li>
+<li>quit</li>
+</ol>
+
+
+<p>The commands will be provided in an input file, and an output is specified. Fun problem, right? So, I start my project folder using my <a href="http://www.katieleonard.ca/automation/2013/09/08/thor-sets-up-a-project/">thor task</a>, and work awhile adding logic and tests and data as appropriate. My file tree finishes like this:</p>
+
+<div>
+  <pre><code class='bash'>blocks
+├── data
+│   ├── input.txt
+│   └── output.txt
+├── lib
+│   └── blocks.rb
+├── spec
+│   ├── blocks_spec.rb
+│   └── spec_helper.rb
+├── Gemfile
+└── README.md</code></pre>
+</div>
+
+
+<p>So, in order to use my script, I would have to call it from the command line:</p>
+
+<div>
+  <pre><code class='bash'>$ ruby lib/blocks.rb data/input.txt
+#=&gt; or
+$ data/input.txt | ruby lib/blocks.rb</code></pre>
+</div>
+
+
+<p>This is an extremely verbose way to deliver a final product, and I would much rather call $ blocks &lt;file_input&gt;. It turns out that making an executable is easy and elegant, just like everything else in ruby. You just have to declare the ruby environment, include a few notes on usage, load the file tree, and call the class:</p>
+
+<div>
+  <pre><code class='ruby'>#!/usr/bin/env ruby
+# blocks
+# 10-Sep-2013
+#
+# Usage:
+# ./blocks data/input.txt
+#
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), &#39;lib&#39;))
+require &#39;blocks&#39;
+Blocks.new.process_input</code></pre>
+</div>
+
+
+<p>Placing this code in a non-extension file, like &lsquo;blocks&rsquo;, in the main directory, I can make it an executable by changing the file permissions:</p>
+
+<div>
+  <pre><code class='bash'>$ chmod +x ./blocks</code></pre>
+</div>
+
+
+<p>And I can call it like any other executable:</p>
+
+<div>
+  <pre><code class='bash'>$ ./blocks data/input.txt</code></pre>
+</div>
+
+
+<p>I liked this solution so much, I added it to my thor project setup! Oh, and if you are interested in seeing my solution for the blocks problem, checkout my <a href="https://github.com/keighty/datastructures/tree/master/ruby/blocks">github repo</a></p>
+
+<p>Awesome.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-10T00:00:00-07:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://keighty.github.io/blog/2013/ruby-execution/" data-via="" data-counturl="http://keighty.github.io/blog/2013/ruby-execution/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/thor-sets-up-a-project/" title="Previous Post: Thor Sets Up A Project">&laquo; Thor Sets Up A Project</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/rails-depends-on-javascript/" title="Next Post: Rails, You Can Depend on Javascript">Rails, You Can Depend on Javascript &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/partial-to-ajax/">Partial to Ajax</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/meatier-apps-with-meteor/">Meatier Apps With Meteor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/rails-depends-on-javascript/">Rails, You Can Depend on Javascript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/ruby-execution/">Ruby Execution</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/argf-all-you-want/">ARGF All You Want</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/hammer-out-tasks-with-thor/">Hammer-out Tasks With Thor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/serving-some-java/">Serving Some Java</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/runtime-for-your-life/">Runtime for Your Life</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - katie leonard -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

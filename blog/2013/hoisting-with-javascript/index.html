@@ -1,0 +1,273 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Hoisting With JavaScript - keighty</title>
+  <meta name="author" content="katie leonard">
+
+  
+  <meta name="description" content="">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://keighty.github.io/blog/2013/hoisting-with-javascript">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">keighty</a></h1>
+  
+    <h2>a portfolio of sorts</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:keighty.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Hoisting With JavaScript</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-26T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I am really enjoying <a href="http://www.amazon.com/Test-Driven-JavaScript-Development-Developers-Library/dp/0321683919">Test-Driven Development</a> by Christian Johansen</p>
+
+<p>I picked up this little gem this morning as I was learning about functions and the various objects associated with them:</p>
+
+<p>You CANNOT use function declarations in conditionals. Take this example:</p>
+
+<div>
+  <pre><code class='java'>if (String.prototype.trim) {
+  function trim(str) {
+    return str.trim();
+  }
+else {
+  function trim(str){
+    return str.replace(/^\s+|\s+$/g, &quot;&quot;);
+  }
+}</code></pre>
+</div>
+
+
+<p>What is wrong with that, you might ask? HOISTING! Both functions are hoisted up to the global variable before execution, which means that the second one always overwrites the first one.</p>
+
+<p>This is a better method:</p>
+
+<div>
+  <pre><code class='java'>if(!String.prototype.trim) {
+  String.prototype.trim = function trim() {
+    return this.replace(/^\s+|\s+$/g, &quot;&quot;)
+  }
+}</code></pre>
+</div>
+
+
+<p>This way, we are not overwriting any browser-available Trim methods, we are declaring the method on the String.prototype, which means it is available to ALL strings in scope, AND we have named it so that it will be more visible in a stack trace in case something goes wrong.</p>
+
+<p>AWESOME</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-26T00:00:00-07:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/javascript/'>JavaScript</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://keighty.github.io/blog/2013/hoisting-with-javascript/" data-via="" data-counturl="http://keighty.github.io/blog/2013/hoisting-with-javascript/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/javascript-has-spies/" title="Previous Post: Javascript has spies">&laquo; Javascript has spies</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/no-indexhtml-no-cry/" title="Next Post: No index.html, no cry">No index.html, no cry &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/partial-to-ajax/">Partial to Ajax</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/meatier-apps-with-meteor/">Meatier Apps With Meteor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/rails-depends-on-javascript/">Rails, You Can Depend on Javascript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/ruby-execution/">Ruby Execution</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/argf-all-you-want/">ARGF All You Want</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/hammer-out-tasks-with-thor/">Hammer-out Tasks With Thor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/serving-some-java/">Serving Some Java</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/runtime-for-your-life/">Runtime for Your Life</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - katie leonard -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

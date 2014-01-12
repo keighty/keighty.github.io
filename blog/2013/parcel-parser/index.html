@@ -1,0 +1,322 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Parcel Parser - keighty</title>
+  <meta name="author" content="katie leonard">
+
+  
+  <meta name="description" content="">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://keighty.github.io/blog/2013/parcel-parser">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">keighty</a></h1>
+  
+    <h2>a portfolio of sorts</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:keighty.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Parcel Parser</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-16T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>On the last episode, I described how to label chunks of code for processing through a parser. Strings are labeled as &lsquo;STRING&rsquo;, class definitions as &lsquo;A&rsquo; + &lsquo;CONSTANT&rsquo;, etc.</p>
+
+<h2>What is a parser?</h2>
+
+<p>A parser separates and analyzes a piece of text according to a set of rules specified by a formal grammar. The analysis is performed by assembling the tokenized code into an Abstract Syntax Tree (AST) &ndash; a tree of nodes that represent what the code means to the language. The AST evaluates the nodes in a similar manner to order of operations in math: each token is placed on the evaluation tree, and expressions are evaluated by reducing each branch in order.</p>
+
+<p>The parser itself is can be written by hand, but I am using RACC: an LALR (Look Ahead, Left to right, Reverse) parser written by <a href="https://github.com/tenderlove/racc">tenderlove</a> to generate Ruby programs. How do we specify a grammar that RACC will understand?</p>
+
+<p>Each rule is formatted in the following way:</p>
+
+<div>
+  <pre><code class='bash'>RuleName:
+  OtherRule TOKEN AnotherRule    { code to run }
+| OtherRule                      { ... }
+;</code></pre>
+</div>
+
+
+<p>It is similar to an if/else statement that captures all possible expressions beginning with the most specific (ie: an expression with TWO rules matches line 2) to more general (all other single expressions are captured on line 3). When a token matches a rule, the code in the attached code block is run.</p>
+
+<p>The code blocks correspond to instructions on how to treat matching tokens. For example, the grammar should specify what happens when the code contains a class definition, labeled with &lsquo;A&rsquo; + &lsquo;CONSTANT&rsquo;.</p>
+
+<div>
+  <pre><code class='ruby'>...
+# Class definition
+Class:
+  A CONSTANT Block { result = ClassNode.new(val[1], val[2]) }
+;
+...</code></pre>
+</div>
+
+
+<p>When the parser catches a class token it will create a new ClassNode with the class name (CONSTANT) and the block as arguments. The val[] array refers to the grammar rule [A, CONSTANT, Block].</p>
+
+<p>Some tokens are parsed very close to AS IS:</p>
+
+<div>
+  <pre><code class='ruby'>Literal:
+  NUMBER { result = LiteralNode.new(val[0]) }
+| STRING { result = LiteralNode.new(val[0]) }
+| TRUE   { result = LiteralNode.new(true) }
+| FALSE  { result = LiteralNode.new(false) }
+| NIL    { result = LiteralNode.new(nil) }
+;</code></pre>
+</div>
+
+
+<p>Each literal triggers the creation of a new LiteralNode with its value as the only argument.</p>
+
+<p>The Nodes are outlined in a Nodes class, where the rules of evaluation are defined.</p>
+
+<div>
+  <pre><code class='ruby'>...
+class ClassNode
+  def initialize(name, body)
+    @name = name
+    @body = body
+  end
+
+  def eval(context)
+    eh_class = CanadianClass.new
+    context[@name] = eh_class
+    @body.eval(Context.new(eh_class, eh_class))
+    eh_class
+  end
+end
+...</code></pre>
+</div>
+
+
+<p>A ClassNode is initialized with two params (recall from the grammar: ClassNode.new(val[1], val[2])), the class name and its code block. The context is like scope &ndash; it can hold modules, classes, methods, attributes, aliases, requires, and includes. Classes, modules, and files are all Contexts (definition from <a href="http://ruby-doc.org/stdlib-1.8.6/libdoc/rdoc/rdoc/RDoc/Context.html">Rdocs</a>). Evaluation of a ClassNode begins by assigning the class to a context and evaluating the code block, which adds more contexts. In this way, a tree structure is formed &ndash; an AST &ndash; which does all the interpreting work for the new language.</p>
+
+<p>When the grammar and node definitions are complete, RACC will generate a parser:</p>
+
+<div>
+  <pre><code class='ruby'>$ racc -vo parser.rb grammar.y</code></pre>
+</div>
+
+
+<p>The parser is a relatively obtuse set of methods and state transition tables, and when you run code through the parser you get an AST that follows the grammar you have defined.</p>
+
+<p>So, now I have a lexer and a parser, but I still can&rsquo;t run my code. I need to define a runner class that will put all these parts together, but first, I need a break.</p>
+
+<p>Awesome.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-16T00:00:00-07:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/eh/'>eh</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://keighty.github.io/blog/2013/parcel-parser/" data-via="" data-counturl="http://keighty.github.io/blog/2013/parcel-parser/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/flex-your-lexer/" title="Previous Post: Flex Your Lexer">&laquo; Flex Your Lexer</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/runtime-for-your-life/" title="Next Post: Runtime For Your Life">Runtime For Your Life &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/partial-to-ajax/">Partial to Ajax</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/meatier-apps-with-meteor/">Meatier Apps With Meteor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/rails-depends-on-javascript/">Rails, You Can Depend on Javascript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/ruby-execution/">Ruby Execution</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/argf-all-you-want/">ARGF All You Want</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/hammer-out-tasks-with-thor/">Hammer-out Tasks With Thor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/serving-some-java/">Serving Some Java</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/runtime-for-your-life/">Runtime for Your Life</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - katie leonard -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

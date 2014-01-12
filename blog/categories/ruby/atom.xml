@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ruby | keighty]]></title>
+  <link href="http://keighty.github.io/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://keighty.github.io/"/>
+  <updated>2014-01-11T17:58:28-08:00</updated>
+  <id>http://keighty.github.io/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Ruby Execution]]></title>
+    <link href="http://keighty.github.io/blog/2013/ruby-execution/"/>
+    <updated>2013-09-10T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/ruby-execution</id>
+    <content type="html"><![CDATA[<p>I have started including an executable in my project setup. Many of the code challenges I have been practicing lately have included file I/O, and while TDD and code exercising with RSpec is still my main process, developing a stand-alone fully-functional project requires something more.</p>
+
+<h3>Blocks Code Challenge</h3>
+
+<p>I found the blocks code challenge on the <a href="http://uva.onlinejudge.org/index.php?option=com_onlinejudge&amp;Itemid=8&amp;category=3&amp;page=show_problem&amp;problem=37">UVa code competition website</a>. To sum up, you have to write a program that will parse and carry out a series of commands for stacking blocks.</p>
+
+<ol>
+<li>move a onto b</li>
+<li>move a over b</li>
+<li>pile a onto b</li>
+<li>pile a over b</li>
+<li>quit</li>
+</ol>
+
+
+<p>The commands will be provided in an input file, and an output is specified. Fun problem, right? So, I start my project folder using my <a href="http://www.katieleonard.ca/automation/2013/09/08/thor-sets-up-a-project/">thor task</a>, and work awhile adding logic and tests and data as appropriate. My file tree finishes like this:
+<div>
+  <pre><code class='bash'>blocks
+├── data
+│   ├── input.txt
+│   └── output.txt
+├── lib
+│   └── blocks.rb
+├── spec
+│   ├── blocks_spec.rb
+│   └── spec_helper.rb
+├── Gemfile
+└── README.md</code></pre>
+</div>
+</p>
+
+<p>So, in order to use my script, I would have to call it from the command line:
+<div>
+  <pre><code class='bash'>$ ruby lib/blocks.rb data/input.txt&lt;/p&gt;
+
+&lt;h1&gt;=&gt; or&lt;/h1&gt;
+
+&lt;p&gt;$ data/input.txt | ruby lib/blocks.rb</code></pre>
+</div>
+</p>
+
+<p>This is an extremely verbose way to deliver a final product, and I would much rather call $ blocks &lt;file_input&gt;. It turns out that making an executable is easy and elegant, just like everything else in ruby. You just have to declare the ruby environment, include a few notes on usage, load the file tree, and call the class:
+<div>
+  <pre><code class='ruby'>&lt;/p&gt;
+
+&lt;h1&gt;!/usr/bin/env ruby&lt;/h1&gt;
+
+&lt;h1&gt;blocks&lt;/h1&gt;
+
+&lt;h1&gt;10-Sep-2013&lt;/h1&gt;
+
+&lt;p&gt;#&lt;/p&gt;
+
+&lt;h1&gt;Usage:&lt;/h1&gt;
+
+&lt;h1&gt;./blocks data/input.txt&lt;/h1&gt;
+
+&lt;p&gt;#
+$LOAD_PATH.unshift(File.join(File.dirname(&lt;strong&gt;FILE&lt;/strong&gt;), &amp;lsquo;lib&amp;rsquo;))
+require &amp;lsquo;blocks&amp;rsquo;
+Blocks.new.process_input</code></pre>
+</div>
+</p>
+
+<p>Placing this code in a non-extension file, like &lsquo;blocks&rsquo;, in the main directory, I can make it an executable by changing the file permissions:
+<div>
+  <pre><code class='bash'>$ chmod +x ./blocks</code></pre>
+</div>
+</p>
+
+<p>And I can call it like any other executable:
+<div>
+  <pre><code class='bash'>$ ./blocks data/input.txt</code></pre>
+</div>
+</p>
+
+<p>I liked this solution so much, I added it to my thor project setup! Oh, and if you are interested in seeing my solution for the blocks problem, checkout my <a href="https://github.com/keighty/datastructures/tree/master/ruby/blocks">github repo</a></p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ARGF All You Want]]></title>
+    <link href="http://keighty.github.io/blog/2013/argf-all-you-want/"/>
+    <updated>2013-09-05T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/argf-all-you-want</id>
+    <content type="html"><![CDATA[<p>Many of the fun, junior code challenges I have encountered deal a lot with input/output of data, and I found a great ruby feature that provides flexibility at the command line.</p>
+
+<h3>Data Input</h3>
+
+<p>There are a lot of ways to treat data at the command line, but the one I was most familiar with is passing in a filename as an argument:</p>
+
+<p><div>
+  <pre><code class='bash'>$ ruby example_script.rb file1.csv file2.csv &amp;hellip;
+$ ruby example_script.rb file1.csv | more
+$ ruby example_script.rb file1.csv &gt; output.txt</code></pre>
+</div>
+</p>
+
+<h3>Filename Input</h3>
+
+<p>Using ARGV, we can access the list of filenames provided at the command line. ARGV is an array containing all the information that follows the command. For example:
+<div>
+  <pre><code class='bash'>$ example_command apple banana orange&lt;/p&gt;
+
+&lt;h1&gt;ARGV = [&amp;ldquo;apple&amp;rdquo;, &amp;ldquo;banana&amp;rdquo;, &amp;ldquo;orange&amp;rdquo;]</code></pre>
+</div>
+</h1>
+
+<p>One can process each filename in ARGV using regular array methods:</p>
+
+<p><div>
+  <pre><code class='ruby'>ARGV.each do |arg|
+  process_string(File.read(arg))
+end</code></pre>
+</div>
+</p>
+
+<p>File.read(arg) reads the file into a &ldquo;\n&rdquo; delimited string, which can be processed further. If there are no arguments, ARGV is an empty array.</p>
+
+<h3>Piped Input</h3>
+
+<p>Say that we want to enter data directly into a program rather than use a fixed filename at the command line &mdash; a useful technique for when we want data to flow out of one process and into another:
+<div>
+  <pre><code class='bash'>$ cat file1.csv | ruby example_script.rb
+$ cat *.csv | ruby example_script.rb
+$ ruby example_script.rb &amp;lt; file1.csv</code></pre>
+</div>
+</p>
+
+<p>Using the pipe, &ldquo;|&rdquo; or &ldquo;&lt;&rdquo;, we can push a string of data from one process into another, but what happens to our program when we try to do this?
+<div>
+  <pre><code class='bash'>$ example.csv | ruby example_script.rb
+TypeError: can`t convert nil into String</code></pre>
+</div>
+</p>
+
+<p>We get a TypeError! Recall that command line arguments are stored in ARGV, but we are not providing any command line arguments. ARGV is an empty array, and we are attempting to open a file from ARGV[0] = nil. Shame on us! How do we access data that is piped in as well as data that is appended to the command line? Do we have to check for the source of the data before we can treat it? Turns out, we DON&rsquo;T.</p>
+
+<h3>The ARGF Solution</h3>
+
+<p>Ruby has a nifty interface for handling data input, regardless of whether it arrives as a command line argument or from another data source. We can replace the code we wrote earlier with a single line:</p>
+
+<p><div>
+  <pre><code class='ruby'>process_string(ARGF.read)</code></pre>
+</div>
+</p>
+
+<p>If ARGV is not empty, ARGF will assume it is an array of filenames and will treat them accordingly. If ARGV is empty, it will read from $stdin to get the data passed in via the pipe. One caveat is that you can&rsquo;t read from both ARGV and the pipe: if ARGV != [  ], $stdin is ignored.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+</feed>

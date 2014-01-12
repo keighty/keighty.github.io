@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Serving Some Java - keighty</title>
+  <meta name="author" content="katie leonard">
+
+  
+  <meta name="description" content="">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://keighty.github.io/blog/2013/serving-some-java">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">keighty</a></h1>
+  
+    <h2>a portfolio of sorts</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:keighty.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Serving Some Java</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-24T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>For a recent java coding challenge I was asked, among other things, to make a server. It has been several years since I last attempted it, and I had forgotten how easy it could be.</p>
+
+<h4>Server</h4>
+
+<p>A server, like any good conversationalist, is a good listener. A server is a program running on a computer that listens at a port, waiting to receive instructions.</p>
+
+<div>
+  <pre><code class='java'>public class Server {
+  private static String inputLine;
+
+  public static void main(String[] args) {
+
+    private static final int PORT_NUMBER = 63400
+
+    try {
+      // Socket variables
+      ServerSocket serverSocket = new ServerSocket(PORT_NUMBER);
+      Socket clientSocket = serverSocket.accept();
+
+      // IO variables
+      InputStreamReader inputReader = new InputStreamReader(clientSocket.getInputStream());
+      BufferedReader bReader = new BufferedReader(inputReader);
+
+      while ((inputLine = bReader.readLine()) != null) {
+        System.out.println(inputLine);
+      }
+
+    } catch (Exception e) {
+      System.out.println(e);
+    }
+  }
+}</code></pre>
+</div>
+
+
+<p>The server opens a socket on a specified port (in this case, port 63400). A socket is the point at which two-way communication happens between computer programs. The server opens a socket at a port and waits for a client to bind the socket so they can exchange information. It waits for input from the client, with instructions to print out anything the client puts in (line 18). So where is the client?</p>
+
+<h4>Client</h4>
+
+<p>The client is even simpler than the server: it finds the server at the specified port and connects to the socket.</p>
+
+<div>
+  <pre><code class='java'>public class Client {
+
+  private static final int PORT_NUMBER = 63400
+
+  public static void main(String[] args) {
+
+    try {
+
+      // Socket variables
+      Socket socket = new Socket(&quot;localhost&quot;, PORT_NUMBER);
+      PrintWriter pWriter = new PrintWriter(socket.getOutputStream(), true);
+
+      pWriter.println(&quot;Hello World!&quot;);
+
+    } catch (Exception e) {
+      System.out.println(e);
+    }
+  }
+}</code></pre>
+</div>
+
+
+<p>With a successful connection, it generates an output stream. If you start the server in one console it will look like it isn&rsquo;t doing anything, but when you start the client in another console you can watch them communicate. The client writes &ldquo;Hello World&rdquo; directly into the port where the server is listening (socket.getOutputStream()), and as instructed, the server obediently prints &ldquo;Hello World&rdquo; to the console.</p>
+
+<p>Awesome.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-24T00:00:00-07:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/java/'>java</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://keighty.github.io/blog/2013/serving-some-java/" data-via="" data-counturl="http://keighty.github.io/blog/2013/serving-some-java/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/runtime-for-your-life/" title="Previous Post: Runtime For Your Life">&laquo; Runtime For Your Life</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/hammer-out-tasks-with-thor/" title="Next Post: Hammer-out Tasks with Thor">Hammer-out Tasks with Thor &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/partial-to-ajax/">Partial to Ajax</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/meatier-apps-with-meteor/">Meatier Apps With Meteor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/rails-depends-on-javascript/">Rails, You Can Depend on Javascript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/ruby-execution/">Ruby Execution</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/argf-all-you-want/">ARGF All You Want</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/hammer-out-tasks-with-thor/">Hammer-out Tasks With Thor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/serving-some-java/">Serving Some Java</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/runtime-for-your-life/">Runtime for Your Life</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - katie leonard -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

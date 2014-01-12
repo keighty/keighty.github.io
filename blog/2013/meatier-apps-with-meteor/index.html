@@ -1,0 +1,327 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Meatier Apps With Meteor - keighty</title>
+  <meta name="author" content="katie leonard">
+
+  
+  <meta name="description" content="">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://keighty.github.io/blog/2013/meatier-apps-with-meteor">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">keighty</a></h1>
+  
+    <h2>a portfolio of sorts</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:keighty.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Meatier Apps With Meteor</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-20T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="http://www.meteor.com/">Meteor</a> is a framework that allows you to write web applications using only javascript. All the work is done on the client-side. Meteor embraces new principles of web design: data on the wire, one language is enough, and simplicity makes for productivity.</p>
+
+<p>Simplicity is something I value as well, and while setting up meteor on my linux machine was not a three-step process as outlined in their examples, it only took a little tinkering to figure out the problem. First, a look at the three meteor setup steps:</p>
+
+<h4>Install</h4>
+
+<div>
+  <pre><code class='bash'>$ curl https://install.meteor.com | /bin/sh</code></pre>
+</div>
+
+
+<h4>Create a sample application</h4>
+
+<div>
+  <pre><code class='bash'>$ meteor create testapp</code></pre>
+</div>
+
+
+<h4>Run the sample application</h4>
+
+<div>
+  <pre><code class='bash'>$ cd testapp
+$ meteor</code></pre>
+</div>
+
+
+<p>This is where the meteor server is supposed to start, connecting to your mongo installation, and serving your application on port 3000:</p>
+
+<div>
+  <pre><code class='bash'>$ meteor
+[[[[[ /path/to/testapp ]]]]]
+
+=&gt; Meteor server running on: http://localhost:3000/</code></pre>
+</div>
+
+
+<p>Instead, my terminal became quite upset about it:</p>
+
+<div>
+  <pre><code class='bash'>[[[[[ /path/to/testapp ]]]]]
+
+Unexpected mongo exit code 1. Restarting.
+Unexpected mongo exit code 1. Restarting.
+Unexpected mongo exit code 1. Restarting.
+Can&#39;t start mongod</code></pre>
+</div>
+
+
+<p>Whups! Everything seems normal in my mongo installation, but after a lot of searching I finally found the problem on <a href="http://stackoverflow.com/questions/18505372/meteor-update-0-6-4-0-6-5-mongo-error">stackoverflow</a>. From among the answers I found this solution:</p>
+
+<blockquote><p>I&rsquo;m also getting this error on Ubuntu. As mentioned, it&rsquo;s caused by mongo and mongod from ~/.meteor/tools/latest/mongodb/bin being compiled with an older version of glib. You can replace the version of mongo bundled by meteor with the version installed in your system:</p></blockquote>
+
+<div>
+  <pre><code class='bash'>cd ~/.meteor/tools/latest/mongodb/bin/
+mv mongo mongo-backup
+mv mongod mongod-backup
+ln -s /usr/bin/mongo
+ln -s /usr/bin/mongod</code></pre>
+</div>
+
+
+<p>Brilliant! Following these instructions, I was finally able to start meteor.</p>
+
+<p><img src="http://keighty.github.io/assets/images/meteor.png" alt="Meteor" /></p>
+
+<h3>Getting down to business</h3>
+
+<p>Now to test out some of the awesome functionality of this framework. I <a href="http://www.meteor.com/examples/todos">followed an example</a> and created a todo list:</p>
+
+<div>
+  <pre><code class='bash'>$ meteor create --example todos
+$ cd todos
+$ meteor deploy totally-fake-url.meteor.com
+Deploying to totally-fake-url.meteor.com.  Bundling...
+Uploading...
+Now serving at totally-fake-url.meteor.com</code></pre>
+</div>
+
+
+<p>Opening totally-fake-url.meteor.com with my browser:</p>
+
+<p><img src="http://keighty.github.io/assets/images/meteortodo.png" alt="Meteor" /></p>
+
+<p>Playing around with creating new todos and lists, it is clear that data is being added and changed instantly and persistently. From the docs:</p>
+
+<blockquote><p>A Meteor application is a mix of JavaScript that runs inside a client web browser, JavaScript that runs on the Meteor server inside a Node.js container, and all the supporting HTML fragments, CSS rules, and static assets.</p></blockquote>
+
+<p>I am really looking forward to diving further into <a href="http://docs.meteor.com/#concepts">the docs</a> to learn more about this incredible framework.
+AWESOME</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-20T00:00:00-07:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://keighty.github.io/blog/2013/meatier-apps-with-meteor/" data-via="" data-counturl="http://keighty.github.io/blog/2013/meatier-apps-with-meteor/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/rails-depends-on-javascript/" title="Previous Post: Rails, You Can Depend on Javascript">&laquo; Rails, You Can Depend on Javascript</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/partial-to-ajax/" title="Next Post: Partial to Ajax">Partial to Ajax &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/partial-to-ajax/">Partial to Ajax</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/meatier-apps-with-meteor/">Meatier Apps With Meteor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/rails-depends-on-javascript/">Rails, You Can Depend on Javascript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/ruby-execution/">Ruby Execution</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/argf-all-you-want/">ARGF All You Want</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/hammer-out-tasks-with-thor/">Hammer-out Tasks With Thor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/serving-some-java/">Serving Some Java</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/runtime-for-your-life/">Runtime for Your Life</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - katie leonard -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

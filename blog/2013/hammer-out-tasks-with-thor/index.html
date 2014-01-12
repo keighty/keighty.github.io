@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Hammer-out Tasks With Thor - keighty</title>
+  <meta name="author" content="katie leonard">
+
+  
+  <meta name="description" content="">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://keighty.github.io/blog/2013/hammer-out-tasks-with-thor">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">keighty</a></h1>
+  
+    <h2>a portfolio of sorts</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:keighty.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Hammer-out Tasks With Thor</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-30T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>A few months ago I gave a small lightning talk to my code school class about automating tasks using <a href="http://rake.rubyforge.org/">Rake</a>. Before I learned ruby I used bash scripts to accomplish similar things, but was often bogged down in learning the syntax of string-processing essentials like awk or sed. I wished for the simplicity of Ruby, and thought that Rake was the bees-knees. After my talk, <a href="chuckvose.com">Chuck</a>, my PCS mentor, put together a repo of <a href="http://whatisthor.com/">Thor</a> tasks that accomplished the same tasks but could be installed system wide.</p>
+
+<h3><a href="http://whatisthor.com/">Thor</a> is my new hero</h3>
+
+<p>Unlike Rake tasks, which are confined to the directory containing the Rakefile, Thor tasks can be installed on your system and called from anywhere. My note files are all formatted in a particular way. Before Thor, I used a rake task:</p>
+
+<div>
+  <pre><code class='bash'>$ cd notesDirWithRakefile
+$ rake post title=&quot;new post title&quot;
+$ Creating new post: &quot;./130830_new_post_title&quot;</code></pre>
+</div>
+
+
+<p>The Rake task auto-formats the filename, replacing spaces with underscores, and prepends today&rsquo;s date so that they will sort in the order they are made. This worked great for when I wanted to keep notes in that one folder, but later I wanted to be able to keep notes on a particular project. I would either have to copy the Rakefile (two places to update if I made any changes), or create a symbolic link (which would break if I ever moved my Rakefile). Neither of these options seemed to be the most practical. Enter Thor:</p>
+
+<p>Creating the Thor task is as easy as pie:</p>
+
+<div>
+  <pre><code class='ruby'>require &#39;thor&#39;
+
+class Note &lt; Thor
+  desc &quot;create&quot;, &quot;creates a notes file in markdown&quot;
+  def create(title=&quot;new note&quot;)
+    slug = title.downcase.strip.gsub(&#39; &#39;, &#39;_&#39;).gsub(/[^\w-]/, &#39;&#39;)
+    date = Time.parse(Time.now).strftime(&#39;%y%m%d&#39;)
+    filename = File.join(&quot;./&quot;, &quot;#{date}_#{slug}.md&quot;)
+
+    if File.exist?(filename)
+      abort(&quot;rake aborted!&quot;) if ask(&quot;#{filename} already exists. Do you want to overwrite?&quot;, [&#39;y&#39;, &#39;n&#39;]) == &#39;n&#39;
+    end
+
+    puts &quot;Creating new post: #{filename}&quot;
+    open(filename, &#39;w&#39;) do |post|
+      post.puts &quot;# #{title.gsub(/-/,&#39; &#39;).capitalize}&quot;
+    end
+  end
+end</code></pre>
+</div>
+
+
+<p>Listing all Thor tasks is easy:</p>
+
+<div>
+  <pre><code class='bash'>$ thor list
+note
+----
+thor note:create  # creates a notes file in markdown</code></pre>
+</div>
+
+
+<p>Installing a Thor task for system use is easy:</p>
+
+<div>
+  <pre><code class='bash'>$ thor install notes.thor
+...
+Do you wish to continue [y/N]? y
+Please specify a name for notes.thor in the system repository [notes.thor]: note
+Storing thor file in your system repository</code></pre>
+</div>
+
+
+<p>Uninstalling a Thor task is easy:</p>
+
+<div>
+  <pre><code class='bash'>$ thor uninstall note
+Uninstalling note.
+Done.</code></pre>
+</div>
+
+
+<p>With my Thor notes task installed system-wide, I can create a note page in any directory, for any reason, without copying code.</p>
+
+<p>Awesome.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-30T00:00:00-07:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/automation/'>automation</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://keighty.github.io/blog/2013/hammer-out-tasks-with-thor/" data-via="" data-counturl="http://keighty.github.io/blog/2013/hammer-out-tasks-with-thor/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/serving-some-java/" title="Previous Post: Serving Some Java">&laquo; Serving Some Java</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/argf-all-you-want/" title="Next Post: ARGF all you want">ARGF all you want &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/partial-to-ajax/">Partial to Ajax</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/meatier-apps-with-meteor/">Meatier Apps With Meteor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/rails-depends-on-javascript/">Rails, You Can Depend on Javascript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/ruby-execution/">Ruby Execution</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/argf-all-you-want/">ARGF All You Want</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/hammer-out-tasks-with-thor/">Hammer-out Tasks With Thor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/serving-some-java/">Serving Some Java</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/runtime-for-your-life/">Runtime for Your Life</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - katie leonard -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

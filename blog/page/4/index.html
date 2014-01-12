@@ -1,0 +1,963 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>keighty</title>
+  <meta name="author" content="katie leonard">
+
+  
+  <meta name="description" content="I was scraping the rust off my data-structures synapses last week, and found that there was still some functionality underneath. UnionFind is one of &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://keighty.github.io/blog/page/4">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">keighty</a></h1>
+  
+    <h2>a portfolio of sorts</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:keighty.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/state-of-the-unionfind/">State of the UnionFind</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-30T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was scraping the rust off my data-structures synapses last week, and found that there was still some functionality underneath. UnionFind is one of those sneaky algorithms that crops up in non-linear arrangements of data, such as computer or social networks. Specifically, it keeps track of sets of connected elements. The API consists of a union(p, q), which connects the two elements p and q, and a find(p, q), which determines if p is in the same set as q.</p>
+
+<p>I learned about this algorithm through <a href="https://www.coursera.org/">Coursera</a>, and their class <a href="https://www.coursera.org/course/algs4partI">Algorithms Part 1</a> with Kevin Wayne and Robert Sedgewick. The focus of this course was not only on implementation of algorithms, but also optimization.</p>
+
+<h1>Union Find</h1>
+
+<p>A simple model for connectivity is 10 objects numbered 1 through 0:</p>
+
+<p>0 1 2 3 4 5 6 7 8 9</p>
+
+<p>Making random connections will produce disjointed sets of objects:</p>
+
+<p>0 1 { 2 3 9 } { 5 6 } 7 { 4 8 }</p>
+
+<p>A find(p, q) will determine if p and q are in the same set:</p>
+
+<ul>
+<li>find(0, 8) => false</li>
+<li>find(2, 9) => true</li>
+</ul>
+
+
+<p>A union(p, q) will put p and q in the same set:</p>
+
+<ul>
+<li>union(1, 6) => 0 { 2 3 9 } { 1 5 6 } 7 { 4 8 }</li>
+<li>union(2, 4) => 0 1 { 5 6 } 7 { 2 3 9 4 8 }</li>
+</ul>
+
+
+<p>Using an array to keep track of the values, we can walk through what this implementation would look like:</p>
+
+<table class="table table-bordered">
+  <tr>
+    <th>Index</th>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td>9</td>
+    <td>0</td>
+    <th></th>
+  </tr>
+  <tr>
+    <th>Value</th>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td>9</td>
+    <td>0</td>
+    <th></th>
+  </tr>
+  <tr>
+    <th>union(4,9)</th>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td class="highlight">9</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td class="highlight">9</td>
+    <td>0</td>
+    <td> | Changes all values that match array[4] to match array[9]</td>
+  </tr>
+  <tr>
+    <th>union(2,4)</th>
+    <td>1</td>
+    <td class="highlight">9</td>
+    <td>3</td>
+    <td class="highlight">9</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td class="highlight">9</td>
+    <td>0</td>
+    <td> | Changes all values that match array[2] to match array[4]</td>
+  </tr>
+  <tr>
+    <th>union(4,7)</th>
+    <td>1</td>
+    <td class="highlight">7</td>
+    <td>3</td>
+    <td class="highlight">7</td>
+    <td>5</td>
+    <td>6</td>
+    <td class="highlight">7</td>
+    <td>8</td>
+    <td class="highlight">7</td>
+    <td>0</td>
+    <td> | Changes all values that match array[4] to match array[7]</td>
+  </tr>
+</table>
+
+
+<p>Using the java api provided by Kevin Wayne and Robert Sedgewick:</p>
+
+<div>
+  <pre><code class='java'>public class UF
+----------------
+public UF(int N)
+public int find(int p, int q)
+public void union(int p, int q)</code></pre>
+</div>
+
+
+<p>I adapted the basic union find in ruby:</p>
+
+<div>
+  <pre><code class='ruby'>class QuickFind
+
+  attr_accessor :find_array
+
+  def initialize(size)
+    @find_array = Array.new(size){ |index| index }
+  end
+
+  def find(p, q)
+    location(p) == location(q)
+  end
+
+  def union(p, q)
+    @find_array = create_union(p, q)
+  end
+
+  private
+
+    def location(index)
+      raise NotAnElement if @find_array[index].nil?
+      return @find_array[index]
+    end
+
+    def create_union(p, q)
+      target = location(p)
+      goal = location(q)
+      temp_array = @find_array.map do |element|
+        element == target ? goal : element
+      end
+    end
+end
+
+class NotAnElement &lt; Exception
+end</code></pre>
+</div>
+
+
+<p>Sets are arranged as a flat array of elements which all share the same value: they are all wearing the same t-shirt. When we connect elements from different sets, we must make sure that every element in the first set changes its t-shirt to match the elements in the other set. This is a time-consuming process, and uses a lot of t-shirts.</p>
+
+<p>This implementation is called QuickFind because in an array of 1,000,000 entries, finding if two elements are connected is easy (compare the t-shirt at index p with the t-shirt at index q), but connecting them requires inspection of every element in the array in order (check everyone&rsquo;s t-shirts) to make sure all the previous connections remain in place.</p>
+
+<h2>Benchmark</h2>
+
+<p>To compare efficiency of this and future UnionFind implementations, I built a basic benchmark that performs a set number of union and find operations and measures the time to completion:</p>
+
+<div>
+  <pre><code class='ruby'>require &#39;benchmark&#39;
+@size = 10000
+
+def testUnit(object)
+  @size.times do
+    object.union(rand(@size), rand(@size))
+    object.find(rand(@size), rand(@size))
+  end
+end
+
+Benchmark.bm do |x|
+  x.report { testUnit(QuickFind.new(@size)) }
+end</code></pre>
+</div>
+
+
+<p>Running the benchmark on QuickFind:</p>
+
+<div>
+  <pre><code class='bash'>$ ruby lib/benchmark.rb
+=&gt; Array size = 100
+       user     system      total        real
+   0.000000   0.000000   0.000000 (  0.002745)
+$ ruby lib/benchmark.rb
+=&gt; Array size = 1000
+       user     system      total        real
+   0.140000   0.000000   0.140000 (  0.137957)
+$ ruby lib/benchmark.rb
+=&gt; Array size = 10000
+       user     system      total        real
+  13.790000   0.020000  13.810000 ( 13.866528)</code></pre>
+</div>
+
+
+<p>You can see from these measurements that increasing the size of the array by a factor of 10 each time comes with a logarithmic increase in processing time. There is definitely room for optimization, so stay tuned for more refinements. In the meantime,</p>
+
+<h2>Fun Rubyisms</h2>
+
+<p>Array initialization is a snap in ruby! Compare the initialization line in the QuickFind algorithm above with the equivalent java implementation:</p>
+
+<div>
+  <pre><code class='ruby'>@find_array = Array.new(size){ |index| index }</code></pre>
+</div>
+
+
+<p>versus</p>
+
+<div>
+  <pre><code class='java'>...
+int[] arry = new int[size]
+for (int i = 0; i &lt; size; i++) {
+    id[i] = i;
+}</code></pre>
+</div>
+
+
+<p>Both result in an array of the specified size, but ruby is slightly less sprawling.</p>
+
+<p>Also, check out lines 27 &ndash; 29</p>
+
+<div>
+  <pre><code class='ruby'>temp_array = @find_array.map do |element|
+  element == target ? goal : element
+end</code></pre>
+</div>
+
+
+<p>Using map() eliminates the need for a separate array declaration. It is the equivalent of:</p>
+
+<div>
+  <pre><code class='ruby'>temp_array = []
+@find_array.each do |element|
+  temp_array &lt;&lt; element == target ? goal : element
+end
+return temp_array</code></pre>
+</div>
+
+
+<p>and is certainly more readable than the equivalent in java:</p>
+
+<div>
+  <pre><code class='java'>int pid = id[p];
+for (int i = 0; i &lt; id.length; i++)
+    if (id[i] == pid) id[i] = id[q];</code></pre>
+</div>
+
+
+<p>Awesome</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/procuring-provisions/">Procuring Provisions</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-27T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was trying to add a database to my JSGames app &mdash; it is a basic sinatra app with a few goodies already in place &mdash; and I was having some difficulty deploying it to Heroku. Rails (for the most part) automagically creates and maintains its database, and as long as I remember to move any references to sqlite3 into the development and test environments, I have never had trouble provisioning one on Heroku either. Rolling a web application from scratch with sinatra, however, requires a little more savvy.</p>
+
+<p>My Gemfile had a familiar structure:</p>
+
+<div>
+  <pre><code class='ruby'>source &#39;https://rubygems.org&#39;
+ruby &#39;2.0.0&#39;
+...
+gem &quot;sinatra&quot;
+gem &quot;activerecord&quot;
+gem &quot;sinatra-activerecord&quot;
+gem &quot;pg&quot;</code></pre>
+</div>
+
+
+<p>So far, so familiar. I added config/environments.rb to outline the details of the database I would like provisioned (using postgres locally as well as in production):</p>
+
+<div>
+  <pre><code class='ruby'>require &#39;active_record&#39;
+require &#39;uri&#39;
+...
+db = URI.parse(ENV[&#39;DATABASE_URL&#39;] || &#39;postgres://localhost/mydb&#39;)
+ActiveRecord::Base.establish_connection(
+  :adapter  =&gt; db.scheme == &#39;postgres&#39; ? &#39;postgresql&#39; : db.scheme,
+  :host     =&gt; db.host,
+  :port     =&gt; db.port,
+  :username =&gt; db.user,
+  :password =&gt; db.password,
+  :database =&gt; db.path[1..-1],
+  :encoding =&gt; &#39;utf8&#39;
+)</code></pre>
+</div>
+
+
+<p>With everything complete, I created a couple of models, migrated, tested it locally, and committed the changes. Heroku compiles the slug just fine, but when I open the application I get the too familiar &ldquo;Application Error&rdquo; page. The logs tell me: <pre>ERROR: Invalid DATABASE_URL</pre></p>
+
+<p>Huh? My url is the one that Heroku suggested! How can it be invalid? It was working fine locally, what is the problem? Here is a sample of my google searches from that frantic afternoon:
+* ERROR: Invalid DATABASE_URL heroku
+* deploying sinatra pg heroku
+* environment variables
+* heroku config variables
+* usr-env-compile heroku
+* heroku can&rsquo;t connect to server
+* how to roll back a push to heroku
+* how to recover from the embarrassment of an offline portfolio project
+* how to start a llama farm</p>
+
+<p>I finally found the answer (aka read the manual) with <a href="https://devcenter.heroku.com/articles/heroku-postgresql">Heroku Postgres</a></p>
+
+<h3>First: Check to see if your database has been provisioned</h3>
+
+<div>
+  <pre><code class='bash'>$ heroku addons | grep POSTGRES</code></pre>
+</div>
+
+
+<p>I ran this command in my sinatra project and found nothing. NOTHING!</p>
+
+<p>When Heroku told me that it couldn&rsquo;t find my database, that is because it hadn&rsquo;t MADE my database. So I&hellip;</p>
+
+<h3>Second: Create a new database</h3>
+
+<div>
+  <pre><code class='bash'>$ heroku addons:add heroku-postgresql:dev
+Adding heroku-postgresql:dev on js-games... done, v42 (free)
+Attached as HEROKU_POSTGRESQL_GOLD_URL
+Database has been created and is available
+ ! This database is empty. If upgrading, you can transfer
+ ! data from another database with pgbackups:restore.
+Use `heroku addons:docs heroku-postgresql:dev` to view documentation.</code></pre>
+</div>
+
+
+<p>YAY! My database has been created and found. Still, nothing wrong with&hellip;</p>
+
+<h3>Third: Double check your database exists</h3>
+
+<div>
+  <pre><code class='bash'>$ heroku config
+=== js-games Config Vars
+HEROKU_POSTGRESQL_GOLD_URL: postgres://∏∏∏∏∏∏∏∏∏∏∏∏∏∏:∏∏∏∏∏∏∏∏∏∏∏@ec2-##-###-###-##.compute-1.amazonaws.com:####/∏∏∏∏#∏##∏∏∏#∏#</code></pre>
+</div>
+
+
+<p>Heroku confesses that my database is stored on AWS, and gives a fairly detailed address (redacted on the grounds of national security).</p>
+
+<h3>Fourth: Promote the new database to primary</h3>
+
+<div>
+  <pre><code class='bash'>$ heroku pg:promote HEROKU_POSTGRESQL_GOLD_URL
+Promoting HEROKU_POSTGRESQL_GOLD_URL to DATABASE_URL... done</code></pre>
+</div>
+
+
+<h3>Fifth: Check out the new database</h3>
+
+<div>
+  <pre><code class='bash'>$ heroku pg:info
+=== HEROKU_POSTGRESQL_GOLD_URL (DATABASE_URL)
+Plan:        Dev
+Status:      available
+Connections: 1
+PG Version:  9.2.4
+Created:     2013-07-27 22:46 UTC
+Data Size:   6.3 MB
+Tables:      0
+Rows:        0/10000 (In compliance)
+Fork/Follow: Unsupported</code></pre>
+</div>
+
+
+<h3>TADA</h3>
+
+<p>Do one final push to heroku and restart the server:</p>
+
+<div>
+  <pre><code class='bash'>$ git commit -a -m &quot;fixes the last two hours of disasterous troubleshooting&quot;
+$ git push heroku master
+...
+$ heroku restart</code></pre>
+</div>
+
+
+<p>Awesome</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/git-picking/">Git-Picking</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-24T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>or, How to mine for cherries with Git</h4>
+
+<p>When I work on an experimental feature in a project branch, I have often found that I will have a mixture of commits I would like to keep, and commits that I wish had never happened.
+Using the principle of only committing atomic changes, and enjoying the fruits of your detailed-commit-message labour, there is a way to extract the gold from the ore, so to speak.</p>
+
+<h2>Locate the gold</h2>
+
+<p>Checkout the branch that contains your experiment, and use git log to get a list of all the commits:</p>
+
+<div>
+  <pre><code class='bash'>$ git checkout form_feature_branch
+$ git log --pretty=oneline
+a83f4c3aa5d800f846d075748a79a326e0971f67 reorg gemfile
+197964c091905a76f2172ca11fcbd49ccfb83c67 adds blog.db
+a793fe00c50a5956c5e9f7be48ac5a9861b1eb95 adds forme form to edit...
+8394b37494b63754f42ecaf19244fe6d8a36942f adds gitignore for db ...
+c52a6fd3f1706584ce3e47abf49ed627a1e28fd3 adds bundler gem for manag...
+1686664c4a98221ea04377bcbcf946e62a9f1cfa removes gems for simple...
+034d309a612dcce6f10bb55f0da2e78b2f7c10b1 adds cells to project
+...</code></pre>
+</div>
+
+
+<p>In form_feature_branch I was testing out different implementations of form generation in erb views. I tried a couple of different gems and found one that suits my sinatra project: <a href="https://github.com/jeremyevans/forme">Forme</a> is easy to use with or without models, and has great sinatra integration and documentation. Also along the way, I discovered how to include bundler for managing file dependencies and did some minor refactoring of my Gemfile.</p>
+
+<p>I wanted to keep the gem reorganization, as well as the forme, bundler, and gitignore commits, so I made this list of keeper-commits:</p>
+
+<div>
+  <pre><code class='bash'>a83f4c3aa5d800f846d075748a79a326e0971f67 reorg gemfile
+a793fe00c50a5956c5e9f7be48ac5a9861b1eb95 adds forme form to edit...
+c52a6fd3f1706584ce3e47abf49ed627a1e28fd3 adds bundler gem for manag...
+8394b37494b63754f42ecaf19244fe6d8a36942f adds gitignore for db ...</code></pre>
+</div>
+
+
+<p>Everything else is cruft.</p>
+
+<h2>Extract the gold</h2>
+
+<p>With this list of golden commits in hand, checkout a fresh branch and cherry-pick the commits you like!</p>
+
+<div>
+  <pre><code class='bash'>$ git checkout -b form_feature_additions
+$ git cherry-pick &lt;commit_identifier&gt;</code></pre>
+</div>
+
+
+<p>Do this command for each good commit:</p>
+
+<div>
+  <pre><code class='bash'>$ git cherry-pick a83f4c3aa5d800f846d075748a79a326e0971f67
+[master form_feature_additions] reorg gemfile
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+ changed mode 100644 Gemfile
+$ git cherry-pick a793fe00c50a5956c5e9f7be48ac5a9861b1eb95
+[master form_feature_additions] adds forme form to edit...
+...
+$ git cherry-pick c52a6fd3f1706584ce3e47abf49ed627a1e28fd3
+[master form_feature_additions] adds bundler gem for manag..
+...
+$ git cherry-pick 8394b37494b63754f42ecaf19244fe6d8a36942f
+[master form_feature_additions] adds gitignore for db ...
+...</code></pre>
+</div>
+
+
+<p>If you look at your git status you will see</p>
+
+<div>
+  <pre><code class='bash'># On branch form_feature_additions
+# Your branch is ahead of &#39;origin/master&#39; by 4 commits.</code></pre>
+</div>
+
+
+<h2>Profit</h2>
+
+<p>Now you can merge this branch with master, or continue fleshing out the feature on a clean branch, keeping only the good stuff and abandoning the bad, making experimentation easy.</p>
+
+<p>AWESOME</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/sinatra-in-a-console/">Sinatra in a Console</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-22T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Sinatra does not have a default console like rails does. If you are writing in a rails environment and need to test out a helper method, or want to check on the state of a record in the database, dropping down into the rails console is as easy as typing:</p>
+
+<div>
+  <pre><code class='bash'>$ rails c</code></pre>
+</div>
+
+
+<p>How can we achieve the same ability in Sinatra?</p>
+
+<h3>Tux</h3>
+
+<p>Tux is a ruby gem that generates a sinatra console. It reads the config.ru, allows you to interact with App methods, and provides empty request and response objects to for investigating communication between views and the Sinatra controller.</p>
+
+<p>Add Tux to your Gemfile:</p>
+
+<div>
+  <pre><code class='ruby'>group :development, :test do
+  ...
+  gem &#39;tux&#39;
+end</code></pre>
+</div>
+
+
+<p>Don&rsquo;t forget to bundle!</p>
+
+<p>At the command line, start up tux and use rack.actions to view all the methods available:</p>
+
+<div>
+  <pre><code class='bash'>$ tux
+Loading development environment (Rack 1.2)
+&gt;&gt; rack.actions
+=&gt; [:request, :get, :post, :put, :patch, :delete, :options, :head, :follow_redirect!, :header, :set_cookie, :clear_cookies, :authorize, :basic_authorize, :digest_authorize, :last_response, :last_request]
+&gt;&gt;</code></pre>
+</div>
+
+
+<p>You can access any method from your application as well.
+Of course, if you are working in Sinatra, you probably want to go as lightweight as possible, which is why you can also use:</p>
+
+<h3>Basic irb</h3>
+
+<p>It is as simple as using irb and requiring your main app file. You have access to all the dependencies and files that your application does by simply requiring that one file. You can check state, call methods, create objects, whatever you need:</p>
+
+<div>
+  <pre><code class='bash'>$ irb
+&gt; require &#39;./app.rb&#39;
+ =&gt; true
+&gt; User.all
+D, [2013-07-22T15:47:49.230146 #54081] DEBUG -- :   User Load (0.2ms)  SELECT &quot;users&quot;.* FROM &quot;users&quot;
+ =&gt; #&lt;ActiveRecord::Relation [#&lt;User id: 1, name: &quot;Gordon Shumway&quot;, email: &quot;gordon@example.com&quot;, created_at: &quot;2013-07-22 22:45:48&quot;, updated_at: &quot;2013-07-22 22:45:48&quot;&gt;, #&lt;User id: 2, name: &quot;Fanny Eubanks&quot;, email: &quot;fanny@example.com&quot;, created_at: &quot;2013-07-22 22:45:48&quot;, updated_at: &quot;2013-07-22 22:45:48&quot;&gt;]&gt;
+&gt;</code></pre>
+</div>
+
+
+<p>This can be called even more elegantly at the command line:</p>
+
+<div>
+  <pre><code class='bash'>$ irb -r ./app.rb</code></pre>
+</div>
+
+
+<p>or through a Rake task:</p>
+
+<div>
+  <pre><code class='bash'>desc &quot;run irb console&quot;
+task :console, :environment do |t, args|
+  ENV[&#39;RACK_ENV&#39;] = args[:environment] || &#39;development&#39;
+  exec &quot;irb -r irb/completion -r ./app.rb&quot;
+end</code></pre>
+</div>
+
+
+<p>Awesome</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/get-your-kicks-on-localhost4567/">Get Your Kicks on Route Localhost:4567</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-17T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I am building a code breaking game along the lines of Mastermind and I encountered a block.</p>
+
+<h2>The problem</h2>
+
+<ul>
+<li>I have a javascript that generates a secret code.</li>
+<li>I have a ruby class that compares a guess to the secret code and returns an analysis of the accuracy of the guess.</li>
+<li>How do I get the ruby class to process a guess and secret code from the browser?</li>
+</ul>
+
+
+<h2>I learned something about Ajax today.</h2>
+
+<p>An ajax call is built up from a few minimum parameters: a url, the HTTP method, the dataType expected, and a callback function that handles the return. You can include data from the user in the form of a data hash:</p>
+
+<div>
+  <pre><code class='javascript'>var the_url = &quot;http://&quot; + window.location.host + &quot;/game/&quot; + guess_string;
+  var mark_string = $.ajax({
+    type: &quot;POST&quot;,
+    url: the_url,
+    accepts: &quot;application/json&quot;,
+    dataType: &quot;json&quot;,
+    data: { &#39;code&#39; : secret_code },
+    complete: function(data){
+      output_mark = data[&#39;responseText&#39;];
+      process_output(secret_code, guess_string, output_mark);
+    }
+  });</code></pre>
+</div>
+
+
+<p>This code snippet is using Ajax to send the secret code and guess to the Sinatra route.</p>
+
+<h2>I learned something about Sinatra today.</h2>
+
+<p>A route has three ingredients: an HTTP method, a URL matching pattern, and a code block.
+Typically they look like this:</p>
+
+<div>
+  <pre><code class='ruby'>get &#39;/&#39; do
+  &quot;hello world&quot;
+end</code></pre>
+</div>
+
+
+<p>But they can also look like this:</p>
+
+<div>
+  <pre><code class='ruby'>post &#39;/game/:guess&#39; do
+  game.guess(params[:guess])
+end
+private
+  def game
+    @game ||= Mastermind::Game.new_with_code(params[:code])
+  end</code></pre>
+</div>
+
+
+<p>The code block returns information. That information can be anything, from a plain string (first example), or an html web page, to a JSON representation of an object (second example). What the browser does with the information it receives is the browser&rsquo;s business.</p>
+
+<p>The overall workflow:
+1. The url on my local machine looks like this: &ldquo;<a href="http://localhost:4567/game/12345">http://localhost:4567/game/12345</a>&rdquo; (line 1). The submitted guess is 12345.
+2. Ajax packages the url with the data hash containing the secret code (line 7).
+3. Javascript submits the HTTP POST request to Sinatra which matches the route.
+4. The route creates a Mastermind::Game object with the provided secret code.
+5. The route calls the guess method on the Game object with the submitted guess.
+6. The route returns a json of the method output (in this case it is a string of +/&ndash; characters indicating exact number matches(+) or matched numbers in the wrong position(&ndash;)).
+7. In the ajax callback function the data from the json object is parsed and passed on for further processing.</p>
+
+<h2>I learned something about routes today.</h2>
+
+<p>I had a mental block about routes. I thought that building the &ldquo;/game/:guess&rdquo; route in Sinatra meant that the user would be constantly navigating between &ldquo;/mastermind&rdquo; and &ldquo;/game/:guess&rdquo;, and that the game would always be reloading with a new secret. I was thinking about routes the wrong way &mdash; when javascript calls the route, it doesn&rsquo;t reload the page, it just retrieves data! I had conflated routes with navigation in my imagination, and forgot that a route is just a method call containing a request for information. Just because the information returned is often rendered as an html page doesn&rsquo;t mean that it has to be html. Which leads me to the penultimate point&hellip;</p>
+
+<h2>I learned something about curl today.</h2>
+
+<p>ANYTHING can make an HTTP request. Ok, maybe that is a slight overstatement.</p>
+
+<p>Browsers interpret the information retrieved using HTTP requests, but they are far from the only category of software that can. Turns out, the command-line functions just as well:</p>
+
+<div>
+  <pre><code class='bash'>$ curl -X POST -H &quot;Accept: application/json&quot; -d &quot;code=12345&quot; js-games.herokuapp.com/12345
++++++$</code></pre>
+</div>
+
+
+<p>The command on line 1 will return the same string I am retrieving with $.ajax in javascript (output on line2). Sure it is a fairly plain result &mdash; it doesn&rsquo;t even include a new line character, for pity&rsquo;s sake &mdash; but it does the job of making an HTTP request to a route and using the result.</p>
+
+<h2>I learned something about myself today.</h2>
+
+<p>I didn&rsquo;t even realize I was misunderstanding HTTP! It was one of those concepts I had already checked off my mental list of technologies to cover on my quest to become a web developer. This breakthrough has reminded me that reviewing the fundamentals in the context of learning new technologies will bring a deeper understanding of everything.</p>
+
+<p>Awesome</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/5/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/3/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/partial-to-ajax/">Partial to Ajax</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/meatier-apps-with-meteor/">Meatier Apps With Meteor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/rails-depends-on-javascript/">Rails, You Can Depend on Javascript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/ruby-execution/">Ruby Execution</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/argf-all-you-want/">ARGF All You Want</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/hammer-out-tasks-with-thor/">Hammer-out Tasks With Thor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/serving-some-java/">Serving Some Java</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/runtime-for-your-life/">Runtime for Your Life</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - katie leonard -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

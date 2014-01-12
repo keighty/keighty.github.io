@@ -1,0 +1,2047 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[keighty]]></title>
+  <link href="http://keighty.github.io/atom.xml" rel="self"/>
+  <link href="http://keighty.github.io/"/>
+  <updated>2014-01-11T17:58:28-08:00</updated>
+  <id>http://keighty.github.io/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Factoring in Nests]]></title>
+    <link href="http://keighty.github.io/blog/2013/factoring-in-nests/"/>
+    <updated>2013-10-29T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/factoring-in-nests</id>
+    <content type="html"><![CDATA[<p>I am building an application that uses several nested attributes: Users have many Goals (Goals belong_to Users), and Goals have many Hours (Hours belong_to Goals).</p>
+
+<p>Using <a href="https://github.com/thoughtbot/factory_girl">FactoryGirl</a> to create a User is straightforward:</p>
+
+<div>
+  <pre><code class='ruby'>FactoryGirl.define do
+  factory :user do
+    sequence :name  { |n| &quot;person#{n}&quot; }
+    sequence :email { |n| &quot;person#{n}@example.com&quot; }
+  end
+end
+
+describe User do
+  before  { @user = FactoryGirl.create(:user) }
+  subject { @user }
+  it { should respond_to(:name) }
+  ...
+end</code></pre>
+</div>
+
+
+<p>How do I create Goals that are linked to the User?</p>
+
+<h3>How to create Factories for nested attributes</h3>
+
+<h5>1. Make a new Factory for producing Goals:</h5>
+
+<div>
+  <pre><code class='ruby'>FactoryGirl.define do
+  factory :goal do
+    sequence :description { |n| &quot;my goal #{n}&quot; }
+    sequence :motivation  { |n| &quot;my motivation #{n}&quot; }
+  end
+end</code></pre>
+</div>
+
+
+<h5>2. Call the Goal Factory from the User Factory and store the Goals in an Array</h5>
+
+<div>
+  <pre><code class='ruby'>FactoryGirl.define do
+  factory :user do
+    sequence :name { |n| &quot;person#{n}&quot; }
+    sequence :email { |n| &quot;person#{n}@example.com&quot; }
+
+    goals { Array.new(1) { FactoryGirl.build(:goal) } }
+
+  end
+end</code></pre>
+</div>
+
+
+<p>Your objects will look like this:</p>
+
+<div>
+  <pre><code class='bash'>&gt; p @user
+#&lt;User id: 1, name: &quot;person1&quot;, email: &quot;person1@example.com&quot;, ... &gt;
+&gt; p @user.goals.first
+#&lt;ActiveRecord::Associations::CollectionProxy [#&lt;Goal id: 1, user_id: 1, description: &quot;my goal 1&quot;, motivation: &quot;my motivation 1&quot;, ...]&gt;</code></pre>
+</div>
+
+
+<p>Create Hours for Goals in the same manner: create a Factory for making Hours, call the Hours Factory from the Goals Factory.</p>
+
+<div>
+  <pre><code class='ruby'>FactoryGirl.define do
+  factory :hour do
+    duration { 100 * rand(36) }
+    ...
+  end
+end
+
+FactoryGirl.define do
+  factory :goal do
+    sequence :description { |n| &quot;my goal #{n}&quot; }
+    sequence :motivation  { |n| &quot;my motivation #{n}&quot; }
+
+    hours { Array.new(3) { FactoryGirl.build(:hour) } }
+  end
+end</code></pre>
+</div>
+
+
+<p>Checking your objects:</p>
+
+<div>
+  <pre><code class='bash'>&gt; p @user
+#&lt;User id: 1, name: &quot;person1&quot;, email: &quot;person1@example.com&quot;, ... &gt;
+&gt; p @user.goals.first
+#&lt;ActiveRecord::Associations::CollectionProxy [#&lt;Goal id: 1, user_id: 1, description: &quot;my goal 1&quot;, motivation: &quot;my motivation 1&quot;, ...]&gt;
+&gt; p @user.goals.first.hours.first
+#&lt;ActiveRecord::Associations::CollectionProxy [#&lt;Hour id: 1, goal_id: 1, duration: 3200 , ...]&gt;</code></pre>
+</div>
+
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Partial to Ajax]]></title>
+    <link href="http://keighty.github.io/blog/2013/partial-to-ajax/"/>
+    <updated>2013-10-18T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/partial-to-ajax</id>
+    <content type="html"><![CDATA[<p>I have been building a new project and getting creative with views. I am working with bootstrap and jquery to develop tabbed displays, and in the process have been gleaning a deeper understanding of rails routes, controllers, and assets. Using Ajax to load partials into rails views is a three part process:</p>
+
+<h4>1. In the View, Add a Link</h4>
+
+<p>/path/to/view.html.erb</p>
+
+<div>
+  <pre><code class='ruby'>&lt;%= link_to &quot;Show my partial&quot;, path_to_controller, remote: true %&gt;</code></pre>
+</div>
+
+
+<p>The key difference in the syntax for this link is &ldquo;remote: true&rdquo;, which signals to the controller action to respond using ajax, not html.</p>
+
+<h4>2. Create a Partial</h4>
+
+<p>/path/to/view/_my_partial.html.erb</p>
+
+<div>
+  <pre><code class='ruby'>&lt;div&gt;
+  &lt;%= form_for @model do |f| %&gt;
+    &lt;%= f.label :my_text_field, &quot;Text Field Label&quot; %&gt;
+    &lt;%= f.text_area :my_text_field %&gt;
+    &lt;%= f.submit &quot;New&quot;, class: &quot;btn btn-primary&quot; %&gt;
+  &lt;% end %&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+
+<h4>3. In the Controller Action, Add a js Response</h4>
+
+<p>/path/to/controller.rb</p>
+
+<div>
+  <pre><code class='ruby'>def my_action
+  respond_to do |format|
+    format.js
+  end
+end</code></pre>
+</div>
+
+
+<p>Normally, Rails will render the view that corresponds to the name of the action in response to an html request. The format.js line asks rails to look for a javascript file instead of an html file when it tries to render a view.</p>
+
+<h4>3. Create a my_action.js.erb File to Shape the Ajax Response</h4>
+
+<p>/path/to/view/my_action.js.erb</p>
+
+<div>
+  <pre><code class='javascript'>$(&quot;#your-placeholder-id&quot;).prepend(&#39;&lt;%= escape_javascript(render &#39;path/to/view/my_partial&#39;) %&gt;</code></pre>
+</div>
+
+
+<p>Files with multiple extensions are processed from last to the first one. With js.erb, the erb will process all the ruby content first, and then the javascript will be run. Your js.erb file should be saved in the same folder as the rest of your controller&rsquo;s views. This is an example :</p>
+
+<div>
+  <pre><code class='bash'>app/views/users/
+├── _my_partial.html.erb
+├── edit.js.erb
+├── show.html.erb</code></pre>
+</div>
+
+
+<p>Voila! When you click the link in your view the partial is loaded using Ajax.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Meatier Apps With Meteor]]></title>
+    <link href="http://keighty.github.io/blog/2013/meatier-apps-with-meteor/"/>
+    <updated>2013-09-20T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/meatier-apps-with-meteor</id>
+    <content type="html"><![CDATA[<p><a href="http://www.meteor.com/">Meteor</a> is a framework that allows you to write web applications using only javascript. All the work is done on the client-side. Meteor embraces new principles of web design: data on the wire, one language is enough, and simplicity makes for productivity.</p>
+
+<p>Simplicity is something I value as well, and while setting up meteor on my linux machine was not a three-step process as outlined in their examples, it only took a little tinkering to figure out the problem. First, a look at the three meteor setup steps:</p>
+
+<h4>Install</h4>
+
+<div>
+  <pre><code class='bash'>$ curl https://install.meteor.com | /bin/sh</code></pre>
+</div>
+
+
+<h4>Create a sample application</h4>
+
+<div>
+  <pre><code class='bash'>$ meteor create testapp</code></pre>
+</div>
+
+
+<h4>Run the sample application</h4>
+
+<div>
+  <pre><code class='bash'>$ cd testapp
+$ meteor</code></pre>
+</div>
+
+
+<p>This is where the meteor server is supposed to start, connecting to your mongo installation, and serving your application on port 3000:</p>
+
+<div>
+  <pre><code class='bash'>$ meteor
+[[[[[ /path/to/testapp ]]]]]
+
+=&gt; Meteor server running on: http://localhost:3000/</code></pre>
+</div>
+
+
+<p>Instead, my terminal became quite upset about it:</p>
+
+<div>
+  <pre><code class='bash'>[[[[[ /path/to/testapp ]]]]]
+
+Unexpected mongo exit code 1. Restarting.
+Unexpected mongo exit code 1. Restarting.
+Unexpected mongo exit code 1. Restarting.
+Can&#39;t start mongod</code></pre>
+</div>
+
+
+<p>Whups! Everything seems normal in my mongo installation, but after a lot of searching I finally found the problem on <a href="http://stackoverflow.com/questions/18505372/meteor-update-0-6-4-0-6-5-mongo-error">stackoverflow</a>. From among the answers I found this solution:</p>
+
+<blockquote><p>I&rsquo;m also getting this error on Ubuntu. As mentioned, it&rsquo;s caused by mongo and mongod from ~/.meteor/tools/latest/mongodb/bin being compiled with an older version of glib. You can replace the version of mongo bundled by meteor with the version installed in your system:</p></blockquote>
+
+<div>
+  <pre><code class='bash'>cd ~/.meteor/tools/latest/mongodb/bin/
+mv mongo mongo-backup
+mv mongod mongod-backup
+ln -s /usr/bin/mongo
+ln -s /usr/bin/mongod</code></pre>
+</div>
+
+
+<p>Brilliant! Following these instructions, I was finally able to start meteor.</p>
+
+<p><img src="http://keighty.github.io/assets/images/meteor.png" alt="Meteor" /></p>
+
+<h3>Getting down to business</h3>
+
+<p>Now to test out some of the awesome functionality of this framework. I <a href="http://www.meteor.com/examples/todos">followed an example</a> and created a todo list:</p>
+
+<div>
+  <pre><code class='bash'>$ meteor create --example todos
+$ cd todos
+$ meteor deploy totally-fake-url.meteor.com
+Deploying to totally-fake-url.meteor.com.  Bundling...
+Uploading...
+Now serving at totally-fake-url.meteor.com</code></pre>
+</div>
+
+
+<p>Opening totally-fake-url.meteor.com with my browser:</p>
+
+<p><img src="http://keighty.github.io/assets/images/meteortodo.png" alt="Meteor" /></p>
+
+<p>Playing around with creating new todos and lists, it is clear that data is being added and changed instantly and persistently. From the docs:</p>
+
+<blockquote><p>A Meteor application is a mix of JavaScript that runs inside a client web browser, JavaScript that runs on the Meteor server inside a Node.js container, and all the supporting HTML fragments, CSS rules, and static assets.</p></blockquote>
+
+<p>I am really looking forward to diving further into <a href="http://docs.meteor.com/#concepts">the docs</a> to learn more about this incredible framework.
+AWESOME</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Rails, You Can Depend on Javascript]]></title>
+    <link href="http://keighty.github.io/blog/2013/rails-depends-on-javascript/"/>
+    <updated>2013-09-16T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/rails-depends-on-javascript</id>
+    <content type="html"><![CDATA[<p>I am between computers at the moment, and I really really miss my OSX development environment. Dependency installation is so smooth and painless on mac, that I had quite forgotten the complications of setting up a complete environment in linux. For instance</p>
+
+<h3>Rails requires a javascript runtime environment</h3>
+
+<p>I am running an Ubuntu 9.4 remix on my little Atom Netbook. Getting rails up and running anew is a lesson in returning to fundamentals.</p>
+
+<div>
+  <pre><code class='bash'>$ gem install rails
+$ rails new testapp -T
+$ rails generate rspec:install
+...
+Could not find a JavaScript runtime. See https://github.com/sstephenson/execjs for a list of available runtimes</code></pre>
+</div>
+
+
+<h3>Why does rails use a javascript runtime?</h3>
+
+<p>A web application does not exist in a ruby/rails vacuum &mdash; rendering an html page requires css and javascript as well. By default, the &lsquo;rails new&rsquo; command generates a Gemfile containing a few suggested goodies, including uglifier, which compresses javascript assets. Dealing with multiple layers of javascripts can hurt application performance, which is why rails has adopted a compression strategy. Uglifier minifies your javascript by removing all the whitespace.</p>
+
+<p>From the RailsGuides:</p>
+
+<blockquote><p>You will need an ExecJS supported runtime in order to use uglifier. If you are using Mac OS X or Windows you have a JavaScript runtime installed in your operating system. Check the ExecJS documentation for information on all of the supported JavaScript runtimes.</p></blockquote>
+
+<h3>Setup Node.js on Linux</h3>
+
+<p>In Ubuntu 10.4 and above, a JavaScript runtime is included, but installing Node on an older Ubuntu distro is not as simple as</p>
+
+<div>
+  <pre><code class='bash'>$ sudo apt-get nodejs</code></pre>
+</div>
+
+
+<p>I found the key sequence of commands on the Node.js website. First, update your packages and install node.js dependencies: python, g++, make, etc</p>
+
+<div>
+  <pre><code class='bash'>$ sudo apt-get update
+$ sudo apt-get install python-software-properties python g++ make</code></pre>
+</div>
+
+
+<p>Next, add the location of the nodejs repository, update, and install.</p>
+
+<div>
+  <pre><code class='bash'>$ sudo add-apt-repository ppa:chris-lea/node.js
+$ sudo apt-get update
+$ sudo apt-get install nodejs</code></pre>
+</div>
+
+
+<p>Wow &mdash; with all of that done, I can finally:</p>
+
+<div>
+  <pre><code class='bash'>$ rails generate rspec:install
+      create  .rspec
+      create  spec
+      create  spec/spec_helper.rb</code></pre>
+</div>
+
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ruby Execution]]></title>
+    <link href="http://keighty.github.io/blog/2013/ruby-execution/"/>
+    <updated>2013-09-10T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/ruby-execution</id>
+    <content type="html"><![CDATA[<p>I have started including an executable in my project setup. Many of the code challenges I have been practicing lately have included file I/O, and while TDD and code exercising with RSpec is still my main process, developing a stand-alone fully-functional project requires something more.</p>
+
+<h3>Blocks Code Challenge</h3>
+
+<p>I found the blocks code challenge on the <a href="http://uva.onlinejudge.org/index.php?option=com_onlinejudge&amp;Itemid=8&amp;category=3&amp;page=show_problem&amp;problem=37">UVa code competition website</a>. To sum up, you have to write a program that will parse and carry out a series of commands for stacking blocks.</p>
+
+<ol>
+<li>move a onto b</li>
+<li>move a over b</li>
+<li>pile a onto b</li>
+<li>pile a over b</li>
+<li>quit</li>
+</ol>
+
+
+<p>The commands will be provided in an input file, and an output is specified. Fun problem, right? So, I start my project folder using my <a href="http://www.katieleonard.ca/automation/2013/09/08/thor-sets-up-a-project/">thor task</a>, and work awhile adding logic and tests and data as appropriate. My file tree finishes like this:</p>
+
+<div>
+  <pre><code class='bash'>blocks
+├── data
+│   ├── input.txt
+│   └── output.txt
+├── lib
+│   └── blocks.rb
+├── spec
+│   ├── blocks_spec.rb
+│   └── spec_helper.rb
+├── Gemfile
+└── README.md</code></pre>
+</div>
+
+
+<p>So, in order to use my script, I would have to call it from the command line:</p>
+
+<div>
+  <pre><code class='bash'>$ ruby lib/blocks.rb data/input.txt
+#=&gt; or
+$ data/input.txt | ruby lib/blocks.rb</code></pre>
+</div>
+
+
+<p>This is an extremely verbose way to deliver a final product, and I would much rather call $ blocks &lt;file_input&gt;. It turns out that making an executable is easy and elegant, just like everything else in ruby. You just have to declare the ruby environment, include a few notes on usage, load the file tree, and call the class:</p>
+
+<div>
+  <pre><code class='ruby'>#!/usr/bin/env ruby
+# blocks
+# 10-Sep-2013
+#
+# Usage:
+# ./blocks data/input.txt
+#
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), &#39;lib&#39;))
+require &#39;blocks&#39;
+Blocks.new.process_input</code></pre>
+</div>
+
+
+<p>Placing this code in a non-extension file, like &lsquo;blocks&rsquo;, in the main directory, I can make it an executable by changing the file permissions:</p>
+
+<div>
+  <pre><code class='bash'>$ chmod +x ./blocks</code></pre>
+</div>
+
+
+<p>And I can call it like any other executable:</p>
+
+<div>
+  <pre><code class='bash'>$ ./blocks data/input.txt</code></pre>
+</div>
+
+
+<p>I liked this solution so much, I added it to my thor project setup! Oh, and if you are interested in seeing my solution for the blocks problem, checkout my <a href="https://github.com/keighty/datastructures/tree/master/ruby/blocks">github repo</a></p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Thor Sets Up a Project]]></title>
+    <link href="http://keighty.github.io/blog/2013/thor-sets-up-a-project/"/>
+    <updated>2013-09-08T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/thor-sets-up-a-project</id>
+    <content type="html"><![CDATA[<p>A few weeks ago I posted about <a href="http://www.katieleonard.ca/automation/2013/08/30/hammer-out-tasks-with-thor/">using Thor to generate system-wide notes files with a standard format</a>. Since then, I have been doing a lot of smaller code challenges, and I wanted to set up a Thor task for generating a standard project file tree.</p>
+
+<p>My Goal Tree:</p>
+
+<div>
+  <pre><code class='bash'>project_name
+├── lib
+│   └── project_name.rb
+├── spec
+│   ├── project_name_spec.rb
+│   └── spec_helper.rb
+├── Gemfile
+└── README.md</code></pre>
+</div>
+
+
+<p>I always begin with these files and this organization. A Gemfile and README are essential for setting up the environment and explaining the gist of the project. I am most comfortable with RSpec, and to get into the practice of TDD, setting up a testing environment right away is non-negotiable. All of these standard files contain some automatic content as well:</p>
+
+<h5>spec_helper.rb loads the library</h5>
+
+<div>
+  <pre><code class='ruby'>$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), &#39;..&#39;, &#39;lib&#39;))
+require &#39;rspec&#39;
+require &#39;project_name&#39;</code></pre>
+</div>
+
+
+<h5>project_name_spec.rb sets up the first test</h5>
+
+<div>
+  <pre><code class='ruby'>require &#39;spec_helper&#39;
+
+describe ProjectName do
+  before (:each) {  }
+  subject {  }
+
+  it &quot;should pass&quot;
+end</code></pre>
+</div>
+
+
+<h5>Gemfile specifies the right gems for setting up the project</h5>
+
+<div>
+  <pre><code class='ruby'>ruby &#39;2.0.0&#39;
+gem &#39;rspec&#39;</code></pre>
+</div>
+
+
+<p>There are other files that could have auto-generated content as well, like a Rakefile, or a config.ru, but this is a good start.</p>
+
+<h4>Create a Thor task (rb_project.thor):</h4>
+
+<div>
+  <pre><code class='ruby'>#!/usr/bin/env ruby
+require &quot;rubygems&quot;
+require &quot;thor&quot;
+
+class RbProject &lt; Thor
+  desc &quot;init&quot;, &quot;creates a ruby project with rspec&quot;
+
+  def init(title=&quot;new_project&quot;)
+    Dir.mkdir(title)
+    Dir.chdir(title)
+    Dir.mkdir(&quot;spec&quot;)
+    Dir.mkdir(&quot;lib&quot;)
+    filename = &quot;#{title}&quot;
+
+    open(File.new(&quot;README.md&quot;, &quot;w&quot;), &quot;w&quot;) do |note|
+      note.puts &quot;# #{title}&quot;
+    end
+
+    open(File.new(&quot;Gemfile&quot;, &quot;w&quot;), &quot;w&quot;) do |my_gem|
+      my_gem.puts &quot;ruby &#39;2.0.0&#39;&quot;
+      my_gem.puts &quot;gem &#39;rspec&#39;&quot;
+    end
+
+    open(File.new(&quot;spec/spec_helper.rb&quot;, &quot;w&quot;), &quot;w&quot;) do |spec|
+      spec.puts &quot;$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), &#39;..&#39;, &#39;lib&#39;))&quot;
+      spec.puts &quot;require &#39;rspec&#39;&quot;
+      spec.puts &quot;require &#39;#{filename}&#39;&quot;
+    end
+
+    open(File.new(&quot;spec/#{filename}_spec.rb&quot;, &quot;w&quot;), &quot;w&quot;) do |spec|
+      spec.puts &quot;require &#39;spec_helper&#39;&quot;
+      spec.puts &quot;&quot;
+      spec.puts &quot;describe #{camelize(filename)} do&quot;
+      spec.puts &quot;  before (:each) {  }&quot;
+      spec.puts &quot;  xit &#39;should pass&#39;&quot;
+      spec.puts &quot;end&quot;
+    end
+  end
+
+  private
+    def camelize(snake)
+      title = snake.split(&#39;_&#39;).each do |word|
+        word.capitalize!
+      end
+      title.join(&#39;&#39;)
+    end
+end</code></pre>
+</div>
+
+
+<p>I created a private method camelize in order to change the snake_case project name into a CamelCase class name.</p>
+
+<p>As before, I install my thor task system wide:</p>
+
+<div>
+  <pre><code class='bash'>$ thor install rb_project.thor</code></pre>
+</div>
+
+
+<p>And now my project generation task can be run from any directory, anywhere on my system:</p>
+
+<div>
+  <pre><code class='bash'>$ thor list
+note
+----
+thor note:create  # creates a notes file in markdown
+
+rb_project
+----------
+thor rb_project:init  # creates a ruby project with rspec
+
+$ thor rb_project:init test_project
+$ tree test_project/
+test_project/
+├── lib
+│   └── test_project.rb
+├── spec
+│   ├── spec_helper.rb
+│   └── test_project_spec.rb
+├── Gemfile
+├── README.md
+
+2 directories, 6 files</code></pre>
+</div>
+
+
+<p>Awesome.</p>
+
+<div>
+  <pre><code class='bash'></code></pre>
+</div>
+
+
+
+
+<div>
+  <pre><code class='bash'></code></pre>
+</div>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ARGF All You Want]]></title>
+    <link href="http://keighty.github.io/blog/2013/argf-all-you-want/"/>
+    <updated>2013-09-05T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/argf-all-you-want</id>
+    <content type="html"><![CDATA[<p>Many of the fun, junior code challenges I have encountered deal a lot with input/output of data, and I found a great ruby feature that provides flexibility at the command line.</p>
+
+<h3>Data Input</h3>
+
+<p>There are a lot of ways to treat data at the command line, but the one I was most familiar with is passing in a filename as an argument:</p>
+
+<div>
+  <pre><code class='bash'>$ ruby example_script.rb file1.csv file2.csv ...
+$ ruby example_script.rb file1.csv | more
+$ ruby example_script.rb file1.csv &gt; output.txt</code></pre>
+</div>
+
+
+<h3>Filename Input</h3>
+
+<p>Using ARGV, we can access the list of filenames provided at the command line. ARGV is an array containing all the information that follows the command. For example:</p>
+
+<div>
+  <pre><code class='bash'>$ example_command apple banana orange
+# ARGV = [&quot;apple&quot;, &quot;banana&quot;, &quot;orange&quot;]</code></pre>
+</div>
+
+
+<p>One can process each filename in ARGV using regular array methods:</p>
+
+<div>
+  <pre><code class='ruby'>ARGV.each do |arg|
+  process_string(File.read(arg))
+end</code></pre>
+</div>
+
+
+<p>File.read(arg) reads the file into a &ldquo;\n&rdquo; delimited string, which can be processed further. If there are no arguments, ARGV is an empty array.</p>
+
+<h3>Piped Input</h3>
+
+<p>Say that we want to enter data directly into a program rather than use a fixed filename at the command line &mdash; a useful technique for when we want data to flow out of one process and into another:</p>
+
+<div>
+  <pre><code class='bash'>$ cat file1.csv | ruby example_script.rb
+$ cat *.csv | ruby example_script.rb
+$ ruby example_script.rb &lt; file1.csv</code></pre>
+</div>
+
+
+<p>Using the pipe, &ldquo;|&rdquo; or &ldquo;&lt;&rdquo;, we can push a string of data from one process into another, but what happens to our program when we try to do this?</p>
+
+<div>
+  <pre><code class='bash'>$ example.csv | ruby example_script.rb
+TypeError: can`t convert nil into String</code></pre>
+</div>
+
+
+<p>We get a TypeError! Recall that command line arguments are stored in ARGV, but we are not providing any command line arguments. ARGV is an empty array, and we are attempting to open a file from ARGV[0] = nil. Shame on us! How do we access data that is piped in as well as data that is appended to the command line? Do we have to check for the source of the data before we can treat it? Turns out, we DON&rsquo;T.</p>
+
+<h3>The ARGF Solution</h3>
+
+<p>Ruby has a nifty interface for handling data input, regardless of whether it arrives as a command line argument or from another data source. We can replace the code we wrote earlier with a single line:</p>
+
+<div>
+  <pre><code class='ruby'>process_string(ARGF.read)</code></pre>
+</div>
+
+
+<p>If ARGV is not empty, ARGF will assume it is an array of filenames and will treat them accordingly. If ARGV is empty, it will read from $stdin to get the data passed in via the pipe. One caveat is that you can&rsquo;t read from both ARGV and the pipe: if ARGV != [  ], $stdin is ignored.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hammer-out Tasks With Thor]]></title>
+    <link href="http://keighty.github.io/blog/2013/hammer-out-tasks-with-thor/"/>
+    <updated>2013-08-30T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/hammer-out-tasks-with-thor</id>
+    <content type="html"><![CDATA[<p>A few months ago I gave a small lightning talk to my code school class about automating tasks using <a href="http://rake.rubyforge.org/">Rake</a>. Before I learned ruby I used bash scripts to accomplish similar things, but was often bogged down in learning the syntax of string-processing essentials like awk or sed. I wished for the simplicity of Ruby, and thought that Rake was the bees-knees. After my talk, <a href="chuckvose.com">Chuck</a>, my PCS mentor, put together a repo of <a href="http://whatisthor.com/">Thor</a> tasks that accomplished the same tasks but could be installed system wide.</p>
+
+<h3><a href="http://whatisthor.com/">Thor</a> is my new hero</h3>
+
+<p>Unlike Rake tasks, which are confined to the directory containing the Rakefile, Thor tasks can be installed on your system and called from anywhere. My note files are all formatted in a particular way. Before Thor, I used a rake task:</p>
+
+<div>
+  <pre><code class='bash'>$ cd notesDirWithRakefile
+$ rake post title=&quot;new post title&quot;
+$ Creating new post: &quot;./130830_new_post_title&quot;</code></pre>
+</div>
+
+
+<p>The Rake task auto-formats the filename, replacing spaces with underscores, and prepends today&rsquo;s date so that they will sort in the order they are made. This worked great for when I wanted to keep notes in that one folder, but later I wanted to be able to keep notes on a particular project. I would either have to copy the Rakefile (two places to update if I made any changes), or create a symbolic link (which would break if I ever moved my Rakefile). Neither of these options seemed to be the most practical. Enter Thor:</p>
+
+<p>Creating the Thor task is as easy as pie:</p>
+
+<div>
+  <pre><code class='ruby'>require &#39;thor&#39;
+
+class Note &lt; Thor
+  desc &quot;create&quot;, &quot;creates a notes file in markdown&quot;
+  def create(title=&quot;new note&quot;)
+    slug = title.downcase.strip.gsub(&#39; &#39;, &#39;_&#39;).gsub(/[^\w-]/, &#39;&#39;)
+    date = Time.parse(Time.now).strftime(&#39;%y%m%d&#39;)
+    filename = File.join(&quot;./&quot;, &quot;#{date}_#{slug}.md&quot;)
+
+    if File.exist?(filename)
+      abort(&quot;rake aborted!&quot;) if ask(&quot;#{filename} already exists. Do you want to overwrite?&quot;, [&#39;y&#39;, &#39;n&#39;]) == &#39;n&#39;
+    end
+
+    puts &quot;Creating new post: #{filename}&quot;
+    open(filename, &#39;w&#39;) do |post|
+      post.puts &quot;# #{title.gsub(/-/,&#39; &#39;).capitalize}&quot;
+    end
+  end
+end</code></pre>
+</div>
+
+
+<p>Listing all Thor tasks is easy:</p>
+
+<div>
+  <pre><code class='bash'>$ thor list
+note
+----
+thor note:create  # creates a notes file in markdown</code></pre>
+</div>
+
+
+<p>Installing a Thor task for system use is easy:</p>
+
+<div>
+  <pre><code class='bash'>$ thor install notes.thor
+...
+Do you wish to continue [y/N]? y
+Please specify a name for notes.thor in the system repository [notes.thor]: note
+Storing thor file in your system repository</code></pre>
+</div>
+
+
+<p>Uninstalling a Thor task is easy:</p>
+
+<div>
+  <pre><code class='bash'>$ thor uninstall note
+Uninstalling note.
+Done.</code></pre>
+</div>
+
+
+<p>With my Thor notes task installed system-wide, I can create a note page in any directory, for any reason, without copying code.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Serving Some Java]]></title>
+    <link href="http://keighty.github.io/blog/2013/serving-some-java/"/>
+    <updated>2013-08-24T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/serving-some-java</id>
+    <content type="html"><![CDATA[<p>For a recent java coding challenge I was asked, among other things, to make a server. It has been several years since I last attempted it, and I had forgotten how easy it could be.</p>
+
+<h4>Server</h4>
+
+<p>A server, like any good conversationalist, is a good listener. A server is a program running on a computer that listens at a port, waiting to receive instructions.</p>
+
+<div>
+  <pre><code class='java'>public class Server {
+  private static String inputLine;
+
+  public static void main(String[] args) {
+
+    private static final int PORT_NUMBER = 63400
+
+    try {
+      // Socket variables
+      ServerSocket serverSocket = new ServerSocket(PORT_NUMBER);
+      Socket clientSocket = serverSocket.accept();
+
+      // IO variables
+      InputStreamReader inputReader = new InputStreamReader(clientSocket.getInputStream());
+      BufferedReader bReader = new BufferedReader(inputReader);
+
+      while ((inputLine = bReader.readLine()) != null) {
+        System.out.println(inputLine);
+      }
+
+    } catch (Exception e) {
+      System.out.println(e);
+    }
+  }
+}</code></pre>
+</div>
+
+
+<p>The server opens a socket on a specified port (in this case, port 63400). A socket is the point at which two-way communication happens between computer programs. The server opens a socket at a port and waits for a client to bind the socket so they can exchange information. It waits for input from the client, with instructions to print out anything the client puts in (line 18). So where is the client?</p>
+
+<h4>Client</h4>
+
+<p>The client is even simpler than the server: it finds the server at the specified port and connects to the socket.</p>
+
+<div>
+  <pre><code class='java'>public class Client {
+
+  private static final int PORT_NUMBER = 63400
+
+  public static void main(String[] args) {
+
+    try {
+
+      // Socket variables
+      Socket socket = new Socket(&quot;localhost&quot;, PORT_NUMBER);
+      PrintWriter pWriter = new PrintWriter(socket.getOutputStream(), true);
+
+      pWriter.println(&quot;Hello World!&quot;);
+
+    } catch (Exception e) {
+      System.out.println(e);
+    }
+  }
+}</code></pre>
+</div>
+
+
+<p>With a successful connection, it generates an output stream. If you start the server in one console it will look like it isn&rsquo;t doing anything, but when you start the client in another console you can watch them communicate. The client writes &ldquo;Hello World&rdquo; directly into the port where the server is listening (socket.getOutputStream()), and as instructed, the server obediently prints &ldquo;Hello World&rdquo; to the console.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Runtime for Your Life]]></title>
+    <link href="http://keighty.github.io/blog/2013/runtime-for-your-life/"/>
+    <updated>2013-08-19T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/runtime-for-your-life</id>
+    <content type="html"><![CDATA[<p>Eh? is coming along as a functioning interpreted language, but we are still missing a runtime. We have a lexer that chops and tags our code string into tokens, and a grammar that contains the rules for order of operations, and a parser that is generated by RACC from the grammar. The parser assembles the tokens into an evaluation tree (AST), but we need a runtime to do the actual evaluation.</p>
+
+<p>Recall from my previous post that the AST consists of nodes, like this one for a method definition:</p>
+
+<div>
+  <pre><code class='ruby'>class DefNode
+  def initialize(name, params, body)
+    @name = name
+    @params = params
+    @body = body
+  end
+
+  def eval(context)
+    context.current_class.can_methods[@name] = CanMethod.new(@params, @body)
+  end
+end</code></pre>
+</div>
+
+
+<p>When a method definition node is evaluated it adds a new entry to the can_methods hash. The name of the method is its key, and the value is an object (CanMethod.new) that contains the details of method evaluation (parameters and the method body). The context is the scope of the evaluation &ndash; in the case of a method call, the context is the enclosing class.</p>
+
+<p>Ok, so when does the CanMethod get evaluated? It happens at runtime. A class node is built and all the method definitions are added, but the node tree will remain untouched until until a method is called.</p>
+
+<div>
+  <pre><code class='ruby'>class CanMethod
+  def initialize(params, body)
+    @params = params
+    @body = body
+  end
+
+  def call(receiver, arguments)
+    @body.eval(Context.new(receiver))
+  end
+end</code></pre>
+</div>
+
+
+<p>When your program calls a method, a portion of the AST is evaluated. The body of the method object is called with the provided parameters in the context of the method receiver. For ruby newbies, the receiver is the object on the left side of the method call &mdash; ie. in foo.bar(3), foo is the receiver and bar is called with the parameter of 3 in the context of foo.  The runtime will create a new context for the method (recall that ruby is block scoped, meaning that all variables and blocks within the method are confined to that method&hellip; mostly).</p>
+
+<div>
+  <pre><code class='ruby'>class Context
+  attr_reader :locals, :current_self, :current_class
+
+  @@constants = {}
+
+  def initialize(current_self, current_class=current_self.can_class)
+    @locals = {}
+    @current_self = current_self
+    @current_class = current_class
+  end
+end</code></pre>
+</div>
+
+
+<p>The context contains all the local variables for the scope as well as a reference to what object is self, and which is super. We are getting very close to putting all these pieces together!</p>
+
+<p>Awesome</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Parcel Parser]]></title>
+    <link href="http://keighty.github.io/blog/2013/parcel-parser/"/>
+    <updated>2013-08-16T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/parcel-parser</id>
+    <content type="html"><![CDATA[<p>On the last episode, I described how to label chunks of code for processing through a parser. Strings are labeled as &lsquo;STRING&rsquo;, class definitions as &lsquo;A&rsquo; + &lsquo;CONSTANT&rsquo;, etc.</p>
+
+<h2>What is a parser?</h2>
+
+<p>A parser separates and analyzes a piece of text according to a set of rules specified by a formal grammar. The analysis is performed by assembling the tokenized code into an Abstract Syntax Tree (AST) &ndash; a tree of nodes that represent what the code means to the language. The AST evaluates the nodes in a similar manner to order of operations in math: each token is placed on the evaluation tree, and expressions are evaluated by reducing each branch in order.</p>
+
+<p>The parser itself is can be written by hand, but I am using RACC: an LALR (Look Ahead, Left to right, Reverse) parser written by <a href="https://github.com/tenderlove/racc">tenderlove</a> to generate Ruby programs. How do we specify a grammar that RACC will understand?</p>
+
+<p>Each rule is formatted in the following way:</p>
+
+<div>
+  <pre><code class='bash'>RuleName:
+  OtherRule TOKEN AnotherRule    { code to run }
+| OtherRule                      { ... }
+;</code></pre>
+</div>
+
+
+<p>It is similar to an if/else statement that captures all possible expressions beginning with the most specific (ie: an expression with TWO rules matches line 2) to more general (all other single expressions are captured on line 3). When a token matches a rule, the code in the attached code block is run.</p>
+
+<p>The code blocks correspond to instructions on how to treat matching tokens. For example, the grammar should specify what happens when the code contains a class definition, labeled with &lsquo;A&rsquo; + &lsquo;CONSTANT&rsquo;.</p>
+
+<div>
+  <pre><code class='ruby'>...
+# Class definition
+Class:
+  A CONSTANT Block { result = ClassNode.new(val[1], val[2]) }
+;
+...</code></pre>
+</div>
+
+
+<p>When the parser catches a class token it will create a new ClassNode with the class name (CONSTANT) and the block as arguments. The val[] array refers to the grammar rule [A, CONSTANT, Block].</p>
+
+<p>Some tokens are parsed very close to AS IS:</p>
+
+<div>
+  <pre><code class='ruby'>Literal:
+  NUMBER { result = LiteralNode.new(val[0]) }
+| STRING { result = LiteralNode.new(val[0]) }
+| TRUE   { result = LiteralNode.new(true) }
+| FALSE  { result = LiteralNode.new(false) }
+| NIL    { result = LiteralNode.new(nil) }
+;</code></pre>
+</div>
+
+
+<p>Each literal triggers the creation of a new LiteralNode with its value as the only argument.</p>
+
+<p>The Nodes are outlined in a Nodes class, where the rules of evaluation are defined.</p>
+
+<div>
+  <pre><code class='ruby'>...
+class ClassNode
+  def initialize(name, body)
+    @name = name
+    @body = body
+  end
+
+  def eval(context)
+    eh_class = CanadianClass.new
+    context[@name] = eh_class
+    @body.eval(Context.new(eh_class, eh_class))
+    eh_class
+  end
+end
+...</code></pre>
+</div>
+
+
+<p>A ClassNode is initialized with two params (recall from the grammar: ClassNode.new(val[1], val[2])), the class name and its code block. The context is like scope &ndash; it can hold modules, classes, methods, attributes, aliases, requires, and includes. Classes, modules, and files are all Contexts (definition from <a href="http://ruby-doc.org/stdlib-1.8.6/libdoc/rdoc/rdoc/RDoc/Context.html">Rdocs</a>). Evaluation of a ClassNode begins by assigning the class to a context and evaluating the code block, which adds more contexts. In this way, a tree structure is formed &ndash; an AST &ndash; which does all the interpreting work for the new language.</p>
+
+<p>When the grammar and node definitions are complete, RACC will generate a parser:</p>
+
+<div>
+  <pre><code class='ruby'>$ racc -vo parser.rb grammar.y</code></pre>
+</div>
+
+
+<p>The parser is a relatively obtuse set of methods and state transition tables, and when you run code through the parser you get an AST that follows the grammar you have defined.</p>
+
+<p>So, now I have a lexer and a parser, but I still can&rsquo;t run my code. I need to define a runner class that will put all these parts together, but first, I need a break.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Flex Your Lexer]]></title>
+    <link href="http://keighty.github.io/blog/2013/flex-your-lexer/"/>
+    <updated>2013-08-15T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/flex-your-lexer</id>
+    <content type="html"><![CDATA[<p>A Lexer is a ruby class with a single method: tokenize(). Its purpose is to label each chunk of code with a particular token. Strings are labeled as strings, numbers as numbers, and class names as constants. For example,</p>
+
+<div>
+  <pre><code class='ruby'>Lexer.new.tokenize(&quot;string&quot;)
+# =&gt;[[:STRING, &quot;string&quot;]]
+Lexer.new.tokenize(&quot;True&quot;)
+# =&gt;[[:CONSTANT, &quot;True&quot;]]
+Lexer.new.tokenize(&quot;a Car&quot;)
+# =&gt;[[:A, &#39;a&#39;], [:CONSTANT, &#39;Car&#39;]])
+Lexer.new.tokenize(&quot;+&quot;)
+# =&gt;[[&quot;+&quot;, &quot;+&quot;]]</code></pre>
+</div>
+
+
+<p>&ldquo;Lexing&rdquo; is accomplished using regular expressions. The lexer treats the text string of your code like a shish kabob &ndash; it slides recognizable chunks off the skewer one at a time and categorizes them (onion, pepper, method definition, etc).</p>
+
+<div>
+  <pre><code class='ruby'>class Lexer
+  KEYWORDS = [&#39;a&#39;, &#39;can&#39;, &#39;if&#39;, &#39;else&#39;, &#39;while&#39;, &#39;true&#39;, &#39;false&#39;, &#39;nil&#39;]
+
+  def tokenize(code)
+    code.chomp!
+    i = 0
+    tokens = []
+
+    while i &lt; code.size
+      chunk = code[i..-1]
+
+      # checks keywords
+      if identifier = chunk[/\A(eh\?)/, 1]
+        tokens &lt;&lt; [&#39;}&#39;, &#39;}&#39;]
+        i += identifier.size
+
+      elsif identifier = chunk[/\A([a-z]\w*)/, 1]
+        if KEYWORDS.include?(identifier)
+          tokens &lt;&lt; [identifier.upcase.to_sym, identifier]
+        else
+          tokens &lt;&lt; [:IDENTIFIER, identifier]
+        end
+        i += identifier.size
+...</code></pre>
+</div>
+
+
+<p>In this example lexer I have defined my list of keywords, removed the trailing newline, and begun peeling identifiable chunks off the code example.
+* If the code chunk matches an &lsquo;eh?&rsquo; it will add a closing brace to the token array.
+* If the code chunk matches a KEYWORD it will be upcased and labeled as a keyword and added to the token array.
+* If the code chunk matches any word of lowercase letters it will be labeled as an IDENTIFIER and added to the token array.</p>
+
+<p>I continued defining regex rules until I was able to completely tokenize a class definition:</p>
+
+<div>
+  <pre><code class='ruby'>code = &lt;&lt;-EOS
+a Canadian
+  can curl
+    if skip:
+      say &#39;Hurry!&#39;
+    eh?
+  eh?
+eh?
+EOS
+...
+Lexer.new.tokenize(code)
+# =&gt; [[:A, &quot;a&quot;], [:CONSTANT, &quot;Canadian&quot;], [:CAN, &quot;can&quot;], [:IDENTIFIER, &quot;curl&quot;], [:IF, &quot;if&quot;], [:IDENTIFIER, &quot;skip&quot;], [&quot;{&quot;, &quot;{&quot;], [:IDENTIFIER, &quot;say&quot;], [:STRING, &quot;Hurry!&quot;], [&quot;}&quot;, &quot;}&quot;], [&quot;}&quot;, &quot;}&quot;], [&quot;}&quot;, &quot;}&quot;]]</code></pre>
+</div>
+
+
+<p>Now that I have an array of tokens, it is time to write my grammar laws that will tell the parser what to do with them.</p>
+
+<p>Awesome</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Canadian Flair]]></title>
+    <link href="http://keighty.github.io/blog/2013/canadian-flair/"/>
+    <updated>2013-08-10T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/canadian-flair</id>
+    <content type="html"><![CDATA[<p>For my last month at code school, I have decided to learn what it takes to develop a new programming language. Having been teased for my Canadian accent, I thought it appropriate to incorporate some idiomatic Canadianisms, and call my language Eh? Deciding what actual features I want to implement in my programming language is an interesting task, and I think I have narrowed it down to a couple of standard rules and a couple wacky ones:</p>
+
+<h3>Rules for Eh?</h3>
+
+<ul>
+<li>blocks of code are delimited by &lsquo;:&rsquo; and &lsquo;eh?&rsquo;</li>
+<li>classes are declared using &ldquo;A&rdquo; keyword</li>
+<li>methods are defined using &ldquo;CAN&rdquo; keyword</li>
+<li>lowercase identifiers are local variables or method names</li>
+<li>capitalized identifiers are global variables</li>
+<li>no parens for args</li>
+<li>last value evaluated in return value</li>
+<li>everything is an object</li>
+</ul>
+
+
+<h1>Steps for building an interpreted language</h1>
+
+<ol>
+<li>This code has to be provided as input to a lexer.</li>
+<li>The lexer will convert that input into tokens.</li>
+<li>The parser will organize those tokens into a tree of nodes.</li>
+<li>The runtime will evaluate the nodes using ruby.</li>
+</ol>
+
+
+<h3>Prototype</h3>
+
+<p>Here is what I would like the final result to look like:</p>
+
+<div>
+  <pre><code class='ruby'>a Canadian
+  with toque
+  with scarf
+  with broom
+
+  can curl
+    if skip:
+      say &quot;Hurry!&quot;
+    eh?
+    if lead:
+      pass
+    eh?
+    say &quot;How social the game...&quot;
+  eh?
+
+  can say_aboot:
+    say &quot;What&#39;s it all aboot?&quot;
+  eh?
+eh?</code></pre>
+</div>
+
+
+<p>With this vague action plan and <a href="http://createyourproglang.com/?hop=rubyinside">&ldquo;Create Your Own Programming Language&rdquo;</a> by Marc-Andre Cournoyer in hand, off we go!</p>
+
+<p>Awesome</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Show-off With GitHub and Docco]]></title>
+    <link href="http://keighty.github.io/blog/2013/show-off-with-github/"/>
+    <updated>2013-08-06T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/show-off-with-github</id>
+    <content type="html"><![CDATA[<p>I was experimenting with some documentation styles today and discovered two bits of gold: gh-pages and docco:</p>
+
+<p>Creating a site for your project using GitHub is a 3 step process:
+1. create a new orphan branch called gh-pages
+2. remove all the contents
+3. fill the branch with your boastful new site</p>
+
+<div>
+  <pre><code class='bash'>$ cd repository
+
+$ git checkout --orphan gh-pages
+# Creates a branch, without any parents
+# Switched to a new branch &#39;gh-pages&#39;
+
+$ git rm -rf .
+# Remove all files from the old working tree</code></pre>
+</div>
+
+
+<p>From here you can use the <a href="https://help.github.com/articles/creating-pages-with-the-automatic-generator">GitHub Automatic Page generator</a> to throw up a theme and some standard content, you can roll out a <a href="http://jekyllbootstrap.com/">jekyll bootstrap</a> platform with blogging integration, or you can simply:</p>
+
+<div>
+  <pre><code class='bash'>$ echo &quot;Hello gh-pages!&quot; &gt; index.html
+$ git add index.html
+$ git commit -a -m &quot;First pages commit&quot;
+$ git push origin gh-pages</code></pre>
+</div>
+
+
+<p>Add and commit your content to your gh-pages branch, and GitHub will generate what needs to be generated in order to serve your website.</p>
+
+<p>Your pages are hosted for free by GitHub. If you have already configured a personal site using <a href="https://help.github.com/articles/user-organization-and-project-pages">User Pages</a>, your project pages will hang off the end of your domain like this : username.github.io/repo_name</p>
+
+<h3><a href="http://jashkenas.github.io/docco/">Docco</a></h3>
+
+<blockquote><p>Docco is a quick-and-dirty documentation generator, written in Literate CoffeeScript. It produces an HTML document that displays your comments intermingled with your code. All prose is passed through Markdown, and code is passed through Highlight.js syntax highlighting.</p></blockquote>
+
+<p>Docco works with  Python, Ruby, JavaScript, Java, and many other languages, with no configuration &mdash; just plug and play!</p>
+
+<p>Install Docco with npm:</p>
+
+<div>
+  <pre><code class='bash'>sudo npm install -g docco</code></pre>
+</div>
+
+
+<p>Run it against your code:</p>
+
+<div>
+  <pre><code class='javascript'>docco lib/*.ruby</code></pre>
+</div>
+
+
+<p>Docco will create a docs/ folder in your project and will generate an html file for each ruby file in the lib directory. This is where beautifully commented code really pays off, but docco does not format multi-line code the same way. Check out my <a href="http://www.katieleonard.ca/PCSnotes/docs/benchmark.html">benchmark.rb</a> for an example of how each comment style is treated by docco.</p>
+
+<p>TADA</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[State of the QuickUnion]]></title>
+    <link href="http://keighty.github.io/blog/2013/state-of-the-quickunion/"/>
+    <updated>2013-08-04T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/state-of-the-quickunion</id>
+    <content type="html"><![CDATA[<p>In my last look at the UnionFind algorithm I made a quick-find implementation &mdash; finding if two elements were connected was fast but connecting two elements was slow. The union operation is a good candidate for optimization.</p>
+
+<h1>Quick Union</h1>
+
+<p>One way to optimize the union operation is to reduce the number of array accesses required.</p>
+
+<p>In QuickFind, the sets are arranged in a flat array of elements which all share the same value: they are all wearing the same t-shirt. When we connect elements from different sets, we must make sure that every element in the first set changes its t-shirt to match the elements in the other set. This is a time-consuming process, and uses a lot of t-shirts.</p>
+
+<p>What if only one element had to change its t-shirt? If the set had a single element in charge &ndash; a root &ndash; then joining elements from different sets would require identifying the t-shirt of the one in charge, and then changing to that element&rsquo;s t-shirt.</p>
+
+<p>Using an array instead of t-shirts to keep track of the values, we can walk through what this implementation would look like:</p>
+
+<table class="table table-bordered">
+  <tr>
+    <th>Index</th>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td>9</td>
+    <td>0</td>
+    <th></th>
+  </tr>
+  <tr>
+    <th>Value</th>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td>9</td>
+    <td>0</td>
+    <td> | Each element begins as the root of its own set</td>
+  </tr>
+  <tr>
+    <th>union(4,9)</th>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td class="highlight">9</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td class="highlight">9</td>
+    <td>0</td>
+    <td> | root(9) = 9, root(4) = 4, change array[4] = 9</td>
+  </tr>
+  <tr>
+    <th>union(2,4)</th>
+    <td>1</td>
+    <td class="highlight">9</td>
+    <td>3</td>
+    <td class="highlight">9</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td>9</td>
+    <td>0</td>
+    <td> | root(4) = 9, root(2) = 2, change array[2] = 9</td>
+  </tr>
+  <tr>
+    <th>union(4,7)</th>
+    <td>1</td>
+    <td>9</td>
+    <td>3</td>
+    <td  class="highlight">9</td>
+    <td>5</td>
+    <td>6</td>
+    <td  class="highlight">7</td>
+    <td>8</td>
+    <td>7</td>
+    <td>0</td>
+    <td> | root(7) = 7, root(4) = 9, change array[9] = 7</td>
+  </tr>
+  <tr>
+    <th>find(2,7)</th>
+    <td>1</td>
+    <td class="highlight">9</td>
+    <td>3</td>
+    <td>9</td>
+    <td>5</td>
+    <td>6</td>
+    <td class="highlight">7</td>
+    <td>8</td>
+    <td class="highlight">7</td>
+    <td>0</td>
+    <td> | root(7) = 7, root(2) = 7. The two are connected </td>
+  </tr>
+</table>
+
+
+<h2>QuickUnion</h2>
+
+<p>Again following the basic API:</p>
+
+<div>
+  <pre><code class='java'>public class UF
+---------------
+public UF(int N)
+public int find(int p, int q)
+public void union(int p, int q)</code></pre>
+</div>
+
+
+<p>I adapted the QuickUnion in ruby:</p>
+
+<div>
+  <pre><code class='ruby'>class QuickUnion
+  def initialize(size)
+    @find_array = Array.new(size){ |index| index }
+  end
+
+  # check if p and q have the same root
+  def find(p, q)
+    verify(p, q)
+    root(p) == root(q)
+  end
+
+  # set id of p&#39;s root to the id of q&#39;s root
+  def union(p, q)
+    verify(p, q)
+    @find_array[root(p)] = root(q)
+  end
+
+  private
+    def root(index)
+      # get root until root(index) == index
+      if @find_array[index] == index
+        return index
+      else
+        root(@find_array[index])
+      end
+    end
+
+    def verify(p, q)
+      raise NotAnElement if @find_array[p].nil?
+      raise NotAnElement if @find_array[q].nil?
+    end
+end
+
+class NotAnElement &lt; Exception
+end</code></pre>
+</div>
+
+
+<p>This implementation is a QuickUnion because in an array of 1,000,000 entries, connecting element p to element q is easy: you only have to find the root of p, and then change q to match (one root() and one array access). Finding if p and q are connected takes a little bit longer, because you have to perform two root operations: one for p and one for q, but it is still faster than accessing every element in the array.</p>
+
+<h2>Benchmark</h2>
+
+<div>
+  <pre><code class='bash'>$ ruby lib/benchmark.rb
+=&gt; Array Size: 100
+       user     system      total        real
+   0.000000   0.000000   0.000000 (  0.001865)
+   0.000000   0.000000   0.000000 (  0.000377)
+$ ruby lib/benchmark.rb
+=&gt; Array Size: 1000
+       user     system      total        real
+   0.120000   0.010000   0.130000 (  0.124929)
+   0.010000   0.000000   0.010000 (  0.008825)
+$ ruby lib/benchmark.rb
+=&gt; Array Size: 10000
+       user     system      total        real
+  10.120000   0.030000  10.150000 ( 10.146124)
+   0.520000   0.000000   0.520000 (  0.520377)</code></pre>
+</div>
+
+
+<p>Comparing QuickFind (top line) with QuickUnion(bottom line), we can actually measure how well this small optimization of the union operation has increased performance with larger datasets.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[State of the UnionFind]]></title>
+    <link href="http://keighty.github.io/blog/2013/state-of-the-unionfind/"/>
+    <updated>2013-07-30T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/state-of-the-unionfind</id>
+    <content type="html"><![CDATA[<p>I was scraping the rust off my data-structures synapses last week, and found that there was still some functionality underneath. UnionFind is one of those sneaky algorithms that crops up in non-linear arrangements of data, such as computer or social networks. Specifically, it keeps track of sets of connected elements. The API consists of a union(p, q), which connects the two elements p and q, and a find(p, q), which determines if p is in the same set as q.</p>
+
+<p>I learned about this algorithm through <a href="https://www.coursera.org/">Coursera</a>, and their class <a href="https://www.coursera.org/course/algs4partI">Algorithms Part 1</a> with Kevin Wayne and Robert Sedgewick. The focus of this course was not only on implementation of algorithms, but also optimization.</p>
+
+<h1>Union Find</h1>
+
+<p>A simple model for connectivity is 10 objects numbered 1 through 0:</p>
+
+<p>0 1 2 3 4 5 6 7 8 9</p>
+
+<p>Making random connections will produce disjointed sets of objects:</p>
+
+<p>0 1 { 2 3 9 } { 5 6 } 7 { 4 8 }</p>
+
+<p>A find(p, q) will determine if p and q are in the same set:</p>
+
+<ul>
+<li>find(0, 8) => false</li>
+<li>find(2, 9) => true</li>
+</ul>
+
+
+<p>A union(p, q) will put p and q in the same set:</p>
+
+<ul>
+<li>union(1, 6) => 0 { 2 3 9 } { 1 5 6 } 7 { 4 8 }</li>
+<li>union(2, 4) => 0 1 { 5 6 } 7 { 2 3 9 4 8 }</li>
+</ul>
+
+
+<p>Using an array to keep track of the values, we can walk through what this implementation would look like:</p>
+
+<table class="table table-bordered">
+  <tr>
+    <th>Index</th>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td>9</td>
+    <td>0</td>
+    <th></th>
+  </tr>
+  <tr>
+    <th>Value</th>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td>9</td>
+    <td>0</td>
+    <th></th>
+  </tr>
+  <tr>
+    <th>union(4,9)</th>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td class="highlight">9</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td class="highlight">9</td>
+    <td>0</td>
+    <td> | Changes all values that match array[4] to match array[9]</td>
+  </tr>
+  <tr>
+    <th>union(2,4)</th>
+    <td>1</td>
+    <td class="highlight">9</td>
+    <td>3</td>
+    <td class="highlight">9</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td class="highlight">9</td>
+    <td>0</td>
+    <td> | Changes all values that match array[2] to match array[4]</td>
+  </tr>
+  <tr>
+    <th>union(4,7)</th>
+    <td>1</td>
+    <td class="highlight">7</td>
+    <td>3</td>
+    <td class="highlight">7</td>
+    <td>5</td>
+    <td>6</td>
+    <td class="highlight">7</td>
+    <td>8</td>
+    <td class="highlight">7</td>
+    <td>0</td>
+    <td> | Changes all values that match array[4] to match array[7]</td>
+  </tr>
+</table>
+
+
+<p>Using the java api provided by Kevin Wayne and Robert Sedgewick:</p>
+
+<div>
+  <pre><code class='java'>public class UF
+----------------
+public UF(int N)
+public int find(int p, int q)
+public void union(int p, int q)</code></pre>
+</div>
+
+
+<p>I adapted the basic union find in ruby:</p>
+
+<div>
+  <pre><code class='ruby'>class QuickFind
+
+  attr_accessor :find_array
+
+  def initialize(size)
+    @find_array = Array.new(size){ |index| index }
+  end
+
+  def find(p, q)
+    location(p) == location(q)
+  end
+
+  def union(p, q)
+    @find_array = create_union(p, q)
+  end
+
+  private
+
+    def location(index)
+      raise NotAnElement if @find_array[index].nil?
+      return @find_array[index]
+    end
+
+    def create_union(p, q)
+      target = location(p)
+      goal = location(q)
+      temp_array = @find_array.map do |element|
+        element == target ? goal : element
+      end
+    end
+end
+
+class NotAnElement &lt; Exception
+end</code></pre>
+</div>
+
+
+<p>Sets are arranged as a flat array of elements which all share the same value: they are all wearing the same t-shirt. When we connect elements from different sets, we must make sure that every element in the first set changes its t-shirt to match the elements in the other set. This is a time-consuming process, and uses a lot of t-shirts.</p>
+
+<p>This implementation is called QuickFind because in an array of 1,000,000 entries, finding if two elements are connected is easy (compare the t-shirt at index p with the t-shirt at index q), but connecting them requires inspection of every element in the array in order (check everyone&rsquo;s t-shirts) to make sure all the previous connections remain in place.</p>
+
+<h2>Benchmark</h2>
+
+<p>To compare efficiency of this and future UnionFind implementations, I built a basic benchmark that performs a set number of union and find operations and measures the time to completion:</p>
+
+<div>
+  <pre><code class='ruby'>require &#39;benchmark&#39;
+@size = 10000
+
+def testUnit(object)
+  @size.times do
+    object.union(rand(@size), rand(@size))
+    object.find(rand(@size), rand(@size))
+  end
+end
+
+Benchmark.bm do |x|
+  x.report { testUnit(QuickFind.new(@size)) }
+end</code></pre>
+</div>
+
+
+<p>Running the benchmark on QuickFind:</p>
+
+<div>
+  <pre><code class='bash'>$ ruby lib/benchmark.rb
+=&gt; Array size = 100
+       user     system      total        real
+   0.000000   0.000000   0.000000 (  0.002745)
+$ ruby lib/benchmark.rb
+=&gt; Array size = 1000
+       user     system      total        real
+   0.140000   0.000000   0.140000 (  0.137957)
+$ ruby lib/benchmark.rb
+=&gt; Array size = 10000
+       user     system      total        real
+  13.790000   0.020000  13.810000 ( 13.866528)</code></pre>
+</div>
+
+
+<p>You can see from these measurements that increasing the size of the array by a factor of 10 each time comes with a logarithmic increase in processing time. There is definitely room for optimization, so stay tuned for more refinements. In the meantime,</p>
+
+<h2>Fun Rubyisms</h2>
+
+<p>Array initialization is a snap in ruby! Compare the initialization line in the QuickFind algorithm above with the equivalent java implementation:</p>
+
+<div>
+  <pre><code class='ruby'>@find_array = Array.new(size){ |index| index }</code></pre>
+</div>
+
+
+<p>versus</p>
+
+<div>
+  <pre><code class='java'>...
+int[] arry = new int[size]
+for (int i = 0; i &lt; size; i++) {
+    id[i] = i;
+}</code></pre>
+</div>
+
+
+<p>Both result in an array of the specified size, but ruby is slightly less sprawling.</p>
+
+<p>Also, check out lines 27 &ndash; 29</p>
+
+<div>
+  <pre><code class='ruby'>temp_array = @find_array.map do |element|
+  element == target ? goal : element
+end</code></pre>
+</div>
+
+
+<p>Using map() eliminates the need for a separate array declaration. It is the equivalent of:</p>
+
+<div>
+  <pre><code class='ruby'>temp_array = []
+@find_array.each do |element|
+  temp_array &lt;&lt; element == target ? goal : element
+end
+return temp_array</code></pre>
+</div>
+
+
+<p>and is certainly more readable than the equivalent in java:</p>
+
+<div>
+  <pre><code class='java'>int pid = id[p];
+for (int i = 0; i &lt; id.length; i++)
+    if (id[i] == pid) id[i] = id[q];</code></pre>
+</div>
+
+
+<p>Awesome</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Procuring Provisions]]></title>
+    <link href="http://keighty.github.io/blog/2013/procuring-provisions/"/>
+    <updated>2013-07-27T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/procuring-provisions</id>
+    <content type="html"><![CDATA[<p>I was trying to add a database to my JSGames app &mdash; it is a basic sinatra app with a few goodies already in place &mdash; and I was having some difficulty deploying it to Heroku. Rails (for the most part) automagically creates and maintains its database, and as long as I remember to move any references to sqlite3 into the development and test environments, I have never had trouble provisioning one on Heroku either. Rolling a web application from scratch with sinatra, however, requires a little more savvy.</p>
+
+<p>My Gemfile had a familiar structure:</p>
+
+<div>
+  <pre><code class='ruby'>source &#39;https://rubygems.org&#39;
+ruby &#39;2.0.0&#39;
+...
+gem &quot;sinatra&quot;
+gem &quot;activerecord&quot;
+gem &quot;sinatra-activerecord&quot;
+gem &quot;pg&quot;</code></pre>
+</div>
+
+
+<p>So far, so familiar. I added config/environments.rb to outline the details of the database I would like provisioned (using postgres locally as well as in production):</p>
+
+<div>
+  <pre><code class='ruby'>require &#39;active_record&#39;
+require &#39;uri&#39;
+...
+db = URI.parse(ENV[&#39;DATABASE_URL&#39;] || &#39;postgres://localhost/mydb&#39;)
+ActiveRecord::Base.establish_connection(
+  :adapter  =&gt; db.scheme == &#39;postgres&#39; ? &#39;postgresql&#39; : db.scheme,
+  :host     =&gt; db.host,
+  :port     =&gt; db.port,
+  :username =&gt; db.user,
+  :password =&gt; db.password,
+  :database =&gt; db.path[1..-1],
+  :encoding =&gt; &#39;utf8&#39;
+)</code></pre>
+</div>
+
+
+<p>With everything complete, I created a couple of models, migrated, tested it locally, and committed the changes. Heroku compiles the slug just fine, but when I open the application I get the too familiar &ldquo;Application Error&rdquo; page. The logs tell me: <pre>ERROR: Invalid DATABASE_URL</pre></p>
+
+<p>Huh? My url is the one that Heroku suggested! How can it be invalid? It was working fine locally, what is the problem? Here is a sample of my google searches from that frantic afternoon:
+* ERROR: Invalid DATABASE_URL heroku
+* deploying sinatra pg heroku
+* environment variables
+* heroku config variables
+* usr-env-compile heroku
+* heroku can&rsquo;t connect to server
+* how to roll back a push to heroku
+* how to recover from the embarrassment of an offline portfolio project
+* how to start a llama farm</p>
+
+<p>I finally found the answer (aka read the manual) with <a href="https://devcenter.heroku.com/articles/heroku-postgresql">Heroku Postgres</a></p>
+
+<h3>First: Check to see if your database has been provisioned</h3>
+
+<div>
+  <pre><code class='bash'>$ heroku addons | grep POSTGRES</code></pre>
+</div>
+
+
+<p>I ran this command in my sinatra project and found nothing. NOTHING!</p>
+
+<p>When Heroku told me that it couldn&rsquo;t find my database, that is because it hadn&rsquo;t MADE my database. So I&hellip;</p>
+
+<h3>Second: Create a new database</h3>
+
+<div>
+  <pre><code class='bash'>$ heroku addons:add heroku-postgresql:dev
+Adding heroku-postgresql:dev on js-games... done, v42 (free)
+Attached as HEROKU_POSTGRESQL_GOLD_URL
+Database has been created and is available
+ ! This database is empty. If upgrading, you can transfer
+ ! data from another database with pgbackups:restore.
+Use `heroku addons:docs heroku-postgresql:dev` to view documentation.</code></pre>
+</div>
+
+
+<p>YAY! My database has been created and found. Still, nothing wrong with&hellip;</p>
+
+<h3>Third: Double check your database exists</h3>
+
+<div>
+  <pre><code class='bash'>$ heroku config
+=== js-games Config Vars
+HEROKU_POSTGRESQL_GOLD_URL: postgres://∏∏∏∏∏∏∏∏∏∏∏∏∏∏:∏∏∏∏∏∏∏∏∏∏∏@ec2-##-###-###-##.compute-1.amazonaws.com:####/∏∏∏∏#∏##∏∏∏#∏#</code></pre>
+</div>
+
+
+<p>Heroku confesses that my database is stored on AWS, and gives a fairly detailed address (redacted on the grounds of national security).</p>
+
+<h3>Fourth: Promote the new database to primary</h3>
+
+<div>
+  <pre><code class='bash'>$ heroku pg:promote HEROKU_POSTGRESQL_GOLD_URL
+Promoting HEROKU_POSTGRESQL_GOLD_URL to DATABASE_URL... done</code></pre>
+</div>
+
+
+<h3>Fifth: Check out the new database</h3>
+
+<div>
+  <pre><code class='bash'>$ heroku pg:info
+=== HEROKU_POSTGRESQL_GOLD_URL (DATABASE_URL)
+Plan:        Dev
+Status:      available
+Connections: 1
+PG Version:  9.2.4
+Created:     2013-07-27 22:46 UTC
+Data Size:   6.3 MB
+Tables:      0
+Rows:        0/10000 (In compliance)
+Fork/Follow: Unsupported</code></pre>
+</div>
+
+
+<h3>TADA</h3>
+
+<p>Do one final push to heroku and restart the server:</p>
+
+<div>
+  <pre><code class='bash'>$ git commit -a -m &quot;fixes the last two hours of disasterous troubleshooting&quot;
+$ git push heroku master
+...
+$ heroku restart</code></pre>
+</div>
+
+
+<p>Awesome</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Git-Picking]]></title>
+    <link href="http://keighty.github.io/blog/2013/git-picking/"/>
+    <updated>2013-07-24T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/git-picking</id>
+    <content type="html"><![CDATA[<h4>or, How to mine for cherries with Git</h4>
+
+<p>When I work on an experimental feature in a project branch, I have often found that I will have a mixture of commits I would like to keep, and commits that I wish had never happened.
+Using the principle of only committing atomic changes, and enjoying the fruits of your detailed-commit-message labour, there is a way to extract the gold from the ore, so to speak.</p>
+
+<h2>Locate the gold</h2>
+
+<p>Checkout the branch that contains your experiment, and use git log to get a list of all the commits:</p>
+
+<div>
+  <pre><code class='bash'>$ git checkout form_feature_branch
+$ git log --pretty=oneline
+a83f4c3aa5d800f846d075748a79a326e0971f67 reorg gemfile
+197964c091905a76f2172ca11fcbd49ccfb83c67 adds blog.db
+a793fe00c50a5956c5e9f7be48ac5a9861b1eb95 adds forme form to edit...
+8394b37494b63754f42ecaf19244fe6d8a36942f adds gitignore for db ...
+c52a6fd3f1706584ce3e47abf49ed627a1e28fd3 adds bundler gem for manag...
+1686664c4a98221ea04377bcbcf946e62a9f1cfa removes gems for simple...
+034d309a612dcce6f10bb55f0da2e78b2f7c10b1 adds cells to project
+...</code></pre>
+</div>
+
+
+<p>In form_feature_branch I was testing out different implementations of form generation in erb views. I tried a couple of different gems and found one that suits my sinatra project: <a href="https://github.com/jeremyevans/forme">Forme</a> is easy to use with or without models, and has great sinatra integration and documentation. Also along the way, I discovered how to include bundler for managing file dependencies and did some minor refactoring of my Gemfile.</p>
+
+<p>I wanted to keep the gem reorganization, as well as the forme, bundler, and gitignore commits, so I made this list of keeper-commits:</p>
+
+<div>
+  <pre><code class='bash'>a83f4c3aa5d800f846d075748a79a326e0971f67 reorg gemfile
+a793fe00c50a5956c5e9f7be48ac5a9861b1eb95 adds forme form to edit...
+c52a6fd3f1706584ce3e47abf49ed627a1e28fd3 adds bundler gem for manag...
+8394b37494b63754f42ecaf19244fe6d8a36942f adds gitignore for db ...</code></pre>
+</div>
+
+
+<p>Everything else is cruft.</p>
+
+<h2>Extract the gold</h2>
+
+<p>With this list of golden commits in hand, checkout a fresh branch and cherry-pick the commits you like!</p>
+
+<div>
+  <pre><code class='bash'>$ git checkout -b form_feature_additions
+$ git cherry-pick &lt;commit_identifier&gt;</code></pre>
+</div>
+
+
+<p>Do this command for each good commit:</p>
+
+<div>
+  <pre><code class='bash'>$ git cherry-pick a83f4c3aa5d800f846d075748a79a326e0971f67
+[master form_feature_additions] reorg gemfile
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+ changed mode 100644 Gemfile
+$ git cherry-pick a793fe00c50a5956c5e9f7be48ac5a9861b1eb95
+[master form_feature_additions] adds forme form to edit...
+...
+$ git cherry-pick c52a6fd3f1706584ce3e47abf49ed627a1e28fd3
+[master form_feature_additions] adds bundler gem for manag..
+...
+$ git cherry-pick 8394b37494b63754f42ecaf19244fe6d8a36942f
+[master form_feature_additions] adds gitignore for db ...
+...</code></pre>
+</div>
+
+
+<p>If you look at your git status you will see</p>
+
+<div>
+  <pre><code class='bash'># On branch form_feature_additions
+# Your branch is ahead of &#39;origin/master&#39; by 4 commits.</code></pre>
+</div>
+
+
+<h2>Profit</h2>
+
+<p>Now you can merge this branch with master, or continue fleshing out the feature on a clean branch, keeping only the good stuff and abandoning the bad, making experimentation easy.</p>
+
+<p>AWESOME</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Sinatra in a Console]]></title>
+    <link href="http://keighty.github.io/blog/2013/sinatra-in-a-console/"/>
+    <updated>2013-07-22T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/sinatra-in-a-console</id>
+    <content type="html"><![CDATA[<p>Sinatra does not have a default console like rails does. If you are writing in a rails environment and need to test out a helper method, or want to check on the state of a record in the database, dropping down into the rails console is as easy as typing:</p>
+
+<div>
+  <pre><code class='bash'>$ rails c</code></pre>
+</div>
+
+
+<p>How can we achieve the same ability in Sinatra?</p>
+
+<h3>Tux</h3>
+
+<p>Tux is a ruby gem that generates a sinatra console. It reads the config.ru, allows you to interact with App methods, and provides empty request and response objects to for investigating communication between views and the Sinatra controller.</p>
+
+<p>Add Tux to your Gemfile:</p>
+
+<div>
+  <pre><code class='ruby'>group :development, :test do
+  ...
+  gem &#39;tux&#39;
+end</code></pre>
+</div>
+
+
+<p>Don&rsquo;t forget to bundle!</p>
+
+<p>At the command line, start up tux and use rack.actions to view all the methods available:</p>
+
+<div>
+  <pre><code class='bash'>$ tux
+Loading development environment (Rack 1.2)
+&gt;&gt; rack.actions
+=&gt; [:request, :get, :post, :put, :patch, :delete, :options, :head, :follow_redirect!, :header, :set_cookie, :clear_cookies, :authorize, :basic_authorize, :digest_authorize, :last_response, :last_request]
+&gt;&gt;</code></pre>
+</div>
+
+
+<p>You can access any method from your application as well.
+Of course, if you are working in Sinatra, you probably want to go as lightweight as possible, which is why you can also use:</p>
+
+<h3>Basic irb</h3>
+
+<p>It is as simple as using irb and requiring your main app file. You have access to all the dependencies and files that your application does by simply requiring that one file. You can check state, call methods, create objects, whatever you need:</p>
+
+<div>
+  <pre><code class='bash'>$ irb
+&gt; require &#39;./app.rb&#39;
+ =&gt; true
+&gt; User.all
+D, [2013-07-22T15:47:49.230146 #54081] DEBUG -- :   User Load (0.2ms)  SELECT &quot;users&quot;.* FROM &quot;users&quot;
+ =&gt; #&lt;ActiveRecord::Relation [#&lt;User id: 1, name: &quot;Gordon Shumway&quot;, email: &quot;gordon@example.com&quot;, created_at: &quot;2013-07-22 22:45:48&quot;, updated_at: &quot;2013-07-22 22:45:48&quot;&gt;, #&lt;User id: 2, name: &quot;Fanny Eubanks&quot;, email: &quot;fanny@example.com&quot;, created_at: &quot;2013-07-22 22:45:48&quot;, updated_at: &quot;2013-07-22 22:45:48&quot;&gt;]&gt;
+&gt;</code></pre>
+</div>
+
+
+<p>This can be called even more elegantly at the command line:</p>
+
+<div>
+  <pre><code class='bash'>$ irb -r ./app.rb</code></pre>
+</div>
+
+
+<p>or through a Rake task:</p>
+
+<div>
+  <pre><code class='bash'>desc &quot;run irb console&quot;
+task :console, :environment do |t, args|
+  ENV[&#39;RACK_ENV&#39;] = args[:environment] || &#39;development&#39;
+  exec &quot;irb -r irb/completion -r ./app.rb&quot;
+end</code></pre>
+</div>
+
+
+<p>Awesome</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Get Your Kicks on Route Localhost:4567]]></title>
+    <link href="http://keighty.github.io/blog/2013/get-your-kicks-on-localhost4567/"/>
+    <updated>2013-07-17T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/get-your-kicks-on-localhost4567</id>
+    <content type="html"><![CDATA[<p>I am building a code breaking game along the lines of Mastermind and I encountered a block.</p>
+
+<h2>The problem</h2>
+
+<ul>
+<li>I have a javascript that generates a secret code.</li>
+<li>I have a ruby class that compares a guess to the secret code and returns an analysis of the accuracy of the guess.</li>
+<li>How do I get the ruby class to process a guess and secret code from the browser?</li>
+</ul>
+
+
+<h2>I learned something about Ajax today.</h2>
+
+<p>An ajax call is built up from a few minimum parameters: a url, the HTTP method, the dataType expected, and a callback function that handles the return. You can include data from the user in the form of a data hash:</p>
+
+<div>
+  <pre><code class='javascript'>var the_url = &quot;http://&quot; + window.location.host + &quot;/game/&quot; + guess_string;
+  var mark_string = $.ajax({
+    type: &quot;POST&quot;,
+    url: the_url,
+    accepts: &quot;application/json&quot;,
+    dataType: &quot;json&quot;,
+    data: { &#39;code&#39; : secret_code },
+    complete: function(data){
+      output_mark = data[&#39;responseText&#39;];
+      process_output(secret_code, guess_string, output_mark);
+    }
+  });</code></pre>
+</div>
+
+
+<p>This code snippet is using Ajax to send the secret code and guess to the Sinatra route.</p>
+
+<h2>I learned something about Sinatra today.</h2>
+
+<p>A route has three ingredients: an HTTP method, a URL matching pattern, and a code block.
+Typically they look like this:</p>
+
+<div>
+  <pre><code class='ruby'>get &#39;/&#39; do
+  &quot;hello world&quot;
+end</code></pre>
+</div>
+
+
+<p>But they can also look like this:</p>
+
+<div>
+  <pre><code class='ruby'>post &#39;/game/:guess&#39; do
+  game.guess(params[:guess])
+end
+private
+  def game
+    @game ||= Mastermind::Game.new_with_code(params[:code])
+  end</code></pre>
+</div>
+
+
+<p>The code block returns information. That information can be anything, from a plain string (first example), or an html web page, to a JSON representation of an object (second example). What the browser does with the information it receives is the browser&rsquo;s business.</p>
+
+<p>The overall workflow:
+1. The url on my local machine looks like this: &ldquo;<a href="http://localhost:4567/game/12345">http://localhost:4567/game/12345</a>&rdquo; (line 1). The submitted guess is 12345.
+2. Ajax packages the url with the data hash containing the secret code (line 7).
+3. Javascript submits the HTTP POST request to Sinatra which matches the route.
+4. The route creates a Mastermind::Game object with the provided secret code.
+5. The route calls the guess method on the Game object with the submitted guess.
+6. The route returns a json of the method output (in this case it is a string of +/&ndash; characters indicating exact number matches(+) or matched numbers in the wrong position(&ndash;)).
+7. In the ajax callback function the data from the json object is parsed and passed on for further processing.</p>
+
+<h2>I learned something about routes today.</h2>
+
+<p>I had a mental block about routes. I thought that building the &ldquo;/game/:guess&rdquo; route in Sinatra meant that the user would be constantly navigating between &ldquo;/mastermind&rdquo; and &ldquo;/game/:guess&rdquo;, and that the game would always be reloading with a new secret. I was thinking about routes the wrong way &mdash; when javascript calls the route, it doesn&rsquo;t reload the page, it just retrieves data! I had conflated routes with navigation in my imagination, and forgot that a route is just a method call containing a request for information. Just because the information returned is often rendered as an html page doesn&rsquo;t mean that it has to be html. Which leads me to the penultimate point&hellip;</p>
+
+<h2>I learned something about curl today.</h2>
+
+<p>ANYTHING can make an HTTP request. Ok, maybe that is a slight overstatement.</p>
+
+<p>Browsers interpret the information retrieved using HTTP requests, but they are far from the only category of software that can. Turns out, the command-line functions just as well:</p>
+
+<div>
+  <pre><code class='bash'>$ curl -X POST -H &quot;Accept: application/json&quot; -d &quot;code=12345&quot; js-games.herokuapp.com/12345
++++++$</code></pre>
+</div>
+
+
+<p>The command on line 1 will return the same string I am retrieving with $.ajax in javascript (output on line2). Sure it is a fairly plain result &mdash; it doesn&rsquo;t even include a new line character, for pity&rsquo;s sake &mdash; but it does the job of making an HTTP request to a route and using the result.</p>
+
+<h2>I learned something about myself today.</h2>
+
+<p>I didn&rsquo;t even realize I was misunderstanding HTTP! It was one of those concepts I had already checked off my mental list of technologies to cover on my quest to become a web developer. This breakthrough has reminded me that reviewing the fundamentals in the context of learning new technologies will bring a deeper understanding of everything.</p>
+
+<p>Awesome</p>
+]]></content>
+  </entry>
+  
+</feed>

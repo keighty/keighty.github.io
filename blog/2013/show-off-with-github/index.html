@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Show-off With GitHub and Docco - keighty</title>
+  <meta name="author" content="katie leonard">
+
+  
+  <meta name="description" content="">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://keighty.github.io/blog/2013/show-off-with-github">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">keighty</a></h1>
+  
+    <h2>a portfolio of sorts</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:keighty.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Show-off With GitHub and Docco</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-06T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I was experimenting with some documentation styles today and discovered two bits of gold: gh-pages and docco:</p>
+
+<p>Creating a site for your project using GitHub is a 3 step process:
+1. create a new orphan branch called gh-pages
+2. remove all the contents
+3. fill the branch with your boastful new site</p>
+
+<div>
+  <pre><code class='bash'>$ cd repository
+
+$ git checkout --orphan gh-pages
+# Creates a branch, without any parents
+# Switched to a new branch &#39;gh-pages&#39;
+
+$ git rm -rf .
+# Remove all files from the old working tree</code></pre>
+</div>
+
+
+<p>From here you can use the <a href="https://help.github.com/articles/creating-pages-with-the-automatic-generator">GitHub Automatic Page generator</a> to throw up a theme and some standard content, you can roll out a <a href="http://jekyllbootstrap.com/">jekyll bootstrap</a> platform with blogging integration, or you can simply:</p>
+
+<div>
+  <pre><code class='bash'>$ echo &quot;Hello gh-pages!&quot; &gt; index.html
+$ git add index.html
+$ git commit -a -m &quot;First pages commit&quot;
+$ git push origin gh-pages</code></pre>
+</div>
+
+
+<p>Add and commit your content to your gh-pages branch, and GitHub will generate what needs to be generated in order to serve your website.</p>
+
+<p>Your pages are hosted for free by GitHub. If you have already configured a personal site using <a href="https://help.github.com/articles/user-organization-and-project-pages">User Pages</a>, your project pages will hang off the end of your domain like this : username.github.io/repo_name</p>
+
+<h3><a href="http://jashkenas.github.io/docco/">Docco</a></h3>
+
+<blockquote><p>Docco is a quick-and-dirty documentation generator, written in Literate CoffeeScript. It produces an HTML document that displays your comments intermingled with your code. All prose is passed through Markdown, and code is passed through Highlight.js syntax highlighting.</p></blockquote>
+
+<p>Docco works with  Python, Ruby, JavaScript, Java, and many other languages, with no configuration &mdash; just plug and play!</p>
+
+<p>Install Docco with npm:</p>
+
+<div>
+  <pre><code class='bash'>sudo npm install -g docco</code></pre>
+</div>
+
+
+<p>Run it against your code:</p>
+
+<div>
+  <pre><code class='javascript'>docco lib/*.ruby</code></pre>
+</div>
+
+
+<p>Docco will create a docs/ folder in your project and will generate an html file for each ruby file in the lib directory. This is where beautifully commented code really pays off, but docco does not format multi-line code the same way. Check out my <a href="http://www.katieleonard.ca/PCSnotes/docs/benchmark.html">benchmark.rb</a> for an example of how each comment style is treated by docco.</p>
+
+<p>TADA</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-06T00:00:00-07:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/web/'>web</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://keighty.github.io/blog/2013/show-off-with-github/" data-via="" data-counturl="http://keighty.github.io/blog/2013/show-off-with-github/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/state-of-the-quickunion/" title="Previous Post: State of the QuickUnion">&laquo; State of the QuickUnion</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/canadian-flair/" title="Next Post: Canadian Flair">Canadian Flair &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/partial-to-ajax/">Partial to Ajax</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/meatier-apps-with-meteor/">Meatier Apps With Meteor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/rails-depends-on-javascript/">Rails, You Can Depend on Javascript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/ruby-execution/">Ruby Execution</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/argf-all-you-want/">ARGF All You Want</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/hammer-out-tasks-with-thor/">Hammer-out Tasks With Thor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/serving-some-java/">Serving Some Java</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/runtime-for-your-life/">Runtime for Your Life</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - katie leonard -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

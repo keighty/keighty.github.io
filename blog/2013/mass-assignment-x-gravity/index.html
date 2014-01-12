@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Mass Assignment X Gravity - keighty</title>
+  <meta name="author" content="katie leonard">
+
+  
+  <meta name="description" content="">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://keighty.github.io/blog/2013/mass-assignment-x-gravity">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">keighty</a></h1>
+  
+    <h2>a portfolio of sorts</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:keighty.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Mass Assignment X Gravity</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-15T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>What is Mass Assignment?</h1>
+
+<p>Mass assignment is using a ruby-esque shortcut to interact with models:</p>
+
+<p>This is NOT mass assignment.</p>
+
+<div>
+  <pre><code class='ruby'>def create
+  u = User.new
+  u.first_name = params[:user][:firstname]
+  u.last_name = params[:user][:lastname]
+  if u.save
+    redirect_to :index, flash: { success: &quot;Created!&quot; }
+  else
+    render :action =&gt; &#39;new&#39;
+  end
+end</code></pre>
+</div>
+
+
+<p>Each param is extracted from the params hash and assigned explicitly. Any params that are not assigned are thrown on the floor.</p>
+
+<p>This IS mass assignment.</p>
+
+<div>
+  <pre><code class='ruby'>def create
+  u = User.new(params[:user])
+  if u.save
+    redirect_to :index, flash: { success: &quot;Created!&quot; }
+  else
+    render :action =&gt; &#39;new&#39;
+  end
+end</code></pre>
+</div>
+
+
+<p>The programmer assumes that the params include all the data necessary, and <em>only</em> the data necessary. All params in the hash are used to create the new user record.</p>
+
+<h3>Why is mass assignment a problem?</h3>
+
+<p>The problem with mass assignment is that if you have a sensitive tag in your model, for example user_type (which could be set to admin), a malicious user can add <code>user[:user_type] = 'admin'</code> to your params hash. Your controller will unwittingly include it in the save command, creating a new admin account for the  malicious user.</p>
+
+<h3>Is there any way to prevent this diabolical schema scheme?</h3>
+
+<p>There is! With Rails 4 comes <strong>strong params</strong>.
+Strong params live in the controller and tell it explicitly what params can be trusted.</p>
+
+<div>
+  <pre><code class='ruby'>def create
+  u = User.new(user_params)
+  if u.save
+    redirect_to :index, flash: { success: &quot;Created!&quot; }
+  else
+    render :action =&gt; &#39;new&#39;
+  end
+end
+...
+def user_params
+  params.require(:user).permit(:name, :email, :password, :password_confirmation)
+end</code></pre>
+</div>
+
+
+<p>The only parameters our controller will send to the model are those specified on our white-list. If rails detects a user attempting to access a param that is not on the white-list, said user had better be prepared for <em>grave consequences</em>. Their session will be <strong>deleted</strong>, their attempt will be <strong>logged</strong>, and Rails will email their mother.</p>
+
+<p>Awesome.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-15T00:00:00-07:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rails/'>rails</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://keighty.github.io/blog/2013/mass-assignment-x-gravity/" data-via="" data-counturl="http://keighty.github.io/blog/2013/mass-assignment-x-gravity/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/a-flash-of-understanding/" title="Previous Post: A Flash of Understanding">&laquo; A Flash of Understanding</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/get-your-kicks-on-localhost4567/" title="Next Post: Get your kicks on route localhost:4567">Get your kicks on route localhost:4567 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/partial-to-ajax/">Partial to Ajax</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/meatier-apps-with-meteor/">Meatier Apps With Meteor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/rails-depends-on-javascript/">Rails, You Can Depend on Javascript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/ruby-execution/">Ruby Execution</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/argf-all-you-want/">ARGF All You Want</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/hammer-out-tasks-with-thor/">Hammer-out Tasks With Thor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/serving-some-java/">Serving Some Java</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/runtime-for-your-life/">Runtime for Your Life</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - katie leonard -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

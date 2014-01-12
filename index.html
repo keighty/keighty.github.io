@@ -1,1 +1,723 @@
-My Octopress Page is coming soon &hellip;
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>keighty</title>
+  <meta name="author" content="katie leonard">
+
+  
+  <meta name="description" content="I am building an application that uses several nested attributes: Users have many Goals (Goals belong_to Users), and Goals have many Hours (Hours &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://keighty.github.io">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">keighty</a></h1>
+  
+    <h2>a portfolio of sorts</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:keighty.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-29T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I am building an application that uses several nested attributes: Users have many Goals (Goals belong_to Users), and Goals have many Hours (Hours belong_to Goals).</p>
+
+<p>Using <a href="https://github.com/thoughtbot/factory_girl">FactoryGirl</a> to create a User is straightforward:</p>
+
+<div>
+  <pre><code class='ruby'>FactoryGirl.define do
+  factory :user do
+    sequence :name  { |n| &quot;person#{n}&quot; }
+    sequence :email { |n| &quot;person#{n}@example.com&quot; }
+  end
+end
+
+describe User do
+  before  { @user = FactoryGirl.create(:user) }
+  subject { @user }
+  it { should respond_to(:name) }
+  ...
+end</code></pre>
+</div>
+
+
+<p>How do I create Goals that are linked to the User?</p>
+
+<h3>How to create Factories for nested attributes</h3>
+
+<h5>1. Make a new Factory for producing Goals:</h5>
+
+<div>
+  <pre><code class='ruby'>FactoryGirl.define do
+  factory :goal do
+    sequence :description { |n| &quot;my goal #{n}&quot; }
+    sequence :motivation  { |n| &quot;my motivation #{n}&quot; }
+  end
+end</code></pre>
+</div>
+
+
+<h5>2. Call the Goal Factory from the User Factory and store the Goals in an Array</h5>
+
+<div>
+  <pre><code class='ruby'>FactoryGirl.define do
+  factory :user do
+    sequence :name { |n| &quot;person#{n}&quot; }
+    sequence :email { |n| &quot;person#{n}@example.com&quot; }
+
+    goals { Array.new(1) { FactoryGirl.build(:goal) } }
+
+  end
+end</code></pre>
+</div>
+
+
+<p>Your objects will look like this:</p>
+
+<div>
+  <pre><code class='bash'>&gt; p @user
+#&lt;User id: 1, name: &quot;person1&quot;, email: &quot;person1@example.com&quot;, ... &gt;
+&gt; p @user.goals.first
+#&lt;ActiveRecord::Associations::CollectionProxy [#&lt;Goal id: 1, user_id: 1, description: &quot;my goal 1&quot;, motivation: &quot;my motivation 1&quot;, ...]&gt;</code></pre>
+</div>
+
+
+<p>Create Hours for Goals in the same manner: create a Factory for making Hours, call the Hours Factory from the Goals Factory.</p>
+
+<div>
+  <pre><code class='ruby'>FactoryGirl.define do
+  factory :hour do
+    duration { 100 * rand(36) }
+    ...
+  end
+end
+
+FactoryGirl.define do
+  factory :goal do
+    sequence :description { |n| &quot;my goal #{n}&quot; }
+    sequence :motivation  { |n| &quot;my motivation #{n}&quot; }
+
+    hours { Array.new(3) { FactoryGirl.build(:hour) } }
+  end
+end</code></pre>
+</div>
+
+
+<p>Checking your objects:</p>
+
+<div>
+  <pre><code class='bash'>&gt; p @user
+#&lt;User id: 1, name: &quot;person1&quot;, email: &quot;person1@example.com&quot;, ... &gt;
+&gt; p @user.goals.first
+#&lt;ActiveRecord::Associations::CollectionProxy [#&lt;Goal id: 1, user_id: 1, description: &quot;my goal 1&quot;, motivation: &quot;my motivation 1&quot;, ...]&gt;
+&gt; p @user.goals.first.hours.first
+#&lt;ActiveRecord::Associations::CollectionProxy [#&lt;Hour id: 1, goal_id: 1, duration: 3200 , ...]&gt;</code></pre>
+</div>
+
+
+<p>Awesome.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/partial-to-ajax/">Partial to Ajax</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-18T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have been building a new project and getting creative with views. I am working with bootstrap and jquery to develop tabbed displays, and in the process have been gleaning a deeper understanding of rails routes, controllers, and assets. Using Ajax to load partials into rails views is a three part process:</p>
+
+<h4>1. In the View, Add a Link</h4>
+
+<p>/path/to/view.html.erb</p>
+
+<div>
+  <pre><code class='ruby'>&lt;%= link_to &quot;Show my partial&quot;, path_to_controller, remote: true %&gt;</code></pre>
+</div>
+
+
+<p>The key difference in the syntax for this link is &ldquo;remote: true&rdquo;, which signals to the controller action to respond using ajax, not html.</p>
+
+<h4>2. Create a Partial</h4>
+
+<p>/path/to/view/_my_partial.html.erb</p>
+
+<div>
+  <pre><code class='ruby'>&lt;div&gt;
+  &lt;%= form_for @model do |f| %&gt;
+    &lt;%= f.label :my_text_field, &quot;Text Field Label&quot; %&gt;
+    &lt;%= f.text_area :my_text_field %&gt;
+    &lt;%= f.submit &quot;New&quot;, class: &quot;btn btn-primary&quot; %&gt;
+  &lt;% end %&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+
+<h4>3. In the Controller Action, Add a js Response</h4>
+
+<p>/path/to/controller.rb</p>
+
+<div>
+  <pre><code class='ruby'>def my_action
+  respond_to do |format|
+    format.js
+  end
+end</code></pre>
+</div>
+
+
+<p>Normally, Rails will render the view that corresponds to the name of the action in response to an html request. The format.js line asks rails to look for a javascript file instead of an html file when it tries to render a view.</p>
+
+<h4>3. Create a my_action.js.erb File to Shape the Ajax Response</h4>
+
+<p>/path/to/view/my_action.js.erb</p>
+
+<div>
+  <pre><code class='javascript'>$(&quot;#your-placeholder-id&quot;).prepend(&#39;&lt;%= escape_javascript(render &#39;path/to/view/my_partial&#39;) %&gt;</code></pre>
+</div>
+
+
+<p>Files with multiple extensions are processed from last to the first one. With js.erb, the erb will process all the ruby content first, and then the javascript will be run. Your js.erb file should be saved in the same folder as the rest of your controller&rsquo;s views. This is an example :</p>
+
+<div>
+  <pre><code class='bash'>app/views/users/
+├── _my_partial.html.erb
+├── edit.js.erb
+├── show.html.erb</code></pre>
+</div>
+
+
+<p>Voila! When you click the link in your view the partial is loaded using Ajax.</p>
+
+<p>Awesome.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/meatier-apps-with-meteor/">Meatier Apps With Meteor</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-20T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.meteor.com/">Meteor</a> is a framework that allows you to write web applications using only javascript. All the work is done on the client-side. Meteor embraces new principles of web design: data on the wire, one language is enough, and simplicity makes for productivity.</p>
+
+<p>Simplicity is something I value as well, and while setting up meteor on my linux machine was not a three-step process as outlined in their examples, it only took a little tinkering to figure out the problem. First, a look at the three meteor setup steps:</p>
+
+<h4>Install</h4>
+
+<div>
+  <pre><code class='bash'>$ curl https://install.meteor.com | /bin/sh</code></pre>
+</div>
+
+
+<h4>Create a sample application</h4>
+
+<div>
+  <pre><code class='bash'>$ meteor create testapp</code></pre>
+</div>
+
+
+<h4>Run the sample application</h4>
+
+<div>
+  <pre><code class='bash'>$ cd testapp
+$ meteor</code></pre>
+</div>
+
+
+<p>This is where the meteor server is supposed to start, connecting to your mongo installation, and serving your application on port 3000:</p>
+
+<div>
+  <pre><code class='bash'>$ meteor
+[[[[[ /path/to/testapp ]]]]]
+
+=&gt; Meteor server running on: http://localhost:3000/</code></pre>
+</div>
+
+
+<p>Instead, my terminal became quite upset about it:</p>
+
+<div>
+  <pre><code class='bash'>[[[[[ /path/to/testapp ]]]]]
+
+Unexpected mongo exit code 1. Restarting.
+Unexpected mongo exit code 1. Restarting.
+Unexpected mongo exit code 1. Restarting.
+Can&#39;t start mongod</code></pre>
+</div>
+
+
+<p>Whups! Everything seems normal in my mongo installation, but after a lot of searching I finally found the problem on <a href="http://stackoverflow.com/questions/18505372/meteor-update-0-6-4-0-6-5-mongo-error">stackoverflow</a>. From among the answers I found this solution:</p>
+
+<blockquote><p>I&rsquo;m also getting this error on Ubuntu. As mentioned, it&rsquo;s caused by mongo and mongod from ~/.meteor/tools/latest/mongodb/bin being compiled with an older version of glib. You can replace the version of mongo bundled by meteor with the version installed in your system:</p></blockquote>
+
+<div>
+  <pre><code class='bash'>cd ~/.meteor/tools/latest/mongodb/bin/
+mv mongo mongo-backup
+mv mongod mongod-backup
+ln -s /usr/bin/mongo
+ln -s /usr/bin/mongod</code></pre>
+</div>
+
+
+<p>Brilliant! Following these instructions, I was finally able to start meteor.</p>
+
+<p><img src="http://keighty.github.io/assets/images/meteor.png" alt="Meteor" /></p>
+
+<h3>Getting down to business</h3>
+
+<p>Now to test out some of the awesome functionality of this framework. I <a href="http://www.meteor.com/examples/todos">followed an example</a> and created a todo list:</p>
+
+<div>
+  <pre><code class='bash'>$ meteor create --example todos
+$ cd todos
+$ meteor deploy totally-fake-url.meteor.com
+Deploying to totally-fake-url.meteor.com.  Bundling...
+Uploading...
+Now serving at totally-fake-url.meteor.com</code></pre>
+</div>
+
+
+<p>Opening totally-fake-url.meteor.com with my browser:</p>
+
+<p><img src="http://keighty.github.io/assets/images/meteortodo.png" alt="Meteor" /></p>
+
+<p>Playing around with creating new todos and lists, it is clear that data is being added and changed instantly and persistently. From the docs:</p>
+
+<blockquote><p>A Meteor application is a mix of JavaScript that runs inside a client web browser, JavaScript that runs on the Meteor server inside a Node.js container, and all the supporting HTML fragments, CSS rules, and static assets.</p></blockquote>
+
+<p>I am really looking forward to diving further into <a href="http://docs.meteor.com/#concepts">the docs</a> to learn more about this incredible framework.
+AWESOME</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/rails-depends-on-javascript/">Rails, You Can Depend on Javascript</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-16T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I am between computers at the moment, and I really really miss my OSX development environment. Dependency installation is so smooth and painless on mac, that I had quite forgotten the complications of setting up a complete environment in linux. For instance</p>
+
+<h3>Rails requires a javascript runtime environment</h3>
+
+<p>I am running an Ubuntu 9.4 remix on my little Atom Netbook. Getting rails up and running anew is a lesson in returning to fundamentals.</p>
+
+<div>
+  <pre><code class='bash'>$ gem install rails
+$ rails new testapp -T
+$ rails generate rspec:install
+...
+Could not find a JavaScript runtime. See https://github.com/sstephenson/execjs for a list of available runtimes</code></pre>
+</div>
+
+
+<h3>Why does rails use a javascript runtime?</h3>
+
+<p>A web application does not exist in a ruby/rails vacuum &mdash; rendering an html page requires css and javascript as well. By default, the &lsquo;rails new&rsquo; command generates a Gemfile containing a few suggested goodies, including uglifier, which compresses javascript assets. Dealing with multiple layers of javascripts can hurt application performance, which is why rails has adopted a compression strategy. Uglifier minifies your javascript by removing all the whitespace.</p>
+
+<p>From the RailsGuides:</p>
+
+<blockquote><p>You will need an ExecJS supported runtime in order to use uglifier. If you are using Mac OS X or Windows you have a JavaScript runtime installed in your operating system. Check the ExecJS documentation for information on all of the supported JavaScript runtimes.</p></blockquote>
+
+<h3>Setup Node.js on Linux</h3>
+
+<p>In Ubuntu 10.4 and above, a JavaScript runtime is included, but installing Node on an older Ubuntu distro is not as simple as</p>
+
+<div>
+  <pre><code class='bash'>$ sudo apt-get nodejs</code></pre>
+</div>
+
+
+<p>I found the key sequence of commands on the Node.js website. First, update your packages and install node.js dependencies: python, g++, make, etc</p>
+
+<div>
+  <pre><code class='bash'>$ sudo apt-get update
+$ sudo apt-get install python-software-properties python g++ make</code></pre>
+</div>
+
+
+<p>Next, add the location of the nodejs repository, update, and install.</p>
+
+<div>
+  <pre><code class='bash'>$ sudo add-apt-repository ppa:chris-lea/node.js
+$ sudo apt-get update
+$ sudo apt-get install nodejs</code></pre>
+</div>
+
+
+<p>Wow &mdash; with all of that done, I can finally:</p>
+
+<div>
+  <pre><code class='bash'>$ rails generate rspec:install
+      create  .rspec
+      create  spec
+      create  spec/spec_helper.rb</code></pre>
+</div>
+
+
+<p>Awesome.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/ruby-execution/">Ruby Execution</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-10T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have started including an executable in my project setup. Many of the code challenges I have been practicing lately have included file I/O, and while TDD and code exercising with RSpec is still my main process, developing a stand-alone fully-functional project requires something more.</p>
+
+<h3>Blocks Code Challenge</h3>
+
+<p>I found the blocks code challenge on the <a href="http://uva.onlinejudge.org/index.php?option=com_onlinejudge&amp;Itemid=8&amp;category=3&amp;page=show_problem&amp;problem=37">UVa code competition website</a>. To sum up, you have to write a program that will parse and carry out a series of commands for stacking blocks.</p>
+
+<ol>
+<li>move a onto b</li>
+<li>move a over b</li>
+<li>pile a onto b</li>
+<li>pile a over b</li>
+<li>quit</li>
+</ol>
+
+
+<p>The commands will be provided in an input file, and an output is specified. Fun problem, right? So, I start my project folder using my <a href="http://www.katieleonard.ca/automation/2013/09/08/thor-sets-up-a-project/">thor task</a>, and work awhile adding logic and tests and data as appropriate. My file tree finishes like this:</p>
+
+<div>
+  <pre><code class='bash'>blocks
+├── data
+│   ├── input.txt
+│   └── output.txt
+├── lib
+│   └── blocks.rb
+├── spec
+│   ├── blocks_spec.rb
+│   └── spec_helper.rb
+├── Gemfile
+└── README.md</code></pre>
+</div>
+
+
+<p>So, in order to use my script, I would have to call it from the command line:</p>
+
+<div>
+  <pre><code class='bash'>$ ruby lib/blocks.rb data/input.txt
+#=&gt; or
+$ data/input.txt | ruby lib/blocks.rb</code></pre>
+</div>
+
+
+<p>This is an extremely verbose way to deliver a final product, and I would much rather call $ blocks &lt;file_input&gt;. It turns out that making an executable is easy and elegant, just like everything else in ruby. You just have to declare the ruby environment, include a few notes on usage, load the file tree, and call the class:</p>
+
+<div>
+  <pre><code class='ruby'>#!/usr/bin/env ruby
+# blocks
+# 10-Sep-2013
+#
+# Usage:
+# ./blocks data/input.txt
+#
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), &#39;lib&#39;))
+require &#39;blocks&#39;
+Blocks.new.process_input</code></pre>
+</div>
+
+
+<p>Placing this code in a non-extension file, like &lsquo;blocks&rsquo;, in the main directory, I can make it an executable by changing the file permissions:</p>
+
+<div>
+  <pre><code class='bash'>$ chmod +x ./blocks</code></pre>
+</div>
+
+
+<p>And I can call it like any other executable:</p>
+
+<div>
+  <pre><code class='bash'>$ ./blocks data/input.txt</code></pre>
+</div>
+
+
+<p>I liked this solution so much, I added it to my thor project setup! Oh, and if you are interested in seeing my solution for the blocks problem, checkout my <a href="https://github.com/keighty/datastructures/tree/master/ruby/blocks">github repo</a></p>
+
+<p>Awesome.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/partial-to-ajax/">Partial to Ajax</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/meatier-apps-with-meteor/">Meatier Apps With Meteor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/rails-depends-on-javascript/">Rails, You Can Depend on Javascript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/ruby-execution/">Ruby Execution</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/argf-all-you-want/">ARGF All You Want</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/hammer-out-tasks-with-thor/">Hammer-out Tasks With Thor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/serving-some-java/">Serving Some Java</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/runtime-for-your-life/">Runtime for Your Life</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - katie leonard -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

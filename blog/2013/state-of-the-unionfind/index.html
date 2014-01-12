@@ -1,0 +1,492 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>State of the UnionFind - keighty</title>
+  <meta name="author" content="katie leonard">
+
+  
+  <meta name="description" content="">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://keighty.github.io/blog/2013/state-of-the-unionfind">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">keighty</a></h1>
+  
+    <h2>a portfolio of sorts</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:keighty.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">State of the UnionFind</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-30T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I was scraping the rust off my data-structures synapses last week, and found that there was still some functionality underneath. UnionFind is one of those sneaky algorithms that crops up in non-linear arrangements of data, such as computer or social networks. Specifically, it keeps track of sets of connected elements. The API consists of a union(p, q), which connects the two elements p and q, and a find(p, q), which determines if p is in the same set as q.</p>
+
+<p>I learned about this algorithm through <a href="https://www.coursera.org/">Coursera</a>, and their class <a href="https://www.coursera.org/course/algs4partI">Algorithms Part 1</a> with Kevin Wayne and Robert Sedgewick. The focus of this course was not only on implementation of algorithms, but also optimization.</p>
+
+<h1>Union Find</h1>
+
+<p>A simple model for connectivity is 10 objects numbered 1 through 0:</p>
+
+<p>0 1 2 3 4 5 6 7 8 9</p>
+
+<p>Making random connections will produce disjointed sets of objects:</p>
+
+<p>0 1 { 2 3 9 } { 5 6 } 7 { 4 8 }</p>
+
+<p>A find(p, q) will determine if p and q are in the same set:</p>
+
+<ul>
+<li>find(0, 8) => false</li>
+<li>find(2, 9) => true</li>
+</ul>
+
+
+<p>A union(p, q) will put p and q in the same set:</p>
+
+<ul>
+<li>union(1, 6) => 0 { 2 3 9 } { 1 5 6 } 7 { 4 8 }</li>
+<li>union(2, 4) => 0 1 { 5 6 } 7 { 2 3 9 4 8 }</li>
+</ul>
+
+
+<p>Using an array to keep track of the values, we can walk through what this implementation would look like:</p>
+
+<table class="table table-bordered">
+  <tr>
+    <th>Index</th>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td>9</td>
+    <td>0</td>
+    <th></th>
+  </tr>
+  <tr>
+    <th>Value</th>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td>9</td>
+    <td>0</td>
+    <th></th>
+  </tr>
+  <tr>
+    <th>union(4,9)</th>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td class="highlight">9</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td class="highlight">9</td>
+    <td>0</td>
+    <td> | Changes all values that match array[4] to match array[9]</td>
+  </tr>
+  <tr>
+    <th>union(2,4)</th>
+    <td>1</td>
+    <td class="highlight">9</td>
+    <td>3</td>
+    <td class="highlight">9</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td class="highlight">9</td>
+    <td>0</td>
+    <td> | Changes all values that match array[2] to match array[4]</td>
+  </tr>
+  <tr>
+    <th>union(4,7)</th>
+    <td>1</td>
+    <td class="highlight">7</td>
+    <td>3</td>
+    <td class="highlight">7</td>
+    <td>5</td>
+    <td>6</td>
+    <td class="highlight">7</td>
+    <td>8</td>
+    <td class="highlight">7</td>
+    <td>0</td>
+    <td> | Changes all values that match array[4] to match array[7]</td>
+  </tr>
+</table>
+
+
+<p>Using the java api provided by Kevin Wayne and Robert Sedgewick:</p>
+
+<div>
+  <pre><code class='java'>public class UF
+----------------
+public UF(int N)
+public int find(int p, int q)
+public void union(int p, int q)</code></pre>
+</div>
+
+
+<p>I adapted the basic union find in ruby:</p>
+
+<div>
+  <pre><code class='ruby'>class QuickFind
+
+  attr_accessor :find_array
+
+  def initialize(size)
+    @find_array = Array.new(size){ |index| index }
+  end
+
+  def find(p, q)
+    location(p) == location(q)
+  end
+
+  def union(p, q)
+    @find_array = create_union(p, q)
+  end
+
+  private
+
+    def location(index)
+      raise NotAnElement if @find_array[index].nil?
+      return @find_array[index]
+    end
+
+    def create_union(p, q)
+      target = location(p)
+      goal = location(q)
+      temp_array = @find_array.map do |element|
+        element == target ? goal : element
+      end
+    end
+end
+
+class NotAnElement &lt; Exception
+end</code></pre>
+</div>
+
+
+<p>Sets are arranged as a flat array of elements which all share the same value: they are all wearing the same t-shirt. When we connect elements from different sets, we must make sure that every element in the first set changes its t-shirt to match the elements in the other set. This is a time-consuming process, and uses a lot of t-shirts.</p>
+
+<p>This implementation is called QuickFind because in an array of 1,000,000 entries, finding if two elements are connected is easy (compare the t-shirt at index p with the t-shirt at index q), but connecting them requires inspection of every element in the array in order (check everyone&rsquo;s t-shirts) to make sure all the previous connections remain in place.</p>
+
+<h2>Benchmark</h2>
+
+<p>To compare efficiency of this and future UnionFind implementations, I built a basic benchmark that performs a set number of union and find operations and measures the time to completion:</p>
+
+<div>
+  <pre><code class='ruby'>require &#39;benchmark&#39;
+@size = 10000
+
+def testUnit(object)
+  @size.times do
+    object.union(rand(@size), rand(@size))
+    object.find(rand(@size), rand(@size))
+  end
+end
+
+Benchmark.bm do |x|
+  x.report { testUnit(QuickFind.new(@size)) }
+end</code></pre>
+</div>
+
+
+<p>Running the benchmark on QuickFind:</p>
+
+<div>
+  <pre><code class='bash'>$ ruby lib/benchmark.rb
+=&gt; Array size = 100
+       user     system      total        real
+   0.000000   0.000000   0.000000 (  0.002745)
+$ ruby lib/benchmark.rb
+=&gt; Array size = 1000
+       user     system      total        real
+   0.140000   0.000000   0.140000 (  0.137957)
+$ ruby lib/benchmark.rb
+=&gt; Array size = 10000
+       user     system      total        real
+  13.790000   0.020000  13.810000 ( 13.866528)</code></pre>
+</div>
+
+
+<p>You can see from these measurements that increasing the size of the array by a factor of 10 each time comes with a logarithmic increase in processing time. There is definitely room for optimization, so stay tuned for more refinements. In the meantime,</p>
+
+<h2>Fun Rubyisms</h2>
+
+<p>Array initialization is a snap in ruby! Compare the initialization line in the QuickFind algorithm above with the equivalent java implementation:</p>
+
+<div>
+  <pre><code class='ruby'>@find_array = Array.new(size){ |index| index }</code></pre>
+</div>
+
+
+<p>versus</p>
+
+<div>
+  <pre><code class='java'>...
+int[] arry = new int[size]
+for (int i = 0; i &lt; size; i++) {
+    id[i] = i;
+}</code></pre>
+</div>
+
+
+<p>Both result in an array of the specified size, but ruby is slightly less sprawling.</p>
+
+<p>Also, check out lines 27 &ndash; 29</p>
+
+<div>
+  <pre><code class='ruby'>temp_array = @find_array.map do |element|
+  element == target ? goal : element
+end</code></pre>
+</div>
+
+
+<p>Using map() eliminates the need for a separate array declaration. It is the equivalent of:</p>
+
+<div>
+  <pre><code class='ruby'>temp_array = []
+@find_array.each do |element|
+  temp_array &lt;&lt; element == target ? goal : element
+end
+return temp_array</code></pre>
+</div>
+
+
+<p>and is certainly more readable than the equivalent in java:</p>
+
+<div>
+  <pre><code class='java'>int pid = id[p];
+for (int i = 0; i &lt; id.length; i++)
+    if (id[i] == pid) id[i] = id[q];</code></pre>
+</div>
+
+
+<p>Awesome</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-30T00:00:00-07:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/data-structures/'>data_structures</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://keighty.github.io/blog/2013/state-of-the-unionfind/" data-via="" data-counturl="http://keighty.github.io/blog/2013/state-of-the-unionfind/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/procuring-provisions/" title="Previous Post: Procuring Provisions">&laquo; Procuring Provisions</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/state-of-the-quickunion/" title="Next Post: State of the QuickUnion">State of the QuickUnion &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/partial-to-ajax/">Partial to Ajax</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/meatier-apps-with-meteor/">Meatier Apps With Meteor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/rails-depends-on-javascript/">Rails, You Can Depend on Javascript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/ruby-execution/">Ruby Execution</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/argf-all-you-want/">ARGF All You Want</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/hammer-out-tasks-with-thor/">Hammer-out Tasks With Thor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/serving-some-java/">Serving Some Java</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/runtime-for-your-life/">Runtime for Your Life</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - katie leonard -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

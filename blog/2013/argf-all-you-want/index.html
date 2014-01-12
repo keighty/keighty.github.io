@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>ARGF All You Want - keighty</title>
+  <meta name="author" content="katie leonard">
+
+  
+  <meta name="description" content="">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://keighty.github.io/blog/2013/argf-all-you-want">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">keighty</a></h1>
+  
+    <h2>a portfolio of sorts</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:keighty.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">ARGF All You Want</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-05T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Many of the fun, junior code challenges I have encountered deal a lot with input/output of data, and I found a great ruby feature that provides flexibility at the command line.</p>
+
+<h3>Data Input</h3>
+
+<p>There are a lot of ways to treat data at the command line, but the one I was most familiar with is passing in a filename as an argument:</p>
+
+<div>
+  <pre><code class='bash'>$ ruby example_script.rb file1.csv file2.csv ...
+$ ruby example_script.rb file1.csv | more
+$ ruby example_script.rb file1.csv &gt; output.txt</code></pre>
+</div>
+
+
+<h3>Filename Input</h3>
+
+<p>Using ARGV, we can access the list of filenames provided at the command line. ARGV is an array containing all the information that follows the command. For example:</p>
+
+<div>
+  <pre><code class='bash'>$ example_command apple banana orange
+# ARGV = [&quot;apple&quot;, &quot;banana&quot;, &quot;orange&quot;]</code></pre>
+</div>
+
+
+<p>One can process each filename in ARGV using regular array methods:</p>
+
+<div>
+  <pre><code class='ruby'>ARGV.each do |arg|
+  process_string(File.read(arg))
+end</code></pre>
+</div>
+
+
+<p>File.read(arg) reads the file into a &ldquo;\n&rdquo; delimited string, which can be processed further. If there are no arguments, ARGV is an empty array.</p>
+
+<h3>Piped Input</h3>
+
+<p>Say that we want to enter data directly into a program rather than use a fixed filename at the command line &mdash; a useful technique for when we want data to flow out of one process and into another:</p>
+
+<div>
+  <pre><code class='bash'>$ cat file1.csv | ruby example_script.rb
+$ cat *.csv | ruby example_script.rb
+$ ruby example_script.rb &lt; file1.csv</code></pre>
+</div>
+
+
+<p>Using the pipe, &ldquo;|&rdquo; or &ldquo;&lt;&rdquo;, we can push a string of data from one process into another, but what happens to our program when we try to do this?</p>
+
+<div>
+  <pre><code class='bash'>$ example.csv | ruby example_script.rb
+TypeError: can`t convert nil into String</code></pre>
+</div>
+
+
+<p>We get a TypeError! Recall that command line arguments are stored in ARGV, but we are not providing any command line arguments. ARGV is an empty array, and we are attempting to open a file from ARGV[0] = nil. Shame on us! How do we access data that is piped in as well as data that is appended to the command line? Do we have to check for the source of the data before we can treat it? Turns out, we DON&rsquo;T.</p>
+
+<h3>The ARGF Solution</h3>
+
+<p>Ruby has a nifty interface for handling data input, regardless of whether it arrives as a command line argument or from another data source. We can replace the code we wrote earlier with a single line:</p>
+
+<div>
+  <pre><code class='ruby'>process_string(ARGF.read)</code></pre>
+</div>
+
+
+<p>If ARGV is not empty, ARGF will assume it is an array of filenames and will treat them accordingly. If ARGV is empty, it will read from $stdin to get the data passed in via the pipe. One caveat is that you can&rsquo;t read from both ARGV and the pipe: if ARGV != [  ], $stdin is ignored.</p>
+
+<p>Awesome.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-05T00:00:00-07:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://keighty.github.io/blog/2013/argf-all-you-want/" data-via="" data-counturl="http://keighty.github.io/blog/2013/argf-all-you-want/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/hammer-out-tasks-with-thor/" title="Previous Post: Hammer-out Tasks with Thor">&laquo; Hammer-out Tasks with Thor</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/thor-sets-up-a-project/" title="Next Post: Thor Sets Up A Project">Thor Sets Up A Project &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/partial-to-ajax/">Partial to Ajax</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/meatier-apps-with-meteor/">Meatier Apps With Meteor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/rails-depends-on-javascript/">Rails, You Can Depend on Javascript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/ruby-execution/">Ruby Execution</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/argf-all-you-want/">ARGF All You Want</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/hammer-out-tasks-with-thor/">Hammer-out Tasks With Thor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/serving-some-java/">Serving Some Java</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/runtime-for-your-life/">Runtime for Your Life</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - katie leonard -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,787 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>keighty</title>
+  <meta name="author" content="katie leonard">
+
+  
+  <meta name="description" content="On the last episode, I described how to label chunks of code for processing through a parser. Strings are labeled as &lsquo;STRING&rsquo;, class &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://keighty.github.io/blog/page/3">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">keighty</a></h1>
+  
+    <h2>a portfolio of sorts</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:keighty.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/parcel-parser/">Parcel Parser</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-16T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>On the last episode, I described how to label chunks of code for processing through a parser. Strings are labeled as &lsquo;STRING&rsquo;, class definitions as &lsquo;A&rsquo; + &lsquo;CONSTANT&rsquo;, etc.</p>
+
+<h2>What is a parser?</h2>
+
+<p>A parser separates and analyzes a piece of text according to a set of rules specified by a formal grammar. The analysis is performed by assembling the tokenized code into an Abstract Syntax Tree (AST) &ndash; a tree of nodes that represent what the code means to the language. The AST evaluates the nodes in a similar manner to order of operations in math: each token is placed on the evaluation tree, and expressions are evaluated by reducing each branch in order.</p>
+
+<p>The parser itself is can be written by hand, but I am using RACC: an LALR (Look Ahead, Left to right, Reverse) parser written by <a href="https://github.com/tenderlove/racc">tenderlove</a> to generate Ruby programs. How do we specify a grammar that RACC will understand?</p>
+
+<p>Each rule is formatted in the following way:</p>
+
+<div>
+  <pre><code class='bash'>RuleName:
+  OtherRule TOKEN AnotherRule    { code to run }
+| OtherRule                      { ... }
+;</code></pre>
+</div>
+
+
+<p>It is similar to an if/else statement that captures all possible expressions beginning with the most specific (ie: an expression with TWO rules matches line 2) to more general (all other single expressions are captured on line 3). When a token matches a rule, the code in the attached code block is run.</p>
+
+<p>The code blocks correspond to instructions on how to treat matching tokens. For example, the grammar should specify what happens when the code contains a class definition, labeled with &lsquo;A&rsquo; + &lsquo;CONSTANT&rsquo;.</p>
+
+<div>
+  <pre><code class='ruby'>...
+# Class definition
+Class:
+  A CONSTANT Block { result = ClassNode.new(val[1], val[2]) }
+;
+...</code></pre>
+</div>
+
+
+<p>When the parser catches a class token it will create a new ClassNode with the class name (CONSTANT) and the block as arguments. The val[] array refers to the grammar rule [A, CONSTANT, Block].</p>
+
+<p>Some tokens are parsed very close to AS IS:</p>
+
+<div>
+  <pre><code class='ruby'>Literal:
+  NUMBER { result = LiteralNode.new(val[0]) }
+| STRING { result = LiteralNode.new(val[0]) }
+| TRUE   { result = LiteralNode.new(true) }
+| FALSE  { result = LiteralNode.new(false) }
+| NIL    { result = LiteralNode.new(nil) }
+;</code></pre>
+</div>
+
+
+<p>Each literal triggers the creation of a new LiteralNode with its value as the only argument.</p>
+
+<p>The Nodes are outlined in a Nodes class, where the rules of evaluation are defined.</p>
+
+<div>
+  <pre><code class='ruby'>...
+class ClassNode
+  def initialize(name, body)
+    @name = name
+    @body = body
+  end
+
+  def eval(context)
+    eh_class = CanadianClass.new
+    context[@name] = eh_class
+    @body.eval(Context.new(eh_class, eh_class))
+    eh_class
+  end
+end
+...</code></pre>
+</div>
+
+
+<p>A ClassNode is initialized with two params (recall from the grammar: ClassNode.new(val[1], val[2])), the class name and its code block. The context is like scope &ndash; it can hold modules, classes, methods, attributes, aliases, requires, and includes. Classes, modules, and files are all Contexts (definition from <a href="http://ruby-doc.org/stdlib-1.8.6/libdoc/rdoc/rdoc/RDoc/Context.html">Rdocs</a>). Evaluation of a ClassNode begins by assigning the class to a context and evaluating the code block, which adds more contexts. In this way, a tree structure is formed &ndash; an AST &ndash; which does all the interpreting work for the new language.</p>
+
+<p>When the grammar and node definitions are complete, RACC will generate a parser:</p>
+
+<div>
+  <pre><code class='ruby'>$ racc -vo parser.rb grammar.y</code></pre>
+</div>
+
+
+<p>The parser is a relatively obtuse set of methods and state transition tables, and when you run code through the parser you get an AST that follows the grammar you have defined.</p>
+
+<p>So, now I have a lexer and a parser, but I still can&rsquo;t run my code. I need to define a runner class that will put all these parts together, but first, I need a break.</p>
+
+<p>Awesome.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/flex-your-lexer/">Flex Your Lexer</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-15T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A Lexer is a ruby class with a single method: tokenize(). Its purpose is to label each chunk of code with a particular token. Strings are labeled as strings, numbers as numbers, and class names as constants. For example,</p>
+
+<div>
+  <pre><code class='ruby'>Lexer.new.tokenize(&quot;string&quot;)
+# =&gt;[[:STRING, &quot;string&quot;]]
+Lexer.new.tokenize(&quot;True&quot;)
+# =&gt;[[:CONSTANT, &quot;True&quot;]]
+Lexer.new.tokenize(&quot;a Car&quot;)
+# =&gt;[[:A, &#39;a&#39;], [:CONSTANT, &#39;Car&#39;]])
+Lexer.new.tokenize(&quot;+&quot;)
+# =&gt;[[&quot;+&quot;, &quot;+&quot;]]</code></pre>
+</div>
+
+
+<p>&ldquo;Lexing&rdquo; is accomplished using regular expressions. The lexer treats the text string of your code like a shish kabob &ndash; it slides recognizable chunks off the skewer one at a time and categorizes them (onion, pepper, method definition, etc).</p>
+
+<div>
+  <pre><code class='ruby'>class Lexer
+  KEYWORDS = [&#39;a&#39;, &#39;can&#39;, &#39;if&#39;, &#39;else&#39;, &#39;while&#39;, &#39;true&#39;, &#39;false&#39;, &#39;nil&#39;]
+
+  def tokenize(code)
+    code.chomp!
+    i = 0
+    tokens = []
+
+    while i &lt; code.size
+      chunk = code[i..-1]
+
+      # checks keywords
+      if identifier = chunk[/\A(eh\?)/, 1]
+        tokens &lt;&lt; [&#39;}&#39;, &#39;}&#39;]
+        i += identifier.size
+
+      elsif identifier = chunk[/\A([a-z]\w*)/, 1]
+        if KEYWORDS.include?(identifier)
+          tokens &lt;&lt; [identifier.upcase.to_sym, identifier]
+        else
+          tokens &lt;&lt; [:IDENTIFIER, identifier]
+        end
+        i += identifier.size
+...</code></pre>
+</div>
+
+
+<p>In this example lexer I have defined my list of keywords, removed the trailing newline, and begun peeling identifiable chunks off the code example.
+* If the code chunk matches an &lsquo;eh?&rsquo; it will add a closing brace to the token array.
+* If the code chunk matches a KEYWORD it will be upcased and labeled as a keyword and added to the token array.
+* If the code chunk matches any word of lowercase letters it will be labeled as an IDENTIFIER and added to the token array.</p>
+
+<p>I continued defining regex rules until I was able to completely tokenize a class definition:</p>
+
+<div>
+  <pre><code class='ruby'>code = &lt;&lt;-EOS
+a Canadian
+  can curl
+    if skip:
+      say &#39;Hurry!&#39;
+    eh?
+  eh?
+eh?
+EOS
+...
+Lexer.new.tokenize(code)
+# =&gt; [[:A, &quot;a&quot;], [:CONSTANT, &quot;Canadian&quot;], [:CAN, &quot;can&quot;], [:IDENTIFIER, &quot;curl&quot;], [:IF, &quot;if&quot;], [:IDENTIFIER, &quot;skip&quot;], [&quot;{&quot;, &quot;{&quot;], [:IDENTIFIER, &quot;say&quot;], [:STRING, &quot;Hurry!&quot;], [&quot;}&quot;, &quot;}&quot;], [&quot;}&quot;, &quot;}&quot;], [&quot;}&quot;, &quot;}&quot;]]</code></pre>
+</div>
+
+
+<p>Now that I have an array of tokens, it is time to write my grammar laws that will tell the parser what to do with them.</p>
+
+<p>Awesome</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/canadian-flair/">Canadian Flair</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-10T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>For my last month at code school, I have decided to learn what it takes to develop a new programming language. Having been teased for my Canadian accent, I thought it appropriate to incorporate some idiomatic Canadianisms, and call my language Eh? Deciding what actual features I want to implement in my programming language is an interesting task, and I think I have narrowed it down to a couple of standard rules and a couple wacky ones:</p>
+
+<h3>Rules for Eh?</h3>
+
+<ul>
+<li>blocks of code are delimited by &lsquo;:&rsquo; and &lsquo;eh?&rsquo;</li>
+<li>classes are declared using &ldquo;A&rdquo; keyword</li>
+<li>methods are defined using &ldquo;CAN&rdquo; keyword</li>
+<li>lowercase identifiers are local variables or method names</li>
+<li>capitalized identifiers are global variables</li>
+<li>no parens for args</li>
+<li>last value evaluated in return value</li>
+<li>everything is an object</li>
+</ul>
+
+
+<h1>Steps for building an interpreted language</h1>
+
+<ol>
+<li>This code has to be provided as input to a lexer.</li>
+<li>The lexer will convert that input into tokens.</li>
+<li>The parser will organize those tokens into a tree of nodes.</li>
+<li>The runtime will evaluate the nodes using ruby.</li>
+</ol>
+
+
+<h3>Prototype</h3>
+
+<p>Here is what I would like the final result to look like:</p>
+
+<div>
+  <pre><code class='ruby'>a Canadian
+  with toque
+  with scarf
+  with broom
+
+  can curl
+    if skip:
+      say &quot;Hurry!&quot;
+    eh?
+    if lead:
+      pass
+    eh?
+    say &quot;How social the game...&quot;
+  eh?
+
+  can say_aboot:
+    say &quot;What&#39;s it all aboot?&quot;
+  eh?
+eh?</code></pre>
+</div>
+
+
+<p>With this vague action plan and <a href="http://createyourproglang.com/?hop=rubyinside">&ldquo;Create Your Own Programming Language&rdquo;</a> by Marc-Andre Cournoyer in hand, off we go!</p>
+
+<p>Awesome</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/show-off-with-github/">Show-off With GitHub and Docco</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-06T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was experimenting with some documentation styles today and discovered two bits of gold: gh-pages and docco:</p>
+
+<p>Creating a site for your project using GitHub is a 3 step process:
+1. create a new orphan branch called gh-pages
+2. remove all the contents
+3. fill the branch with your boastful new site</p>
+
+<div>
+  <pre><code class='bash'>$ cd repository
+
+$ git checkout --orphan gh-pages
+# Creates a branch, without any parents
+# Switched to a new branch &#39;gh-pages&#39;
+
+$ git rm -rf .
+# Remove all files from the old working tree</code></pre>
+</div>
+
+
+<p>From here you can use the <a href="https://help.github.com/articles/creating-pages-with-the-automatic-generator">GitHub Automatic Page generator</a> to throw up a theme and some standard content, you can roll out a <a href="http://jekyllbootstrap.com/">jekyll bootstrap</a> platform with blogging integration, or you can simply:</p>
+
+<div>
+  <pre><code class='bash'>$ echo &quot;Hello gh-pages!&quot; &gt; index.html
+$ git add index.html
+$ git commit -a -m &quot;First pages commit&quot;
+$ git push origin gh-pages</code></pre>
+</div>
+
+
+<p>Add and commit your content to your gh-pages branch, and GitHub will generate what needs to be generated in order to serve your website.</p>
+
+<p>Your pages are hosted for free by GitHub. If you have already configured a personal site using <a href="https://help.github.com/articles/user-organization-and-project-pages">User Pages</a>, your project pages will hang off the end of your domain like this : username.github.io/repo_name</p>
+
+<h3><a href="http://jashkenas.github.io/docco/">Docco</a></h3>
+
+<blockquote><p>Docco is a quick-and-dirty documentation generator, written in Literate CoffeeScript. It produces an HTML document that displays your comments intermingled with your code. All prose is passed through Markdown, and code is passed through Highlight.js syntax highlighting.</p></blockquote>
+
+<p>Docco works with  Python, Ruby, JavaScript, Java, and many other languages, with no configuration &mdash; just plug and play!</p>
+
+<p>Install Docco with npm:</p>
+
+<div>
+  <pre><code class='bash'>sudo npm install -g docco</code></pre>
+</div>
+
+
+<p>Run it against your code:</p>
+
+<div>
+  <pre><code class='javascript'>docco lib/*.ruby</code></pre>
+</div>
+
+
+<p>Docco will create a docs/ folder in your project and will generate an html file for each ruby file in the lib directory. This is where beautifully commented code really pays off, but docco does not format multi-line code the same way. Check out my <a href="http://www.katieleonard.ca/PCSnotes/docs/benchmark.html">benchmark.rb</a> for an example of how each comment style is treated by docco.</p>
+
+<p>TADA</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/state-of-the-quickunion/">State of the QuickUnion</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-04T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In my last look at the UnionFind algorithm I made a quick-find implementation &mdash; finding if two elements were connected was fast but connecting two elements was slow. The union operation is a good candidate for optimization.</p>
+
+<h1>Quick Union</h1>
+
+<p>One way to optimize the union operation is to reduce the number of array accesses required.</p>
+
+<p>In QuickFind, the sets are arranged in a flat array of elements which all share the same value: they are all wearing the same t-shirt. When we connect elements from different sets, we must make sure that every element in the first set changes its t-shirt to match the elements in the other set. This is a time-consuming process, and uses a lot of t-shirts.</p>
+
+<p>What if only one element had to change its t-shirt? If the set had a single element in charge &ndash; a root &ndash; then joining elements from different sets would require identifying the t-shirt of the one in charge, and then changing to that element&rsquo;s t-shirt.</p>
+
+<p>Using an array instead of t-shirts to keep track of the values, we can walk through what this implementation would look like:</p>
+
+<table class="table table-bordered">
+  <tr>
+    <th>Index</th>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td>9</td>
+    <td>0</td>
+    <th></th>
+  </tr>
+  <tr>
+    <th>Value</th>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td>9</td>
+    <td>0</td>
+    <td> | Each element begins as the root of its own set</td>
+  </tr>
+  <tr>
+    <th>union(4,9)</th>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td class="highlight">9</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td class="highlight">9</td>
+    <td>0</td>
+    <td> | root(9) = 9, root(4) = 4, change array[4] = 9</td>
+  </tr>
+  <tr>
+    <th>union(2,4)</th>
+    <td>1</td>
+    <td class="highlight">9</td>
+    <td>3</td>
+    <td class="highlight">9</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+    <td>8</td>
+    <td>9</td>
+    <td>0</td>
+    <td> | root(4) = 9, root(2) = 2, change array[2] = 9</td>
+  </tr>
+  <tr>
+    <th>union(4,7)</th>
+    <td>1</td>
+    <td>9</td>
+    <td>3</td>
+    <td  class="highlight">9</td>
+    <td>5</td>
+    <td>6</td>
+    <td  class="highlight">7</td>
+    <td>8</td>
+    <td>7</td>
+    <td>0</td>
+    <td> | root(7) = 7, root(4) = 9, change array[9] = 7</td>
+  </tr>
+  <tr>
+    <th>find(2,7)</th>
+    <td>1</td>
+    <td class="highlight">9</td>
+    <td>3</td>
+    <td>9</td>
+    <td>5</td>
+    <td>6</td>
+    <td class="highlight">7</td>
+    <td>8</td>
+    <td class="highlight">7</td>
+    <td>0</td>
+    <td> | root(7) = 7, root(2) = 7. The two are connected </td>
+  </tr>
+</table>
+
+
+<h2>QuickUnion</h2>
+
+<p>Again following the basic API:</p>
+
+<div>
+  <pre><code class='java'>public class UF
+---------------
+public UF(int N)
+public int find(int p, int q)
+public void union(int p, int q)</code></pre>
+</div>
+
+
+<p>I adapted the QuickUnion in ruby:</p>
+
+<div>
+  <pre><code class='ruby'>class QuickUnion
+  def initialize(size)
+    @find_array = Array.new(size){ |index| index }
+  end
+
+  # check if p and q have the same root
+  def find(p, q)
+    verify(p, q)
+    root(p) == root(q)
+  end
+
+  # set id of p&#39;s root to the id of q&#39;s root
+  def union(p, q)
+    verify(p, q)
+    @find_array[root(p)] = root(q)
+  end
+
+  private
+    def root(index)
+      # get root until root(index) == index
+      if @find_array[index] == index
+        return index
+      else
+        root(@find_array[index])
+      end
+    end
+
+    def verify(p, q)
+      raise NotAnElement if @find_array[p].nil?
+      raise NotAnElement if @find_array[q].nil?
+    end
+end
+
+class NotAnElement &lt; Exception
+end</code></pre>
+</div>
+
+
+<p>This implementation is a QuickUnion because in an array of 1,000,000 entries, connecting element p to element q is easy: you only have to find the root of p, and then change q to match (one root() and one array access). Finding if p and q are connected takes a little bit longer, because you have to perform two root operations: one for p and one for q, but it is still faster than accessing every element in the array.</p>
+
+<h2>Benchmark</h2>
+
+<div>
+  <pre><code class='bash'>$ ruby lib/benchmark.rb
+=&gt; Array Size: 100
+       user     system      total        real
+   0.000000   0.000000   0.000000 (  0.001865)
+   0.000000   0.000000   0.000000 (  0.000377)
+$ ruby lib/benchmark.rb
+=&gt; Array Size: 1000
+       user     system      total        real
+   0.120000   0.010000   0.130000 (  0.124929)
+   0.010000   0.000000   0.010000 (  0.008825)
+$ ruby lib/benchmark.rb
+=&gt; Array Size: 10000
+       user     system      total        real
+  10.120000   0.030000  10.150000 ( 10.146124)
+   0.520000   0.000000   0.520000 (  0.520377)</code></pre>
+</div>
+
+
+<p>Comparing QuickFind (top line) with QuickUnion(bottom line), we can actually measure how well this small optimization of the union operation has increased performance with larger datasets.</p>
+
+<p>Awesome.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/4/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/2/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/partial-to-ajax/">Partial to Ajax</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/meatier-apps-with-meteor/">Meatier Apps With Meteor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/rails-depends-on-javascript/">Rails, You Can Depend on Javascript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/ruby-execution/">Ruby Execution</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/argf-all-you-want/">ARGF All You Want</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/hammer-out-tasks-with-thor/">Hammer-out Tasks With Thor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/serving-some-java/">Serving Some Java</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/runtime-for-your-life/">Runtime for Your Life</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - katie leonard -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

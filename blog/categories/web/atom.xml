@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Web | keighty]]></title>
+  <link href="http://keighty.github.io/blog/categories/web/atom.xml" rel="self"/>
+  <link href="http://keighty.github.io/"/>
+  <updated>2014-01-11T17:58:28-08:00</updated>
+  <id>http://keighty.github.io/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Show-off With GitHub and Docco]]></title>
+    <link href="http://keighty.github.io/blog/2013/show-off-with-github/"/>
+    <updated>2013-08-06T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/show-off-with-github</id>
+    <content type="html"><![CDATA[<p>I was experimenting with some documentation styles today and discovered two bits of gold: gh-pages and docco:</p>
+
+<p>Creating a site for your project using GitHub is a 3 step process:
+1. create a new orphan branch called gh-pages
+2. remove all the contents
+3. fill the branch with your boastful new site</p>
+
+<p><div>
+  <pre><code class='bash'>$ cd repository&lt;/p&gt;
+
+&lt;p&gt;$ git checkout &amp;mdash;orphan gh-pages&lt;/p&gt;
+
+&lt;h1&gt;Creates a branch, without any parents&lt;/h1&gt;
+
+&lt;h1&gt;Switched to a new branch &amp;lsquo;gh-pages&amp;rsquo;&lt;/h1&gt;
+
+&lt;p&gt;$ git rm -rf .&lt;/p&gt;
+
+&lt;h1&gt;Remove all files from the old working tree&lt;/h1&gt;
+
+&lt;p&gt;</code></pre>
+</div>
+</p>
+
+<p>From here you can use the <a href="https://help.github.com/articles/creating-pages-with-the-automatic-generator">GitHub Automatic Page generator</a> to throw up a theme and some standard content, you can roll out a <a href="http://jekyllbootstrap.com/">jekyll bootstrap</a> platform with blogging integration, or you can simply:</p>
+
+<p><div>
+  <pre><code class='bash'>$ echo &amp;ldquo;Hello gh-pages!&amp;rdquo; &gt; index.html
+$ git add index.html
+$ git commit -a -m &amp;ldquo;First pages commit&amp;rdquo;
+$ git push origin gh-pages</code></pre>
+</div>
+</p>
+
+<p>Add and commit your content to your gh-pages branch, and GitHub will generate what needs to be generated in order to serve your website.</p>
+
+<p>Your pages are hosted for free by GitHub. If you have already configured a personal site using <a href="https://help.github.com/articles/user-organization-and-project-pages">User Pages</a>, your project pages will hang off the end of your domain like this : username.github.io/repo_name</p>
+
+<h3><a href="http://jashkenas.github.io/docco/">Docco</a></h3>
+
+<blockquote><p>Docco is a quick-and-dirty documentation generator, written in Literate CoffeeScript. It produces an HTML document that displays your comments intermingled with your code. All prose is passed through Markdown, and code is passed through Highlight.js syntax highlighting.</p></blockquote>
+
+<p>Docco works with  Python, Ruby, JavaScript, Java, and many other languages, with no configuration &mdash; just plug and play!</p>
+
+<p>Install Docco with npm:
+<div>
+  <pre><code class='bash'>sudo npm install -g docco</code></pre>
+</div>
+</p>
+
+<p>Run it against your code:
+<div>
+  <pre><code class='javascript'>docco lib/*.ruby</code></pre>
+</div>
+</p>
+
+<p>Docco will create a docs/ folder in your project and will generate an html file for each ruby file in the lib directory. This is where beautifully commented code really pays off, but docco does not format multi-line code the same way. Check out my <a href="http://www.katieleonard.ca/PCSnotes/docs/benchmark.html">benchmark.rb</a> for an example of how each comment style is treated by docco.</p>
+
+<p>TADA</p>
+]]></content>
+  </entry>
+  
+</feed>

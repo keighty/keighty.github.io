@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: JavaScript | keighty]]></title>
+  <link href="http://keighty.github.io/blog/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://keighty.github.io/"/>
+  <updated>2014-01-11T17:58:28-08:00</updated>
+  <id>http://keighty.github.io/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Hoisting With JavaScript]]></title>
+    <link href="http://keighty.github.io/blog/2013/hoisting-with-javascript/"/>
+    <updated>2013-06-26T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/hoisting-with-javascript</id>
+    <content type="html"><![CDATA[<p>I am really enjoying <a href="http://www.amazon.com/Test-Driven-JavaScript-Development-Developers-Library/dp/0321683919">Test-Driven Development</a> by Christian Johansen</p>
+
+<p>I picked up this little gem this morning as I was learning about functions and the various objects associated with them:</p>
+
+<p>You CANNOT use function declarations in conditionals. Take this example:
+<div>
+  <pre><code class='java'>if (String.prototype.trim) {
+  function trim(str) {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;return str.trim();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;  }
+else {
+  function trim(str){&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;return str.replace(/^\s+|\s+$/g, &quot;&quot;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;  }
+}</code></pre>
+</div>
+</p>
+
+<p>What is wrong with that, you might ask? HOISTING! Both functions are hoisted up to the global variable before execution, which means that the second one always overwrites the first one.</p>
+
+<p>This is a better method:
+<div>
+  <pre><code class='java'>if(!String.prototype.trim) {
+  String.prototype.trim = function trim() {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;return this.replace(/^\s+|\s+$/g, &quot;&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;  }
+}</code></pre>
+</div>
+</p>
+
+<p>This way, we are not overwriting any browser-available Trim methods, we are declaring the method on the String.prototype, which means it is available to ALL strings in scope, AND we have named it so that it will be more visible in a stack trace in case something goes wrong.</p>
+
+<p>AWESOME</p>
+]]></content>
+  </entry>
+  
+</feed>

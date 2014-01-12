@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Automation | keighty]]></title>
+  <link href="http://keighty.github.io/blog/categories/automation/atom.xml" rel="self"/>
+  <link href="http://keighty.github.io/"/>
+  <updated>2014-01-11T17:58:28-08:00</updated>
+  <id>http://keighty.github.io/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Thor Sets Up a Project]]></title>
+    <link href="http://keighty.github.io/blog/2013/thor-sets-up-a-project/"/>
+    <updated>2013-09-08T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/thor-sets-up-a-project</id>
+    <content type="html"><![CDATA[<p>A few weeks ago I posted about <a href="http://www.katieleonard.ca/automation/2013/08/30/hammer-out-tasks-with-thor/">using Thor to generate system-wide notes files with a standard format</a>. Since then, I have been doing a lot of smaller code challenges, and I wanted to set up a Thor task for generating a standard project file tree.</p>
+
+<p>My Goal Tree:
+<div>
+  <pre><code class='bash'>project_name
+├── lib
+│   └── project_name.rb
+├── spec
+│   ├── project_name_spec.rb
+│   └── spec_helper.rb
+├── Gemfile
+└── README.md</code></pre>
+</div>
+</p>
+
+<p>I always begin with these files and this organization. A Gemfile and README are essential for setting up the environment and explaining the gist of the project. I am most comfortable with RSpec, and to get into the practice of TDD, setting up a testing environment right away is non-negotiable. All of these standard files contain some automatic content as well:</p>
+
+<h5>spec_helper.rb loads the library</h5>
+
+<p><div>
+  <pre><code class='ruby'>$LOAD_PATH.unshift(File.join(File.dirname(&lt;strong&gt;FILE&lt;/strong&gt;), &amp;lsquo;..&amp;rsquo;, &amp;lsquo;lib&amp;rsquo;))
+require &amp;lsquo;rspec&amp;rsquo;
+require &amp;lsquo;project_name&amp;rsquo;</code></pre>
+</div>
+</p>
+
+<h5>project_name_spec.rb sets up the first test</h5>
+
+<p><div>
+  <pre><code class='ruby'>require &amp;lsquo;spec_helper&amp;rsquo;&lt;/p&gt;
+
+&lt;p&gt;describe ProjectName do
+  before (:each) {  }
+  subject {  }&lt;/p&gt;
+
+&lt;p&gt;  it &amp;ldquo;should pass&amp;rdquo;
+end</code></pre>
+</div>
+</p>
+
+<h5>Gemfile specifies the right gems for setting up the project</h5>
+
+<p><div>
+  <pre><code class='ruby'>ruby &amp;lsquo;2.0.0&amp;rsquo;
+gem &amp;lsquo;rspec&amp;rsquo;</code></pre>
+</div>
+</p>
+
+<p>There are other files that could have auto-generated content as well, like a Rakefile, or a config.ru, but this is a good start.</p>
+
+<h4>Create a Thor task (rb_project.thor):</h4>
+
+<p><div>
+  <pre><code class='ruby'>&lt;/p&gt;
+
+&lt;h1&gt;!/usr/bin/env ruby&lt;/h1&gt;
+
+&lt;p&gt;require &amp;ldquo;rubygems&amp;rdquo;
+require &amp;ldquo;thor&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;class RbProject &amp;lt; Thor
+  desc &amp;ldquo;init&amp;rdquo;, &amp;ldquo;creates a ruby project with rspec&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;  def init(title=&amp;ldquo;new_project&amp;rdquo;)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Dir.mkdir(title)
+Dir.chdir(title)
+Dir.mkdir(&quot;spec&quot;)
+Dir.mkdir(&quot;lib&quot;)
+filename = &quot;#{title}&quot;
+
+open(File.new(&quot;README.md&quot;, &quot;w&quot;), &quot;w&quot;) do |note|
+  note.puts &quot;# #{title}&quot;
+end
+
+open(File.new(&quot;Gemfile&quot;, &quot;w&quot;), &quot;w&quot;) do |my_gem|
+  my_gem.puts &quot;ruby &#39;2.0.0&#39;&quot;
+  my_gem.puts &quot;gem &#39;rspec&#39;&quot;
+end
+
+open(File.new(&quot;spec/spec_helper.rb&quot;, &quot;w&quot;), &quot;w&quot;) do |spec|
+  spec.puts &quot;$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), &#39;..&#39;, &#39;lib&#39;))&quot;
+  spec.puts &quot;require &#39;rspec&#39;&quot;
+  spec.puts &quot;require &#39;#{filename}&#39;&quot;
+end
+
+open(File.new(&quot;spec/#{filename}_spec.rb&quot;, &quot;w&quot;), &quot;w&quot;) do |spec|
+  spec.puts &quot;require &#39;spec_helper&#39;&quot;
+  spec.puts &quot;&quot;
+  spec.puts &quot;describe #{camelize(filename)} do&quot;
+  spec.puts &quot;  before (:each) {  }&quot;
+  spec.puts &quot;  xit &#39;should pass&#39;&quot;
+  spec.puts &quot;end&quot;
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;  end&lt;/p&gt;
+
+&lt;p&gt;  private&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;def camelize(snake)
+  title = snake.split(&#39;_&#39;).each do |word|
+    word.capitalize!
+  end
+  title.join(&#39;&#39;)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;end</code></pre>
+</div>
+</p>
+
+<p>I created a private method camelize in order to change the snake_case project name into a CamelCase class name.</p>
+
+<p>As before, I install my thor task system wide:
+<div>
+  <pre><code class='bash'>$ thor install rb_project.thor</code></pre>
+</div>
+</p>
+
+<p>And now my project generation task can be run from any directory, anywhere on my system:
+<div>
+  <pre><code class='bash'>$ thor list&lt;/p&gt;
+
+&lt;h2&gt;note&lt;/h2&gt;
+
+&lt;p&gt;thor note:create  # creates a notes file in markdown&lt;/p&gt;
+
+&lt;h2&gt;rb_project&lt;/h2&gt;
+
+&lt;p&gt;thor rb_project:init  # creates a ruby project with rspec&lt;/p&gt;
+
+&lt;p&gt;$ thor rb_project:init test_project
+$ tree test_project/
+test_project/
+├── lib
+│   └── test_project.rb
+├── spec
+│   ├── spec_helper.rb
+│   └── test_project_spec.rb
+├── Gemfile
+├── README.md&lt;/p&gt;
+
+&lt;p&gt;2 directories, 6 files</code></pre>
+</div>
+</p>
+
+<p>Awesome.</p>
+
+<p><div>
+  <pre><code class='bash'></code></pre>
+</div>
+
+<div>
+  <pre><code class='bash'></code></pre>
+</div>
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hammer-out Tasks With Thor]]></title>
+    <link href="http://keighty.github.io/blog/2013/hammer-out-tasks-with-thor/"/>
+    <updated>2013-08-30T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/hammer-out-tasks-with-thor</id>
+    <content type="html"><![CDATA[<p>A few months ago I gave a small lightning talk to my code school class about automating tasks using <a href="http://rake.rubyforge.org/">Rake</a>. Before I learned ruby I used bash scripts to accomplish similar things, but was often bogged down in learning the syntax of string-processing essentials like awk or sed. I wished for the simplicity of Ruby, and thought that Rake was the bees-knees. After my talk, <a href="chuckvose.com">Chuck</a>, my PCS mentor, put together a repo of <a href="http://whatisthor.com/">Thor</a> tasks that accomplished the same tasks but could be installed system wide.</p>
+
+<h3><a href="http://whatisthor.com/">Thor</a> is my new hero</h3>
+
+<p>Unlike Rake tasks, which are confined to the directory containing the Rakefile, Thor tasks can be installed on your system and called from anywhere. My note files are all formatted in a particular way. Before Thor, I used a rake task:</p>
+
+<p><div>
+  <pre><code class='bash'>$ cd notesDirWithRakefile
+$ rake post title=&amp;ldquo;new post title&amp;rdquo;
+$ Creating new post: &amp;ldquo;./130830_new_post_title&amp;rdquo;</code></pre>
+</div>
+</p>
+
+<p>The Rake task auto-formats the filename, replacing spaces with underscores, and prepends today&rsquo;s date so that they will sort in the order they are made. This worked great for when I wanted to keep notes in that one folder, but later I wanted to be able to keep notes on a particular project. I would either have to copy the Rakefile (two places to update if I made any changes), or create a symbolic link (which would break if I ever moved my Rakefile). Neither of these options seemed to be the most practical. Enter Thor:</p>
+
+<p>Creating the Thor task is as easy as pie:
+<div>
+  <pre><code class='ruby'>require &amp;lsquo;thor&amp;rsquo;&lt;/p&gt;
+
+&lt;p&gt;class Note &amp;lt; Thor
+  desc &amp;ldquo;create&amp;rdquo;, &amp;ldquo;creates a notes file in markdown&amp;rdquo;
+  def create(title=&amp;ldquo;new note&amp;rdquo;)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;slug = title.downcase.strip.gsub(&#39; &#39;, &#39;_&#39;).gsub(/[^\w-]/, &#39;&#39;)
+date = Time.parse(Time.now).strftime(&#39;%y%m%d&#39;)
+filename = File.join(&quot;./&quot;, &quot;#{date}_#{slug}.md&quot;)
+
+if File.exist?(filename)
+  abort(&quot;rake aborted!&quot;) if ask(&quot;#{filename} already exists. Do you want to overwrite?&quot;, [&#39;y&#39;, &#39;n&#39;]) == &#39;n&#39;
+end
+
+puts &quot;Creating new post: #{filename}&quot;
+open(filename, &#39;w&#39;) do |post|
+  post.puts &quot;# #{title.gsub(/-/,&#39; &#39;).capitalize}&quot;
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;  end
+end</code></pre>
+</div>
+</p>
+
+<p>Listing all Thor tasks is easy:
+<div>
+  <pre><code class='bash'>$ thor list&lt;/p&gt;
+
+&lt;h2&gt;note&lt;/h2&gt;
+
+&lt;p&gt;thor note:create  # creates a notes file in markdown</code></pre>
+</div>
+</p>
+
+<p>Installing a Thor task for system use is easy:
+<div>
+  <pre><code class='bash'>$ thor install notes.thor
+&amp;hellip;
+Do you wish to continue [y/N]? y
+Please specify a name for notes.thor in the system repository [notes.thor]: note
+Storing thor file in your system repository</code></pre>
+</div>
+</p>
+
+<p>Uninstalling a Thor task is easy:
+<div>
+  <pre><code class='bash'>$ thor uninstall note
+Uninstalling note.
+Done.</code></pre>
+</div>
+</p>
+
+<p>With my Thor notes task installed system-wide, I can create a note page in any directory, for any reason, without copying code.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+</feed>

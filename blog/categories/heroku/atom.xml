@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Heroku | keighty]]></title>
+  <link href="http://keighty.github.io/blog/categories/heroku/atom.xml" rel="self"/>
+  <link href="http://keighty.github.io/"/>
+  <updated>2014-01-11T17:58:28-08:00</updated>
+  <id>http://keighty.github.io/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Procuring Provisions]]></title>
+    <link href="http://keighty.github.io/blog/2013/procuring-provisions/"/>
+    <updated>2013-07-27T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/procuring-provisions</id>
+    <content type="html"><![CDATA[<p>I was trying to add a database to my JSGames app &mdash; it is a basic sinatra app with a few goodies already in place &mdash; and I was having some difficulty deploying it to Heroku. Rails (for the most part) automagically creates and maintains its database, and as long as I remember to move any references to sqlite3 into the development and test environments, I have never had trouble provisioning one on Heroku either. Rolling a web application from scratch with sinatra, however, requires a little more savvy.</p>
+
+<p>My Gemfile had a familiar structure:</p>
+
+<p><div>
+  <pre><code class='ruby'>source &amp;lsquo;&lt;a href=&quot;https://rubygems.org&quot;&gt;https://rubygems.org&lt;/a&gt;&amp;rsquo;
+ruby &amp;lsquo;2.0.0&amp;rsquo;
+&amp;hellip;
+gem &amp;ldquo;sinatra&amp;rdquo;
+gem &amp;ldquo;activerecord&amp;rdquo;
+gem &amp;ldquo;sinatra-activerecord&amp;rdquo;
+gem &amp;ldquo;pg&amp;rdquo;</code></pre>
+</div>
+</p>
+
+<p>So far, so familiar. I added config/environments.rb to outline the details of the database I would like provisioned (using postgres locally as well as in production):</p>
+
+<p><div>
+  <pre><code class='ruby'>require &amp;lsquo;active_record&amp;rsquo;
+require &amp;lsquo;uri&amp;rsquo;
+&amp;hellip;
+db = URI.parse(ENV[&amp;lsquo;DATABASE_URL&amp;rsquo;] || &amp;lsquo;postgres://localhost/mydb&amp;rsquo;)
+ActiveRecord::Base.establish_connection(
+  :adapter  =&gt; db.scheme == &amp;lsquo;postgres&amp;rsquo; ? &amp;lsquo;postgresql&amp;rsquo; : db.scheme,
+  :host     =&gt; db.host,
+  :port     =&gt; db.port,
+  :username =&gt; db.user,
+  :password =&gt; db.password,
+  :database =&gt; db.path[1..-1],
+  :encoding =&gt; &amp;lsquo;utf8&amp;rsquo;
+)</code></pre>
+</div>
+</p>
+
+<p>With everything complete, I created a couple of models, migrated, tested it locally, and committed the changes. Heroku compiles the slug just fine, but when I open the application I get the too familiar &ldquo;Application Error&rdquo; page. The logs tell me: <pre>ERROR: Invalid DATABASE_URL</pre></p>
+
+<p>Huh? My url is the one that Heroku suggested! How can it be invalid? It was working fine locally, what is the problem? Here is a sample of my google searches from that frantic afternoon:
+* ERROR: Invalid DATABASE_URL heroku
+* deploying sinatra pg heroku
+* environment variables
+* heroku config variables
+* usr-env-compile heroku
+* heroku can&rsquo;t connect to server
+* how to roll back a push to heroku
+* how to recover from the embarrassment of an offline portfolio project
+* how to start a llama farm</p>
+
+<p>I finally found the answer (aka read the manual) with <a href="https://devcenter.heroku.com/articles/heroku-postgresql">Heroku Postgres</a></p>
+
+<h3>First: Check to see if your database has been provisioned</h3>
+
+<p><div>
+  <pre><code class='bash'>$ heroku addons | grep POSTGRES</code></pre>
+</div>
+</p>
+
+<p>I ran this command in my sinatra project and found nothing. NOTHING!</p>
+
+<p>When Heroku told me that it couldn&rsquo;t find my database, that is because it hadn&rsquo;t MADE my database. So I&hellip;</p>
+
+<h3>Second: Create a new database</h3>
+
+<p><div>
+  <pre><code class='bash'>$ heroku addons:add heroku-postgresql:dev
+Adding heroku-postgresql:dev on js-games&amp;hellip; done, v42 (free)
+Attached as HEROKU_POSTGRESQL_GOLD_URL
+Database has been created and is available
+ ! This database is empty. If upgrading, you can transfer
+ ! data from another database with pgbackups:restore.
+Use &lt;code&gt;heroku addons:docs heroku-postgresql:dev&lt;/code&gt; to view documentation.</code></pre>
+</div>
+</p>
+
+<p>YAY! My database has been created and found. Still, nothing wrong with&hellip;</p>
+
+<h3>Third: Double check your database exists</h3>
+
+<p><div>
+  <pre><code class='bash'>$ heroku config
+=== js-games Config Vars
+HEROKU_POSTGRESQL_GOLD_URL: postgres://∏∏∏∏∏∏∏∏∏∏∏∏∏∏:∏∏∏∏∏∏∏∏∏∏∏@ec2-##&amp;ndash;###&amp;ndash;###&amp;ndash;##.compute-1.amazonaws.com:####/∏∏∏∏#∏##∏∏∏#∏#</code></pre>
+</div>
+</p>
+
+<p>Heroku confesses that my database is stored on AWS, and gives a fairly detailed address (redacted on the grounds of national security).</p>
+
+<h3>Fourth: Promote the new database to primary</h3>
+
+<p><div>
+  <pre><code class='bash'>$ heroku pg:promote HEROKU_POSTGRESQL_GOLD_URL
+Promoting HEROKU_POSTGRESQL_GOLD_URL to DATABASE_URL&amp;hellip; done</code></pre>
+</div>
+</p>
+
+<h3>Fifth: Check out the new database</h3>
+
+<p><div>
+  <pre><code class='bash'>$ heroku pg:info
+=== HEROKU_POSTGRESQL_GOLD_URL (DATABASE_URL)
+Plan:        Dev
+Status:      available
+Connections: 1
+PG Version:  9.2.4
+Created:     2013-07-27 22:46 UTC
+Data Size:   6.3 MB
+Tables:      0
+Rows:        0/10000 (In compliance)
+Fork/Follow: Unsupported</code></pre>
+</div>
+</p>
+
+<h3>TADA</h3>
+
+<p>Do one final push to heroku and restart the server:
+<div>
+  <pre><code class='bash'>$ git commit -a -m &amp;ldquo;fixes the last two hours of disasterous troubleshooting&amp;rdquo;
+$ git push heroku master
+&amp;hellip;
+$ heroku restart</code></pre>
+</div>
+</p>
+
+<p>Awesome</p>
+]]></content>
+  </entry>
+  
+</feed>

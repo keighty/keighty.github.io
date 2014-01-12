@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>A Flash of Understanding - keighty</title>
+  <meta name="author" content="katie leonard">
+
+  
+  <meta name="description" content="">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://keighty.github.io/blog/2013/a-flash-of-understanding">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">keighty</a></h1>
+  
+    <h2>a portfolio of sorts</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:keighty.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">A Flash of Understanding</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-13T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>My page wouldn&rsquo;t flash the user.</p>
+
+<p>Trundling along the <a href="http://ruby.railstutorial.org/chapters/updating-showing-and-deleting-users?version=4.0#top">Hartl railstutorial</a>, I needed to write some logic to allow a user to update their information.</p>
+
+<p>As a <a href="http://www.katieleonard.ca/tdd/testing/2013/06/14/TDD-is-the-way-to-be/">loyal TDD-er</a>, I wrote a test to check that users see a success message if they are able to update their infomation:</p>
+
+<div>
+  <pre><code class='ruby'>describe &quot;updating with valid information&quot; do
+  let(:new_name) { &quot;New Name&quot; }
+  let(:new_email) { &quot;new@example.com&quot; }
+  before do
+    fill_in &quot;Name&quot;, with: new_name
+    fill_in &quot;Email&quot;, with: new_email
+    fill_in &quot;Password&quot;, with: user.password
+    fill_in &quot;Confirm Password&quot;, with: user.password
+    click_button &quot;Save changes&quot;
+  end
+  it { should have_selector(&#39;div.alert.alert-success&#39;) }
+end</code></pre>
+</div>
+
+
+<p>As expected, the tests should fail until I am able to log in.</p>
+
+<p>Since the Rails4 user scaffold comes with some nifty built in methods, I thought it would be easy to adapt them for my own ends:</p>
+
+<div>
+  <pre><code class='ruby'># PATCH/PUT /users/1
+# PATCH/PUT /users/1.json
+def update
+  respond_to do |format|
+    if @user.update(user_params)
+      format.html { redirect_to @user, notice: &#39;Profile updated.&#39; }
+      format.json { head :no_content }
+    else
+      format.html { render action: &#39;edit&#39; }
+      format.json { render json: @user.errors, status: :unprocessable_entity }
+    end
+  end
+end</code></pre>
+</div>
+
+
+<p>I modify the line 5 of the user controller to change the &ldquo;notice&rdquo; message to a &ldquo;success&rdquo; message:</p>
+
+<div>
+  <pre><code class='ruby'>format.html { redirect_to @user, success: &quot;Profile updated&quot; }</code></pre>
+</div>
+
+
+<p>Seems reasonable, but my test for the flash message is still failing. Why won&rsquo;t my page flash the user?!</p>
+
+<p>Quick as a flash, I asked <a href="https://itunes.apple.com/us/app/dash-docs-snippets/id458034879?mt=12">Dash</a> about FlashHash.</p>
+
+<p>Lo, and behold! Notice and alert are built-in flash tags, but success is nowhere to be found. How can I express the satisfaction of <code>SUCCESS!!</code> with a tag as mundane as notice:?</p>
+
+<p>Thanks to <a href="http://en.wikipedia.org/wiki/Duck_typing">duck-typing</a> (if it walks like a duck and quacks like a duck, it is probably a hash.. right?) we can add our spiffy <code>success:</code> tag to flash, and share the appropriate level of enthusiasm with our users:</p>
+
+<div>
+  <pre><code class='ruby'>format.html { redirect_to @user, flash: { success: &quot;Profile updated&quot; }}</code></pre>
+</div>
+
+
+<p>All tests are green, and today I learned that flash is</p>
+
+<p>Awesome</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-13T00:00:00-07:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rails/'>rails</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://keighty.github.io/blog/2013/a-flash-of-understanding/" data-via="" data-counturl="http://keighty.github.io/blog/2013/a-flash-of-understanding/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/best-practices-pull-requests/" title="Previous Post: Best Practices - Pull Requests">&laquo; Best Practices - Pull Requests</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/mass-assignment-x-gravity/" title="Next Post: Mass assignment X Gravity">Mass assignment X Gravity &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/partial-to-ajax/">Partial to Ajax</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/meatier-apps-with-meteor/">Meatier Apps With Meteor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/rails-depends-on-javascript/">Rails, You Can Depend on Javascript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/ruby-execution/">Ruby Execution</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/argf-all-you-want/">ARGF All You Want</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/hammer-out-tasks-with-thor/">Hammer-out Tasks With Thor</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/serving-some-java/">Serving Some Java</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/runtime-for-your-life/">Runtime for Your Life</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - katie leonard -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

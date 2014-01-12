@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: jQuery | keighty]]></title>
+  <link href="http://keighty.github.io/blog/categories/jquery/atom.xml" rel="self"/>
+  <link href="http://keighty.github.io/"/>
+  <updated>2014-01-11T17:58:28-08:00</updated>
+  <id>http://keighty.github.io/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[jQuery Objects vs Strings]]></title>
+    <link href="http://keighty.github.io/blog/2013/jquery-objects-vs-strings/"/>
+    <updated>2013-06-19T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/jquery-objects-vs-strings</id>
+    <content type="html"><![CDATA[<h2>Object blocker!!</h2>
+
+<p>My pair was stuck for the longest time on the following code snip:</p>
+
+<p><div>
+  <pre><code class='javascript'>$(function(){
+  var new_square = &amp;lsquo;$(&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;)&amp;rsquo;;&lt;/p&gt;
+
+&lt;p&gt;  $(&amp;lsquo;body&amp;rsquo;).on(&amp;lsquo;click&amp;rsquo;,&amp;lsquo;.square&amp;rsquo;, function(){&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// var my_square = $(this);
+$(this).toggleClass(&#39;blue&#39;);
+
+b = $(new_square)
+  .insertAfter(this);
+a = $(new_square)
+  .insertBefore(this);
+b.toggleClass(&#39;blue&#39;);
+a.toggleClass(&#39;blue&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;  });
+});</code></pre>
+</div>
+
+ We expected out output to include three elements &mdash; the original square, one
+ inserted after, and one inserted before. The output we were seeing included
+ only two squares: the original one and the square inserted before. If
+ we inverted the insert calls, we would see only one inserted after. We
+ were totally stumped until we printed out the content of new_square:
+ <div>
+  <pre><code class='javascript'>$(&amp;lsquo;&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;&amp;rsquo;);</code></pre>
+</div>
+
+ We were actually passing a reference to a jQuery OBJECT into the insert methods,
+ so in essence, we were creating the object once and then passing it around to
+ different locations. When we changed new_square from a jQuery object:
+ <div>
+  <pre><code class='javascript'>var new_square = &amp;lsquo;$(&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;)&amp;rsquo;;</code></pre>
+</div>
+
+ to a string
+ <div>
+  <pre><code class='javascript'>var new_square = &amp;lsquo;&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;&amp;rsquo;;</code></pre>
+</div>
+
+ We saw our third element appear no problem.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Namespaces and jQuery]]></title>
+    <link href="http://keighty.github.io/blog/2013/solving-namespace-conflicts-with-jquery/"/>
+    <updated>2013-06-18T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/solving-namespace-conflicts-with-jquery</id>
+    <content type="html"><![CDATA[<h3>Namespaces in jQuery getting you down?</h3>
+
+<p>Chuck taught me a great trick today &mdash; how to avoid namespace
+conflicts in jQuery:
+<div>
+  <pre><code class='javascript'>(function($){
+&amp;hellip;
+})(jQuery);</code></pre>
+</div>
+
+This function is being passed jQuery as an argument, and is
+assigning it the local variable $ &mdash; allowing you to use
+the $ and reference the jQuery library.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+</feed>

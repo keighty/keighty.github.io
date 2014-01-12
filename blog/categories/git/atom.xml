@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Git | keighty]]></title>
+  <link href="http://keighty.github.io/blog/categories/git/atom.xml" rel="self"/>
+  <link href="http://keighty.github.io/"/>
+  <updated>2014-01-11T17:58:28-08:00</updated>
+  <id>http://keighty.github.io/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Git-Picking]]></title>
+    <link href="http://keighty.github.io/blog/2013/git-picking/"/>
+    <updated>2013-07-24T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/git-picking</id>
+    <content type="html"><![CDATA[<h4>or, How to mine for cherries with Git</h4>
+
+<p>When I work on an experimental feature in a project branch, I have often found that I will have a mixture of commits I would like to keep, and commits that I wish had never happened.
+Using the principle of only committing atomic changes, and enjoying the fruits of your detailed-commit-message labour, there is a way to extract the gold from the ore, so to speak.</p>
+
+<h2>Locate the gold</h2>
+
+<p>Checkout the branch that contains your experiment, and use git log to get a list of all the commits:</p>
+
+<p><div>
+  <pre><code class='bash'>$ git checkout form_feature_branch
+$ git log &amp;mdash;pretty=oneline
+a83f4c3aa5d800f846d075748a79a326e0971f67 reorg gemfile
+197964c091905a76f2172ca11fcbd49ccfb83c67 adds blog.db
+a793fe00c50a5956c5e9f7be48ac5a9861b1eb95 adds forme form to edit&amp;hellip;
+8394b37494b63754f42ecaf19244fe6d8a36942f adds gitignore for db &amp;hellip;
+c52a6fd3f1706584ce3e47abf49ed627a1e28fd3 adds bundler gem for manag&amp;hellip;
+1686664c4a98221ea04377bcbcf946e62a9f1cfa removes gems for simple&amp;hellip;
+034d309a612dcce6f10bb55f0da2e78b2f7c10b1 adds cells to project
+&amp;hellip;</code></pre>
+</div>
+</p>
+
+<p>In form_feature_branch I was testing out different implementations of form generation in erb views. I tried a couple of different gems and found one that suits my sinatra project: <a href="https://github.com/jeremyevans/forme">Forme</a> is easy to use with or without models, and has great sinatra integration and documentation. Also along the way, I discovered how to include bundler for managing file dependencies and did some minor refactoring of my Gemfile.</p>
+
+<p>I wanted to keep the gem reorganization, as well as the forme, bundler, and gitignore commits, so I made this list of keeper-commits:</p>
+
+<p><div>
+  <pre><code class='bash'>a83f4c3aa5d800f846d075748a79a326e0971f67 reorg gemfile
+a793fe00c50a5956c5e9f7be48ac5a9861b1eb95 adds forme form to edit&amp;hellip;
+c52a6fd3f1706584ce3e47abf49ed627a1e28fd3 adds bundler gem for manag&amp;hellip;
+8394b37494b63754f42ecaf19244fe6d8a36942f adds gitignore for db &amp;hellip;</code></pre>
+</div>
+</p>
+
+<p>Everything else is cruft.</p>
+
+<h2>Extract the gold</h2>
+
+<p>With this list of golden commits in hand, checkout a fresh branch and cherry-pick the commits you like!
+<div>
+  <pre><code class='bash'>$ git checkout -b form_feature_additions
+$ git cherry-pick &amp;lt;commit_identifier&gt;</code></pre>
+</div>
+</p>
+
+<p>Do this command for each good commit:
+<div>
+  <pre><code class='bash'>$ git cherry-pick a83f4c3aa5d800f846d075748a79a326e0971f67
+[master form_feature_additions] reorg gemfile
+ 1 file changed, 4 insertions(+), 2 deletions(&amp;ndash;)
+ changed mode 100644 Gemfile
+$ git cherry-pick a793fe00c50a5956c5e9f7be48ac5a9861b1eb95
+[master form_feature_additions] adds forme form to edit&amp;hellip;
+&amp;hellip;
+$ git cherry-pick c52a6fd3f1706584ce3e47abf49ed627a1e28fd3
+[master form_feature_additions] adds bundler gem for manag..
+&amp;hellip;
+$ git cherry-pick 8394b37494b63754f42ecaf19244fe6d8a36942f
+[master form_feature_additions] adds gitignore for db &amp;hellip;
+&amp;hellip;</code></pre>
+</div>
+</p>
+
+<p>If you look at your git status you will see</p>
+
+<p><div>
+  <pre><code class='bash'>&lt;/p&gt;
+
+&lt;h1&gt;On branch form_feature_additions&lt;/h1&gt;
+
+&lt;h1&gt;Your branch is ahead of &amp;lsquo;origin/master&amp;rsquo; by 4 commits.</code></pre>
+</div>
+</h1>
+
+<h2>Profit</h2>
+
+<p>Now you can merge this branch with master, or continue fleshing out the feature on a clean branch, keeping only the good stuff and abandoning the bad, making experimentation easy.</p>
+
+<p>AWESOME</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Best Practices - Pull Requests]]></title>
+    <link href="http://keighty.github.io/blog/2013/best-practices-pull-requests/"/>
+    <updated>2013-07-11T00:00:00-07:00</updated>
+    <id>http://keighty.github.io/blog/2013/best-practices-pull-requests</id>
+    <content type="html"><![CDATA[<p>Learning how to contribute to open source projects has been really exciting. Adding value to existing projects, getting social in the coding community, and working on production-level code has been a steep but rewarding learning curve. One important thing to learn is the etiquette of creating pull requests. I read a great post about what to include in a <a href="http://dev.solita.fi/2013/07/04/whats-in-a-good-commit.html">good commit</a>, but I also needed to know how to make a good pull request:</p>
+
+<h3>Branch it</h3>
+
+<p>Before making any changes to an open source project, open a new branch. This will allow you to isolate your changes into separate pull requests. For example, I add Feature A, push to master, and create pull request 1. The next day, I add Feature B, push to master, and create pull request 2. If Feature A has not already been reviewed and accepted, Feature B additions will now be encorporated into pull request 1. This is bad practice. Keep each contribution in a separate branch. This will also allow you to keep your current branch up to date with the upstream repository, without affecting your previous work.</p>
+
+<h3>One change, one commit</h3>
+
+<p>A commit is not just a backup. Like a migration, your commit history should read like a road map of changes you make to get to your current state &mdash; and changes you should undo when things go wrong. If your commits change dozens of lines of code, understanding the changes is going to require a deep dive into the code.</p>
+
+<h3>Pithy commit messages</h3>
+
+<p>Make it easy on your code reviewer by making your commits small enough, and your commit messages detailed enough that they can be understood at a glance.</p>
+
+<p>The workflow, in general:</p>
+
+<ol>
+  <li>fork the repo</li>
+  <li><code>git clone</code> to local machine</li>
+  <li><code>git checkout -b featureA</code></li>
+  <li><code>git pull upstream master</code></li>
+  <li>make your changes</li>
+  <li><code>git commit -am "adds one addition to feature A"</code></li>
+  <li><code>git push origin featureA</code></li>
+  <li>make pull request</li>
+</ol>
+
+
+<p>Awesome</p>
+]]></content>
+  </entry>
+  
+</feed>
