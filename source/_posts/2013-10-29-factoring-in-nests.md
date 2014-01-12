@@ -2,6 +2,7 @@
 layout: post
 title: "Factoring In Nests"
 description: ""
+comments: true
 category: rails
 tags: []
 ---
