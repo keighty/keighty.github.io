@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-12T11:26:33-08:00</updated>
+  <updated>2014-01-12T11:49:53-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -24,13 +24,13 @@
 
 <p>A server, like any good conversationalist, is a good listener. A server is a program running on a computer that listens at a port, waiting to receive instructions.</p>
 
-<p>{% highlight java linenos %}
-public class Server {
-  private static String inputLine;</p>
+<p><div>
+  <pre><code class='java'>public class Server {
+  private static String inputLine;&lt;/p&gt;
 
-<p>  public static void main(String[] args) {</p>
+&lt;p&gt;  public static void main(String[] args) {&lt;/p&gt;
 
-<pre><code>private static final int PORT_NUMBER = 63400
+&lt;pre&gt;&lt;code&gt;private static final int PORT_NUMBER = 63400
 
 try {
   // Socket variables
@@ -48,10 +48,12 @@ try {
 } catch (Exception e) {
   System.out.println(e);
 }
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>  }
-}{% endhighlight %}</p>
+&lt;p&gt;  }
+}</code></pre>
+</div>
+</p>
 
 <p>The server opens a socket on a specified port (in this case, port 63400). A socket is the point at which two-way communication happens between computer programs. The server opens a socket at a port and waits for a client to bind the socket so they can exchange information. It waits for input from the client, with instructions to print out anything the client puts in (line 18). So where is the client?</p>
 
@@ -59,28 +61,30 @@ try {
 
 <p>The client is even simpler than the server: it finds the server at the specified port and connects to the socket.</p>
 
-<p>{% highlight java linenos %}
-public class Client {</p>
+<p><div>
+  <pre><code class='java'>public class Client {&lt;/p&gt;
 
-<p>  private static final int PORT_NUMBER = 63400</p>
+&lt;p&gt;  private static final int PORT_NUMBER = 63400&lt;/p&gt;
 
-<p>  public static void main(String[] args) {</p>
+&lt;p&gt;  public static void main(String[] args) {&lt;/p&gt;
 
-<pre><code>try {
+&lt;pre&gt;&lt;code&gt;try {
 
   // Socket variables
-  Socket socket = new Socket("localhost", PORT_NUMBER);
+  Socket socket = new Socket(&quot;localhost&quot;, PORT_NUMBER);
   PrintWriter pWriter = new PrintWriter(socket.getOutputStream(), true);
 
-  pWriter.println("Hello World!");
+  pWriter.println(&quot;Hello World!&quot;);
 
 } catch (Exception e) {
   System.out.println(e);
 }
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>  }
-}{% endhighlight %}</p>
+&lt;p&gt;  }
+}</code></pre>
+</div>
+</p>
 
 <p>With a successful connection, it generates an output stream. If you start the server in one console it will look like it isn&rsquo;t doing anything, but when you start the client in another console you can watch them communicate. The client writes &ldquo;Hello World&rdquo; directly into the port where the server is listening (socket.getOutputStream()), and as instructed, the server obediently prints &ldquo;Hello World&rdquo; to the console.</p>
 

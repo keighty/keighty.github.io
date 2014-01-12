@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Jekyll | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/jekyll/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-12T11:26:33-08:00</updated>
+  <updated>2014-01-12T11:49:53-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -26,14 +26,16 @@ fantastic gem! I found an even more awesome one at <a href="http://jekyllbootstr
 <p>Now I am enjoying the power of bootstrap along with the ease of jekyll.</p>
 
 <p>To create a post
-{% highlight ruby %}
-$ rake post title=&ldquo;Hello World&rdquo;
-{% endhighlight %}</p>
+<div>
+  <pre><code class='ruby'>$ rake post title=&amp;ldquo;Hello World&amp;rdquo;</code></pre>
+</div>
+</p>
 
 <p>To create a new page:
-{% highlight ruby %}
-$ rake page name=&ldquo;pages/about&rdquo;
-{% endhighlight %}</p>
+<div>
+  <pre><code class='ruby'>$ rake page name=&amp;ldquo;pages/about&amp;rdquo;</code></pre>
+</div>
+</p>
 
 <p>Couldn&rsquo;t be simpler for a beginning blogger.</p>
 ]]></content>

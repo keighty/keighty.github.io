@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-12T11:26:33-08:00</updated>
+  <updated>2014-01-12T11:49:53-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -23,35 +23,39 @@
 <p>I picked up this little gem this morning as I was learning about functions and the various objects associated with them:</p>
 
 <p>You CANNOT use function declarations in conditionals. Take this example:
-{% highlight java %}
-if (String.prototype.trim) {
-  function trim(str) {</p>
+<div>
+  <pre><code class='java'>if (String.prototype.trim) {
+  function trim(str) {&lt;/p&gt;
 
-<pre><code>return str.trim();
-</code></pre>
+&lt;pre&gt;&lt;code&gt;return str.trim();
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>  }
+&lt;p&gt;  }
 else {
-  function trim(str){</p>
+  function trim(str){&lt;/p&gt;
 
-<pre><code>return str.replace(/^\s+|\s+$/g, "");
-</code></pre>
+&lt;pre&gt;&lt;code&gt;return str.replace(/^\s+|\s+$/g, &quot;&quot;);
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>  }
-}{% endhighlight %}</p>
+&lt;p&gt;  }
+}</code></pre>
+</div>
+</p>
 
 <p>What is wrong with that, you might ask? HOISTING! Both functions are hoisted up to the global variable before execution, which means that the second one always overwrites the first one.</p>
 
 <p>This is a better method:
-{% highlight java %}
-if(!String.prototype.trim) {
-  String.prototype.trim = function trim() {</p>
+<div>
+  <pre><code class='java'>if(!String.prototype.trim) {
+  String.prototype.trim = function trim() {&lt;/p&gt;
 
-<pre><code>return this.replace(/^\s+|\s+$/g, "")
-</code></pre>
+&lt;pre&gt;&lt;code&gt;return this.replace(/^\s+|\s+$/g, &quot;&quot;)
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>  }
-}{% endhighlight %}</p>
+&lt;p&gt;  }
+}</code></pre>
+</div>
+</p>
 
 <p>This way, we are not overwriting any browser-available Trim methods, we are declaring the method on the String.prototype, which means it is available to ALL strings in scope, AND we have named it so that it will be more visible in a stack trace in case something goes wrong.</p>
 

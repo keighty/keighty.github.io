@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-12T11:26:33-08:00</updated>
+  <updated>2014-01-12T11:49:53-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -34,8 +34,8 @@
 
 
 <p>The commands will be provided in an input file, and an output is specified. Fun problem, right? So, I start my project folder using my <a href="http://www.katieleonard.ca/automation/2013/09/08/thor-sets-up-a-project/">thor task</a>, and work awhile adding logic and tests and data as appropriate. My file tree finishes like this:
-{% highlight bash %}
-blocks
+<div>
+  <pre><code class='bash'>blocks
 ├── data
 │   ├── input.txt
 │   └── output.txt
@@ -45,43 +45,54 @@ blocks
 │   ├── blocks_spec.rb
 │   └── spec_helper.rb
 ├── Gemfile
-└── README.md{% endhighlight %}</p>
+└── README.md</code></pre>
+</div>
+</p>
 
 <p>So, in order to use my script, I would have to call it from the command line:
-{% highlight bash %}
-$ ruby lib/blocks.rb data/input.txt</p>
+<div>
+  <pre><code class='bash'>$ ruby lib/blocks.rb data/input.txt&lt;/p&gt;
 
-<h1>=> or</h1>
+&lt;h1&gt;=&gt; or&lt;/h1&gt;
 
-<p>$ data/input.txt | ruby lib/blocks.rb{% endhighlight %}</p>
+&lt;p&gt;$ data/input.txt | ruby lib/blocks.rb</code></pre>
+</div>
+</p>
 
 <p>This is an extremely verbose way to deliver a final product, and I would much rather call $ blocks &lt;file_input&gt;. It turns out that making an executable is easy and elegant, just like everything else in ruby. You just have to declare the ruby environment, include a few notes on usage, load the file tree, and call the class:
-{% highlight ruby %}</p>
+<div>
+  <pre><code class='ruby'>&lt;/p&gt;
 
-<h1>!/usr/bin/env ruby</h1>
+&lt;h1&gt;!/usr/bin/env ruby&lt;/h1&gt;
 
-<h1>blocks</h1>
+&lt;h1&gt;blocks&lt;/h1&gt;
 
-<h1>10-Sep-2013</h1>
+&lt;h1&gt;10-Sep-2013&lt;/h1&gt;
 
-<p>#</p>
+&lt;p&gt;#&lt;/p&gt;
 
-<h1>Usage:</h1>
+&lt;h1&gt;Usage:&lt;/h1&gt;
 
-<h1>./blocks data/input.txt</h1>
+&lt;h1&gt;./blocks data/input.txt&lt;/h1&gt;
 
-<p>#
-$LOAD_PATH.unshift(File.join(File.dirname(<strong>FILE</strong>), &lsquo;lib&rsquo;))
-require &lsquo;blocks&rsquo;
-Blocks.new.process_input{% endhighlight %}</p>
+&lt;p&gt;#
+$LOAD_PATH.unshift(File.join(File.dirname(&lt;strong&gt;FILE&lt;/strong&gt;), &amp;lsquo;lib&amp;rsquo;))
+require &amp;lsquo;blocks&amp;rsquo;
+Blocks.new.process_input</code></pre>
+</div>
+</p>
 
 <p>Placing this code in a non-extension file, like &lsquo;blocks&rsquo;, in the main directory, I can make it an executable by changing the file permissions:
-{% highlight bash %}
-$ chmod +x ./blocks{% endhighlight %}</p>
+<div>
+  <pre><code class='bash'>$ chmod +x ./blocks</code></pre>
+</div>
+</p>
 
 <p>And I can call it like any other executable:
-{% highlight bash %}
-$ ./blocks data/input.txt{% endhighlight %}</p>
+<div>
+  <pre><code class='bash'>$ ./blocks data/input.txt</code></pre>
+</div>
+</p>
 
 <p>I liked this solution so much, I added it to my thor project setup! Oh, and if you are interested in seeing my solution for the blocks problem, checkout my <a href="https://github.com/keighty/datastructures/tree/master/ruby/blocks">github repo</a></p>
 
@@ -100,40 +111,50 @@ $ ./blocks data/input.txt{% endhighlight %}</p>
 
 <p>There are a lot of ways to treat data at the command line, but the one I was most familiar with is passing in a filename as an argument:</p>
 
-<p>{% highlight bash linenos%}
-$ ruby example_script.rb file1.csv file2.csv &hellip;
+<p><div>
+  <pre><code class='bash'>$ ruby example_script.rb file1.csv file2.csv &amp;hellip;
 $ ruby example_script.rb file1.csv | more
-$ ruby example_script.rb file1.csv > output.txt{% endhighlight %}</p>
+$ ruby example_script.rb file1.csv &gt; output.txt</code></pre>
+</div>
+</p>
 
 <h3>Filename Input</h3>
 
 <p>Using ARGV, we can access the list of filenames provided at the command line. ARGV is an array containing all the information that follows the command. For example:
-{% highlight bash %}
-$ example_command apple banana orange</p>
+<div>
+  <pre><code class='bash'>$ example_command apple banana orange&lt;/p&gt;
 
-<h1>ARGV = [&ldquo;apple&rdquo;, &ldquo;banana&rdquo;, &ldquo;orange&rdquo;]{% endhighlight %}</h1>
+&lt;h1&gt;ARGV = [&amp;ldquo;apple&amp;rdquo;, &amp;ldquo;banana&amp;rdquo;, &amp;ldquo;orange&amp;rdquo;]</code></pre>
+</div>
+</h1>
 
 <p>One can process each filename in ARGV using regular array methods:</p>
 
-<p>{% highlight ruby %}
-ARGV.each do |arg|
+<p><div>
+  <pre><code class='ruby'>ARGV.each do |arg|
   process_string(File.read(arg))
-end {% endhighlight %}</p>
+end</code></pre>
+</div>
+</p>
 
 <p>File.read(arg) reads the file into a &ldquo;\n&rdquo; delimited string, which can be processed further. If there are no arguments, ARGV is an empty array.</p>
 
 <h3>Piped Input</h3>
 
 <p>Say that we want to enter data directly into a program rather than use a fixed filename at the command line &mdash; a useful technique for when we want data to flow out of one process and into another:
-{% highlight bash %}
-$ cat file1.csv | ruby example_script.rb
+<div>
+  <pre><code class='bash'>$ cat file1.csv | ruby example_script.rb
 $ cat *.csv | ruby example_script.rb
-$ ruby example_script.rb &lt; file1.csv {% endhighlight %}</p>
+$ ruby example_script.rb &amp;lt; file1.csv</code></pre>
+</div>
+</p>
 
 <p>Using the pipe, &ldquo;|&rdquo; or &ldquo;&lt;&rdquo;, we can push a string of data from one process into another, but what happens to our program when we try to do this?
-{% highlight bash %}
-$ example.csv | ruby example_script.rb
-TypeError: can`t convert nil into String {% endhighlight %}</p>
+<div>
+  <pre><code class='bash'>$ example.csv | ruby example_script.rb
+TypeError: can`t convert nil into String</code></pre>
+</div>
+</p>
 
 <p>We get a TypeError! Recall that command line arguments are stored in ARGV, but we are not providing any command line arguments. ARGV is an empty array, and we are attempting to open a file from ARGV[0] = nil. Shame on us! How do we access data that is piped in as well as data that is appended to the command line? Do we have to check for the source of the data before we can treat it? Turns out, we DON&rsquo;T.</p>
 
@@ -141,8 +162,10 @@ TypeError: can`t convert nil into String {% endhighlight %}</p>
 
 <p>Ruby has a nifty interface for handling data input, regardless of whether it arrives as a command line argument or from another data source. We can replace the code we wrote earlier with a single line:</p>
 
-<p>{% highlight ruby%}
-process_string(ARGF.read){% endhighlight %}</p>
+<p><div>
+  <pre><code class='ruby'>process_string(ARGF.read)</code></pre>
+</div>
+</p>
 
 <p>If ARGV is not empty, ARGF will assume it is an array of filenames and will treat them accordingly. If ARGV is empty, it will read from $stdin to get the data passed in via the pipe. One caveat is that you can&rsquo;t read from both ARGV and the pipe: if ARGV != [  ], $stdin is ignored.</p>
 
