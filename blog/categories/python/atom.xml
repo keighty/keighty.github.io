@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Jekyll | keighty]]></title>
-  <link href="http://www.katieleonard.ca/blog/categories/jekyll/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Python | keighty]]></title>
+  <link href="http://www.katieleonard.ca/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-12T11:49:53-08:00</updated>
+  <updated>2014-01-12T14:03:06-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>

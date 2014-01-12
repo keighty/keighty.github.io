@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: JavaScript | keighty]]></title>
+  <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-12T11:49:53-08:00</updated>
+  <updated>2014-01-12T14:03:06-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,100 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Meatier Apps With Meteor]]></title>
+    <link href="http://www.katieleonard.ca/blog/2013/meatier-apps-with-meteor/"/>
+    <updated>2013-09-20T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2013/meatier-apps-with-meteor</id>
+    <content type="html"><![CDATA[<p><a href="http://www.meteor.com/">Meteor</a> is a framework that allows you to write web applications using only javascript. All the work is done on the client-side. Meteor embraces new principles of web design: data on the wire, one language is enough, and simplicity makes for productivity.</p>
+
+<p>Simplicity is something I value as well, and while setting up meteor on my linux machine was not a three-step process as outlined in their examples, it only took a little tinkering to figure out the problem. First, a look at the three meteor setup steps:</p>
+
+<h4>Install</h4>
+
+<p><div>
+  <pre><code class='bash'>$ curl &lt;a href=&quot;https://install.meteor.com&quot;&gt;https://install.meteor.com&lt;/a&gt; | /bin/sh</code></pre>
+</div>
+</p>
+
+<h4>Create a sample application</h4>
+
+<p><div>
+  <pre><code class='bash'>$ meteor create testapp</code></pre>
+</div>
+</p>
+
+<h4>Run the sample application</h4>
+
+<p><div>
+  <pre><code class='bash'>$ cd testapp
+$ meteor</code></pre>
+</div>
+</p>
+
+<p>This is where the meteor server is supposed to start, connecting to your mongo installation, and serving your application on port 3000:
+<div>
+  <pre><code class='bash'>$ meteor
+[[[[[ /path/to/testapp ]]]]]&lt;/p&gt;
+
+&lt;p&gt;=&gt; Meteor server running on: &lt;a href=&quot;http://localhost:3000/&quot;&gt;http://localhost:3000/&lt;/a&gt;</code></pre>
+</div>
+</p>
+
+<p>Instead, my terminal became quite upset about it:
+<div>
+  <pre><code class='bash'>[[[[[ /path/to/testapp ]]]]]&lt;/p&gt;
+
+&lt;p&gt;Unexpected mongo exit code 1. Restarting.
+Unexpected mongo exit code 1. Restarting.
+Unexpected mongo exit code 1. Restarting.
+Can&amp;rsquo;t start mongod</code></pre>
+</div>
+</p>
+
+<p>Whups! Everything seems normal in my mongo installation, but after a lot of searching I finally found the problem on <a href="http://stackoverflow.com/questions/18505372/meteor-update-0-6-4-0-6-5-mongo-error">stackoverflow</a>. From among the answers I found this solution:</p>
+
+<blockquote><p>I&rsquo;m also getting this error on Ubuntu. As mentioned, it&rsquo;s caused by mongo and mongod from ~/.meteor/tools/latest/mongodb/bin being compiled with an older version of glib. You can replace the version of mongo bundled by meteor with the version installed in your system:
+<div>
+  <pre><code class='bash'>cd ~/.meteor/tools/latest/mongodb/bin/
+mv mongo mongo-backup
+mv mongod mongod-backup
+ln -s /usr/bin/mongo
+ln -s /usr/bin/mongod</code></pre>
+</div>
+</p></blockquote>
+
+<p>Brilliant! Following these instructions, I was finally able to start meteor.</p>
+
+<p><img src="/assets/images/meteor.png" alt="Meteor" /></p>
+
+<h3>Getting down to business</h3>
+
+<p>Now to test out some of the awesome functionality of this framework. I <a href="http://www.meteor.com/examples/todos">followed an example</a> and created a todo list:</p>
+
+<p><div>
+  <pre><code class='bash'>$ meteor create &amp;mdash;example todos
+$ cd todos
+$ meteor deploy totally-fake-url.meteor.com
+Deploying to totally-fake-url.meteor.com.  Bundling&amp;hellip;
+Uploading&amp;hellip;
+Now serving at totally-fake-url.meteor.com</code></pre>
+</div>
+</p>
+
+<p>Opening totally-fake-url.meteor.com with my browser:</p>
+
+<p><img src="/assets/images/meteortodo.png" alt="Meteor" /></p>
+
+<p>Playing around with creating new todos and lists, it is clear that data is being added and changed instantly and persistently. From the docs:</p>
+
+<blockquote><p>A Meteor application is a mix of JavaScript that runs inside a client web browser, JavaScript that runs on the Meteor server inside a Node.js container, and all the supporting HTML fragments, CSS rules, and static assets.</p></blockquote>
+
+<p>I am really looking forward to diving further into <a href="http://docs.meteor.com/#concepts">the docs</a> to learn more about this incredible framework.
+AWESOME</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Hoisting With JavaScript]]></title>
@@ -60,6 +154,127 @@ else {
 <p>This way, we are not overwriting any browser-available Trim methods, we are declaring the method on the String.prototype, which means it is available to ALL strings in scope, AND we have named it so that it will be more visible in a stack trace in case something goes wrong.</p>
 
 <p>AWESOME</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Javascript Has Spies]]></title>
+    <link href="http://www.katieleonard.ca/blog/2013/javascript-has-spies/"/>
+    <updated>2013-06-25T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2013/javascript-has-spies</id>
+    <content type="html"><![CDATA[<h2>Spies vs Mocks vs Stubs?</h2>
+
+<p>We are covering testing frameworks at PCS this week,
+ particularly Jasmine and Sinon.</p>
+
+<p>Jasmine has a similar structure to RSpec:
+<div>
+  <pre><code class='java'>describe(&amp;ldquo;Class to describe&amp;rdquo;, function() {
+  it(&amp;ldquo;should have some behavior&amp;rdquo;. function() {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//assertions
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;  });
+});</code></pre>
+</div>
+</p>
+
+<p>Also similar to RSpec, Jasmine allows you to spy on behavior.
+ Using spies, I can watch a method call and collect information about it.</p>
+
+<ul>
+<li>Want to know if it was called?
+<div>
+  <pre><code class='java'>expect(method).toHaveBeenCalled()</code></pre>
+</div>
+</li>
+<li>Want to know how many times?
+<div>
+  <pre><code class='java'>expect(method.callCount).toEqual(3)</code></pre>
+</div>
+</li>
+<li>Want to know how it was called?
+<div>
+  <pre><code class='java'>expect(method).toHaveBeenCalledWith(args)</code></pre>
+</div>
+</li>
+</ul>
+
+
+<p>For example:
+<div>
+  <pre><code class='java'>describe( &amp;ldquo;Spy on methods&amp;rdquo;, function () {
+  it( &amp;ldquo;should watch calls to console&amp;rdquo;, function () {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var mySpy = spyOn(console, &quot;log&quot;);
+console.log(&quot;test1&quot;);
+console.log(&quot;test2&quot;);
+console.log(&quot;test3&quot;);
+
+expect(mySpy.callCount).toEqual(3);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;  });
+});</code></pre>
+</div>
+
+Tomorrow, I conquer Stubs and Mocks!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[jQuery Objects vs Strings]]></title>
+    <link href="http://www.katieleonard.ca/blog/2013/jquery-objects-vs-strings/"/>
+    <updated>2013-06-19T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2013/jquery-objects-vs-strings</id>
+    <content type="html"><![CDATA[<h2>Object blocker!!</h2>
+
+<p>My pair was stuck for the longest time on the following code snip:</p>
+
+<p><div>
+  <pre><code class='javascript'>$(function(){
+  var new_square = &amp;lsquo;$(&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;)&amp;rsquo;;&lt;/p&gt;
+
+&lt;p&gt;  $(&amp;lsquo;body&amp;rsquo;).on(&amp;lsquo;click&amp;rsquo;,&amp;lsquo;.square&amp;rsquo;, function(){&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// var my_square = $(this);
+$(this).toggleClass(&#39;blue&#39;);
+
+b = $(new_square)
+  .insertAfter(this);
+a = $(new_square)
+  .insertBefore(this);
+b.toggleClass(&#39;blue&#39;);
+a.toggleClass(&#39;blue&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;  });
+});</code></pre>
+</div>
+
+ We expected out output to include three elements &mdash; the original square, one
+ inserted after, and one inserted before. The output we were seeing included
+ only two squares: the original one and the square inserted before. If
+ we inverted the insert calls, we would see only one inserted after. We
+ were totally stumped until we printed out the content of new_square:
+ <div>
+  <pre><code class='javascript'>$(&amp;lsquo;&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;&amp;rsquo;);</code></pre>
+</div>
+
+ We were actually passing a reference to a jQuery OBJECT into the insert methods,
+ so in essence, we were creating the object once and then passing it around to
+ different locations. When we changed new_square from a jQuery object:
+ <div>
+  <pre><code class='javascript'>var new_square = &amp;lsquo;$(&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;)&amp;rsquo;;</code></pre>
+</div>
+
+ to a string
+ <div>
+  <pre><code class='javascript'>var new_square = &amp;lsquo;&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;&amp;rsquo;;</code></pre>
+</div>
+
+ We saw our third element appear no problem.</p>
 ]]></content>
   </entry>
   
