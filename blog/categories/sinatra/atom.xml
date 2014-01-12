@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Sinatra | keighty]]></title>
-  <link href="http://keighty.github.io/blog/categories/sinatra/atom.xml" rel="self"/>
-  <link href="http://keighty.github.io/"/>
-  <updated>2014-01-11T17:58:28-08:00</updated>
-  <id>http://keighty.github.io/</id>
+  <link href="http://www.katieleonard.ca/blog/categories/sinatra/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2014-01-12T10:52:40-08:00</updated>
+  <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Sinatra in a Console]]></title>
-    <link href="http://keighty.github.io/blog/2013/sinatra-in-a-console/"/>
+    <link href="http://www.katieleonard.ca/blog/2013/sinatra-in-a-console/"/>
     <updated>2013-07-22T00:00:00-07:00</updated>
-    <id>http://keighty.github.io/blog/2013/sinatra-in-a-console</id>
+    <id>http://www.katieleonard.ca/blog/2013/sinatra-in-a-console</id>
     <content type="html"><![CDATA[<p>Sinatra does not have a default console like rails does. If you are writing in a rails environment and need to test out a helper method, or want to check on the state of a record in the database, dropping down into the rails console is as easy as typing:
 <div>
   <pre><code class='bash'>$ rails c</code></pre>
@@ -90,9 +90,9 @@ end</code></pre>
   
   <entry>
     <title type="html"><![CDATA[Get Your Kicks on Route Localhost:4567]]></title>
-    <link href="http://keighty.github.io/blog/2013/get-your-kicks-on-localhost4567/"/>
+    <link href="http://www.katieleonard.ca/blog/2013/get-your-kicks-on-localhost4567/"/>
     <updated>2013-07-17T00:00:00-07:00</updated>
-    <id>http://keighty.github.io/blog/2013/get-your-kicks-on-localhost4567</id>
+    <id>http://www.katieleonard.ca/blog/2013/get-your-kicks-on-localhost4567</id>
     <content type="html"><![CDATA[<p>I am building a code breaking game along the lines of Mastermind and I encountered a block.</p>
 
 <h2>The problem</h2>
@@ -193,9 +193,9 @@ private
   
   <entry>
     <title type="html"><![CDATA[Partial to Sinatra]]></title>
-    <link href="http://keighty.github.io/blog/2013/partial-to-sinatra/"/>
+    <link href="http://www.katieleonard.ca/blog/2013/partial-to-sinatra/"/>
     <updated>2013-07-09T00:00:00-07:00</updated>
-    <id>http://keighty.github.io/blog/2013/partial-to-sinatra</id>
+    <id>http://www.katieleonard.ca/blog/2013/partial-to-sinatra</id>
     <content type="html"><![CDATA[<p>Having just discovered the magic of using partials to refactor html in rails, imagine my delight when I found it to be even easier in Sinatra.</p>
 
 <p>A partial is a just a fragment of html (or erb). They can be used for rendering duplicate or dynamic content into otherwise static pages.</p>
@@ -230,7 +230,7 @@ private
 
 &lt;div class=&quot;span4 pagination-centered&quot;&gt;
   &lt;%= erb :_solitaireDesc  %&gt;
-  &lt;a href=&quot;http://keighty.github.io/game&quot; class=&quot;btn btn-large&quot;&gt;Play&lt;/a&gt;
+  &lt;a href=&quot;http://www.katieleonard.ca/game&quot; class=&quot;btn btn-large&quot;&gt;Play&lt;/a&gt;
 &lt;/div&gt;
 
 

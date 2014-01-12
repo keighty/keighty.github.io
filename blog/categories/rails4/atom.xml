@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Rails4 | keighty]]></title>
-  <link href="http://keighty.github.io/blog/categories/rails4/atom.xml" rel="self"/>
-  <link href="http://keighty.github.io/"/>
-  <updated>2014-01-11T17:58:28-08:00</updated>
-  <id>http://keighty.github.io/</id>
+  <link href="http://www.katieleonard.ca/blog/categories/rails4/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2014-01-12T10:52:40-08:00</updated>
+  <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[No index.html, No Cry]]></title>
-    <link href="http://keighty.github.io/blog/2013/no-indexhtml-no-cry/"/>
+    <link href="http://www.katieleonard.ca/blog/2013/no-indexhtml-no-cry/"/>
     <updated>2013-06-29T00:00:00-07:00</updated>
-    <id>http://keighty.github.io/blog/2013/no-indexhtml-no-cry</id>
+    <id>http://www.katieleonard.ca/blog/2013/no-indexhtml-no-cry</id>
     <content type="html"><![CDATA[<p>Following along with <a href="http://www.amazon.com/Ruby-Rails-Tutorial-Addison-Wesley-Professional/dp/0321832051">Rails tutorial</a> by Michael Hartl, I built a sample app with a simple database, linking users to microposts in a twitter-like manner. Everything worked well locally, but when it came time to deploy on heroku, I ran across some interesting stumbling blocks:</p>
 
 <h3>Rails 4 does not come with a default index.html</h3>

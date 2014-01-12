@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Git | keighty]]></title>
-  <link href="http://keighty.github.io/blog/categories/git/atom.xml" rel="self"/>
-  <link href="http://keighty.github.io/"/>
-  <updated>2014-01-11T17:58:28-08:00</updated>
-  <id>http://keighty.github.io/</id>
+  <link href="http://www.katieleonard.ca/blog/categories/git/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2014-01-12T10:52:40-08:00</updated>
+  <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Git-Picking]]></title>
-    <link href="http://keighty.github.io/blog/2013/git-picking/"/>
+    <link href="http://www.katieleonard.ca/blog/2013/git-picking/"/>
     <updated>2013-07-24T00:00:00-07:00</updated>
-    <id>http://keighty.github.io/blog/2013/git-picking</id>
+    <id>http://www.katieleonard.ca/blog/2013/git-picking</id>
     <content type="html"><![CDATA[<h4>or, How to mine for cherries with Git</h4>
 
 <p>When I work on an experimental feature in a project branch, I have often found that I will have a mixture of commits I would like to keep, and commits that I wish had never happened.
@@ -103,9 +103,9 @@ $ git cherry-pick 8394b37494b63754f42ecaf19244fe6d8a36942f
   
   <entry>
     <title type="html"><![CDATA[Best Practices - Pull Requests]]></title>
-    <link href="http://keighty.github.io/blog/2013/best-practices-pull-requests/"/>
+    <link href="http://www.katieleonard.ca/blog/2013/best-practices-pull-requests/"/>
     <updated>2013-07-11T00:00:00-07:00</updated>
-    <id>http://keighty.github.io/blog/2013/best-practices-pull-requests</id>
+    <id>http://www.katieleonard.ca/blog/2013/best-practices-pull-requests</id>
     <content type="html"><![CDATA[<p>Learning how to contribute to open source projects has been really exciting. Adding value to existing projects, getting social in the coding community, and working on production-level code has been a steep but rewarding learning curve. One important thing to learn is the etiquette of creating pull requests. I read a great post about what to include in a <a href="http://dev.solita.fi/2013/07/04/whats-in-a-good-commit.html">good commit</a>, but I also needed to know how to make a good pull request:</p>
 
 <h3>Branch it</h3>

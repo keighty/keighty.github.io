@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: JavaScript | keighty]]></title>
-  <link href="http://keighty.github.io/blog/categories/javascript/atom.xml" rel="self"/>
-  <link href="http://keighty.github.io/"/>
-  <updated>2014-01-11T17:58:28-08:00</updated>
-  <id>http://keighty.github.io/</id>
+  <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2014-01-12T10:52:40-08:00</updated>
+  <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Hoisting With JavaScript]]></title>
-    <link href="http://keighty.github.io/blog/2013/hoisting-with-javascript/"/>
+    <link href="http://www.katieleonard.ca/blog/2013/hoisting-with-javascript/"/>
     <updated>2013-06-26T00:00:00-07:00</updated>
-    <id>http://keighty.github.io/blog/2013/hoisting-with-javascript</id>
+    <id>http://www.katieleonard.ca/blog/2013/hoisting-with-javascript</id>
     <content type="html"><![CDATA[<p>I am really enjoying <a href="http://www.amazon.com/Test-Driven-JavaScript-Development-Developers-Library/dp/0321683919">Test-Driven Development</a> by Christian Johansen</p>
 
 <p>I picked up this little gem this morning as I was learning about functions and the various objects associated with them:</p>

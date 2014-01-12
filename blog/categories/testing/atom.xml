@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Testing | keighty]]></title>
-  <link href="http://keighty.github.io/blog/categories/testing/atom.xml" rel="self"/>
-  <link href="http://keighty.github.io/"/>
-  <updated>2014-01-11T17:58:28-08:00</updated>
-  <id>http://keighty.github.io/</id>
+  <link href="http://www.katieleonard.ca/blog/categories/testing/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2014-01-12T10:52:40-08:00</updated>
+  <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[I Admit It, I Love TDD]]></title>
-    <link href="http://keighty.github.io/blog/2013/TDD-is-the-way-to-be/"/>
+    <link href="http://www.katieleonard.ca/blog/2013/TDD-is-the-way-to-be/"/>
     <updated>2013-06-14T00:00:00-07:00</updated>
-    <id>http://keighty.github.io/blog/2013/TDD-is-the-way-to-be</id>
+    <id>http://www.katieleonard.ca/blog/2013/TDD-is-the-way-to-be</id>
     <content type="html"><![CDATA[<p>This week @PDXcodeschool we jumped into TDD using minitest/autorun. I have
 used RSpec in the past, and loved the way it let me manage the logic of my project.
 I love that ruby has a built in framework &mdash; so easy to use!</p>

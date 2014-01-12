@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Jekyll | keighty]]></title>
-  <link href="http://keighty.github.io/blog/categories/jekyll/atom.xml" rel="self"/>
-  <link href="http://keighty.github.io/"/>
-  <updated>2014-01-11T17:58:28-08:00</updated>
-  <id>http://keighty.github.io/</id>
+  <link href="http://www.katieleonard.ca/blog/categories/jekyll/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2014-01-12T10:52:40-08:00</updated>
+  <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Blogging With Jekyll Bootstrap]]></title>
-    <link href="http://keighty.github.io/blog/2013/blogging-with-jekyll-bootstrap/"/>
+    <link href="http://www.katieleonard.ca/blog/2013/blogging-with-jekyll-bootstrap/"/>
     <updated>2013-06-15T00:00:00-07:00</updated>
-    <id>http://keighty.github.io/blog/2013/blogging-with-jekyll-bootstrap</id>
+    <id>http://www.katieleonard.ca/blog/2013/blogging-with-jekyll-bootstrap</id>
     <content type="html"><![CDATA[<p>Building a portfolio has been a lot of fun and has required a couple of
 different technologies. A fellow PCS student has been blogging a long time,
 and he suggested using Jekyll in combination with github pages. What a

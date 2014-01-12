@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: jQuery | keighty]]></title>
-  <link href="http://keighty.github.io/blog/categories/jquery/atom.xml" rel="self"/>
-  <link href="http://keighty.github.io/"/>
-  <updated>2014-01-11T17:58:28-08:00</updated>
-  <id>http://keighty.github.io/</id>
+  <link href="http://www.katieleonard.ca/blog/categories/jquery/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2014-01-12T10:52:40-08:00</updated>
+  <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[jQuery Objects vs Strings]]></title>
-    <link href="http://keighty.github.io/blog/2013/jquery-objects-vs-strings/"/>
+    <link href="http://www.katieleonard.ca/blog/2013/jquery-objects-vs-strings/"/>
     <updated>2013-06-19T00:00:00-07:00</updated>
-    <id>http://keighty.github.io/blog/2013/jquery-objects-vs-strings</id>
+    <id>http://www.katieleonard.ca/blog/2013/jquery-objects-vs-strings</id>
     <content type="html"><![CDATA[<h2>Object blocker!!</h2>
 
 <p>My pair was stuck for the longest time on the following code snip:</p>
@@ -70,9 +70,9 @@ a.toggleClass(&#39;blue&#39;);
   
   <entry>
     <title type="html"><![CDATA[Namespaces and jQuery]]></title>
-    <link href="http://keighty.github.io/blog/2013/solving-namespace-conflicts-with-jquery/"/>
+    <link href="http://www.katieleonard.ca/blog/2013/solving-namespace-conflicts-with-jquery/"/>
     <updated>2013-06-18T00:00:00-07:00</updated>
-    <id>http://keighty.github.io/blog/2013/solving-namespace-conflicts-with-jquery</id>
+    <id>http://www.katieleonard.ca/blog/2013/solving-namespace-conflicts-with-jquery</id>
     <content type="html"><![CDATA[<h3>Namespaces in jQuery getting you down?</h3>
 
 <p>Chuck taught me a great trick today &mdash; how to avoid namespace

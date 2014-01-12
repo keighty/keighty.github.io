@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Java | keighty]]></title>
-  <link href="http://keighty.github.io/blog/categories/java/atom.xml" rel="self"/>
-  <link href="http://keighty.github.io/"/>
-  <updated>2014-01-11T17:58:28-08:00</updated>
-  <id>http://keighty.github.io/</id>
+  <link href="http://www.katieleonard.ca/blog/categories/java/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2014-01-12T10:52:40-08:00</updated>
+  <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Serving Some Java]]></title>
-    <link href="http://keighty.github.io/blog/2013/serving-some-java/"/>
+    <link href="http://www.katieleonard.ca/blog/2013/serving-some-java/"/>
     <updated>2013-08-24T00:00:00-07:00</updated>
-    <id>http://keighty.github.io/blog/2013/serving-some-java</id>
+    <id>http://www.katieleonard.ca/blog/2013/serving-some-java</id>
     <content type="html"><![CDATA[<p>For a recent java coding challenge I was asked, among other things, to make a server. It has been several years since I last attempted it, and I had forgotten how easy it could be.</p>
 
 <h4>Server</h4>

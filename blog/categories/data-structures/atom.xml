@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Data_structures | keighty]]></title>
-  <link href="http://keighty.github.io/blog/categories/data-structures/atom.xml" rel="self"/>
-  <link href="http://keighty.github.io/"/>
-  <updated>2014-01-11T17:58:28-08:00</updated>
-  <id>http://keighty.github.io/</id>
+  <link href="http://www.katieleonard.ca/blog/categories/data-structures/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2014-01-12T10:52:40-08:00</updated>
+  <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[State of the QuickUnion]]></title>
-    <link href="http://keighty.github.io/blog/2013/state-of-the-quickunion/"/>
+    <link href="http://www.katieleonard.ca/blog/2013/state-of-the-quickunion/"/>
     <updated>2013-08-04T00:00:00-07:00</updated>
-    <id>http://keighty.github.io/blog/2013/state-of-the-quickunion</id>
+    <id>http://www.katieleonard.ca/blog/2013/state-of-the-quickunion</id>
     <content type="html"><![CDATA[<p>In my last look at the UnionFind algorithm I made a quick-find implementation &mdash; finding if two elements were connected was fast but connecting two elements was slow. The union operation is a good candidate for optimization.</p>
 
 <h1>Quick Union</h1>
@@ -224,9 +224,9 @@ $ ruby lib/benchmark.rb
   
   <entry>
     <title type="html"><![CDATA[State of the UnionFind]]></title>
-    <link href="http://keighty.github.io/blog/2013/state-of-the-unionfind/"/>
+    <link href="http://www.katieleonard.ca/blog/2013/state-of-the-unionfind/"/>
     <updated>2013-07-30T00:00:00-07:00</updated>
-    <id>http://keighty.github.io/blog/2013/state-of-the-unionfind</id>
+    <id>http://www.katieleonard.ca/blog/2013/state-of-the-unionfind</id>
     <content type="html"><![CDATA[<p>I was scraping the rust off my data-structures synapses last week, and found that there was still some functionality underneath. UnionFind is one of those sneaky algorithms that crops up in non-linear arrangements of data, such as computer or social networks. Specifically, it keeps track of sets of connected elements. The API consists of a union(p, q), which connects the two elements p and q, and a find(p, q), which determines if p is in the same set as q.</p>
 
 <p>I learned about this algorithm through <a href="https://www.coursera.org/">Coursera</a>, and their class <a href="https://www.coursera.org/course/algs4partI">Algorithms Part 1</a> with Kevin Wayne and Robert Sedgewick. The focus of this course was not only on implementation of algorithms, but also optimization.</p>
