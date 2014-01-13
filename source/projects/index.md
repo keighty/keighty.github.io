@@ -28,26 +28,20 @@ can curl
 eh?{% endhighlight %}
 
 ##JSGames
-I wrote (JSGames)[http://js-games.herokuapp.com/] to practice many different web technologies, including jQuery, Bootstrap, Sinatra, Rspec, Jasmine, ActiveRecord, and PostgreSQL. [http://github.com/keighty/JSGames](<i class="fa fa-github"></i></a></p>
-</div>
+I wrote (JSGames)[http://js-games.herokuapp.com/] to practice many different web technologies, including jQuery, Bootstrap, Sinatra, Rspec, Jasmine, ActiveRecord, and PostgreSQL.
 
-<img class="playicon" src="{% asset_path solitaire.png %}" alt="Solitaire game">
-<ul class="page-list">
-<li>[http://js-games.herokuapp.com/solitaire](Solitaire</a>: Similar to peg solitaire, the object of the game is to turn all the squares blue.</li>
-<li>[http://js-games.herokuapp.com/mastermind](Mastermind</a>: Like the board game, Mastermind is a single-player code-breaking game.</li>
-<li>[http://js-games.herokuapp.com/animalquiz](Animal Quiz</a>: An artificial intelligence game for teaching a database to guess the animal you are thinking of.</li>
-</ul>
+(<i class="fa fa-github"></i>)[http://github.com/keighty/JSGames]
 
-<div class="jumbotron">
-<h1>Code Samples</h1>
-<p class="lead">I used [http://jashkenas.github.io/docco/](Docco</a> to generate annotated documentation for some useful pieces of code. [http://github.com/keighty/PCSnotes/tree/gh-pages](<i class="fa fa-github"></i></a></p>
-</div>
-<ul class="page-list">
-<li>[http://www.katieleonard.ca/PCSnotes/docs/benchmark.html](Benchmark.rb</a></li>
-<li>[http://www.katieleonard.ca/PCSnotes/docs/animal_quiz.html](Animal Quiz.rb</a></li>
-</ul>
+<!-- <img class="playicon" src="{% asset_path solitaire.png %}" alt="Solitaire game"> -->
+*(Solitaire)[http://js-games.herokuapp.com/solitaire]: Similar to peg solitaire, the object of the game is to turn all the squares blue.
+*(Mastermind)[http://js-games.herokuapp.com/mastermind]: Like the board game, Mastermind is a single-player code-breaking game.
+*(Animal Quiz)[http://js-games.herokuapp.com/animalquiz]: An artificial intelligence game for teaching a database to guess the animal you are thinking of.
 
-<div class="jumbotron">
-<h1>Android Applications</h1>
-<p class="lead">[http://kapplications.ca/">KApplications</a> is a side project for building personal productivity Android applications.</p>
-</div>
+##Code Samples
+I used (Docco)[http://jashkenas.github.io/docco/] to generate annotated documentation for some useful pieces of code.(<i class="fa fa-github"></i>)[http://github.com/keighty/PCSnotes/tree/gh-pages]
+
+*(Benchmark.rb)[http://www.katieleonard.ca/PCSnotes/docs/benchmark.html]
+*(Animal Quiz.rb)[http://www.katieleonard.ca/PCSnotes/docs/animal_quiz.html]
+
+##Android Applications
+(KApplications)[http://kapplications.ca/] is a side project for building personal productivity Android applications.
