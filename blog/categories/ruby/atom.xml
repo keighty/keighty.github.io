@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-12T14:03:06-08:00</updated>
+  <updated>2014-01-13T08:01:05-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -19,6 +19,9 @@
     <updated>2013-09-10T00:00:00-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/ruby-execution</id>
     <content type="html"><![CDATA[<p>I have started including an executable in my project setup. Many of the code challenges I have been practicing lately have included file I/O, and while TDD and code exercising with RSpec is still my main process, developing a stand-alone fully-functional project requires something more.</p>
+
+<!--more-->
+
 
 <h3>Blocks Code Challenge</h3>
 
@@ -106,6 +109,9 @@ Blocks.new.process_input</code></pre>
     <updated>2013-09-08T00:00:00-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/thor-sets-up-a-project</id>
     <content type="html"><![CDATA[<p>A few weeks ago I posted about <a href="http://www.katieleonard.ca/automation/2013/08/30/hammer-out-tasks-with-thor/">using Thor to generate system-wide notes files with a standard format</a>. Since then, I have been doing a lot of smaller code challenges, and I wanted to set up a Thor task for generating a standard project file tree.</p>
+
+<!--more-->
+
 
 <p>My Goal Tree:
 <div>
@@ -272,6 +278,9 @@ test_project/
     <id>http://www.katieleonard.ca/blog/2013/argf-all-you-want</id>
     <content type="html"><![CDATA[<p>Many of the fun, junior code challenges I have encountered deal a lot with input/output of data, and I found a great ruby feature that provides flexibility at the command line.</p>
 
+<!--more-->
+
+
 <h3>Data Input</h3>
 
 <p>There are a lot of ways to treat data at the command line, but the one I was most familiar with is passing in a filename as an argument:</p>
@@ -344,6 +353,9 @@ TypeError: can`t convert nil into String</code></pre>
     <updated>2013-08-30T00:00:00-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/hammer-out-tasks-with-thor</id>
     <content type="html"><![CDATA[<p>A few months ago I gave a small lightning talk to my code school class about automating tasks using <a href="http://rake.rubyforge.org/">Rake</a>. Before I learned ruby I used bash scripts to accomplish similar things, but was often bogged down in learning the syntax of string-processing essentials like awk or sed. I wished for the simplicity of Ruby, and thought that Rake was the bees-knees. After my talk, <a href="chuckvose.com">Chuck</a>, my PCS mentor, put together a repo of <a href="http://whatisthor.com/">Thor</a> tasks that accomplished the same tasks but could be installed system wide.</p>
+
+<!--more-->
+
 
 <h3><a href="http://whatisthor.com/">Thor</a> is my new hero</h3>
 
@@ -425,6 +437,9 @@ Done.</code></pre>
     <updated>2013-08-04T00:00:00-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/state-of-the-quickunion</id>
     <content type="html"><![CDATA[<p>In my last look at the UnionFind algorithm I made a quick-find implementation &mdash; finding if two elements were connected was fast but connecting two elements was slow. The union operation is a good candidate for optimization.</p>
+
+<!--more-->
+
 
 <h1>Quick Union</h1>
 

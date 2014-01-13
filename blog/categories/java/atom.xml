@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-12T14:03:06-08:00</updated>
+  <updated>2014-01-13T08:01:05-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -19,6 +19,9 @@
     <updated>2013-08-24T00:00:00-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/serving-some-java</id>
     <content type="html"><![CDATA[<p>For a recent java coding challenge I was asked, among other things, to make a server. It has been several years since I last attempted it, and I had forgotten how easy it could be.</p>
+
+<!--more-->
+
 
 <h4>Server</h4>
 

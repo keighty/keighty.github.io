@@ -70,6 +70,7 @@
 <ul class="main-navigation">
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects/index.html">Projects</a></li>
 </ul>
 
 </nav>
@@ -108,161 +109,12 @@
 
   <div class="entry-content"><p>A few weeks ago I posted about <a href="http://www.katieleonard.ca/automation/2013/08/30/hammer-out-tasks-with-thor/">using Thor to generate system-wide notes files with a standard format</a>. Since then, I have been doing a lot of smaller code challenges, and I wanted to set up a Thor task for generating a standard project file tree.</p>
 
-<p>My Goal Tree:</p>
-
-<div>
-  <pre><code class='bash'>project_name
-├── lib
-│   └── project_name.rb
-├── spec
-│   ├── project_name_spec.rb
-│   └── spec_helper.rb
-├── Gemfile
-└── README.md</code></pre>
-</div>
-
-
-<p>I always begin with these files and this organization. A Gemfile and README are essential for setting up the environment and explaining the gist of the project. I am most comfortable with RSpec, and to get into the practice of TDD, setting up a testing environment right away is non-negotiable. All of these standard files contain some automatic content as well:</p>
-
-<h5>spec_helper.rb loads the library</h5>
-
-<div>
-  <pre><code class='ruby'>$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), &#39;..&#39;, &#39;lib&#39;))
-require &#39;rspec&#39;
-require &#39;project_name&#39;</code></pre>
-</div>
-
-
-<h5>project_name_spec.rb sets up the first test</h5>
-
-<div>
-  <pre><code class='ruby'>require &#39;spec_helper&#39;
-
-describe ProjectName do
-  before (:each) {  }
-  subject {  }
-
-  it &quot;should pass&quot;
-end</code></pre>
-</div>
-
-
-<h5>Gemfile specifies the right gems for setting up the project</h5>
-
-<div>
-  <pre><code class='ruby'>ruby &#39;2.0.0&#39;
-gem &#39;rspec&#39;</code></pre>
-</div>
-
-
-<p>There are other files that could have auto-generated content as well, like a Rakefile, or a config.ru, but this is a good start.</p>
-
-<h4>Create a Thor task (rb_project.thor):</h4>
-
-<div>
-  <pre><code class='ruby'>#!/usr/bin/env ruby
-require &quot;rubygems&quot;
-require &quot;thor&quot;
-
-class RbProject &lt; Thor
-  desc &quot;init&quot;, &quot;creates a ruby project with rspec&quot;
-
-  def init(title=&quot;new_project&quot;)
-    Dir.mkdir(title)
-    Dir.chdir(title)
-    Dir.mkdir(&quot;spec&quot;)
-    Dir.mkdir(&quot;lib&quot;)
-    filename = &quot;#{title}&quot;
-
-    open(File.new(&quot;README.md&quot;, &quot;w&quot;), &quot;w&quot;) do |note|
-      note.puts &quot;# #{title}&quot;
-    end
-
-    open(File.new(&quot;Gemfile&quot;, &quot;w&quot;), &quot;w&quot;) do |my_gem|
-      my_gem.puts &quot;ruby &#39;2.0.0&#39;&quot;
-      my_gem.puts &quot;gem &#39;rspec&#39;&quot;
-    end
-
-    open(File.new(&quot;spec/spec_helper.rb&quot;, &quot;w&quot;), &quot;w&quot;) do |spec|
-      spec.puts &quot;$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), &#39;..&#39;, &#39;lib&#39;))&quot;
-      spec.puts &quot;require &#39;rspec&#39;&quot;
-      spec.puts &quot;require &#39;#{filename}&#39;&quot;
-    end
-
-    open(File.new(&quot;spec/#{filename}_spec.rb&quot;, &quot;w&quot;), &quot;w&quot;) do |spec|
-      spec.puts &quot;require &#39;spec_helper&#39;&quot;
-      spec.puts &quot;&quot;
-      spec.puts &quot;describe #{camelize(filename)} do&quot;
-      spec.puts &quot;  before (:each) {  }&quot;
-      spec.puts &quot;  xit &#39;should pass&#39;&quot;
-      spec.puts &quot;end&quot;
-    end
-  end
-
-  private
-    def camelize(snake)
-      title = snake.split(&#39;_&#39;).each do |word|
-        word.capitalize!
-      end
-      title.join(&#39;&#39;)
-    end
-end</code></pre>
-</div>
-
-
-<p>I created a private method camelize in order to change the snake_case project name into a CamelCase class name.</p>
-
-<p>As before, I install my thor task system wide:</p>
-
-<div>
-  <pre><code class='bash'>$ thor install rb_project.thor</code></pre>
-</div>
-
-
-<p>And now my project generation task can be run from any directory, anywhere on my system:</p>
-
-<div>
-  <pre><code class='bash'>$ thor list
-note
-----
-thor note:create  # creates a notes file in markdown
-
-rb_project
-----------
-thor rb_project:init  # creates a ruby project with rspec
-
-$ thor rb_project:init test_project
-$ tree test_project/
-test_project/
-├── lib
-│   └── test_project.rb
-├── spec
-│   ├── spec_helper.rb
-│   └── test_project_spec.rb
-├── Gemfile
-├── README.md
-
-2 directories, 6 files</code></pre>
-</div>
-
-
-<p>Awesome.</p>
-
-<div>
-  <pre><code class='bash'></code></pre>
-</div>
-
-
-
-
-<div>
-  <pre><code class='bash'></code></pre>
-</div>
-
-
-
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/thor-sets-up-a-project/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -298,73 +150,12 @@ test_project/
 
   <div class="entry-content"><p>Many of the fun, junior code challenges I have encountered deal a lot with input/output of data, and I found a great ruby feature that provides flexibility at the command line.</p>
 
-<h3>Data Input</h3>
-
-<p>There are a lot of ways to treat data at the command line, but the one I was most familiar with is passing in a filename as an argument:</p>
-
-<div>
-  <pre><code class='bash'>$ ruby example_script.rb file1.csv file2.csv ...
-$ ruby example_script.rb file1.csv | more
-$ ruby example_script.rb file1.csv &gt; output.txt</code></pre>
-</div>
-
-
-<h3>Filename Input</h3>
-
-<p>Using ARGV, we can access the list of filenames provided at the command line. ARGV is an array containing all the information that follows the command. For example:</p>
-
-<div>
-  <pre><code class='bash'>$ example_command apple banana orange
-# ARGV = [&quot;apple&quot;, &quot;banana&quot;, &quot;orange&quot;]</code></pre>
-</div>
-
-
-<p>One can process each filename in ARGV using regular array methods:</p>
-
-<div>
-  <pre><code class='ruby'>ARGV.each do |arg|
-  process_string(File.read(arg))
-end</code></pre>
-</div>
-
-
-<p>File.read(arg) reads the file into a &ldquo;\n&rdquo; delimited string, which can be processed further. If there are no arguments, ARGV is an empty array.</p>
-
-<h3>Piped Input</h3>
-
-<p>Say that we want to enter data directly into a program rather than use a fixed filename at the command line &mdash; a useful technique for when we want data to flow out of one process and into another:</p>
-
-<div>
-  <pre><code class='bash'>$ cat file1.csv | ruby example_script.rb
-$ cat *.csv | ruby example_script.rb
-$ ruby example_script.rb &lt; file1.csv</code></pre>
-</div>
-
-
-<p>Using the pipe, &ldquo;|&rdquo; or &ldquo;&lt;&rdquo;, we can push a string of data from one process into another, but what happens to our program when we try to do this?</p>
-
-<div>
-  <pre><code class='bash'>$ example.csv | ruby example_script.rb
-TypeError: can`t convert nil into String</code></pre>
-</div>
-
-
-<p>We get a TypeError! Recall that command line arguments are stored in ARGV, but we are not providing any command line arguments. ARGV is an empty array, and we are attempting to open a file from ARGV[0] = nil. Shame on us! How do we access data that is piped in as well as data that is appended to the command line? Do we have to check for the source of the data before we can treat it? Turns out, we DON&rsquo;T.</p>
-
-<h3>The ARGF Solution</h3>
-
-<p>Ruby has a nifty interface for handling data input, regardless of whether it arrives as a command line argument or from another data source. We can replace the code we wrote earlier with a single line:</p>
-
-<div>
-  <pre><code class='ruby'>process_string(ARGF.read)</code></pre>
-</div>
-
-
-<p>If ARGV is not empty, ARGF will assume it is an array of filenames and will treat them accordingly. If ARGV is empty, it will read from $stdin to get the data passed in via the pipe. One caveat is that you can&rsquo;t read from both ARGV and the pipe: if ARGV != [  ], $stdin is ignored.</p>
-
-<p>Awesome.</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/argf-all-you-want/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -400,79 +191,12 @@ TypeError: can`t convert nil into String</code></pre>
 
   <div class="entry-content"><p>A few months ago I gave a small lightning talk to my code school class about automating tasks using <a href="http://rake.rubyforge.org/">Rake</a>. Before I learned ruby I used bash scripts to accomplish similar things, but was often bogged down in learning the syntax of string-processing essentials like awk or sed. I wished for the simplicity of Ruby, and thought that Rake was the bees-knees. After my talk, <a href="chuckvose.com">Chuck</a>, my PCS mentor, put together a repo of <a href="http://whatisthor.com/">Thor</a> tasks that accomplished the same tasks but could be installed system wide.</p>
 
-<h3><a href="http://whatisthor.com/">Thor</a> is my new hero</h3>
-
-<p>Unlike Rake tasks, which are confined to the directory containing the Rakefile, Thor tasks can be installed on your system and called from anywhere. My note files are all formatted in a particular way. Before Thor, I used a rake task:</p>
-
-<div>
-  <pre><code class='bash'>$ cd notesDirWithRakefile
-$ rake post title=&quot;new post title&quot;
-$ Creating new post: &quot;./130830_new_post_title&quot;</code></pre>
-</div>
-
-
-<p>The Rake task auto-formats the filename, replacing spaces with underscores, and prepends today&rsquo;s date so that they will sort in the order they are made. This worked great for when I wanted to keep notes in that one folder, but later I wanted to be able to keep notes on a particular project. I would either have to copy the Rakefile (two places to update if I made any changes), or create a symbolic link (which would break if I ever moved my Rakefile). Neither of these options seemed to be the most practical. Enter Thor:</p>
-
-<p>Creating the Thor task is as easy as pie:</p>
-
-<div>
-  <pre><code class='ruby'>require &#39;thor&#39;
-
-class Note &lt; Thor
-  desc &quot;create&quot;, &quot;creates a notes file in markdown&quot;
-  def create(title=&quot;new note&quot;)
-    slug = title.downcase.strip.gsub(&#39; &#39;, &#39;_&#39;).gsub(/[^\w-]/, &#39;&#39;)
-    date = Time.parse(Time.now).strftime(&#39;%y%m%d&#39;)
-    filename = File.join(&quot;./&quot;, &quot;#{date}_#{slug}.md&quot;)
-
-    if File.exist?(filename)
-      abort(&quot;rake aborted!&quot;) if ask(&quot;#{filename} already exists. Do you want to overwrite?&quot;, [&#39;y&#39;, &#39;n&#39;]) == &#39;n&#39;
-    end
-
-    puts &quot;Creating new post: #{filename}&quot;
-    open(filename, &#39;w&#39;) do |post|
-      post.puts &quot;# #{title.gsub(/-/,&#39; &#39;).capitalize}&quot;
-    end
-  end
-end</code></pre>
-</div>
-
-
-<p>Listing all Thor tasks is easy:</p>
-
-<div>
-  <pre><code class='bash'>$ thor list
-note
-----
-thor note:create  # creates a notes file in markdown</code></pre>
-</div>
-
-
-<p>Installing a Thor task for system use is easy:</p>
-
-<div>
-  <pre><code class='bash'>$ thor install notes.thor
-...
-Do you wish to continue [y/N]? y
-Please specify a name for notes.thor in the system repository [notes.thor]: note
-Storing thor file in your system repository</code></pre>
-</div>
-
-
-<p>Uninstalling a Thor task is easy:</p>
-
-<div>
-  <pre><code class='bash'>$ thor uninstall note
-Uninstalling note.
-Done.</code></pre>
-</div>
-
-
-<p>With my Thor notes task installed system-wide, I can create a note page in any directory, for any reason, without copying code.</p>
-
-<p>Awesome.</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/hammer-out-tasks-with-thor/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -508,73 +232,12 @@ Done.</code></pre>
 
   <div class="entry-content"><p>For a recent java coding challenge I was asked, among other things, to make a server. It has been several years since I last attempted it, and I had forgotten how easy it could be.</p>
 
-<h4>Server</h4>
-
-<p>A server, like any good conversationalist, is a good listener. A server is a program running on a computer that listens at a port, waiting to receive instructions.</p>
-
-<div>
-  <pre><code class='java'>public class Server {
-  private static String inputLine;
-
-  public static void main(String[] args) {
-
-    private static final int PORT_NUMBER = 63400
-
-    try {
-      // Socket variables
-      ServerSocket serverSocket = new ServerSocket(PORT_NUMBER);
-      Socket clientSocket = serverSocket.accept();
-
-      // IO variables
-      InputStreamReader inputReader = new InputStreamReader(clientSocket.getInputStream());
-      BufferedReader bReader = new BufferedReader(inputReader);
-
-      while ((inputLine = bReader.readLine()) != null) {
-        System.out.println(inputLine);
-      }
-
-    } catch (Exception e) {
-      System.out.println(e);
-    }
-  }
-}</code></pre>
-</div>
-
-
-<p>The server opens a socket on a specified port (in this case, port 63400). A socket is the point at which two-way communication happens between computer programs. The server opens a socket at a port and waits for a client to bind the socket so they can exchange information. It waits for input from the client, with instructions to print out anything the client puts in (line 18). So where is the client?</p>
-
-<h4>Client</h4>
-
-<p>The client is even simpler than the server: it finds the server at the specified port and connects to the socket.</p>
-
-<div>
-  <pre><code class='java'>public class Client {
-
-  private static final int PORT_NUMBER = 63400
-
-  public static void main(String[] args) {
-
-    try {
-
-      // Socket variables
-      Socket socket = new Socket(&quot;localhost&quot;, PORT_NUMBER);
-      PrintWriter pWriter = new PrintWriter(socket.getOutputStream(), true);
-
-      pWriter.println(&quot;Hello World!&quot;);
-
-    } catch (Exception e) {
-      System.out.println(e);
-    }
-  }
-}</code></pre>
-</div>
-
-
-<p>With a successful connection, it generates an output stream. If you start the server in one console it will look like it isn&rsquo;t doing anything, but when you start the client in another console you can watch them communicate. The client writes &ldquo;Hello World&rdquo; directly into the port where the server is listening (socket.getOutputStream()), and as instructed, the server obediently prints &ldquo;Hello World&rdquo; to the console.</p>
-
-<p>Awesome.</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/serving-some-java/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -610,63 +273,12 @@ Done.</code></pre>
 
   <div class="entry-content"><p>Eh? is coming along as a functioning interpreted language, but we are still missing a runtime. We have a lexer that chops and tags our code string into tokens, and a grammar that contains the rules for order of operations, and a parser that is generated by RACC from the grammar. The parser assembles the tokens into an evaluation tree (AST), but we need a runtime to do the actual evaluation.</p>
 
-<p>Recall from my previous post that the AST consists of nodes, like this one for a method definition:</p>
-
-<div>
-  <pre><code class='ruby'>class DefNode
-  def initialize(name, params, body)
-    @name = name
-    @params = params
-    @body = body
-  end
-
-  def eval(context)
-    context.current_class.can_methods[@name] = CanMethod.new(@params, @body)
-  end
-end</code></pre>
-</div>
-
-
-<p>When a method definition node is evaluated it adds a new entry to the can_methods hash. The name of the method is its key, and the value is an object (CanMethod.new) that contains the details of method evaluation (parameters and the method body). The context is the scope of the evaluation &ndash; in the case of a method call, the context is the enclosing class.</p>
-
-<p>Ok, so when does the CanMethod get evaluated? It happens at runtime. A class node is built and all the method definitions are added, but the node tree will remain untouched until until a method is called.</p>
-
-<div>
-  <pre><code class='ruby'>class CanMethod
-  def initialize(params, body)
-    @params = params
-    @body = body
-  end
-
-  def call(receiver, arguments)
-    @body.eval(Context.new(receiver))
-  end
-end</code></pre>
-</div>
-
-
-<p>When your program calls a method, a portion of the AST is evaluated. The body of the method object is called with the provided parameters in the context of the method receiver. For ruby newbies, the receiver is the object on the left side of the method call &mdash; ie. in foo.bar(3), foo is the receiver and bar is called with the parameter of 3 in the context of foo.  The runtime will create a new context for the method (recall that ruby is block scoped, meaning that all variables and blocks within the method are confined to that method&hellip; mostly).</p>
-
-<div>
-  <pre><code class='ruby'>class Context
-  attr_reader :locals, :current_self, :current_class
-
-  @@constants = {}
-
-  def initialize(current_self, current_class=current_self.can_class)
-    @locals = {}
-    @current_self = current_self
-    @current_class = current_class
-  end
-end</code></pre>
-</div>
-
-
-<p>The context contains all the local variables for the scope as well as a reference to what object is self, and which is super. We are getting very close to putting all these pieces together!</p>
-
-<p>Awesome</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/runtime-for-your-life/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -685,6 +297,13 @@ end</code></pre>
 <aside class="sidebar">
   
     <section>
+  <div class='contact'>
+    <a href='mailto:keighty.leonard@gmail.com?Subject=Hello!' rel='tooltip' title='keighty.leonard@gmail.com'><i class="fa fa-envelope fa-3x"></i></a>
+    <a href='http://twitter.com/jKeightyLeonard' title='@KeightyLeonard'><i class="fa fa-twitter fa-3x"></i></a>
+    <a href='http://github.com/keighty' title='github.com/keighty'><i class="fa fa-github fa-3x"></i></a>
+    <a href='http://linkedin.com/in/katieleonard' title='linkedin/katieleonard'><i class="fa fa-linkedin fa-3x"></i></a>
+  </div>
+</section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
@@ -717,8 +336,6 @@ end</code></pre>
     <li class="loading">Status updating&#8230;</li>
   </ul>
   
-  <a href="https://github.com/keighty">@keighty</a> on GitHub
-  
   <script type="text/javascript">
     $(document).ready(function(){
         if (!window.jXHR){
@@ -738,6 +355,13 @@ end</code></pre>
     });
   </script>
   <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+  <div>
+    <h1>Aboot me</h1>
+    <p>I have loved programming since my first &#8220;Hello World!&#8221;, and have been seeking source code enlightenment through Java, Ruby, Rails, and JavaScript. I am also a recent immigrant to Portland, Oregon - perhaps you can tell from my Canadian accent?</p>
+  </div>
 </section>
 
 

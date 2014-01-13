@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-12T14:03:06-08:00</updated>
+  <updated>2014-01-13T08:01:05-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -20,7 +20,7 @@
     <id>http://www.katieleonard.ca/blog/2013/meatier-apps-with-meteor</id>
     <content type="html"><![CDATA[<p><a href="http://www.meteor.com/">Meteor</a> is a framework that allows you to write web applications using only javascript. All the work is done on the client-side. Meteor embraces new principles of web design: data on the wire, one language is enough, and simplicity makes for productivity.</p>
 
-<p>Simplicity is something I value as well, and while setting up meteor on my linux machine was not a three-step process as outlined in their examples, it only took a little tinkering to figure out the problem. First, a look at the three meteor setup steps:</p>
+<p>Simplicity is something I value as well, and while setting up meteor on my linux machine was not a three-step process as outlined in their examples, it only took a little tinkering to figure out the problem. <!--more-->First, a look at the three meteor setup steps:</p>
 
 <h4>Install</h4>
 
@@ -116,7 +116,7 @@ AWESOME</p>
 
 <p>I picked up this little gem this morning as I was learning about functions and the various objects associated with them:</p>
 
-<p>You CANNOT use function declarations in conditionals. Take this example:
+<p>You CANNOT use function declarations in conditionals. <!--more-->Take this example:
 <div>
   <pre><code class='java'>if (String.prototype.trim) {
   function trim(str) {&lt;/p&gt;
@@ -180,7 +180,7 @@ else {
 </div>
 </p>
 
-<p>Also similar to RSpec, Jasmine allows you to spy on behavior.
+<p>Also similar to RSpec, Jasmine allows you to spy on behavior.<!--more-->
  Using spies, I can watch a method call and collect information about it.</p>
 
 <ul>
@@ -252,8 +252,12 @@ a.toggleClass(&#39;blue&#39;);
 &lt;p&gt;  });
 });</code></pre>
 </div>
+</p>
 
- We expected out output to include three elements &mdash; the original square, one
+<!--more-->
+
+
+<p> We expected out output to include three elements &mdash; the original square, one
  inserted after, and one inserted before. The output we were seeing included
  only two squares: the original one and the square inserted before. If
  we inverted the insert calls, we would see only one inserted after. We

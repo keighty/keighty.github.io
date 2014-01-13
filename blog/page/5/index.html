@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="What is Mass Assignment? Mass assignment is using a ruby-esque shortcut to interact with models: This is NOT mass assignment. def create u = User.new &hellip;">
+  <meta name="description" content="What is Mass Assignment? Mass assignment is using a ruby-esque shortcut to interact with models">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -70,6 +70,7 @@
 <ul class="main-navigation">
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects/index.html">Projects</a></li>
 </ul>
 
 </nav>
@@ -106,74 +107,14 @@
   </header>
 
 
-  <div class="entry-content"><h1>What is Mass Assignment?</h1>
+  <div class="entry-content"><h3>What is Mass Assignment?</h3>
 
-<p>Mass assignment is using a ruby-esque shortcut to interact with models:</p>
-
-<p>This is NOT mass assignment.</p>
-
-<div>
-  <pre><code class='ruby'>def create
-  u = User.new
-  u.first_name = params[:user][:firstname]
-  u.last_name = params[:user][:lastname]
-  if u.save
-    redirect_to :index, flash: { success: &quot;Created!&quot; }
-  else
-    render :action =&gt; &#39;new&#39;
-  end
-end</code></pre>
-</div>
-
-
-<p>Each param is extracted from the params hash and assigned explicitly. Any params that are not assigned are thrown on the floor.</p>
-
-<p>This IS mass assignment.</p>
-
-<div>
-  <pre><code class='ruby'>def create
-  u = User.new(params[:user])
-  if u.save
-    redirect_to :index, flash: { success: &quot;Created!&quot; }
-  else
-    render :action =&gt; &#39;new&#39;
-  end
-end</code></pre>
-</div>
-
-
-<p>The programmer assumes that the params include all the data necessary, and <em>only</em> the data necessary. All params in the hash are used to create the new user record.</p>
-
-<h3>Why is mass assignment a problem?</h3>
-
-<p>The problem with mass assignment is that if you have a sensitive tag in your model, for example user_type (which could be set to admin), a malicious user can add <code>user[:user_type] = 'admin'</code> to your params hash. Your controller will unwittingly include it in the save command, creating a new admin account for the  malicious user.</p>
-
-<h3>Is there any way to prevent this diabolical schema scheme?</h3>
-
-<p>There is! With Rails 4 comes <strong>strong params</strong>.
-Strong params live in the controller and tell it explicitly what params can be trusted.</p>
-
-<div>
-  <pre><code class='ruby'>def create
-  u = User.new(user_params)
-  if u.save
-    redirect_to :index, flash: { success: &quot;Created!&quot; }
-  else
-    render :action =&gt; &#39;new&#39;
-  end
-end
-...
-def user_params
-  params.require(:user).permit(:name, :email, :password, :password_confirmation)
-end</code></pre>
-</div>
-
-
-<p>The only parameters our controller will send to the model are those specified on our white-list. If rails detects a user attempting to access a param that is not on the white-list, said user had better be prepared for <em>grave consequences</em>. Their session will be <strong>deleted</strong>, their attempt will be <strong>logged</strong>, and Rails will email their mother.</p>
-
-<p>Awesome.</p>
-</div>
+<p>Mass assignment is using a ruby-esque shortcut to interact with models</div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/mass-assignment-x-gravity/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -211,70 +152,12 @@ end</code></pre>
 
 <p>Trundling along the <a href="http://ruby.railstutorial.org/chapters/updating-showing-and-deleting-users?version=4.0#top">Hartl railstutorial</a>, I needed to write some logic to allow a user to update their information.</p>
 
-<p>As a <a href="http://www.katieleonard.ca/tdd/testing/2013/06/14/TDD-is-the-way-to-be/">loyal TDD-er</a>, I wrote a test to check that users see a success message if they are able to update their infomation:</p>
-
-<div>
-  <pre><code class='ruby'>describe &quot;updating with valid information&quot; do
-  let(:new_name) { &quot;New Name&quot; }
-  let(:new_email) { &quot;new@example.com&quot; }
-  before do
-    fill_in &quot;Name&quot;, with: new_name
-    fill_in &quot;Email&quot;, with: new_email
-    fill_in &quot;Password&quot;, with: user.password
-    fill_in &quot;Confirm Password&quot;, with: user.password
-    click_button &quot;Save changes&quot;
-  end
-  it { should have_selector(&#39;div.alert.alert-success&#39;) }
-end</code></pre>
-</div>
-
-
-<p>As expected, the tests should fail until I am able to log in.</p>
-
-<p>Since the Rails4 user scaffold comes with some nifty built in methods, I thought it would be easy to adapt them for my own ends:</p>
-
-<div>
-  <pre><code class='ruby'># PATCH/PUT /users/1
-# PATCH/PUT /users/1.json
-def update
-  respond_to do |format|
-    if @user.update(user_params)
-      format.html { redirect_to @user, notice: &#39;Profile updated.&#39; }
-      format.json { head :no_content }
-    else
-      format.html { render action: &#39;edit&#39; }
-      format.json { render json: @user.errors, status: :unprocessable_entity }
-    end
-  end
-end</code></pre>
-</div>
-
-
-<p>I modify the line 5 of the user controller to change the &ldquo;notice&rdquo; message to a &ldquo;success&rdquo; message:</p>
-
-<div>
-  <pre><code class='ruby'>format.html { redirect_to @user, success: &quot;Profile updated&quot; }</code></pre>
-</div>
-
-
-<p>Seems reasonable, but my test for the flash message is still failing. Why won&rsquo;t my page flash the user?!</p>
-
-<p>Quick as a flash, I asked <a href="https://itunes.apple.com/us/app/dash-docs-snippets/id458034879?mt=12">Dash</a> about FlashHash.</p>
-
-<p>Lo, and behold! Notice and alert are built-in flash tags, but success is nowhere to be found. How can I express the satisfaction of <code>SUCCESS!!</code> with a tag as mundane as notice:?</p>
-
-<p>Thanks to <a href="http://en.wikipedia.org/wiki/Duck_typing">duck-typing</a> (if it walks like a duck and quacks like a duck, it is probably a hash.. right?) we can add our spiffy <code>success:</code> tag to flash, and share the appropriate level of enthusiasm with our users:</p>
-
-<div>
-  <pre><code class='ruby'>format.html { redirect_to @user, flash: { success: &quot;Profile updated&quot; }}</code></pre>
-</div>
-
-
-<p>All tests are green, and today I learned that flash is</p>
-
-<p>Awesome</p>
-</div>
+<p>As a <a href="http://www.katieleonard.ca/tdd/testing/2013/06/14/TDD-is-the-way-to-be/">loyal TDD-er</a>, I wrote a test to check that users see a success message if they are able to update their infomation:</div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/a-flash-of-understanding/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -308,37 +191,12 @@ end</code></pre>
   </header>
 
 
-  <div class="entry-content"><p>Learning how to contribute to open source projects has been really exciting. Adding value to existing projects, getting social in the coding community, and working on production-level code has been a steep but rewarding learning curve. One important thing to learn is the etiquette of creating pull requests. I read a great post about what to include in a <a href="http://dev.solita.fi/2013/07/04/whats-in-a-good-commit.html">good commit</a>, but I also needed to know how to make a good pull request:</p>
-
-<h3>Branch it</h3>
-
-<p>Before making any changes to an open source project, open a new branch. This will allow you to isolate your changes into separate pull requests. For example, I add Feature A, push to master, and create pull request 1. The next day, I add Feature B, push to master, and create pull request 2. If Feature A has not already been reviewed and accepted, Feature B additions will now be encorporated into pull request 1. This is bad practice. Keep each contribution in a separate branch. This will also allow you to keep your current branch up to date with the upstream repository, without affecting your previous work.</p>
-
-<h3>One change, one commit</h3>
-
-<p>A commit is not just a backup. Like a migration, your commit history should read like a road map of changes you make to get to your current state &mdash; and changes you should undo when things go wrong. If your commits change dozens of lines of code, understanding the changes is going to require a deep dive into the code.</p>
-
-<h3>Pithy commit messages</h3>
-
-<p>Make it easy on your code reviewer by making your commits small enough, and your commit messages detailed enough that they can be understood at a glance.</p>
-
-<p>The workflow, in general:</p>
-
-<ol>
-  <li>fork the repo</li>
-  <li><code>git clone</code> to local machine</li>
-  <li><code>git checkout -b featureA</code></li>
-  <li><code>git pull upstream master</code></li>
-  <li>make your changes</li>
-  <li><code>git commit -am "adds one addition to feature A"</code></li>
-  <li><code>git push origin featureA</code></li>
-  <li>make pull request</li>
-</ol>
-
-
-<p>Awesome</p>
-</div>
+  <div class="entry-content"><p>Learning how to contribute to open source projects has been really exciting. Adding value to existing projects, getting social in the coding community, and working on production-level code has been a steep but rewarding learning curve. One important thing to learn is the etiquette of creating pull requests. I read a great post about what to include in a <a href="http://dev.solita.fi/2013/07/04/whats-in-a-good-commit.html">good commit</a>, but I also needed to know how to make a good pull request</div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/best-practices-pull-requests/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -374,42 +232,12 @@ end</code></pre>
 
   <div class="entry-content"><p>Having just discovered the magic of using partials to refactor html in rails, imagine my delight when I found it to be even easier in Sinatra.</p>
 
-<p>A partial is a just a fragment of html (or erb). They can be used for rendering duplicate or dynamic content into otherwise static pages.</p>
-
-<p>I was writing html for my JSGames sinatra application when I caught myself copying a snippet of html onto my clipboard. Why on earth would I duplicate code? I want to include a block of text on both the index and the game page, but I don&rsquo;t want to have to modify it in two places when I inevitably get around to rewriting it.</p>
-
-<p>The solution?</p>
-
-<p>Factor out the duplicate html into a partial (begin name with _ for identification purposes). For example <code>_gameDescription.erb</code></p>
-
-<div>
-  <pre><code class='html'>&lt;h1&gt;Game Title&lt;/h1&gt;
-&lt;p&gt;Game description&lt;/p&gt;</code></pre>
-</div>
-
-
-<p>Add that partial wherever you want to display this snippet of code:</p>
-
-<div>
-  <pre><code class='ruby'>&lt;%= erb :_gameDescription  %&gt;</code></pre>
-</div>
-
-
-<p>For example:</p>
-
-<div>
-  <pre><code class='ruby'>&lt;div class=&quot;span4 pagination-centered&quot;&gt;
-  &lt;%= erb :_solitaireDesc  %&gt;
-  &lt;a href=&quot;/game&quot; class=&quot;btn btn-large&quot;&gt;Play&lt;/a&gt;
-&lt;/div&gt;</code></pre>
-</div>
-
-
-<p>Check out the final product on <a href="http://js-games.herokuapp.com/solitaire">JSGames</a>.</p>
-
-<p>Awesome</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/partial-to-sinatra/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -455,76 +283,12 @@ end</code></pre>
 </div>
 
 
-<p>Use the failures to drive development:</p>
-
-<h3>2. No Route</h3>
-
-<div>
-  <pre><code class='bash'>Failures:
-  1) Static About page should have the content &#39;About Us&#39;
-     Failure/Error: visit &#39;/static_pages/about&#39;
-     ActionController::RoutingError:
-       No route matches [GET] &quot;/static_pages/about&quot;</code></pre>
-</div>
-
-
-<p>Add one to /config/routes.rb:</p>
-
-<div>
-  <pre><code class='ruby'>DemoApp2::Application.routes.draw do
-  get &quot;static_pages/about&quot;
-  ...
-end</code></pre>
-</div>
-
-
-<h3>3.No Controller</h3>
-
-<div>
-  <pre><code class='bash'>Failures:
-
-  1) Static About page should have the content &#39;About Us&#39;
-     Failure/Error: visit &#39;/static_pages/about&#39;
-     AbstractController::ActionNotFound:
-       The action &#39;about&#39; could not be found for StaticPagesController</code></pre>
-</div>
-
-
-<p>Add one to /controllers/static_pages_controller.rb</p>
-
-<div>
-  <pre><code class='ruby'>class StaticPagesController &lt; ApplicationController
-  def about
-  end
-end</code></pre>
-</div>
-
-
-<h3>4. No Page</h3>
-
-<div>
-  <pre><code class='ruby'>Failures:
-  1) Static About page should have the content &#39;About Us&#39;
-     Failure/Error: visit &#39;/static_pages/about&#39;
-     ActionView::MissingTemplate:
-       Missing template static_pages/about, application/about with {:locale=&gt;[:en], :formats=&gt;[:html], :handlers=&gt;[:erb, :builder, :raw, :ruby, :jbuilder, :coffee]}.</code></pre>
-</div>
-
-
-<p>Add a view to /static_pages/about.html.erb</p>
-
-<div>
-  <pre><code class='html'>&lt;!DOCTYPE html&gt;
-  &lt;body&gt;
-    &lt;h1&gt;About Us&lt;/h1&gt;
-  &lt;/body&gt;
-&lt;/html&gt;</code></pre>
-</div>
-
-
-
-</div>
+<p>Use the failures to drive development</div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/red-green-refactor/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -543,6 +307,13 @@ end</code></pre>
 <aside class="sidebar">
   
     <section>
+  <div class='contact'>
+    <a href='mailto:keighty.leonard@gmail.com?Subject=Hello!' rel='tooltip' title='keighty.leonard@gmail.com'><i class="fa fa-envelope fa-3x"></i></a>
+    <a href='http://twitter.com/jKeightyLeonard' title='@KeightyLeonard'><i class="fa fa-twitter fa-3x"></i></a>
+    <a href='http://github.com/keighty' title='github.com/keighty'><i class="fa fa-github fa-3x"></i></a>
+    <a href='http://linkedin.com/in/katieleonard' title='linkedin/katieleonard'><i class="fa fa-linkedin fa-3x"></i></a>
+  </div>
+</section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
@@ -575,8 +346,6 @@ end</code></pre>
     <li class="loading">Status updating&#8230;</li>
   </ul>
   
-  <a href="https://github.com/keighty">@keighty</a> on GitHub
-  
   <script type="text/javascript">
     $(document).ready(function(){
         if (!window.jXHR){
@@ -596,6 +365,13 @@ end</code></pre>
     });
   </script>
   <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+  <div>
+    <h1>Aboot me</h1>
+    <p>I have loved programming since my first &#8220;Hello World!&#8221;, and have been seeking source code enlightenment through Java, Ruby, Rails, and JavaScript. I am also a recent immigrant to Portland, Oregon - perhaps you can tell from my Canadian accent?</p>
+  </div>
 </section>
 
 

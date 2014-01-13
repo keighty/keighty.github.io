@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Sinatra | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/sinatra/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-12T14:03:06-08:00</updated>
+  <updated>2014-01-13T08:01:05-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -24,7 +24,7 @@
 </div>
 </p>
 
-<p>How can we achieve the same ability in Sinatra?</p>
+<p>How can we achieve the same ability in Sinatra?<!--more--></p>
 
 <h3>Tux</h3>
 
@@ -102,6 +102,9 @@ end</code></pre>
 <li>I have a ruby class that compares a guess to the secret code and returns an analysis of the accuracy of the guess.</li>
 <li>How do I get the ruby class to process a guess and secret code from the browser?</li>
 </ul>
+
+
+<!--more-->
 
 
 <h2>I learned something about Ajax today.</h2>
@@ -197,6 +200,9 @@ private
     <updated>2013-07-09T00:00:00-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/partial-to-sinatra</id>
     <content type="html"><![CDATA[<p>Having just discovered the magic of using partials to refactor html in rails, imagine my delight when I found it to be even easier in Sinatra.</p>
+
+<!--more-->
+
 
 <p>A partial is a just a fragment of html (or erb). They can be used for rendering duplicate or dynamic content into otherwise static pages.</p>
 

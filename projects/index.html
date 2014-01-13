@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Mass Assignment X Gravity - keighty</title>
+  <title>Projects - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="">
+  <meta name="description" content="Projects Learning Grid Using Meteor to track my learning goals is easy! As I go, I can move a javascript MVVM from &ldquo;Learning Zone&rdquo; to & &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2013/mass-assignment-x-gravity">
+  <link rel="canonical" href="http://www.katieleonard.ca/projects">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -77,136 +77,87 @@
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
   <header>
-    
-      <h1 class="entry-title">Mass Assignment X Gravity</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-15T00:00:00-07:00" pubdate data-updated="true"></time>
-        
-      </p>
+    <h1 class="entry-title">Projects</h1>
     
   </header>
+  
+  <h2><a href="http://github.com/keighty/learningGrid"><i class="fa fa-github"></i></a> Learning Grid</h2>
 
 
-<div class="entry-content"><h3>What is Mass Assignment?</h3>
+<p>Using <a href="https://www.meteor.com/">Meteor</a> to track my <a href="http://learninggrid.meteor.com/">learning goals</a> is easy! As I go, I can move a javascript MVVM from &ldquo;Learning Zone&rdquo; to &ldquo;Comfort Zone&rdquo;, and manage my future projects along the way.</p>
 
-<p>Mass assignment is using a ruby-esque shortcut to interact with models<!--more-->:</p>
-
-<p>This is NOT mass assignment.</p>
-
-<div>
-  <pre><code class='ruby'>def create
-  u = User.new
-  u.first_name = params[:user][:firstname]
-  u.last_name = params[:user][:lastname]
-  if u.save
-    redirect_to :index, flash: { success: &quot;Created!&quot; }
-  else
-    render :action =&gt; &#39;new&#39;
-  end
-end</code></pre>
-</div>
+<h2><a href="http://github.com/keighty/eh-"><i class="fa fa-github"></i></a> Eh?</h2>
 
 
-<p>Each param is extracted from the params hash and assigned explicitly. Any params that are not assigned are thrown on the floor.</p>
+<p><a href="http://www.katieleonard.ca/eh-/index.html">Eh?</a> is a programming language I am building using idiomatic Canadianisms. I am gaining a greater understanding of how languages function, and love considering what features I want in a language.</p>
 
-<p>This IS mass assignment.</p>
-
-<div>
-  <pre><code class='ruby'>def create
-  u = User.new(params[:user])
-  if u.save
-    redirect_to :index, flash: { success: &quot;Created!&quot; }
-  else
-    render :action =&gt; &#39;new&#39;
-  end
-end</code></pre>
-</div>
-
-
-<p>The programmer assumes that the params include all the data necessary, and <em>only</em> the data necessary. All params in the hash are used to create the new user record.</p>
-
-<h3>Why is mass assignment a problem?</h3>
-
-<p>The problem with mass assignment is that if you have a sensitive tag in your model, for example user_type (which could be set to admin), a malicious user can add <code>user[:user_type] = 'admin'</code> to your params hash. Your controller will unwittingly include it in the save command, creating a new admin account for the  malicious user.</p>
-
-<h3>Is there any way to prevent this diabolical schema scheme?</h3>
-
-<p>There is! With Rails 4 comes <strong>strong params</strong>.
-Strong params live in the controller and tell it explicitly what params can be trusted.</p>
-
-<div>
-  <pre><code class='ruby'>def create
-  u = User.new(user_params)
-  if u.save
-    redirect_to :index, flash: { success: &quot;Created!&quot; }
-  else
-    render :action =&gt; &#39;new&#39;
-  end
-end
-...
-def user_params
-  params.require(:user).permit(:name, :email, :password, :password_confirmation)
-end</code></pre>
-</div>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>a Canadian
+</span><span class='line'>with toque
+</span><span class='line'>with scarf
+</span><span class='line'>with broom
+</span><span class='line'>
+</span><span class='line'>can curl
+</span><span class='line'>    if skip
+</span><span class='line'>      say "Hurry!"
+</span><span class='line'>    elsif lead
+</span><span class='line'>      say "That's too much ice..."
+</span><span class='line'>    eh?
+</span><span class='line'>  eh?
+</span><span class='line'>eh?</span></code></pre></td></tr></table></div></figure>
 
 
-<p>The only parameters our controller will send to the model are those specified on our white-list. If rails detects a user attempting to access a param that is not on the white-list, said user had better be prepared for <em>grave consequences</em>. Their session will be <strong>deleted</strong>, their attempt will be <strong>logged</strong>, and Rails will email their mother.</p>
-
-<p>Awesome.</p>
-</div>
 
 
-  <footer>
-    <p class="meta">
+<h2><a href="http://github.com/keighty/JSGames"><i class="fa fa-github"></i></a> JSGames</h2>
+
+
+<p>I wrote <a href="http://js-games.herokuapp.com/">JSGames</a> to practice different web technologies, including jQuery, Bootstrap, Sinatra, Rspec, Jasmine, ActiveRecord, and PostgreSQL.</p>
+
+<ul>
+<li><a href="http://js-games.herokuapp.com/solitaire">Solitaire</a>: Similar to peg solitaire, the object of the game is to turn all the squares blue.</li>
+<li><a href="http://js-games.herokuapp.com/mastermind">Mastermind</a>: Like the board game, Mastermind is a single-player code-breaking game.</li>
+<li><a href="http://js-games.herokuapp.com/animalquiz">Animal Quiz</a>: An artificial intelligence game for teaching a database to guess the animal you are thinking of.</li>
+</ul>
+
+
+<h2><a href="http://github.com/keighty/PCSnotes/tree/gh-pages"><i class="fa fa-github"></i></a> Code Samples</h2>
+
+
+<p>I used <a href="http://jashkenas.github.io/docco/">Docco</a> to generate annotated documentation for some useful pieces of code.</p>
+
+<ul>
+<li><a href="http://www.katieleonard.ca/PCSnotes/docs/benchmark.html">Benchmark.rb</a></li>
+<li><a href="http://www.katieleonard.ca/PCSnotes/docs/animal_quiz.html">Animal Quiz.rb</a></li>
+</ul>
+
+
+<h2>Android Applications</h2>
+
+<p><a href="http://kapplications.ca/">KApplications</a> is a side project for building personal productivity Android applications.</p>
+
+  
+    <footer>
       
-  
-
-<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
-
       
-
-
-
-
-
-
-
-
+        <div class="sharing">
   
-
-
-<time datetime="2013-07-15T00:00:00-07:00" pubdate data-updated="true"></time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/rails/'>rails</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2013/mass-assignment-x-gravity/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2013/mass-assignment-x-gravity/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/projects/index.html" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/projects/index.html" >Tweet</a>
   
   
   
@@ -214,23 +165,10 @@ end</code></pre>
   
 </div>
 
-    
-    <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/a-flash-of-understanding/" title="Previous Post: A Flash of Understanding">&laquo; A Flash of Understanding</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2013/get-your-kicks-on-localhost4567/" title="Next Post: Get your kicks on route localhost:4567">Get your kicks on route localhost:4567 &raquo;</a>
-      
-    </p>
-  </footer>
+    </footer>
+  
 </article>
-
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-  </section>
 
 </div>
 
@@ -326,10 +264,7 @@ end</code></pre>
       var disqus_shortname = 'keightyleonard';
       
         
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2013/mass-assignment-x-gravity/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2013/mass-assignment-x-gravity/';
-        var disqus_script = 'embed.js';
+        var disqus_script = 'count.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

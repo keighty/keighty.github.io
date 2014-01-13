@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Web | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/web/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-12T14:03:06-08:00</updated>
+  <updated>2014-01-13T08:01:05-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -18,7 +18,7 @@
     <link href="http://www.katieleonard.ca/blog/2013/show-off-with-github/"/>
     <updated>2013-08-06T00:00:00-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/show-off-with-github</id>
-    <content type="html"><![CDATA[<p>I was experimenting with some documentation styles today and discovered two bits of gold: gh-pages and docco:</p>
+    <content type="html"><![CDATA[<p>I was experimenting with some documentation styles today and discovered two bits of gold: gh-pages and docco<!--more-->:</p>
 
 <p>Creating a site for your project using GitHub is a 3 step process:
 1. create a new orphan branch called gh-pages

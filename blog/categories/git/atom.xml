@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-12T14:03:06-08:00</updated>
+  <updated>2014-01-13T08:01:05-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -22,6 +22,9 @@
 
 <p>When I work on an experimental feature in a project branch, I have often found that I will have a mixture of commits I would like to keep, and commits that I wish had never happened.
 Using the principle of only committing atomic changes, and enjoying the fruits of your detailed-commit-message labour, there is a way to extract the gold from the ore, so to speak.</p>
+
+<!--more-->
+
 
 <h2>Locate the gold</h2>
 
@@ -106,7 +109,7 @@ $ git cherry-pick 8394b37494b63754f42ecaf19244fe6d8a36942f
     <link href="http://www.katieleonard.ca/blog/2013/best-practices-pull-requests/"/>
     <updated>2013-07-11T00:00:00-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/best-practices-pull-requests</id>
-    <content type="html"><![CDATA[<p>Learning how to contribute to open source projects has been really exciting. Adding value to existing projects, getting social in the coding community, and working on production-level code has been a steep but rewarding learning curve. One important thing to learn is the etiquette of creating pull requests. I read a great post about what to include in a <a href="http://dev.solita.fi/2013/07/04/whats-in-a-good-commit.html">good commit</a>, but I also needed to know how to make a good pull request:</p>
+    <content type="html"><![CDATA[<p>Learning how to contribute to open source projects has been really exciting. Adding value to existing projects, getting social in the coding community, and working on production-level code has been a steep but rewarding learning curve. One important thing to learn is the etiquette of creating pull requests. I read a great post about what to include in a <a href="http://dev.solita.fi/2013/07/04/whats-in-a-good-commit.html">good commit</a>, but I also needed to know how to make a good pull request<!--more-->:</p>
 
 <h3>Branch it</h3>
 
