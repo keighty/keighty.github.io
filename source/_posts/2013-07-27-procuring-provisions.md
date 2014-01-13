@@ -8,7 +8,7 @@ tags: []
 ---
 
 I was trying to add a database to my JSGames app -- it is a basic sinatra app with a few goodies already in place -- and I was having some difficulty deploying it to Heroku. Rails (for the most part) automagically creates and maintains its database, and as long as I remember to move any references to sqlite3 into the development and test environments, I have never had trouble provisioning one on Heroku either. Rolling a web application from scratch with sinatra, however, requires a little more savvy.
-
+<!--more-->
 My Gemfile had a familiar structure:
 
 {% highlight ruby %}

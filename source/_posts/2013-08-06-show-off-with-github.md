@@ -7,7 +7,7 @@ category: web
 tags: []
 ---
 
-I was experimenting with some documentation styles today and discovered two bits of gold: gh-pages and docco:
+I was experimenting with some documentation styles today and discovered two bits of gold: gh-pages and docco<!--more-->:
 
 Creating a site for your project using GitHub is a 3 step process:
 1. create a new orphan branch called gh-pages

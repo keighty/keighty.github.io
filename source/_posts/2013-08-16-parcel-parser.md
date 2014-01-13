@@ -13,7 +13,7 @@ On the last episode, I described how to label chunks of code for processing thro
 A parser separates and analyzes a piece of text according to a set of rules specified by a formal grammar. The analysis is performed by assembling the tokenized code into an Abstract Syntax Tree (AST) - a tree of nodes that represent what the code means to the language. The AST evaluates the nodes in a similar manner to order of operations in math: each token is placed on the evaluation tree, and expressions are evaluated by reducing each branch in order.
 
 The parser itself is can be written by hand, but I am using RACC: an LALR (Look Ahead, Left to right, Reverse) parser written by [tenderlove](https://github.com/tenderlove/racc) to generate Ruby programs. How do we specify a grammar that RACC will understand?
-
+<!--more-->
 Each rule is formatted in the following way:
 {% highlight bash linenos%}
 RuleName:

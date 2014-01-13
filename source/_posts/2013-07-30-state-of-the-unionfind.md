@@ -10,7 +10,7 @@ tags: []
 I was scraping the rust off my data-structures synapses last week, and found that there was still some functionality underneath. UnionFind is one of those sneaky algorithms that crops up in non-linear arrangements of data, such as computer or social networks. Specifically, it keeps track of sets of connected elements. The API consists of a union(p, q), which connects the two elements p and q, and a find(p, q), which determines if p is in the same set as q.
 
 I learned about this algorithm through [Coursera](https://www.coursera.org/), and their class [Algorithms Part 1](https://www.coursera.org/course/algs4partI) with Kevin Wayne and Robert Sedgewick. The focus of this course was not only on implementation of algorithms, but also optimization.
-
+<!--more-->
 #Union Find
 A simple model for connectivity is 10 objects numbered 1 through 0:
 

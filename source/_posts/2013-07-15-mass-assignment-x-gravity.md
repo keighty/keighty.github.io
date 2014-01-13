@@ -7,8 +7,8 @@ category: rails
 tags: []
 ---
 
-#What is Mass Assignment?
-Mass assignment is using a ruby-esque shortcut to interact with models:
+###What is Mass Assignment?
+Mass assignment is using a ruby-esque shortcut to interact with models<!--more-->:
 
 This is NOT mass assignment.
 {% highlight ruby %}

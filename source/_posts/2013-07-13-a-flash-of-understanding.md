@@ -11,7 +11,7 @@ My page wouldn't flash the user.
 
 Trundling along the [Hartl railstutorial](http://ruby.railstutorial.org/chapters/updating-showing-and-deleting-users?version=4.0#top), I needed to write some logic to allow a user to update their information.
 
-As a [loyal TDD-er](http://www.katieleonard.ca/tdd/testing/2013/06/14/TDD-is-the-way-to-be/), I wrote a test to check that users see a success message if they are able to update their infomation:
+As a [loyal TDD-er](http://www.katieleonard.ca/tdd/testing/2013/06/14/TDD-is-the-way-to-be/), I wrote a test to check that users see a success message if they are able to update their infomation:<!--more-->
 
 {% highlight ruby %}
 describe "updating with valid information" do

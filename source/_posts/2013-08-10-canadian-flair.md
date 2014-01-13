@@ -18,7 +18,7 @@ For my last month at code school, I have decided to learn what it takes to devel
 * no parens for args
 * last value evaluated in return value
 * everything is an object
-
+<!--more-->
 #Steps for building an interpreted language
 1. This code has to be provided as input to a lexer.
 1. The lexer will convert that input into tokens.

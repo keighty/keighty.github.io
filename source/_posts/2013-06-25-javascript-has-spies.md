@@ -20,7 +20,7 @@ describe("Class to describe", function() {
   });
 });{% endhighlight %}
 
-Also similar to RSpec, Jasmine allows you to spy on behavior.
+Also similar to RSpec, Jasmine allows you to spy on behavior.<!--more-->
  Using spies, I can watch a method call and collect information about it.
 
 * Want to know if it was called?

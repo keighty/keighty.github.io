@@ -11,7 +11,7 @@ Sinatra does not have a default console like rails does. If you are writing in a
 {% highlight bash %}
 $ rails c{% endhighlight %}
 
-How can we achieve the same ability in Sinatra?
+How can we achieve the same ability in Sinatra?<!--more-->
 ###Tux
 Tux is a ruby gem that generates a sinatra console. It reads the config.ru, allows you to interact with App methods, and provides empty request and response objects to for investigating communication between views and the Sinatra controller.
 

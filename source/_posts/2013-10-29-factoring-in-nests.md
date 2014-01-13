@@ -27,6 +27,7 @@ describe User do
 end {% endhighlight %}
 
 How do I create Goals that are linked to the User?
+<!--more-->
 ### How to create Factories for nested attributes
 
 #####1. Make a new Factory for producing Goals:

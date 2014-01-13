@@ -8,7 +8,7 @@ tags: [I/O]
 ---
 
 Many of the fun, junior code challenges I have encountered deal a lot with input/output of data, and I found a great ruby feature that provides flexibility at the command line.
-
+<!--more-->
 ###Data Input
 There are a lot of ways to treat data at the command line, but the one I was most familiar with is passing in a filename as an argument:
 

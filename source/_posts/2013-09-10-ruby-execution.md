@@ -8,7 +8,7 @@ tags: []
 ---
 
 I have started including an executable in my project setup. Many of the code challenges I have been practicing lately have included file I/O, and while TDD and code exercising with RSpec is still my main process, developing a stand-alone fully-functional project requires something more.
-
+<!--more-->
 ###Blocks Code Challenge
 I found the blocks code challenge on the [UVa code competition website](http://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=3&page=show_problem&problem=37). To sum up, you have to write a program that will parse and carry out a series of commands for stacking blocks.
 

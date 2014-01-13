@@ -8,7 +8,7 @@ categories: ruby
 This week @PDXcodeschool we jumped into TDD using minitest/autorun. I have
 used RSpec in the past, and loved the way it let me manage the logic of my project.
 I love that ruby has a built in framework -- so easy to use!
-
+<!--more-->
 * Use specs to rough out project logic
 {% highlight ruby %}
 describe "Car" do

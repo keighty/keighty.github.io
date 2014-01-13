@@ -16,7 +16,7 @@ describe "Static About page" do
   end
 end{% endhighlight %}
 
-Use the failures to drive development:
+Use the failures to drive development<!--more-->:
 
 ###2. No Route
 {% highlight bash %}

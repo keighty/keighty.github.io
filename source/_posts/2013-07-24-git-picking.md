@@ -11,7 +11,7 @@ tags: []
 
 When I work on an experimental feature in a project branch, I have often found that I will have a mixture of commits I would like to keep, and commits that I wish had never happened.
 Using the principle of only committing atomic changes, and enjoying the fruits of your detailed-commit-message labour, there is a way to extract the gold from the ore, so to speak.
-
+<!--more-->
 ##Locate the gold
 Checkout the branch that contains your experiment, and use git log to get a list of all the commits:
 

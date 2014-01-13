@@ -8,7 +8,7 @@ tags: []
 ---
 
 I have been building a new project and getting creative with views. I am working with bootstrap and jquery to develop tabbed displays, and in the process have been gleaning a deeper understanding of rails routes, controllers, and assets. Using Ajax to load partials into rails views is a three part process:
-
+<!--more-->
 ####1. In the View, Add a Link
 /path/to/view.html.erb
 

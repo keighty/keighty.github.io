@@ -11,7 +11,7 @@ I am really enjoying [Test-Driven Development](http://www.amazon.com/Test-Driven
 
 I picked up this little gem this morning as I was learning about functions and the various objects associated with them:
 
-You CANNOT use function declarations in conditionals. Take this example:
+You CANNOT use function declarations in conditionals. <!--more-->Take this example:
 {% highlight java %}
 if (String.prototype.trim) {
   function trim(str) {

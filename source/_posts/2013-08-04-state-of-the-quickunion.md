@@ -8,7 +8,7 @@ tags: []
 ---
 
 In my last look at the UnionFind algorithm I made a quick-find implementation -- finding if two elements were connected was fast but connecting two elements was slow. The union operation is a good candidate for optimization.
-
+<!--more-->
 #Quick Union
 One way to optimize the union operation is to reduce the number of array accesses required.
 

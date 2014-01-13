@@ -13,7 +13,7 @@ I am building a code breaking game along the lines of Mastermind and I encounter
 * I have a javascript that generates a secret code.
 * I have a ruby class that compares a guess to the secret code and returns an analysis of the accuracy of the guess.
 * How do I get the ruby class to process a guess and secret code from the browser?
-
+<!--more-->
 ##I learned something about Ajax today.
 An ajax call is built up from a few minimum parameters: a url, the HTTP method, the dataType expected, and a callback function that handles the return. You can include data from the user in the form of a data hash:
 

@@ -28,6 +28,7 @@ $(function(){
   });
 });
 {% endhighlight %}
+<!--more-->
  We expected out output to include three elements -- the original square, one
  inserted after, and one inserted before. The output we were seeing included
  only two squares: the original one and the square inserted before. If

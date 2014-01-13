@@ -21,7 +21,7 @@ Lexer.new.tokenize("+")
 {% endhighlight %}
 
 "Lexing" is accomplished using regular expressions. The lexer treats the text string of your code like a shish kabob - it slides recognizable chunks off the skewer one at a time and categorizes them (onion, pepper, method definition, etc).
-
+<!--more-->
 {% highlight ruby %}
 class Lexer
   KEYWORDS = ['a', 'can', 'if', 'else', 'while', 'true', 'false', 'nil']

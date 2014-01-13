@@ -8,7 +8,7 @@ tags: []
 
 ### Namespaces in jQuery getting you down?
 Chuck taught me a great trick today -- how to avoid namespace
-conflicts in jQuery:
+conflicts in jQuery<!--more-->:
 {% highlight javascript %}
 (function($){
 ...

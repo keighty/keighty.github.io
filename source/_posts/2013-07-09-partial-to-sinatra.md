@@ -8,7 +8,7 @@ tags: []
 ---
 
 Having just discovered the magic of using partials to refactor html in rails, imagine my delight when I found it to be even easier in Sinatra.
-
+<!--more-->
 A partial is a just a fragment of html (or erb). They can be used for rendering duplicate or dynamic content into otherwise static pages.
 
 I was writing html for my JSGames sinatra application when I caught myself copying a snippet of html onto my clipboard. Why on earth would I duplicate code? I want to include a block of text on both the index and the game page, but I don't want to have to modify it in two places when I inevitably get around to rewriting it.

@@ -9,7 +9,7 @@ tags: [jekyll, yaml]
 Building a portfolio has been a lot of fun and has required a couple of
 different technologies. A fellow PCS student has been blogging a long time,
 and he suggested using Jekyll in combination with github pages. What a
-fantastic gem! I found an even more awesome one at [jekyll-bootstrap](http://jekyllbootstrap.com/).
+fantastic gem! I found an even more awesome one at [jekyll-bootstrap](http://jekyllbootstrap.com/).<!--more-->
 
 Now I am enjoying the power of bootstrap along with the ease of jekyll.
 

@@ -17,7 +17,7 @@ $ rails new testapp -T
 $ rails generate rspec:install
 ...
 Could not find a JavaScript runtime. See https://github.com/sstephenson/execjs for a list of available runtimes{% endhighlight %}
-
+<!--more-->
 ###Why does rails use a javascript runtime?
 A web application does not exist in a ruby/rails vacuum -- rendering an html page requires css and javascript as well. By default, the 'rails new' command generates a Gemfile containing a few suggested goodies, including uglifier, which compresses javascript assets. Dealing with multiple layers of javascripts can hurt application performance, which is why rails has adopted a compression strategy. Uglifier minifies your javascript by removing all the whitespace.
 

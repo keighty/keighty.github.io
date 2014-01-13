@@ -8,7 +8,7 @@ tags: []
 ---
 
 For a recent java coding challenge I was asked, among other things, to make a server. It has been several years since I last attempted it, and I had forgotten how easy it could be.
-
+<!--more-->
 #### Server
 A server, like any good conversationalist, is a good listener. A server is a program running on a computer that listens at a port, waiting to receive instructions.
 

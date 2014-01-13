@@ -8,7 +8,7 @@ tags: []
 ---
 
 A few weeks ago I posted about [using Thor to generate system-wide notes files with a standard format](http://www.katieleonard.ca/automation/2013/08/30/hammer-out-tasks-with-thor/). Since then, I have been doing a lot of smaller code challenges, and I wanted to set up a Thor task for generating a standard project file tree.
-
+<!--more-->
 My Goal Tree:
 {% highlight bash %}
 project_name

@@ -9,7 +9,7 @@ tags: []
 
 [Meteor](http://www.meteor.com/) is a framework that allows you to write web applications using only javascript. All the work is done on the client-side. Meteor embraces new principles of web design: data on the wire, one language is enough, and simplicity makes for productivity.
 
-Simplicity is something I value as well, and while setting up meteor on my linux machine was not a three-step process as outlined in their examples, it only took a little tinkering to figure out the problem. First, a look at the three meteor setup steps:
+Simplicity is something I value as well, and while setting up meteor on my linux machine was not a three-step process as outlined in their examples, it only took a little tinkering to figure out the problem. <!--more-->First, a look at the three meteor setup steps:
 
 ####Install
 {% highlight bash %}

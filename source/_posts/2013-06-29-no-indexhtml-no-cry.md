@@ -7,7 +7,7 @@ category: rails
 tags: []
 ---
 
-Following along with [Rails tutorial](http://www.amazon.com/Ruby-Rails-Tutorial-Addison-Wesley-Professional/dp/0321832051) by Michael Hartl, I built a sample app with a simple database, linking users to microposts in a twitter-like manner. Everything worked well locally, but when it came time to deploy on heroku, I ran across some interesting stumbling blocks:
+Following along with [Rails tutorial](http://www.amazon.com/Ruby-Rails-Tutorial-Addison-Wesley-Professional/dp/0321832051) by Michael Hartl, I built a sample app with a simple database, linking users to microposts in a twitter-like manner. Everything worked well locally, but when it came time to deploy on heroku, I ran across some interesting stumbling blocks<!--more-->:
 
 ###Rails 4 does not come with a default index.html
 There I was, gleefully watching the slug compile on heroku (after several abortive attempts I realized I had not moved the sqlite3 gem into the development environment -- heroku doesn't like that). All seemed fine, I typed
