@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Show-off with GitHub and Docco"
+comments: true
 description: ""
 category: web
 tags: []

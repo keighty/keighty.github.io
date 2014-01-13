@@ -1,8 +1,9 @@
 ---
 layout: post
 title: "No index.html, no cry"
+comments: true
 description: ""
-category: rails4
+category: rails
 tags: []
 ---
 

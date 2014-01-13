@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Serving Some Java"
+comments: true
 description: ""
 category: java
 tags: []

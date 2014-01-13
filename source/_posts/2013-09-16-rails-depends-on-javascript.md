@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Rails, You Can Depend on Javascript"
+comments: true
 description: ""
 category: rails
 tags: []

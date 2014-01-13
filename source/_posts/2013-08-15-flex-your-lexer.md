@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Flex Your Lexer"
+comments: true
 description: ""
 category: eh
 tags: []

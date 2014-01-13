@@ -1,8 +1,9 @@
 ---
 layout: post
 title: "State of the QuickUnion"
+comments: true
 description: ""
-category: data_structures
+category: ruby
 tags: []
 ---
 

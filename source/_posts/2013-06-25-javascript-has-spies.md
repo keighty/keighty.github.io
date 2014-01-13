@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Javascript has spies"
+comments: true
 description: ""
 category: javascript
 tags: [js, jasmine]

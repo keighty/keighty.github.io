@@ -1,8 +1,9 @@
 ---
 layout: post
 title: "Thor Sets Up A Project"
+comments: true
 description: ""
-category: automation
+category: ruby
 tags: []
 ---
 

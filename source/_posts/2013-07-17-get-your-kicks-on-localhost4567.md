@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Get your kicks on route localhost:4567"
+comments: true
 description: ""
 category: sinatra
 tags: [javascript, sinatra]

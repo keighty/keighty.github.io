@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "ARGF all you want"
+comments: true
 description: ""
 category: ruby
 tags: [I/O]

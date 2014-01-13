@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Canadian Flair"
+comments: true
 description: ""
 category: eh
 tags: []

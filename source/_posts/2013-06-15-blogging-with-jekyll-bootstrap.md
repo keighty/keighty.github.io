@@ -1,8 +1,9 @@
 ---
 layout: post
 title: "Blogging with Jekyll Bootstrap"
+comments: true
 description: "learning jekyll, yaml, and bootstrap"
-category: jekyll
+category: python
 tags: [jekyll, yaml]
 ---
 Building a portfolio has been a lot of fun and has required a couple of

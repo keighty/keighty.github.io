@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Runtime For Your Life"
+comments: true
 description: ""
 category: eh
 tags: []

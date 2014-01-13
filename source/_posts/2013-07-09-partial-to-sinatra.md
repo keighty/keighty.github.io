@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Partial to Sinatra"
+comments: true
 description: ""
 category: sinatra
 tags: []

@@ -1,8 +1,8 @@
 ---
 layout: post
 title: "Factoring In Nests"
-description: ""
 comments: true
+description: ""
 category: rails
 tags: []
 ---

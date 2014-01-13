@@ -1,8 +1,9 @@
 ---
 layout: post
 title: "Hammer-out Tasks with Thor"
+comments: true
 description: ""
-category: automation
+category: ruby
 tags: []
 ---
 

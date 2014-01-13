@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Best Practices - Pull Requests"
+comments: true
 description: ""
 category: git
 tags: []

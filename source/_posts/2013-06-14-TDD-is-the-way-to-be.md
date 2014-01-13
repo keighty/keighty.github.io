@@ -2,7 +2,8 @@
 layout: post
 title:  "I admit it, I love TDD"
 date:   2013-06-14
-categories: TDD testing
+comments: true
+categories: ruby
 ---
 This week @PDXcodeschool we jumped into TDD using minitest/autorun. I have
 used RSpec in the past, and loved the way it let me manage the logic of my project.

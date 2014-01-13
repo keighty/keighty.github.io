@@ -1,8 +1,9 @@
 ---
 layout: post
 title: "Hoisting with JavaScript"
+comments: true
 description: ""
-category: JavaScript
+category: javascript
 tags: []
 ---
 

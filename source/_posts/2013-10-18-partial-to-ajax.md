@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Partial to Ajax"
+comments: true
 description: ""
 category: rails
 tags: []

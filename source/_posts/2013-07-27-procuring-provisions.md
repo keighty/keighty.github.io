@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Procuring Provisions"
+comments: true
 description: ""
 category: heroku
 tags: []

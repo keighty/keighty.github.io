@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Git-Picking"
+comments: true
 description: ""
 category: git
 tags: []

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "A Flash of Understanding"
+comments: true
 description: ""
 category: rails
 tags: []

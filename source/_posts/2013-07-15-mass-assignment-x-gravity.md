@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Mass assignment X Gravity"
+comments: true
 description: ""
 category: rails
 tags: []

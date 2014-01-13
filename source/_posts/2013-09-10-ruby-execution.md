@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Ruby Execution"
+comments: true
 description: ""
 category: ruby
 tags: []

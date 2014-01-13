@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Red, Green, Refactor! A Workflow for Rails"
+comments: true
 description: ""
 category: rails
 tags: []

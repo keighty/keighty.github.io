@@ -1,8 +1,9 @@
 ---
 layout: post
 title: "jQuery objects vs strings"
+comments: true
 description: ""
-category: jQuery
+category: javascript
 tags: []
 ---
 

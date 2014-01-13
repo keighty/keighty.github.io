@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Parcel Parser"
+comments: true
 description: ""
 category: eh
 tags: []

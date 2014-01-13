@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Sinatra in a console"
+comments: true
 description: ""
 category: sinatra
 tags: []
