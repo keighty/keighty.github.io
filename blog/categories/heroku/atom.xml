@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Heroku | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/heroku/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-13T22:10:06-08:00</updated>
+  <updated>2014-01-13T22:17:43-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Procuring Provisions]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/procuring-provisions/"/>
-    <updated>2013-07-27T00:00:00-07:00</updated>
+    <updated>2013-07-27T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/procuring-provisions</id>
     <content type="html"><![CDATA[<p>I was trying to add a database to my JSGames app &mdash; it is a basic sinatra app with a few goodies already in place &mdash; and I was having some difficulty deploying it to Heroku. Rails (for the most part) automagically creates and maintains its database, and as long as I remember to move any references to sqlite3 into the development and test environments, I have never had trouble provisioning one on Heroku either. Rolling a web application from scratch with sinatra, however, requires a little more savvy.</p>
 

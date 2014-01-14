@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-13T22:10:06-08:00</updated>
+  <updated>2014-01-13T22:17:43-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -88,7 +88,7 @@
   <entry>
     <title type="html"><![CDATA[Factoring in Nests]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/factoring-in-nests/"/>
-    <updated>2013-10-29T00:00:00-07:00</updated>
+    <updated>2013-10-29T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/factoring-in-nests</id>
     <content type="html"><![CDATA[<p>I am building an application that uses several nested attributes: Users have many Goals (Goals belong_to Users), and Goals have many Hours (Hours belong_to Goals).</p>
 
@@ -193,85 +193,9 @@ end</code></pre>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Partial to Ajax]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/partial-to-ajax/"/>
-    <updated>2013-10-18T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/partial-to-ajax</id>
-    <content type="html"><![CDATA[<p>I have been building a new project and getting creative with views. I am working with bootstrap and jquery to develop tabbed displays, and in the process have been gleaning a deeper understanding of rails routes, controllers, and assets. Using Ajax to load partials into rails views is a three part process:</p>
-
-<!--more-->
-
-
-<h4>1. In the View, Add a Link</h4>
-
-<p>/path/to/view.html.erb</p>
-
-<div>
-  <pre><code class='ruby'>&lt;%= link_to &quot;Show my partial&quot;, path_to_controller, remote: true %&gt;</code></pre>
-</div>
-
-
-<p>The key difference in the syntax for this link is &ldquo;remote: true&rdquo;, which signals to the controller action to respond using ajax, not html.</p>
-
-<h4>2. Create a Partial</h4>
-
-<p>/path/to/view/_my_partial.html.erb</p>
-
-<div>
-  <pre><code class='ruby'>&lt;div&gt;
-  &lt;%= form_for @model do |f| %&gt;
-    &lt;%= f.label :my_text_field, &quot;Text Field Label&quot; %&gt;
-    &lt;%= f.text_area :my_text_field %&gt;
-    &lt;%= f.submit &quot;New&quot;, class: &quot;btn btn-primary&quot; %&gt;
-  &lt;% end %&gt;
-&lt;/div&gt;</code></pre>
-</div>
-
-
-<h4>3. In the Controller Action, Add a js Response</h4>
-
-<p>/path/to/controller.rb</p>
-
-<div>
-  <pre><code class='ruby'>def my_action
-  respond_to do |format|
-    format.js
-  end
-end</code></pre>
-</div>
-
-
-<p>Normally, Rails will render the view that corresponds to the name of the action in response to an html request. The format.js line asks rails to look for a javascript file instead of an html file when it tries to render a view.</p>
-
-<h4>3. Create a my_action.js.erb File to Shape the Ajax Response</h4>
-
-<p>/path/to/view/my_action.js.erb</p>
-
-<div>
-  <pre><code class='javascript'>$(&quot;#your-placeholder-id&quot;).prepend(&#39;&lt;%= escape_javascript(render &#39;path/to/view/my_partial&#39;) %&gt;</code></pre>
-</div>
-
-
-<p>Files with multiple extensions are processed from last to the first one. With js.erb, the erb will process all the ruby content first, and then the javascript will be run. Your js.erb file should be saved in the same folder as the rest of your controller&rsquo;s views. This is an example :</p>
-
-<div>
-  <pre><code class='bash'>app/views/users/
-├── _my_partial.html.erb
-├── edit.js.erb
-├── show.html.erb</code></pre>
-</div>
-
-
-<p>Voila! When you click the link in your view the partial is loaded using Ajax.</p>
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
     <title type="html"><![CDATA[Meatier Apps With Meteor]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/meatier-apps-with-meteor/"/>
-    <updated>2013-09-20T00:00:00-07:00</updated>
+    <updated>2013-10-20T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/meatier-apps-with-meteor</id>
     <content type="html"><![CDATA[<p><a href="http://www.meteor.com/">Meteor</a> is a framework that allows you to write web applications using only javascript. All the work is done on the client-side. Meteor embraces new principles of web design: data on the wire, one language is enough, and simplicity makes for productivity.</p>
 
@@ -360,9 +284,85 @@ AWESOME</p>
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[Partial to Ajax]]></title>
+    <link href="http://www.katieleonard.ca/blog/2013/partial-to-ajax/"/>
+    <updated>2013-10-18T22:29:03-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2013/partial-to-ajax</id>
+    <content type="html"><![CDATA[<p>I have been building a new project and getting creative with views. I am working with bootstrap and jquery to develop tabbed displays, and in the process have been gleaning a deeper understanding of rails routes, controllers, and assets. Using Ajax to load partials into rails views is a three part process:</p>
+
+<!--more-->
+
+
+<h4>1. In the View, Add a Link</h4>
+
+<p>/path/to/view.html.erb</p>
+
+<div>
+  <pre><code class='ruby'>&lt;%= link_to &quot;Show my partial&quot;, path_to_controller, remote: true %&gt;</code></pre>
+</div>
+
+
+<p>The key difference in the syntax for this link is &ldquo;remote: true&rdquo;, which signals to the controller action to respond using ajax, not html.</p>
+
+<h4>2. Create a Partial</h4>
+
+<p>/path/to/view/_my_partial.html.erb</p>
+
+<div>
+  <pre><code class='ruby'>&lt;div&gt;
+  &lt;%= form_for @model do |f| %&gt;
+    &lt;%= f.label :my_text_field, &quot;Text Field Label&quot; %&gt;
+    &lt;%= f.text_area :my_text_field %&gt;
+    &lt;%= f.submit &quot;New&quot;, class: &quot;btn btn-primary&quot; %&gt;
+  &lt;% end %&gt;
+&lt;/div&gt;</code></pre>
+</div>
+
+
+<h4>3. In the Controller Action, Add a js Response</h4>
+
+<p>/path/to/controller.rb</p>
+
+<div>
+  <pre><code class='ruby'>def my_action
+  respond_to do |format|
+    format.js
+  end
+end</code></pre>
+</div>
+
+
+<p>Normally, Rails will render the view that corresponds to the name of the action in response to an html request. The format.js line asks rails to look for a javascript file instead of an html file when it tries to render a view.</p>
+
+<h4>3. Create a my_action.js.erb File to Shape the Ajax Response</h4>
+
+<p>/path/to/view/my_action.js.erb</p>
+
+<div>
+  <pre><code class='javascript'>$(&quot;#your-placeholder-id&quot;).prepend(&#39;&lt;%= escape_javascript(render &#39;path/to/view/my_partial&#39;) %&gt;</code></pre>
+</div>
+
+
+<p>Files with multiple extensions are processed from last to the first one. With js.erb, the erb will process all the ruby content first, and then the javascript will be run. Your js.erb file should be saved in the same folder as the rest of your controller&rsquo;s views. This is an example :</p>
+
+<div>
+  <pre><code class='bash'>app/views/users/
+├── _my_partial.html.erb
+├── edit.js.erb
+├── show.html.erb</code></pre>
+</div>
+
+
+<p>Voila! When you click the link in your view the partial is loaded using Ajax.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Rails, You Can Depend on Javascript]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/rails-depends-on-javascript/"/>
-    <updated>2013-09-16T00:00:00-07:00</updated>
+    <updated>2013-09-16T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/rails-depends-on-javascript</id>
     <content type="html"><![CDATA[<p>I am between computers at the moment, and I really really miss my OSX development environment. Dependency installation is so smooth and painless on mac, that I had quite forgotten the complications of setting up a complete environment in linux. For instance</p>
 
@@ -435,7 +435,7 @@ $ sudo apt-get install nodejs</code></pre>
   <entry>
     <title type="html"><![CDATA[Ruby Execution]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/ruby-execution/"/>
-    <updated>2013-09-10T00:00:00-07:00</updated>
+    <updated>2013-09-10T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/ruby-execution</id>
     <content type="html"><![CDATA[<p>I have started including an executable in my project setup. Many of the code challenges I have been practicing lately have included file I/O, and while TDD and code exercising with RSpec is still my main process, developing a stand-alone fully-functional project requires something more.</p>
 
@@ -520,7 +520,7 @@ Blocks.new.process_input</code></pre>
   <entry>
     <title type="html"><![CDATA[Thor Sets Up a Project]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/thor-sets-up-a-project/"/>
-    <updated>2013-09-08T00:00:00-07:00</updated>
+    <updated>2013-09-08T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/thor-sets-up-a-project</id>
     <content type="html"><![CDATA[<p>A few weeks ago I posted about <a href="http://www.katieleonard.ca/automation/2013/08/30/hammer-out-tasks-with-thor/">using Thor to generate system-wide notes files with a standard format</a>. Since then, I have been doing a lot of smaller code challenges, and I wanted to set up a Thor task for generating a standard project file tree.</p>
 
@@ -686,7 +686,7 @@ test_project/
   <entry>
     <title type="html"><![CDATA[ARGF All You Want]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/argf-all-you-want/"/>
-    <updated>2013-09-05T00:00:00-07:00</updated>
+    <updated>2013-09-05T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/argf-all-you-want</id>
     <content type="html"><![CDATA[<p>Many of the fun, junior code challenges I have encountered deal a lot with input/output of data, and I found a great ruby feature that provides flexibility at the command line.</p>
 
@@ -764,7 +764,7 @@ TypeError: can`t convert nil into String</code></pre>
   <entry>
     <title type="html"><![CDATA[Hammer-out Tasks With Thor]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/hammer-out-tasks-with-thor/"/>
-    <updated>2013-08-30T00:00:00-07:00</updated>
+    <updated>2013-08-30T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/hammer-out-tasks-with-thor</id>
     <content type="html"><![CDATA[<p>A few months ago I gave a small lightning talk to my code school class about automating tasks using <a href="http://rake.rubyforge.org/">Rake</a>. Before I learned ruby I used bash scripts to accomplish similar things, but was often bogged down in learning the syntax of string-processing essentials like awk or sed. I wished for the simplicity of Ruby, and thought that Rake was the bees-knees. After my talk, <a href="chuckvose.com">Chuck</a>, my PCS mentor, put together a repo of <a href="http://whatisthor.com/">Thor</a> tasks that accomplished the same tasks but could be installed system wide.</p>
 
@@ -848,7 +848,7 @@ Done.</code></pre>
   <entry>
     <title type="html"><![CDATA[Serving Some Java]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/serving-some-java/"/>
-    <updated>2013-08-24T00:00:00-07:00</updated>
+    <updated>2013-08-24T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/serving-some-java</id>
     <content type="html"><![CDATA[<p>For a recent java coding challenge I was asked, among other things, to make a server. It has been several years since I last attempted it, and I had forgotten how easy it could be.</p>
 
@@ -926,7 +926,7 @@ Done.</code></pre>
   <entry>
     <title type="html"><![CDATA[Runtime for Your Life]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/runtime-for-your-life/"/>
-    <updated>2013-08-19T00:00:00-07:00</updated>
+    <updated>2013-08-19T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/runtime-for-your-life</id>
     <content type="html"><![CDATA[<p>Eh? is coming along as a functioning interpreted language, but we are still missing a runtime. We have a lexer that chops and tags our code string into tokens, and a grammar that contains the rules for order of operations, and a parser that is generated by RACC from the grammar. The parser assembles the tokens into an evaluation tree (AST), but we need a runtime to do the actual evaluation.</p>
 
@@ -994,7 +994,7 @@ end</code></pre>
   <entry>
     <title type="html"><![CDATA[Parcel Parser]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/parcel-parser/"/>
-    <updated>2013-08-16T00:00:00-07:00</updated>
+    <updated>2013-08-16T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/parcel-parser</id>
     <content type="html"><![CDATA[<p>On the last episode, I described how to label chunks of code for processing through a parser. Strings are labeled as &lsquo;STRING&rsquo;, class definitions as &lsquo;A&rsquo; + &lsquo;CONSTANT&rsquo;, etc.</p>
 
@@ -1089,7 +1089,7 @@ end
   <entry>
     <title type="html"><![CDATA[Flex Your Lexer]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/flex-your-lexer/"/>
-    <updated>2013-08-15T00:00:00-07:00</updated>
+    <updated>2013-08-15T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/flex-your-lexer</id>
     <content type="html"><![CDATA[<p>A Lexer is a ruby class with a single method: tokenize(). Its purpose is to label each chunk of code with a particular token. Strings are labeled as strings, numbers as numbers, and class names as constants. For example,</p>
 
@@ -1170,7 +1170,7 @@ Lexer.new.tokenize(code)
   <entry>
     <title type="html"><![CDATA[Canadian Flair]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/canadian-flair/"/>
-    <updated>2013-08-10T00:00:00-07:00</updated>
+    <updated>2013-08-10T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/canadian-flair</id>
     <content type="html"><![CDATA[<p>For my last month at code school, I have decided to learn what it takes to develop a new programming language. Having been teased for my Canadian accent, I thought it appropriate to incorporate some idiomatic Canadianisms, and call my language Eh? Deciding what actual features I want to implement in my programming language is an interesting task, and I think I have narrowed it down to a couple of standard rules and a couple wacky ones:</p>
 
@@ -1237,7 +1237,7 @@ eh?</code></pre>
   <entry>
     <title type="html"><![CDATA[Show-off With GitHub and Docco]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/show-off-with-github/"/>
-    <updated>2013-08-06T00:00:00-07:00</updated>
+    <updated>2013-08-06T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/show-off-with-github</id>
     <content type="html"><![CDATA[<p>I was experimenting with some documentation styles today and discovered two bits of gold: gh-pages and docco<!--more-->:</p>
 
@@ -1301,7 +1301,7 @@ $ git push origin gh-pages</code></pre>
   <entry>
     <title type="html"><![CDATA[State of the QuickUnion]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/state-of-the-quickunion/"/>
-    <updated>2013-08-04T00:00:00-07:00</updated>
+    <updated>2013-08-04T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/state-of-the-quickunion</id>
     <content type="html"><![CDATA[<p>In my last look at the UnionFind algorithm I made a quick-find implementation &mdash; finding if two elements were connected was fast but connecting two elements was slow. The union operation is a good candidate for optimization.</p>
 
@@ -1492,7 +1492,7 @@ $ ruby lib/benchmark.rb
   <entry>
     <title type="html"><![CDATA[State of the UnionFind]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/state-of-the-unionfind/"/>
-    <updated>2013-07-30T00:00:00-07:00</updated>
+    <updated>2013-07-30T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/state-of-the-unionfind</id>
     <content type="html"><![CDATA[<p>I was scraping the rust off my data-structures synapses last week, and found that there was still some functionality underneath. UnionFind is one of those sneaky algorithms that crops up in non-linear arrangements of data, such as computer or social networks. Specifically, it keeps track of sets of connected elements. The API consists of a union(p, q), which connects the two elements p and q, and a find(p, q), which determines if p is in the same set as q.</p>
 
@@ -1757,7 +1757,7 @@ for (int i = 0; i &lt; id.length; i++)
   <entry>
     <title type="html"><![CDATA[Procuring Provisions]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/procuring-provisions/"/>
-    <updated>2013-07-27T00:00:00-07:00</updated>
+    <updated>2013-07-27T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/procuring-provisions</id>
     <content type="html"><![CDATA[<p>I was trying to add a database to my JSGames app &mdash; it is a basic sinatra app with a few goodies already in place &mdash; and I was having some difficulty deploying it to Heroku. Rails (for the most part) automagically creates and maintains its database, and as long as I remember to move any references to sqlite3 into the development and test environments, I have never had trouble provisioning one on Heroku either. Rolling a web application from scratch with sinatra, however, requires a little more savvy.</p>
 
@@ -1892,7 +1892,7 @@ $ heroku restart</code></pre>
   <entry>
     <title type="html"><![CDATA[Git-Picking]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/git-picking/"/>
-    <updated>2013-07-24T00:00:00-07:00</updated>
+    <updated>2013-07-24T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/git-picking</id>
     <content type="html"><![CDATA[<h4>or, How to mine for cherries with Git</h4>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-13T22:10:06-08:00</updated>
+  <updated>2014-01-13T22:17:43-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Meatier Apps With Meteor]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/meatier-apps-with-meteor/"/>
-    <updated>2013-09-20T00:00:00-07:00</updated>
+    <updated>2013-10-20T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/meatier-apps-with-meteor</id>
     <content type="html"><![CDATA[<p><a href="http://www.meteor.com/">Meteor</a> is a framework that allows you to write web applications using only javascript. All the work is done on the client-side. Meteor embraces new principles of web design: data on the wire, one language is enough, and simplicity makes for productivity.</p>
 

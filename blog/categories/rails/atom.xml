@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-13T22:10:06-08:00</updated>
+  <updated>2014-01-13T22:17:43-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Factoring in Nests]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/factoring-in-nests/"/>
-    <updated>2013-10-29T00:00:00-07:00</updated>
+    <updated>2013-10-29T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/factoring-in-nests</id>
     <content type="html"><![CDATA[<p>I am building an application that uses several nested attributes: Users have many Goals (Goals belong_to Users), and Goals have many Hours (Hours belong_to Goals).</p>
 
@@ -147,7 +147,7 @@ end</code></pre>
   <entry>
     <title type="html"><![CDATA[Partial to Ajax]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/partial-to-ajax/"/>
-    <updated>2013-10-18T00:00:00-07:00</updated>
+    <updated>2013-10-18T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/partial-to-ajax</id>
     <content type="html"><![CDATA[<p>I have been building a new project and getting creative with views. I am working with bootstrap and jquery to develop tabbed displays, and in the process have been gleaning a deeper understanding of rails routes, controllers, and assets. Using Ajax to load partials into rails views is a three part process:</p>
 
@@ -229,7 +229,7 @@ end</code></pre>
   <entry>
     <title type="html"><![CDATA[Rails, You Can Depend on Javascript]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/rails-depends-on-javascript/"/>
-    <updated>2013-09-16T00:00:00-07:00</updated>
+    <updated>2013-09-16T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/rails-depends-on-javascript</id>
     <content type="html"><![CDATA[<p>I am between computers at the moment, and I really really miss my OSX development environment. Dependency installation is so smooth and painless on mac, that I had quite forgotten the complications of setting up a complete environment in linux. For instance</p>
 
@@ -396,7 +396,7 @@ The only parameters our controller will send to the model are those specified on
 <p><div>
   <pre><code class='ruby'>describe &amp;ldquo;updating with valid information&amp;rdquo; do
   let(:new_name) { &amp;ldquo;New Name&amp;rdquo; }
-  let(:new_email) { &amp;ldquo;&lt;a href=&quot;&amp;#x6d;&amp;#97;&amp;#105;&amp;#x6c;&amp;#116;&amp;#111;&amp;#58;&amp;#x6e;&amp;#x65;&amp;#119;&amp;#x40;&amp;#x65;&amp;#x78;&amp;#97;&amp;#x6d;&amp;#112;&amp;#x6c;&amp;#101;&amp;#46;&amp;#99;&amp;#111;&amp;#109;&quot;&gt;&amp;#110;&amp;#x65;&amp;#x77;&amp;#x40;&amp;#x65;&amp;#120;&amp;#97;&amp;#109;&amp;#112;&amp;#x6c;&amp;#x65;&amp;#46;&amp;#x63;&amp;#x6f;&amp;#109;&lt;/a&gt;&amp;rdquo; }
+  let(:new_email) { &amp;ldquo;&lt;a href=&quot;&amp;#109;&amp;#97;&amp;#x69;&amp;#x6c;&amp;#116;&amp;#111;&amp;#58;&amp;#110;&amp;#101;&amp;#119;&amp;#64;&amp;#101;&amp;#x78;&amp;#x61;&amp;#109;&amp;#x70;&amp;#x6c;&amp;#101;&amp;#46;&amp;#99;&amp;#111;&amp;#x6d;&quot;&gt;&amp;#x6e;&amp;#101;&amp;#x77;&amp;#64;&amp;#x65;&amp;#x78;&amp;#97;&amp;#109;&amp;#x70;&amp;#108;&amp;#x65;&amp;#46;&amp;#x63;&amp;#x6f;&amp;#x6d;&lt;/a&gt;&amp;rdquo; }
   before do&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;fill_in &quot;Name&quot;, with: new_name

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Web | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/web/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-13T22:10:06-08:00</updated>
+  <updated>2014-01-13T22:17:43-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Show-off With GitHub and Docco]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/show-off-with-github/"/>
-    <updated>2013-08-06T00:00:00-07:00</updated>
+    <updated>2013-08-06T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/show-off-with-github</id>
     <content type="html"><![CDATA[<p>I was experimenting with some documentation styles today and discovered two bits of gold: gh-pages and docco<!--more-->:</p>
 
