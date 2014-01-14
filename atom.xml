@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-13T08:01:05-08:00</updated>
+  <updated>2014-01-13T21:24:34-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -264,8 +264,6 @@ ln -s /usr/bin/mongod</code></pre>
 
 <p>Brilliant! Following these instructions, I was finally able to start meteor.</p>
 
-<p><img src="http://www.katieleonard.ca/assets/images/meteor.png" alt="Meteor" /></p>
-
 <h3>Getting down to business</h3>
 
 <p>Now to test out some of the awesome functionality of this framework. I <a href="http://www.meteor.com/examples/todos">followed an example</a> and created a todo list:</p>
@@ -280,13 +278,9 @@ Now serving at totally-fake-url.meteor.com</code></pre>
 </div>
 
 
-<p>Opening totally-fake-url.meteor.com with my browser:</p>
+<p>Playing around with creating new todos and lists, it is clear that data is being added and changed instantly and persistently.</p>
 
-<p><img src="http://www.katieleonard.ca/assets/images/meteortodo.png" alt="Meteor" /></p>
-
-<p>Playing around with creating new todos and lists, it is clear that data is being added and changed instantly and persistently. From the docs:</p>
-
-<blockquote><p>A Meteor application is a mix of JavaScript that runs inside a client web browser, JavaScript that runs on the Meteor server inside a Node.js container, and all the supporting HTML fragments, CSS rules, and static assets.</p></blockquote>
+<p>A Meteor application is a mix of JavaScript that runs inside a client web browser, JavaScript that runs on the Meteor server inside a Node.js container, and all the supporting HTML fragments, CSS rules, and static assets.</p>
 
 <p>I am really looking forward to diving further into <a href="http://docs.meteor.com/#concepts">the docs</a> to learn more about this incredible framework.
 AWESOME</p>

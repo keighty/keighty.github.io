@@ -118,7 +118,7 @@
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/meatier-apps-with-meteor/</loc>
-        <lastmod>2014-01-13T07:44:48-08:00</lastmod>
+        <lastmod>2014-01-13T19:45:29-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/partial-to-ajax/</loc>
@@ -129,12 +129,16 @@
         <lastmod>2014-01-13T07:44:11-08:00</lastmod>
     </url>
     <url>
+        <loc>http://www.katieleonard.ca/404.html</loc>
+        <lastmod>2014-01-13T21:23:50-08:00</lastmod>
+    </url>
+    <url>
         <loc>http://www.katieleonard.ca/projects/</loc>
         <lastmod>2014-01-12T18:55:25-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/archives/</loc>
-        <lastmod>2014-01-13T07:54:42-08:00</lastmod>
+        <lastmod>2014-01-13T19:45:29-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/robots.txt</loc>
@@ -142,6 +146,6 @@
     </url>
     <url>
         <loc>http://www.katieleonard.ca/</loc>
-        <lastmod>2014-01-13T07:54:42-08:00</lastmod>
+        <lastmod>2014-01-13T19:45:29-08:00</lastmod>
     </url>
 </urlset>
