@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-13T21:24:34-08:00</updated>
+  <updated>2014-01-13T22:10:06-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,64 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Get Clean]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/get-clean/"/>
+    <updated>2014-01-13T21:29:03-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/get-clean</id>
+    <content type="html"><![CDATA[<p>I experiment a lot before I choose an implementation I like. I am sure I am not alone in making a few (or many) false starts, and yet feeling sick at the thought of deleting any code. What if one of those paths I started down was the right one? This loss aversion often leads to working trees of non-working code, and <code>git stash</code>-es that I will never revisit. If I stop myself from going too far down yet another road without an end in sight, attempts to clean up my working directory often stall miserably at the end of a <code>git checkout .</code>:<!--more--></p>
+
+<p>```bash
+On branch intelligent_branch_name</p>
+
+<h1>Untracked files:</h1>
+
+<h1>(use &ldquo;git add <file>&hellip;&rdquo; to include in what will be committed)</h1>
+
+<p>#</p>
+
+<h1>../test/yay_I_wrote_tests.rb</h1>
+
+<h1>../helpers/yay_I_wrote_a_helper.rb</h1>
+
+<h1>../helpers/how_many_helpers_did_I_write.rb</h1>
+
+<h1>../views/i_dont_remember_creating_this_file.rb</h1>
+
+<h1>../models/oh_thats_where_that_went.rb</h1>
+
+<p>```</p>
+
+<p>Once upon a time, I would click my way through <code>git rm</code> after <code>git rm</code>. A small improvement in <code>git rm</code> efficiency came when I discovered I could <code>git rm</code> more than one file at a time (don&rsquo;t judge me, I am new at this). Still, the biggest break-through came when a coworker, perhaps observing my struggles, pointed me to <a href="http://ndpsoftware.com/git-cheatsheet.html">git-cheatsheet</a> &mdash; a interactive visual tool to display the relevant commands for each stage of my git workflow.</p>
+
+<h3>Enter <code>git clean</code></h3>
+
+<p>Git clean is a force to be reckoned with, and not just because it doesn&rsquo;t do anything unless you force it.</p>
+
+<p><code>bash Use the -n flag to describe the action the cleaner would take linenos:false
+$ git clean -n
+Would remove ../helpers/yay_I_wrote_a_helper.rb
+Would remove ../helpers/how_many_helpers_did_I_write.rb
+Would remove ../views/i_dont_remember_creating_this_file.rb
+Would remove ../models/oh_thats_where_that_went.rb
+$
+</code></p>
+
+<p><code>bash Use the -f flag to force the cleanup linenos:false
+$ git clean -f
+removed ../helpers/yay_I_wrote_a_helper.rb
+removed ../helpers/how_many_helpers_did_I_write.rb
+removed ../views/i_dont_remember_creating_this_file.rb
+removed ../models/oh_thats_where_that_went.rb
+$
+</code></p>
+
+<p>Now I can be as crufty as I want to be in my working tree, because <code>git</code> will be there to clean up the mess.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Git-Picking]]></title>
