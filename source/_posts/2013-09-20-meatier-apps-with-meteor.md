@@ -54,8 +54,6 @@ ln -s /usr/bin/mongod {% endhighlight %}
 
 Brilliant! Following these instructions, I was finally able to start meteor.
 
-![Meteor]({{ site.url }}/assets/images/meteor.png)
-
 ###Getting down to business
 Now to test out some of the awesome functionality of this framework. I [followed an example](http://www.meteor.com/examples/todos) and created a todo list:
 
@@ -67,12 +65,9 @@ Deploying to totally-fake-url.meteor.com.  Bundling...
 Uploading...
 Now serving at totally-fake-url.meteor.com {% endhighlight %}
 
-Opening totally-fake-url.meteor.com with my browser:
+Playing around with creating new todos and lists, it is clear that data is being added and changed instantly and persistently.
 
-![Meteor]({{ site.url }}/assets/images/meteortodo.png)
-
-Playing around with creating new todos and lists, it is clear that data is being added and changed instantly and persistently. From the docs:
-> A Meteor application is a mix of JavaScript that runs inside a client web browser, JavaScript that runs on the Meteor server inside a Node.js container, and all the supporting HTML fragments, CSS rules, and static assets.
+A Meteor application is a mix of JavaScript that runs inside a client web browser, JavaScript that runs on the Meteor server inside a Node.js container, and all the supporting HTML fragments, CSS rules, and static assets.
 
 I am really looking forward to diving further into [the docs](http://docs.meteor.com/#concepts) to learn more about this incredible framework.
 AWESOME
