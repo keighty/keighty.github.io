@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Runtime For Your Life"
+date: 2013-08-19 21:29:03 -0800
 comments: true
 description: ""
 category: eh

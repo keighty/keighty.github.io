@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Flex Your Lexer"
+date: 2013-08-15 21:29:03 -0800
 comments: true
 description: ""
 category: eh

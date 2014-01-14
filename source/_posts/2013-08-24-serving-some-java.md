@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Serving Some Java"
+date: 2013-08-24 21:29:03 -0800
 comments: true
 description: ""
 category: java

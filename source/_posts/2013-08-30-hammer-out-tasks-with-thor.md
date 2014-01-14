@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Hammer-out Tasks with Thor"
+date: 2013-08-30 21:29:03 -0800
 comments: true
 description: ""
 category: ruby

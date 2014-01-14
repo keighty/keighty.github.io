@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Rails, You Can Depend on Javascript"
+date: 2013-09-16 21:29:03 -0800
 comments: true
 description: ""
 category: rails

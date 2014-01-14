@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Thor Sets Up A Project"
+date: 2013-09-08 21:29:03 -0800
 comments: true
 description: ""
 category: ruby

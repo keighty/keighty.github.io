@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Show-off with GitHub and Docco"
+date: 2013-08-06 21:29:03 -0800
 comments: true
 description: ""
 category: web

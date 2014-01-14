@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Git-Picking"
+date: 2013-07-24 21:29:03 -0800
 comments: true
 description: ""
 category: git

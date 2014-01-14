@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "State of the QuickUnion"
+date: 2013-08-04 21:29:03 -0800
 comments: true
 description: ""
 category: ruby

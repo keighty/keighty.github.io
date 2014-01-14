@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "State of the UnionFind"
+date: 2013-07-30 21:29:03 -0800
 comments: true
 description: ""
 category: ruby

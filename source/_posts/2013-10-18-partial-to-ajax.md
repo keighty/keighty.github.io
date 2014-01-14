@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Partial to Ajax"
+date: 2013-10-18 21:29:03 -0800
 comments: true
 description: ""
 category: rails

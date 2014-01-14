@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Procuring Provisions"
+date: 2013-07-27 21:29:03 -0800
 comments: true
 description: ""
 category: heroku

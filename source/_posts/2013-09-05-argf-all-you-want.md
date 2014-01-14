@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "ARGF all you want"
+date: 2013-09-05 21:29:03 -0800
 comments: true
 description: ""
 category: ruby

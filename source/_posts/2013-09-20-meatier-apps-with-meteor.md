@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Meatier Apps With Meteor"
+date: 2013-10-20 21:29:03 -0800
 comments: true
 description: ""
 category: javascript
