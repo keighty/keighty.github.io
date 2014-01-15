@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Projects - keighty</title>
+  <title>Meteor User - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Projects Learning Grid Using Meteor to track my learning goals is easy! As I go, I can move a javascript MVVM from &ldquo;Learning Zone&rdquo; to & &hellip;">
+  <meta name="description" content="&ldquo;Getting Started with Meteor.js JavaScript Framework&rdquo; by Isaac Strack is a great introduction to a powerful tool. User accounts in three &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/projects">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/meteor-user">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -77,87 +77,137 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Projects</h1>
+    
+      <h1 class="entry-title">Meteor User</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-14T19:38:16-08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2014</time>
+        
+      </p>
     
   </header>
-  
-  <h2><a href="http://github.com/keighty/learningGrid"><i class="fa fa-github"></i></a> Learning Grid</h2>
 
 
-<p>Using <a href="https://www.meteor.com/">Meteor</a> to track my <a href="http://learninggrid.meteor.com/">learning goals</a> is easy! As I go, I can move a javascript MVVM from &ldquo;Learning Zone&rdquo; to &ldquo;Comfort Zone&rdquo;, and manage my future projects along the way.</p>
+<div class="entry-content"><p><a href="http://www.packtpub.com/getting-started-with-meteor-javascript-framework/book">&ldquo;Getting Started with Meteor.js JavaScript Framework&rdquo;</a> by Isaac Strack is a great introduction to a powerful tool.</p>
 
-<h2><a href="http://github.com/keighty/eh-"><i class="fa fa-github"></i></a> Eh?</h2>
+<!--more-->
 
 
-<p><a href="http://www.katieleonard.ca/eh-/index.html">Eh?</a> is a programming language I am building using idiomatic Canadianisms. I am gaining a greater understanding of how languages function, and love considering what features I want in a language.</p>
+<h3>User accounts in three easy steps</h3>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p>Meteor rolls its own user accounts system, and getting it running on your application is a three step process:</p>
+
+<figure class='code'><figcaption><span>1) command line: Add the relevant packages</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>a Canadian
-</span><span class='line'>with toque
-</span><span class='line'>with scarf
-</span><span class='line'>with broom
-</span><span class='line'>
-</span><span class='line'>can curl
-</span><span class='line'>    if skip
-</span><span class='line'>      say "Hurry!"
-</span><span class='line'>    elsif lead
-</span><span class='line'>      say "That's too much ice..."
-</span><span class='line'>    eh?
-</span><span class='line'>  eh?
-</span><span class='line'>eh?</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor add accounts-base
+</span><span class='line'>accounts-base: A user account system
+</span><span class='line'><span class="nv">$ </span>meteor add accounts-password
+</span><span class='line'>accounts-password: Password support <span class="k">for </span>accounts
+</span><span class='line'><span class="nv">$ </span>meteor add email
+</span><span class='line'>email: Send email messages
+</span><span class='line'><span class="nv">$ </span>meteor add accounts-ui
+</span></code></pre></td></tr></table></div></figure>
 
 
 
 
-<h2><a href="http://github.com/keighty/JSGames"><i class="fa fa-github"></i></a> JSGames</h2>
+<figure class='code'><figcaption><span>2) html: Add a div to hold the login button</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;float:right; margin-right:20px;&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  {{loginButtons align=&quot;right&quot;}}
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>I wrote <a href="http://js-games.herokuapp.com/">JSGames</a> to practice different web technologies, including jQuery, Bootstrap, Sinatra, Rspec, Jasmine, ActiveRecord, and PostgreSQL.</p>
-
-<ul>
-<li><a href="http://js-games.herokuapp.com/solitaire">Solitaire</a>: Similar to peg solitaire, the object of the game is to turn all the squares blue.</li>
-<li><a href="http://js-games.herokuapp.com/mastermind">Mastermind</a>: Like the board game, Mastermind is a single-player code-breaking game.</li>
-<li><a href="http://js-games.herokuapp.com/animalquiz">Animal Quiz</a>: An artificial intelligence game for teaching a database to guess the animal you are thinking of.</li>
-</ul>
 
 
-<h2><a href="http://github.com/keighty/PCSnotes/tree/gh-pages"><i class="fa fa-github"></i></a> Code Samples</h2>
+<figure class='code'><figcaption><span>3) client javascript: Add an Accounts config</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Accounts</span><span class="p">.</span><span class="nx">ui</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">passwordSignupFields</span><span class="o">:</span> <span class="s1">&#39;USERNAME_AND_OPTIONAL_EMAIL&#39;</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>I used <a href="http://jashkenas.github.io/docco/">Docco</a> to generate annotated documentation for some useful pieces of code.</p>
+<h2>The catch</h2>
 
-<ul>
-<li><a href="http://www.katieleonard.ca/PCSnotes/docs/benchmark.html">Benchmark.rb</a></li>
-<li><a href="http://www.katieleonard.ca/PCSnotes/docs/animal_quiz.html">Animal Quiz.rb</a></li>
-</ul>
+<p>While the server side and client side code looks similar they are definitely not interchangeable. Server code run on the client side will likely fail silently, but client code run on the server will crash the app. One place where I got tripped up was accessing the userId:</p>
+
+<h3>Server side <code>this.userId</code></h3>
+
+<p><span class='pullquote-right' data-pullquote='Use this.userId inside the server publish function'>
+In Meteor server side javascript the context is clear: <code>this</code> is called in the context of a Meteor object, and you can therefore make inquiries about its properties. Use this.userId inside the server publish function to access the id of the current user (or null if no user is logged in &mdash; from the <a href="http://docs.meteor.com/#publish_userId">docs</a>).
+</span></p>
+
+<h3>Client side: <code>Meteor.userId()</code></h3>
+
+<p><span class='pullquote-right' data-pullquote='Use Meteor.userId() anywhere BUT in the server publish function'>
+In the Meteor client side, <code>this</code> has a different context: the <code>window</code> object. The window object has a userId property that can be set at Document.ready(), but in the case that a user logs out and another user logs in to that same window without a page refresh, <code>window.userId</code> will retain the id of the first user. Use Meteor.userId() anywhere BUT in the server publish function to get the current user id (or null if no user is logged in &mdash; from the <a href="http://docs.meteor.com/#accounts_api">docs</a>).
+</span></p>
+
+<p>Thanks to this <a href="http://stackoverflow.com/a/20781135">stackoverflow</a> response, the Meteor <a href="http://docs.meteor.com/">docs</a>, and packtpub&rsquo;s awesome <a href="http://www.packtpub.com/getting-started-with-meteor-javascript-framework/book">support page</a> for helping me get reacquainted with javascript contexts.</p>
+
+<p>Awesome</p>
+</div>
 
 
-<h2>Android Applications</h2>
+  <footer>
+    <p class="meta">
+      
+  
 
-<p><a href="http://kapplications.ca/">KApplications</a> is a side project for building personal productivity Android applications.</p>
+<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
+
+      
+
+
+
+
+
+
+
 
   
-    <footer>
+
+
+<time datetime="2014-01-14T19:38:16-08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2014</time>
       
-      
-        <div class="sharing">
+
+<span class="categories">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/projects/index.html" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/projects/index.html" >Tweet</a>
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/meteor-user/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/meteor-user/" >Tweet</a>
   
   
   
@@ -165,10 +215,21 @@
   
 </div>
 
+    
+    <p class="meta">
       
-    </footer>
-  
+        <a class="basic-alignment left" href="/blog/2014/get-clean/" title="Previous Post: get clean">&laquo; get clean</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -264,7 +325,10 @@
       var disqus_shortname = 'keightyleonard';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/meteor-user/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2014/meteor-user/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-13T22:17:43-08:00</updated>
+  <updated>2014-01-14T21:42:02-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,67 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Meteor User]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/meteor-user/"/>
+    <updated>2014-01-14T19:38:16-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/meteor-user</id>
+    <content type="html"><![CDATA[<p><a href="http://www.packtpub.com/getting-started-with-meteor-javascript-framework/book">&ldquo;Getting Started with Meteor.js JavaScript Framework&rdquo;</a> by Isaac Strack is a great introduction to a powerful tool.</p>
+
+<!--more-->
+
+
+<h3>User accounts in three easy steps</h3>
+
+<p>Meteor rolls its own user accounts system, and getting it running on your application is a three step process:</p>
+
+<p>
+<code>bash 1) command line: Add the relevant packages
+$ meteor add accounts-base
+accounts-base: A user account system
+$ meteor add accounts-password
+accounts-password: Password support for accounts
+$ meteor add email
+email: Send email messages
+$ meteor add accounts-ui
+</code>
+</p>
+
+<p>
+```html 2) html: Add a div to hold the login button</p>
+
+<div style="float:right; margin-right:20px;">
+  {{loginButtons align="right"}}
+</div>
+
+
+<p>```
+</p>
+
+<p><code>javascript 3) client javascript: Add an Accounts config
+Accounts.ui.config({
+  passwordSignupFields: 'USERNAME_AND_OPTIONAL_EMAIL'
+});
+</code></p>
+
+<h2>The catch</h2>
+
+<p>While the server side and client side code looks similar they are definitely not interchangeable. Server code run on the client side will likely fail silently, but client code run on the server will crash the app. One place where I got tripped up was accessing the userId:</p>
+
+<h3>Server side <code>this.userId</code></h3>
+
+<p>Surround your pullquote like this {" text to be quoted "}</p>
+
+<h3>Client side: <code>Meteor.userId()</code></h3>
+
+<p>Surround your pullquote like this {" text to be quoted "}</p>
+
+<p>Thanks to this <a href="http://stackoverflow.com/a/20781135">stackoverflow</a> response, the Meteor <a href="http://docs.meteor.com/">docs</a>, and packtpub&rsquo;s awesome <a href="http://www.packtpub.com/getting-started-with-meteor-javascript-framework/book">support page</a> for helping me get reacquainted with javascript contexts.</p>
+
+<p>Awesome</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Meatier Apps With Meteor]]></title>

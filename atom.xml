@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-13T22:17:43-08:00</updated>
+  <updated>2014-01-14T21:42:02-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,81 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Meteor User]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/meteor-user/"/>
+    <updated>2014-01-14T19:38:16-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/meteor-user</id>
+    <content type="html"><![CDATA[<p><a href="http://www.packtpub.com/getting-started-with-meteor-javascript-framework/book">&ldquo;Getting Started with Meteor.js JavaScript Framework&rdquo;</a> by Isaac Strack is a great introduction to a powerful tool.</p>
+
+<!--more-->
+
+
+<h3>User accounts in three easy steps</h3>
+
+<p>Meteor rolls its own user accounts system, and getting it running on your application is a three step process:</p>
+
+<figure class='code'><figcaption><span>1) command line: Add the relevant packages</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor add accounts-base
+</span><span class='line'>accounts-base: A user account system
+</span><span class='line'><span class="nv">$ </span>meteor add accounts-password
+</span><span class='line'>accounts-password: Password support <span class="k">for </span>accounts
+</span><span class='line'><span class="nv">$ </span>meteor add email
+</span><span class='line'>email: Send email messages
+</span><span class='line'><span class="nv">$ </span>meteor add accounts-ui
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>2) html: Add a div to hold the login button</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;float:right; margin-right:20px;&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  {{loginButtons align=&quot;right&quot;}}
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>3) client javascript: Add an Accounts config</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Accounts</span><span class="p">.</span><span class="nx">ui</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">passwordSignupFields</span><span class="o">:</span> <span class="s1">&#39;USERNAME_AND_OPTIONAL_EMAIL&#39;</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>The catch</h2>
+
+<p>While the server side and client side code looks similar they are definitely not interchangeable. Server code run on the client side will likely fail silently, but client code run on the server will crash the app. One place where I got tripped up was accessing the userId:</p>
+
+<h3>Server side <code>this.userId</code></h3>
+
+<p><span class='pullquote-right' data-pullquote='Use this.userId inside the server publish function'>
+In Meteor server side javascript the context is clear: <code>this</code> is called in the context of a Meteor object, and you can therefore make inquiries about its properties. Use this.userId inside the server publish function to access the id of the current user (or null if no user is logged in &mdash; from the <a href="http://docs.meteor.com/#publish_userId">docs</a>).
+</span></p>
+
+<h3>Client side: <code>Meteor.userId()</code></h3>
+
+<p><span class='pullquote-right' data-pullquote='Use Meteor.userId() anywhere BUT in the server publish function'>
+In the Meteor client side, <code>this</code> has a different context: the <code>window</code> object. The window object has a userId property that can be set at Document.ready(), but in the case that a user logs out and another user logs in to that same window without a page refresh, <code>window.userId</code> will retain the id of the first user. Use Meteor.userId() anywhere BUT in the server publish function to get the current user id (or null if no user is logged in &mdash; from the <a href="http://docs.meteor.com/#accounts_api">docs</a>).
+</span></p>
+
+<p>Thanks to this <a href="http://stackoverflow.com/a/20781135">stackoverflow</a> response, the Meteor <a href="http://docs.meteor.com/">docs</a>, and packtpub&rsquo;s awesome <a href="http://www.packtpub.com/getting-started-with-meteor-javascript-framework/book">support page</a> for helping me get reacquainted with javascript contexts.</p>
+
+<p>Awesome</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Get Clean]]></title>
@@ -1976,87 +2051,6 @@ $ git cherry-pick 8394b37494b63754f42ecaf19244fe6d8a36942f
 <p>Now you can merge this branch with master, or continue fleshing out the feature on a clean branch, keeping only the good stuff and abandoning the bad, making experimentation easy.</p>
 
 <p>AWESOME</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Sinatra in a Console]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/sinatra-in-a-console/"/>
-    <updated>2013-07-22T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/sinatra-in-a-console</id>
-    <content type="html"><![CDATA[<p>Sinatra does not have a default console like rails does. If you are writing in a rails environment and need to test out a helper method, or want to check on the state of a record in the database, dropping down into the rails console is as easy as typing:</p>
-
-<div>
-  <pre><code class='bash'>$ rails c</code></pre>
-</div>
-
-
-<p>How can we achieve the same ability in Sinatra?<!--more--></p>
-
-<h3>Tux</h3>
-
-<p>Tux is a ruby gem that generates a sinatra console. It reads the config.ru, allows you to interact with App methods, and provides empty request and response objects to for investigating communication between views and the Sinatra controller.</p>
-
-<p>Add Tux to your Gemfile:</p>
-
-<div>
-  <pre><code class='ruby'>group :development, :test do
-  ...
-  gem &#39;tux&#39;
-end</code></pre>
-</div>
-
-
-<p>Don&rsquo;t forget to bundle!</p>
-
-<p>At the command line, start up tux and use rack.actions to view all the methods available:</p>
-
-<div>
-  <pre><code class='bash'>$ tux
-Loading development environment (Rack 1.2)
-&gt;&gt; rack.actions
-=&gt; [:request, :get, :post, :put, :patch, :delete, :options, :head, :follow_redirect!, :header, :set_cookie, :clear_cookies, :authorize, :basic_authorize, :digest_authorize, :last_response, :last_request]
-&gt;&gt;</code></pre>
-</div>
-
-
-<p>You can access any method from your application as well.
-Of course, if you are working in Sinatra, you probably want to go as lightweight as possible, which is why you can also use:</p>
-
-<h3>Basic irb</h3>
-
-<p>It is as simple as using irb and requiring your main app file. You have access to all the dependencies and files that your application does by simply requiring that one file. You can check state, call methods, create objects, whatever you need:</p>
-
-<div>
-  <pre><code class='bash'>$ irb
-&gt; require &#39;./app.rb&#39;
- =&gt; true
-&gt; User.all
-D, [2013-07-22T15:47:49.230146 #54081] DEBUG -- :   User Load (0.2ms)  SELECT &quot;users&quot;.* FROM &quot;users&quot;
- =&gt; #&lt;ActiveRecord::Relation [#&lt;User id: 1, name: &quot;Gordon Shumway&quot;, email: &quot;gordon@example.com&quot;, created_at: &quot;2013-07-22 22:45:48&quot;, updated_at: &quot;2013-07-22 22:45:48&quot;&gt;, #&lt;User id: 2, name: &quot;Fanny Eubanks&quot;, email: &quot;fanny@example.com&quot;, created_at: &quot;2013-07-22 22:45:48&quot;, updated_at: &quot;2013-07-22 22:45:48&quot;&gt;]&gt;
-&gt;</code></pre>
-</div>
-
-
-<p>This can be called even more elegantly at the command line:</p>
-
-<div>
-  <pre><code class='bash'>$ irb -r ./app.rb</code></pre>
-</div>
-
-
-<p>or through a Rake task:</p>
-
-<div>
-  <pre><code class='bash'>desc &quot;run irb console&quot;
-task :console, :environment do |t, args|
-  ENV[&#39;RACK_ENV&#39;] = args[:environment] || &#39;development&#39;
-  exec &quot;irb -r irb/completion -r ./app.rb&quot;
-end</code></pre>
-</div>
-
-
-<p>Awesome</p>
 ]]></content>
   </entry>
   
