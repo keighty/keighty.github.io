@@ -8,7 +8,7 @@ categories: opensource
 
 ##``git checkout`` the Ego.
 
-In the interests of giving back to the software community, I have been looking for an active open-source project to contribute to. I am working to gain mastery of ruby on rails, so naturally I gravitate towards projects of that ilk. Unfortunately, I have gained just enough knowledge to be a little smug, so when I found a project I wanted to work on I scrolled immediately to the README and started scanning. The first block of text was headed by:
+In the interests of giving back to the software community, I have been looking for an active open-source project to contribute to. I am working to gain mastery of ruby on rails, so naturally I gravitate towards projects of that ilk. Unfortunately, I have gained just enough knowledge to be a little smug, so when I found a project I wanted to work on I scrolled immediately to the README and started scanning.<!--more--> The first block of text was headed by:
 
 ###Start here if this is your first ruby on rails project...
 
