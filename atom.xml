@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-18T12:35:05-08:00</updated>
+  <updated>2014-01-18T12:38:26-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -20,7 +20,7 @@
     <id>http://www.katieleonard.ca/blog/2014/opensource-setup-git-checkout-the-ego</id>
     <content type="html"><![CDATA[<h2><code>git checkout</code> the Ego.</h2>
 
-<p>In the interests of giving back to the software community, I have been looking for an active open-source project to contribute to. I am working to gain mastery of ruby on rails, so naturally I gravitate towards projects of that ilk. Unfortunately, I have gained just enough knowledge to be a little smug, so when I found a project I wanted to work on I scrolled immediately to the README and started scanning. The first block of text was headed by:</p>
+<p>In the interests of giving back to the software community, I have been looking for an active open-source project to contribute to. I am working to gain mastery of ruby on rails, so naturally I gravitate towards projects of that ilk. Unfortunately, I have gained just enough knowledge to be a little smug, so when I found a project I wanted to work on I scrolled immediately to the README and started scanning.<!--more--> The first block of text was headed by:</p>
 
 <h3>Start here if this is your first ruby on rails project&hellip;</h3>
 
