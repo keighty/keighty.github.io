@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Get Clean - keighty</title>
+  <title>Open-source Setup: - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="use git clean to remove files from working tree">
+  <meta name="description" content="git checkout the Ego. In the interests of giving back to the software community, I have been looking for an active open-source project to contribute &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/get-clean">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/opensource-setup-git-checkout-the-ego">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -81,7 +81,7 @@
   
   <header>
     
-      <h1 class="entry-title">Get Clean</h1>
+      <h1 class="entry-title">Open-source Setup:</h1>
     
     
       <p class="meta">
@@ -97,16 +97,22 @@
   
 
 
-<time datetime="2014-01-13T21:29:03-08:00" pubdate data-updated="true">Jan 13<span>th</span>, 2014</time>
+<time datetime="2014-01-18T11:18:29-08:00" pubdate data-updated="true">Jan 18<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I experiment a lot before I choose an implementation I like. I am sure I am not alone in making a few (or many) false starts, and yet feeling sick at the thought of deleting any code. What if one of those paths I started down was the right one? This loss aversion often leads to working trees of non-working code, and <code>git stash</code>-es that I will never revisit. If I stop myself from going too far down yet another road without an end in sight, attempts to clean up my working directory often stall miserably at the end of a <code>git checkout .</code>:<!--more--></p>
+<div class="entry-content"><h2><code>git checkout</code> the Ego.</h2>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p>In the interests of giving back to the software community, I have been looking for an active open-source project to contribute to. I am working to gain mastery of ruby on rails, so naturally I gravitate towards projects of that ilk. Unfortunately, I have gained just enough knowledge to be a little smug, so when I found a project I wanted to work on I scrolled immediately to the README and started scanning. The first block of text was headed by:</p>
+
+<h3>Start here if this is your first ruby on rails project&hellip;</h3>
+
+<p>&hellip;with a link to a blog post. I kept scanning for information that would be relevant to ME. This was not my first ruby on rails project. I have my elaborate dev environment set up just the way I like it, thank you very much, and I can reproduce your project with a flick of my config file, I am sure (chuckles condescendingly). This is a snippet of the proceeding workflow:</p>
+
+<figure class='code'><figcaption><span>Workflow of the egotistical programmer.</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -115,57 +121,99 @@
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>On branch intelligent_branch_name
-</span><span class='line'><span class="c"># Untracked files:</span>
-</span><span class='line'><span class="c">#   (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)</span>
-</span><span class='line'><span class="c">#</span>
-</span><span class='line'><span class="c"># ../test/yay_I_wrote_tests.rb</span>
-</span><span class='line'><span class="c"># ../helpers/yay_I_wrote_a_helper.rb</span>
-</span><span class='line'><span class="c"># ../helpers/how_many_helpers_did_I_write.rb</span>
-</span><span class='line'><span class="c"># ../views/i_dont_remember_creating_this_file.rb</span>
-</span><span class='line'><span class="c"># ../models/oh_thats_where_that_went.rb</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone repo
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>repo/
+</span><span class='line'><span class="nv">$ </span>bundle install
+</span><span class='line'>Errors: need to update your rubygems
+</span><span class='line'><span class="nv">$ </span>gem update --system
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:setup
+</span><span class='line'>Errors: need postgres installed <span class="o">(</span>no inkling in the README<span class="o">)</span>
+</span><span class='line'><span class="nv">$ </span>brew install postgres
+</span><span class='line'>... follow half of the required instructions
+</span><span class='line'>Errors
+</span><span class='line'>Frustration because you don<span class="err">&#39;</span>t know how to follow instructions
+</span><span class='line'><span class="nv">$ </span>brew info postgres
+</span><span class='line'>...
+</span><span class='line'><span class="s2">&quot;ooooohhhhhhhh... I missed a step&quot;</span>
+</span><span class='line'><span class="nv">$ </span>follow instructions this <span class="nb">time</span>
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:setup
+</span><span class='line'>Errors: need redis installed
+</span><span class='line'><span class="nv">$ </span>brew install redis
+</span><span class='line'><span class="nv">$ </span>follow instructions because I have learned my lesson
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:setup
+</span><span class='line'>Errors: redis config file missing information
+</span><span class='line'>Frustration because redis config file was removed 100 commits ago
+</span><span class='line'>...
+</span><span class='line'>Determine that first pull request
+</span><span class='line'>will be an amendment to setup documentation
+</span><span class='line'>Rebuild config file and add host name
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:setup
+</span><span class='line'>Errors: required seeds file was removed 100 commits ago
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:migrate
+</span><span class='line'><span class="nv">$ </span>SUCCESS!!!
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake spec
+</span><span class='line'>Errors: run db:test:prepare
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:test:prepare
+</span><span class='line'>Errors
+</span><span class='line'>Frustration
+</span><span class='line'><span class="nv">$ RAILS_ENV</span><span class="o">=</span><span class="nb">test </span>bundle <span class="nb">exec </span>rake db:migrate
+</span><span class='line'><span class="nv">$ </span>SUCCESS!!
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake spec
+</span><span class='line'>Errors... sigh.. more errors
+</span><span class='line'><span class="nv">$ </span>limp away <span class="k">for </span>lunch, live to contribute another day
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Once upon a time, I would click my way through <code>git rm</code> after <code>git rm</code>. A small improvement in <code>git rm</code> efficiency came when I discovered I could <code>git rm</code> more than one file at a time (don&rsquo;t judge me, I am new at this). Still, the biggest break-through came when a coworker, perhaps observing my struggles, pointed me to <a href="http://ndpsoftware.com/git-cheatsheet.html">git-cheatsheet</a> &mdash; a interactive visual tool to display the relevant commands for each stage of my git workflow.</p>
+<p>Getting a new project setup and functional is not an easy chore, and I was quite chastened when I swallowed my pride and checked out the blog post for first timers, which boiled down to:</p>
 
-<h3>Enter <code>git clean</code></h3>
-
-<p>Git clean is a force to be reckoned with, and not just because it doesn&rsquo;t do anything unless you force it.</p>
-
-<figure class='code'><figcaption><span>Use the -n flag to describe the action the cleaner would take linenos:false</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clean -n
-</span><span class='line'>Would remove ../helpers/yay_I_wrote_a_helper.rb
-</span><span class='line'>Would remove ../helpers/how_many_helpers_did_I_write.rb
-</span><span class='line'>Would remove ../views/i_dont_remember_creating_this_file.rb
-</span><span class='line'>Would remove ../models/oh_thats_where_that_went.rb
-</span><span class='line'><span class="err">$</span>
-</span></code></pre></td></tr></table></div></figure>
+<ol>
+<li>Install <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a></li>
+<li>Install <a href="http://www.vagrantup.com/">Vagrant</a></li>
+<li><code>git clone repo</code></li>
+<li><code>cd repo</code></li>
+<li><code>vagrant up</code></li>
+<li><code>vagrant ssh</code></li>
+<li><code>cd /vagrant</code></li>
+<li><code>bundle install</code></li>
+<li><code>bundle exec rake db:migrate</code></li>
+<li><code>bundle exec rails s</code></li>
+</ol>
 
 
+<p>I could have been contributing hours ago, when I still had momentum! Perhaps my first pull request should still be to modify the README. I would rephrase the heading to read &ldquo;For all developers: get started right here&rdquo;, and then remove every other instruction that followed.</p>
 
-
-<figure class='code'><figcaption><span>Use the -f flag to force the cleanup linenos:false</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clean -f
-</span><span class='line'>removed ../helpers/yay_I_wrote_a_helper.rb
-</span><span class='line'>removed ../helpers/how_many_helpers_did_I_write.rb
-</span><span class='line'>removed ../views/i_dont_remember_creating_this_file.rb
-</span><span class='line'>removed ../models/oh_thats_where_that_went.rb
-</span><span class='line'><span class="err">$</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now I can be as crufty as I want to be in my working tree, because <code>git</code> will be there to clean up the mess.</p>
+<p>Perhaps I should go get started&hellip;</p>
 
 <p>Awesome.</p>
 </div>
@@ -190,12 +238,12 @@
   
 
 
-<time datetime="2014-01-13T21:29:03-08:00" pubdate data-updated="true">Jan 13<span>th</span>, 2014</time>
+<time datetime="2014-01-18T11:18:29-08:00" pubdate data-updated="true">Jan 18<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/git/'>git</a>
+    <a class='category' href='/blog/categories/opensource/'>opensource</a>
   
 </span>
 
@@ -204,7 +252,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/get-clean/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/get-clean/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/opensource-setup-git-checkout-the-ego/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/opensource-setup-git-checkout-the-ego/" >Tweet</a>
   
   
   
@@ -215,10 +263,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/factoring-in-nests/" title="Previous Post: Factoring In Nests">&laquo; Factoring In Nests</a>
+        <a class="basic-alignment left" href="/blog/2014/meteor-user/" title="Previous Post: Meteor user">&laquo; Meteor user</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/meteor-user/" title="Next Post: Meteor user">Meteor user &raquo;</a>
       
     </p>
   </footer>
@@ -325,8 +371,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/get-clean/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2014/get-clean/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/opensource-setup-git-checkout-the-ego/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2014/opensource-setup-git-checkout-the-ego/';
         var disqus_script = 'embed.js';
       
     (function () {

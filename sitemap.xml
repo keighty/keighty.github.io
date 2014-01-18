@@ -2,139 +2,143 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/TDD-is-the-way-to-be/</loc>
-        <lastmod>2014-01-13T07:54:42-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/blogging-with-jekyll-bootstrap/</loc>
-        <lastmod>2014-01-13T07:54:35-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/solving-namespace-conflicts-with-jquery/</loc>
-        <lastmod>2014-01-13T07:54:22-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/jquery-objects-vs-strings/</loc>
-        <lastmod>2014-01-13T07:54:07-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/javascript-has-spies/</loc>
-        <lastmod>2014-01-13T07:53:51-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/hoisting-with-javascript/</loc>
-        <lastmod>2014-01-13T07:53:38-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/no-indexhtml-no-cry/</loc>
-        <lastmod>2014-01-13T07:53:27-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/red-green-refactor/</loc>
-        <lastmod>2014-01-13T07:53:10-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/partial-to-sinatra/</loc>
-        <lastmod>2014-01-13T07:52:59-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/best-practices-pull-requests/</loc>
-        <lastmod>2014-01-13T07:52:45-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/a-flash-of-understanding/</loc>
-        <lastmod>2014-01-13T07:52:33-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/mass-assignment-x-gravity/</loc>
-        <lastmod>2014-01-13T07:51:32-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/get-your-kicks-on-localhost4567/</loc>
-        <lastmod>2014-01-13T07:49:46-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/sinatra-in-a-console/</loc>
-        <lastmod>2014-01-13T07:49:35-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/git-picking/</loc>
-        <lastmod>2014-01-13T22:16:54-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/procuring-provisions/</loc>
-        <lastmod>2014-01-13T22:16:42-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/state-of-the-unionfind/</loc>
-        <lastmod>2014-01-13T22:16:23-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/state-of-the-quickunion/</loc>
-        <lastmod>2014-01-13T22:16:13-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/show-off-with-github/</loc>
-        <lastmod>2014-01-13T22:16:02-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/canadian-flair/</loc>
-        <lastmod>2014-01-13T22:15:53-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/flex-your-lexer/</loc>
-        <lastmod>2014-01-13T22:15:40-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/parcel-parser/</loc>
-        <lastmod>2014-01-13T22:15:29-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/runtime-for-your-life/</loc>
-        <lastmod>2014-01-13T22:15:20-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/serving-some-java/</loc>
-        <lastmod>2014-01-13T22:15:10-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/hammer-out-tasks-with-thor/</loc>
-        <lastmod>2014-01-13T22:14:50-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/argf-all-you-want/</loc>
-        <lastmod>2014-01-13T22:14:18-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/thor-sets-up-a-project/</loc>
-        <lastmod>2014-01-13T22:14:05-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/ruby-execution/</loc>
-        <lastmod>2014-01-13T22:13:51-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/rails-depends-on-javascript/</loc>
-        <lastmod>2014-01-13T22:13:38-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/partial-to-ajax/</loc>
-        <lastmod>2014-01-13T22:13:14-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/meatier-apps-with-meteor/</loc>
-        <lastmod>2014-01-13T22:13:22-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2013/factoring-in-nests/</loc>
-        <lastmod>2014-01-13T22:12:48-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2014/get-clean/</loc>
-        <lastmod>2014-01-13T22:07:28-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/2014/meteor-user/</loc>
-        <lastmod>2014-01-14T21:41:06-08:00</lastmod>
+        <lastmod>2014-01-17T07:55:10-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.katieleonard.ca/blog/2014/opensource-setup-git-checkout-the-ego/</loc>
+        <lastmod>2014-01-18T12:33:12-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/404.html</loc>
@@ -146,7 +150,7 @@
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/archives/</loc>
-        <lastmod>2014-01-14T21:41:06-08:00</lastmod>
+        <lastmod>2014-01-18T12:33:12-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/robots.txt</loc>
@@ -154,6 +158,6 @@
     </url>
     <url>
         <loc>http://www.katieleonard.ca/</loc>
-        <lastmod>2014-01-14T21:41:06-08:00</lastmod>
+        <lastmod>2014-01-18T12:33:12-08:00</lastmod>
     </url>
 </urlset>
