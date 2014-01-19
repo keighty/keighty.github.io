@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-19T09:39:32-08:00</updated>
+  <updated>2014-01-19T09:41:21-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -143,9 +143,9 @@
 <!--more-->
 
 
-<h3>User accounts in four easy steps</h3>
+<h3>User accounts in three easy steps</h3>
 
-<p>Meteor rolls its own user accounts system, and getting it running on your application is a four step process:</p>
+<p>Meteor rolls its own user accounts system, and getting it running on your application is a three step process:</p>
 
 <figure class='code'><figcaption><span>1) command line: Add the relevant packages</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
