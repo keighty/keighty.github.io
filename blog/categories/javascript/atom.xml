@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-18T12:38:26-08:00</updated>
+  <updated>2014-01-19T09:33:31-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -25,7 +25,7 @@
 
 <h3>User accounts in three easy steps</h3>
 
-<p>Meteor rolls its own user accounts system, and getting it running on your application is a three step process:</p>
+<p>Meteor rolls its own user accounts system, and getting it running on your application is a four step process:</p>
 
 <p>
 <code>bash 1) command line: Add the relevant packages
@@ -36,6 +36,7 @@ accounts-password: Password support for accounts
 $ meteor add email
 email: Send email messages
 $ meteor add accounts-ui
+accounts-ui: Simple templates to add login widgets to an app
 </code>
 </p>
 
