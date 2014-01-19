@@ -8,8 +8,8 @@ categories: javascript
 
 ["Getting Started with Meteor.js JavaScript Framework"](http://www.packtpub.com/getting-started-with-meteor-javascript-framework/book) by Isaac Strack is a great introduction to a powerful tool.
 <!--more-->
-### User accounts in four easy steps
-Meteor rolls its own user accounts system, and getting it running on your application is a four step process:
+### User accounts in three easy steps
+Meteor rolls its own user accounts system, and getting it running on your application is a three step process:
 
 {% raw %}
 ```bash 1) command line: Add the relevant packages
