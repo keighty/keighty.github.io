@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "maintaining mongod"
+title: "mongod maintenance"
 date: 2014-01-22 07:23:10 -0800
 comments: true
 categories: mongodb
 ---
 
-My laptop's battery died. Not a big deal, it is an old laptop and is used to being abused. I do not, however, have an old installation of mongo. I am quite new to mongo (as with everything else), so when meteor told me that it could not find a running instance of mongodb, I immediately began by trying to start it up again<!--more-->:
+My laptop's battery died, and I let it. Not a big deal, it is an old laptop and is used to being abused. Every time it does a hard shut down like that I wonder if it will recover. The laptop recovered just fine, but mongo did not. When my computer coughed back to life, I politely requested a meteor server, to which meteor replied that it could not start my server because it could not find a running mongodb. My first instinct, naturally, was to start it up again<!--more-->:
 
 ```bash
 $ mongo start
