@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Mongodb | keighty]]></title>
+  <link href="http://www.katieleonard.ca/blog/categories/mongodb/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2014-01-22T18:46:52-08:00</updated>
+  <id>http://www.katieleonard.ca/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Maintaining Mongod]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/maintaining-mongod/"/>
+    <updated>2014-01-22T07:23:10-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/maintaining-mongod</id>
+    <content type="html"><![CDATA[<p>My laptop&rsquo;s battery died. Not a big deal, it is an old laptop and is used to being abused. I do not, however, have an old installation of mongo. I am quite new to mongo (as with everything else), so when meteor told me that it could not find a running instance of mongodb, I immediately began by trying to start it up again<!--more-->:</p>
+
+<p><code>bash
+$ mongo start
+MongoDB shell version: 2.4.6
+connecting to: start
+Mon Jan 20 07:42:47.289 Error: couldn't connect to server 127.0.0.1:27017 at src/mongo/shell/mongo.js:145
+exception: connect failed
+</code></p>
+
+<p>Followed by a trip to the logs:
+```bash This error has been reformatted to fit your tv.
+$ tail /var/log/mongodb/mongodb.log</p>
+
+<hr />
+
+<p>[initandlisten] exception in initAndListen: 10309 Unable to create/open lock file: /var/lib/mongodb/mongod.lock errno:13 Permission denied Is a mongod instance already running?, terminating
+dbexit:
+[initandlisten] shutdown: going to close listening sockets&hellip;
+[initandlisten] shutdown: going to flush diaglog&hellip;
+[initandlisten] shutdown: going to close sockets&hellip;
+[initandlisten] shutdown: waiting for fs preallocator&hellip;
+[initandlisten] shutdown: closing all files&hellip;
+[initandlisten] closeAllFiles() finished
+[initandlisten] shutdown: removing fs lock&hellip;
+[initandlisten] couldn&rsquo;t remove fs lock errno:9 Bad file descriptor
+dbexit: really exiting now
+```</p>
+
+<p>A lock file, you say? Well! I know what to do with those!</p>
+
+<p><code>bash Are you sure you want to mess with this?
+$ rm /var/lib/mongodb/mongod.lock
+rm: remove write-protected regular file `/var/lib/mongodb/mongod.lock'? n
+</code></p>
+
+<p>No, I am not sure &mdash; thanks for asking! After a deep breath and a reminder that I should not be so hasty (rtfm, katie), I found this note on <a href="http://docs.mongodb.org/manual/reference/configuration-options/#repair">mongodb.org</a>:</p>
+
+<blockquote><p>Note: Because mongod rewrites all of the database files during the repair routine, if you do not run repair under the same user account as mongod usually runs, you will need to run chown on your database files to correct the permissions before starting mongod again.</p></blockquote>
+
+<p>A file rewrite will include a lock file, will it not?</p>
+
+<p>```bash
+$ sudo -u mongodb mongod &mdash;repair &mdash;dbpath /var/lib/mongodb/
+[sudo] password for keighty:
+&hellip;
+sudo service mongodb start</p>
+
+<p>```</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+</feed>

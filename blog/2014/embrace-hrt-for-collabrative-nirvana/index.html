@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Factoring in Nests - keighty</title>
+  <title>Embrace HRT for Collabrative Nirvana - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="">
+  <meta name="description" content="Team Geek: A Software Developer&rsquo;s Guide to Working Well with Others by Brian W. Fitzpatrick and Ben Collins-Sussman. With decades of collective &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2013/factoring-in-nests">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/embrace-hrt-for-collabrative-nirvana">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -81,7 +81,7 @@
   
   <header>
     
-      <h1 class="entry-title">Factoring in Nests</h1>
+      <h1 class="entry-title">Embrace HRT for Collabrative Nirvana</h1>
     
     
       <p class="meta">
@@ -97,110 +97,28 @@
   
 
 
-<time datetime="2013-10-29T22:29:03-07:00" pubdate data-updated="true">Oct 29<span>th</span>, 2013</time>
+<time datetime="2014-01-20T07:07:15-08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I am building an application that uses several nested attributes: Users have many Goals (Goals belong_to Users), and Goals have many Hours (Hours belong_to Goals).</p>
+<div class="entry-content"><p><a href="http://www.amazon.com/gp/product/1449302440/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1449302440&amp;linkCode=as2&amp;tag=keighty-20">Team Geek: A Software Developer&rsquo;s Guide to Working Well with Others</a> by Brian W. Fitzpatrick and Ben Collins-Sussman.</p>
 
-<p>Using <a href="https://github.com/thoughtbot/factory_girl">FactoryGirl</a> to create a User is straightforward:</p>
+<p>With decades of collective experience, these two authors distill the essential philosophy required to be part of a healthy development team: HRT &mdash; humility, respect, and trust. These values are covered in the first chapter and the remainder of the book describes how to best use them as an engineer and as a manager. Some techniques particularly resonated with my world view.<!--more--></p>
 
-<div>
-  <pre><code class='ruby'>FactoryGirl.define do
-  factory :user do
-    sequence :name  { |n| &quot;person#{n}&quot; }
-    sequence :email { |n| &quot;person#{n}@example.com&quot; }
-  end
-end
+<h3>Fail early. Fail fast. Fail often</h3>
 
-describe User do
-  before  { @user = FactoryGirl.create(:user) }
-  subject { @user }
-  it { should respond_to(:name) }
-  ...
-end</code></pre>
-</div>
+<p>It is easy to pay lip-service to this philosophy, but it is impossible to adopt without a culture of HRT. From my own limited experience I can add &mdash; Communicate early. Communicate fast. Communicate often. &mdash; as another mantra of healthy team dynamics. Failure is always an option, but without HRT and open lines of communication it can take much more time to discover.</p>
 
+<h3>Make time vs manager time</h3>
 
-<p>How do I create Goals that are linked to the User?</p>
+<p>Fitzpatrick and Collins-Sussman drew on a lot of great resources, and there is as much gold in the footnotes as there is in the text. They referenced Paul Graham&rsquo;s essay, <a href="http://www.paulgraham.com/makersschedule.html">Maker&rsquo;s Schedule</a>, in which he contrasts the different working styles of managers and makers (writers or programmers). The manager&rsquo;s schedule can be divided into hour-long chunks that may be apportioned to meetings, appointments, or tasks.: the essence of David Allen&rsquo;s <a href="http://www.davidco.com/about-gtd">GTD</a> (Getting Things Done). Makers, on the other hand, cannot be effective in one hour intervals. Graham writes that a single meeting in the afternoon can affect the productivity for a whole day. First it breaks up the afternoon into two pieces that are not long enough to really get into the zone, then it psychologically leaks into the morning where you are &ldquo;less likely to start something ambitious&rdquo;. I can definitely identify with this propensity. The cost of task switching around meetings often results in a lost day.</p>
 
-<!--more-->
+<h3>Core values</h3>
 
-
-<h3>How to create Factories for nested attributes</h3>
-
-<h5>1. Make a new Factory for producing Goals:</h5>
-
-<div>
-  <pre><code class='ruby'>FactoryGirl.define do
-  factory :goal do
-    sequence :description { |n| &quot;my goal #{n}&quot; }
-    sequence :motivation  { |n| &quot;my motivation #{n}&quot; }
-  end
-end</code></pre>
-</div>
-
-
-<h5>2. Call the Goal Factory from the User Factory and store the Goals in an Array</h5>
-
-<div>
-  <pre><code class='ruby'>FactoryGirl.define do
-  factory :user do
-    sequence :name { |n| &quot;person#{n}&quot; }
-    sequence :email { |n| &quot;person#{n}@example.com&quot; }
-
-    goals { Array.new(1) { FactoryGirl.build(:goal) } }
-
-  end
-end</code></pre>
-</div>
-
-
-<p>Your objects will look like this:</p>
-
-<div>
-  <pre><code class='bash'>&gt; p @user
-#&lt;User id: 1, name: &quot;person1&quot;, email: &quot;person1@example.com&quot;, ... &gt;
-&gt; p @user.goals.first
-#&lt;ActiveRecord::Associations::CollectionProxy [#&lt;Goal id: 1, user_id: 1, description: &quot;my goal 1&quot;, motivation: &quot;my motivation 1&quot;, ...]&gt;</code></pre>
-</div>
-
-
-<p>Create Hours for Goals in the same manner: create a Factory for making Hours, call the Hours Factory from the Goals Factory.</p>
-
-<div>
-  <pre><code class='ruby'>FactoryGirl.define do
-  factory :hour do
-    duration { 100 * rand(36) }
-    ...
-  end
-end
-
-FactoryGirl.define do
-  factory :goal do
-    sequence :description { |n| &quot;my goal #{n}&quot; }
-    sequence :motivation  { |n| &quot;my motivation #{n}&quot; }
-
-    hours { Array.new(3) { FactoryGirl.build(:hour) } }
-  end
-end</code></pre>
-</div>
-
-
-<p>Checking your objects:</p>
-
-<div>
-  <pre><code class='bash'>&gt; p @user
-#&lt;User id: 1, name: &quot;person1&quot;, email: &quot;person1@example.com&quot;, ... &gt;
-&gt; p @user.goals.first
-#&lt;ActiveRecord::Associations::CollectionProxy [#&lt;Goal id: 1, user_id: 1, description: &quot;my goal 1&quot;, motivation: &quot;my motivation 1&quot;, ...]&gt;
-&gt; p @user.goals.first.hours.first
-#&lt;ActiveRecord::Associations::CollectionProxy [#&lt;Hour id: 1, goal_id: 1, duration: 3200 , ...]&gt;</code></pre>
-</div>
-
+<p>HRT is the heart of high-functioning teams of any ilk. When I was interviewing for my first job in software development (all those weeks ago) the most difficult question an interviewer could pose to me was &ldquo;where do you see yourself in 5 years&rdquo;? It was difficult because I had just spent the last five years dreaming about writing code for a living. I couldn&rsquo;t even verbalize what I was looking for in a company, only that I would know it when I met it. Now I can identify the traits I was looking for: teams that value writing code and shipping product, consensus based team decision making, asynchronous communication (I am not room-meat), and of course, they&rsquo;ve got to have HeaRT.</p>
 
 <p>Awesome.</p>
 </div>
@@ -225,12 +143,12 @@ end</code></pre>
   
 
 
-<time datetime="2013-10-29T22:29:03-07:00" pubdate data-updated="true">Oct 29<span>th</span>, 2013</time>
+<time datetime="2014-01-20T07:07:15-08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/rails/'>rails</a>
+    <a class='category' href='/blog/categories/reads/'>reads</a>
   
 </span>
 
@@ -239,7 +157,7 @@ end</code></pre>
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2013/factoring-in-nests/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2013/factoring-in-nests/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/embrace-hrt-for-collabrative-nirvana/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/embrace-hrt-for-collabrative-nirvana/" >Tweet</a>
   
   
   
@@ -250,10 +168,10 @@ end</code></pre>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/meatier-apps-with-meteor/" title="Previous Post: Meatier Apps With Meteor">&laquo; Meatier Apps With Meteor</a>
+        <a class="basic-alignment left" href="/blog/2014/opensource-setup-git-checkout-the-ego/" title="Previous Post: open-source setup:">&laquo; open-source setup:</a>
       
       
-        <a class="basic-alignment right" href="/blog/2014/get-clean/" title="Next Post: get clean">get clean &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2014/maintaining-mongod/" title="Next Post: maintaining mongod">maintaining mongod &raquo;</a>
       
     </p>
   </footer>
@@ -360,8 +278,8 @@ end</code></pre>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2013/factoring-in-nests/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2013/factoring-in-nests/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/embrace-hrt-for-collabrative-nirvana/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2014/embrace-hrt-for-collabrative-nirvana/';
         var disqus_script = 'embed.js';
       
     (function () {

@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-19T09:41:21-08:00</updated>
+  <updated>2014-01-22T18:46:52-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,112 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Maintaining Mongod]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/maintaining-mongod/"/>
+    <updated>2014-01-22T07:23:10-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/maintaining-mongod</id>
+    <content type="html"><![CDATA[<p>My laptop&rsquo;s battery died. Not a big deal, it is an old laptop and is used to being abused. I do not, however, have an old installation of mongo. I am quite new to mongo (as with everything else), so when meteor told me that it could not find a running instance of mongodb, I immediately began by trying to start it up again<!--more-->:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mongo start
+</span><span class='line'>MongoDB shell version: 2.4.6
+</span><span class='line'>connecting to: start
+</span><span class='line'>Mon Jan 20 07:42:47.289 Error: couldn<span class="err">&#39;</span>t connect to server 127.0.0.1:27017 at src/mongo/shell/mongo.js:145
+</span><span class='line'>exception: connect failed
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Followed by a trip to the logs:</p>
+
+<figure class='code'><figcaption><span>This error has been reformatted to fit your tv.</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>tail /var/log/mongodb/mongodb.log
+</span><span class='line'>*************
+</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> exception in initAndListen: 10309 Unable to create/open lock file: /var/lib/mongodb/mongod.lock errno:13 Permission denied Is a mongod instance already running?, terminating
+</span><span class='line'>dbexit:
+</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> shutdown: going to close listening sockets...
+</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> shutdown: going to flush diaglog...
+</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> shutdown: going to close sockets...
+</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> shutdown: waiting <span class="k">for </span>fs preallocator...
+</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> shutdown: closing all files...
+</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> closeAllFiles<span class="o">()</span> finished
+</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> shutdown: removing fs lock...
+</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> couldn<span class="err">&#39;</span>t remove fs lock errno:9 Bad file descriptor
+</span><span class='line'>dbexit: really exiting now
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A lock file, you say? Well! I know what to do with those!</p>
+
+<figure class='code'><figcaption><span>Are you sure you want to mess with this?</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rm /var/lib/mongodb/mongod.lock
+</span><span class='line'>rm: remove write-protected regular file <span class="sb">`</span>/var/lib/mongodb/mongod.lock<span class="err">&#39;</span>? n
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>No, I am not sure &mdash; thanks for asking! After a deep breath and a reminder that I should not be so hasty (rtfm, katie), I found this note on <a href="http://docs.mongodb.org/manual/reference/configuration-options/#repair">mongodb.org</a>:</p>
+
+<blockquote><p>Note: Because mongod rewrites all of the database files during the repair routine, if you do not run repair under the same user account as mongod usually runs, you will need to run chown on your database files to correct the permissions before starting mongod again.</p></blockquote>
+
+<p>A file rewrite will include a lock file, will it not?</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u mongodb mongod --repair --dbpath /var/lib/mongodb/
+</span><span class='line'><span class="o">[</span>sudo<span class="o">]</span> password <span class="k">for </span>keighty:
+</span><span class='line'>...
+</span><span class='line'>sudo service mongodb start
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Embrace HRT for Collabrative Nirvana]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/embrace-hrt-for-collabrative-nirvana/"/>
+    <updated>2014-01-20T07:07:15-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/embrace-hrt-for-collabrative-nirvana</id>
+    <content type="html"><![CDATA[<p><a href="http://www.amazon.com/gp/product/1449302440/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1449302440&amp;linkCode=as2&amp;tag=keighty-20">Team Geek: A Software Developer&rsquo;s Guide to Working Well with Others</a> by Brian W. Fitzpatrick and Ben Collins-Sussman.</p>
+
+<p>With decades of collective experience, these two authors distill the essential philosophy required to be part of a healthy development team: HRT &mdash; humility, respect, and trust. These values are covered in the first chapter and the remainder of the book describes how to best use them as an engineer and as a manager. Some techniques particularly resonated with my world view.<!--more--></p>
+
+<h3>Fail early. Fail fast. Fail often</h3>
+
+<p>It is easy to pay lip-service to this philosophy, but it is impossible to adopt without a culture of HRT. From my own limited experience I can add &mdash; Communicate early. Communicate fast. Communicate often. &mdash; as another mantra of healthy team dynamics. Failure is always an option, but without HRT and open lines of communication it can take much more time to discover.</p>
+
+<h3>Make time vs manager time</h3>
+
+<p>Fitzpatrick and Collins-Sussman drew on a lot of great resources, and there is as much gold in the footnotes as there is in the text. They referenced Paul Graham&rsquo;s essay, <a href="http://www.paulgraham.com/makersschedule.html">Maker&rsquo;s Schedule</a>, in which he contrasts the different working styles of managers and makers (writers or programmers). The manager&rsquo;s schedule can be divided into hour-long chunks that may be apportioned to meetings, appointments, or tasks.: the essence of David Allen&rsquo;s <a href="http://www.davidco.com/about-gtd">GTD</a> (Getting Things Done). Makers, on the other hand, cannot be effective in one hour intervals. Graham writes that a single meeting in the afternoon can affect the productivity for a whole day. First it breaks up the afternoon into two pieces that are not long enough to really get into the zone, then it psychologically leaks into the morning where you are &ldquo;less likely to start something ambitious&rdquo;. I can definitely identify with this propensity. The cost of task switching around meetings often results in a lost day.</p>
+
+<h3>Core values</h3>
+
+<p>HRT is the heart of high-functioning teams of any ilk. When I was interviewing for my first job in software development (all those weeks ago) the most difficult question an interviewer could pose to me was &ldquo;where do you see yourself in 5 years&rdquo;? It was difficult because I had just spent the last five years dreaming about writing code for a living. I couldn&rsquo;t even verbalize what I was looking for in a company, only that I would know it when I met it. Now I can identify the traits I was looking for: teams that value writing code and shipping product, consensus based team decision making, asynchronous communication (I am not room-meat), and of course, they&rsquo;ve got to have HeaRT.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Open-source Setup:]]></title>
@@ -1683,406 +1789,6 @@ $ ruby lib/benchmark.rb
 <p>Comparing QuickFind (top line) with QuickUnion(bottom line), we can actually measure how well this small optimization of the union operation has increased performance with larger datasets.</p>
 
 <p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[State of the UnionFind]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/state-of-the-unionfind/"/>
-    <updated>2013-07-30T22:29:03-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/state-of-the-unionfind</id>
-    <content type="html"><![CDATA[<p>I was scraping the rust off my data-structures synapses last week, and found that there was still some functionality underneath. UnionFind is one of those sneaky algorithms that crops up in non-linear arrangements of data, such as computer or social networks. Specifically, it keeps track of sets of connected elements. The API consists of a union(p, q), which connects the two elements p and q, and a find(p, q), which determines if p is in the same set as q.</p>
-
-<p>I learned about this algorithm through <a href="https://www.coursera.org/">Coursera</a>, and their class <a href="https://www.coursera.org/course/algs4partI">Algorithms Part 1</a> with Kevin Wayne and Robert Sedgewick. The focus of this course was not only on implementation of algorithms, but also optimization.</p>
-
-<!--more-->
-
-
-<h1>Union Find</h1>
-
-<p>A simple model for connectivity is 10 objects numbered 1 through 0:</p>
-
-<p>0 1 2 3 4 5 6 7 8 9</p>
-
-<p>Making random connections will produce disjointed sets of objects:</p>
-
-<p>0 1 { 2 3 9 } { 5 6 } 7 { 4 8 }</p>
-
-<p>A find(p, q) will determine if p and q are in the same set:</p>
-
-<ul>
-<li>find(0, 8) => false</li>
-<li>find(2, 9) => true</li>
-</ul>
-
-
-<p>A union(p, q) will put p and q in the same set:</p>
-
-<ul>
-<li>union(1, 6) => 0 { 2 3 9 } { 1 5 6 } 7 { 4 8 }</li>
-<li>union(2, 4) => 0 1 { 5 6 } 7 { 2 3 9 4 8 }</li>
-</ul>
-
-
-<p>Using an array to keep track of the values, we can walk through what this implementation would look like:</p>
-
-<table class="table table-bordered">
-  <tr>
-    <th>Index</th>
-    <td>1</td>
-    <td>2</td>
-    <td>3</td>
-    <td>4</td>
-    <td>5</td>
-    <td>6</td>
-    <td>7</td>
-    <td>8</td>
-    <td>9</td>
-    <td>0</td>
-    <th></th>
-  </tr>
-  <tr>
-    <th>Value</th>
-    <td>1</td>
-    <td>2</td>
-    <td>3</td>
-    <td>4</td>
-    <td>5</td>
-    <td>6</td>
-    <td>7</td>
-    <td>8</td>
-    <td>9</td>
-    <td>0</td>
-    <th></th>
-  </tr>
-  <tr>
-    <th>union(4,9)</th>
-    <td>1</td>
-    <td>2</td>
-    <td>3</td>
-    <td class="highlight">9</td>
-    <td>5</td>
-    <td>6</td>
-    <td>7</td>
-    <td>8</td>
-    <td class="highlight">9</td>
-    <td>0</td>
-    <td> | Changes all values that match array[4] to match array[9]</td>
-  </tr>
-  <tr>
-    <th>union(2,4)</th>
-    <td>1</td>
-    <td class="highlight">9</td>
-    <td>3</td>
-    <td class="highlight">9</td>
-    <td>5</td>
-    <td>6</td>
-    <td>7</td>
-    <td>8</td>
-    <td class="highlight">9</td>
-    <td>0</td>
-    <td> | Changes all values that match array[2] to match array[4]</td>
-  </tr>
-  <tr>
-    <th>union(4,7)</th>
-    <td>1</td>
-    <td class="highlight">7</td>
-    <td>3</td>
-    <td class="highlight">7</td>
-    <td>5</td>
-    <td>6</td>
-    <td class="highlight">7</td>
-    <td>8</td>
-    <td class="highlight">7</td>
-    <td>0</td>
-    <td> | Changes all values that match array[4] to match array[7]</td>
-  </tr>
-</table>
-
-
-<p>Using the java api provided by Kevin Wayne and Robert Sedgewick:</p>
-
-<div>
-  <pre><code class='java'>public class UF
-----------------
-public UF(int N)
-public int find(int p, int q)
-public void union(int p, int q)</code></pre>
-</div>
-
-
-<p>I adapted the basic union find in ruby:</p>
-
-<div>
-  <pre><code class='ruby'>class QuickFind
-
-  attr_accessor :find_array
-
-  def initialize(size)
-    @find_array = Array.new(size){ |index| index }
-  end
-
-  def find(p, q)
-    location(p) == location(q)
-  end
-
-  def union(p, q)
-    @find_array = create_union(p, q)
-  end
-
-  private
-
-    def location(index)
-      raise NotAnElement if @find_array[index].nil?
-      return @find_array[index]
-    end
-
-    def create_union(p, q)
-      target = location(p)
-      goal = location(q)
-      temp_array = @find_array.map do |element|
-        element == target ? goal : element
-      end
-    end
-end
-
-class NotAnElement &lt; Exception
-end</code></pre>
-</div>
-
-
-<p>Sets are arranged as a flat array of elements which all share the same value: they are all wearing the same t-shirt. When we connect elements from different sets, we must make sure that every element in the first set changes its t-shirt to match the elements in the other set. This is a time-consuming process, and uses a lot of t-shirts.</p>
-
-<p>This implementation is called QuickFind because in an array of 1,000,000 entries, finding if two elements are connected is easy (compare the t-shirt at index p with the t-shirt at index q), but connecting them requires inspection of every element in the array in order (check everyone&rsquo;s t-shirts) to make sure all the previous connections remain in place.</p>
-
-<h2>Benchmark</h2>
-
-<p>To compare efficiency of this and future UnionFind implementations, I built a basic benchmark that performs a set number of union and find operations and measures the time to completion:</p>
-
-<div>
-  <pre><code class='ruby'>require &#39;benchmark&#39;
-@size = 10000
-
-def testUnit(object)
-  @size.times do
-    object.union(rand(@size), rand(@size))
-    object.find(rand(@size), rand(@size))
-  end
-end
-
-Benchmark.bm do |x|
-  x.report { testUnit(QuickFind.new(@size)) }
-end</code></pre>
-</div>
-
-
-<p>Running the benchmark on QuickFind:</p>
-
-<div>
-  <pre><code class='bash'>$ ruby lib/benchmark.rb
-=&gt; Array size = 100
-       user     system      total        real
-   0.000000   0.000000   0.000000 (  0.002745)
-$ ruby lib/benchmark.rb
-=&gt; Array size = 1000
-       user     system      total        real
-   0.140000   0.000000   0.140000 (  0.137957)
-$ ruby lib/benchmark.rb
-=&gt; Array size = 10000
-       user     system      total        real
-  13.790000   0.020000  13.810000 ( 13.866528)</code></pre>
-</div>
-
-
-<p>You can see from these measurements that increasing the size of the array by a factor of 10 each time comes with a logarithmic increase in processing time. There is definitely room for optimization, so stay tuned for more refinements. In the meantime,</p>
-
-<h2>Fun Rubyisms</h2>
-
-<p>Array initialization is a snap in ruby! Compare the initialization line in the QuickFind algorithm above with the equivalent java implementation:</p>
-
-<div>
-  <pre><code class='ruby'>@find_array = Array.new(size){ |index| index }</code></pre>
-</div>
-
-
-<p>versus</p>
-
-<div>
-  <pre><code class='java'>...
-int[] arry = new int[size]
-for (int i = 0; i &lt; size; i++) {
-    id[i] = i;
-}</code></pre>
-</div>
-
-
-<p>Both result in an array of the specified size, but ruby is slightly less sprawling.</p>
-
-<p>Also, check out lines 27 &ndash; 29</p>
-
-<div>
-  <pre><code class='ruby'>temp_array = @find_array.map do |element|
-  element == target ? goal : element
-end</code></pre>
-</div>
-
-
-<p>Using map() eliminates the need for a separate array declaration. It is the equivalent of:</p>
-
-<div>
-  <pre><code class='ruby'>temp_array = []
-@find_array.each do |element|
-  temp_array &lt;&lt; element == target ? goal : element
-end
-return temp_array</code></pre>
-</div>
-
-
-<p>and is certainly more readable than the equivalent in java:</p>
-
-<div>
-  <pre><code class='java'>int pid = id[p];
-for (int i = 0; i &lt; id.length; i++)
-    if (id[i] == pid) id[i] = id[q];</code></pre>
-</div>
-
-
-<p>Awesome</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Procuring Provisions]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/procuring-provisions/"/>
-    <updated>2013-07-27T22:29:03-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/procuring-provisions</id>
-    <content type="html"><![CDATA[<p>I was trying to add a database to my JSGames app &mdash; it is a basic sinatra app with a few goodies already in place &mdash; and I was having some difficulty deploying it to Heroku. Rails (for the most part) automagically creates and maintains its database, and as long as I remember to move any references to sqlite3 into the development and test environments, I have never had trouble provisioning one on Heroku either. Rolling a web application from scratch with sinatra, however, requires a little more savvy.</p>
-
-<!--more-->
-
-
-<p>My Gemfile had a familiar structure:</p>
-
-<div>
-  <pre><code class='ruby'>source &#39;https://rubygems.org&#39;
-ruby &#39;2.0.0&#39;
-...
-gem &quot;sinatra&quot;
-gem &quot;activerecord&quot;
-gem &quot;sinatra-activerecord&quot;
-gem &quot;pg&quot;</code></pre>
-</div>
-
-
-<p>So far, so familiar. I added config/environments.rb to outline the details of the database I would like provisioned (using postgres locally as well as in production):</p>
-
-<div>
-  <pre><code class='ruby'>require &#39;active_record&#39;
-require &#39;uri&#39;
-...
-db = URI.parse(ENV[&#39;DATABASE_URL&#39;] || &#39;postgres://localhost/mydb&#39;)
-ActiveRecord::Base.establish_connection(
-  :adapter  =&gt; db.scheme == &#39;postgres&#39; ? &#39;postgresql&#39; : db.scheme,
-  :host     =&gt; db.host,
-  :port     =&gt; db.port,
-  :username =&gt; db.user,
-  :password =&gt; db.password,
-  :database =&gt; db.path[1..-1],
-  :encoding =&gt; &#39;utf8&#39;
-)</code></pre>
-</div>
-
-
-<p>With everything complete, I created a couple of models, migrated, tested it locally, and committed the changes. Heroku compiles the slug just fine, but when I open the application I get the too familiar &ldquo;Application Error&rdquo; page. The logs tell me: <pre>ERROR: Invalid DATABASE_URL</pre></p>
-
-<p>Huh? My url is the one that Heroku suggested! How can it be invalid? It was working fine locally, what is the problem? Here is a sample of my google searches from that frantic afternoon:
-* ERROR: Invalid DATABASE_URL heroku
-* deploying sinatra pg heroku
-* environment variables
-* heroku config variables
-* usr-env-compile heroku
-* heroku can&rsquo;t connect to server
-* how to roll back a push to heroku
-* how to recover from the embarrassment of an offline portfolio project
-* how to start a llama farm</p>
-
-<p>I finally found the answer (aka read the manual) with <a href="https://devcenter.heroku.com/articles/heroku-postgresql">Heroku Postgres</a></p>
-
-<h3>First: Check to see if your database has been provisioned</h3>
-
-<div>
-  <pre><code class='bash'>$ heroku addons | grep POSTGRES</code></pre>
-</div>
-
-
-<p>I ran this command in my sinatra project and found nothing. NOTHING!</p>
-
-<p>When Heroku told me that it couldn&rsquo;t find my database, that is because it hadn&rsquo;t MADE my database. So I&hellip;</p>
-
-<h3>Second: Create a new database</h3>
-
-<div>
-  <pre><code class='bash'>$ heroku addons:add heroku-postgresql:dev
-Adding heroku-postgresql:dev on js-games... done, v42 (free)
-Attached as HEROKU_POSTGRESQL_GOLD_URL
-Database has been created and is available
- ! This database is empty. If upgrading, you can transfer
- ! data from another database with pgbackups:restore.
-Use `heroku addons:docs heroku-postgresql:dev` to view documentation.</code></pre>
-</div>
-
-
-<p>YAY! My database has been created and found. Still, nothing wrong with&hellip;</p>
-
-<h3>Third: Double check your database exists</h3>
-
-<div>
-  <pre><code class='bash'>$ heroku config
-=== js-games Config Vars
-HEROKU_POSTGRESQL_GOLD_URL: postgres://∏∏∏∏∏∏∏∏∏∏∏∏∏∏:∏∏∏∏∏∏∏∏∏∏∏@ec2-##-###-###-##.compute-1.amazonaws.com:####/∏∏∏∏#∏##∏∏∏#∏#</code></pre>
-</div>
-
-
-<p>Heroku confesses that my database is stored on AWS, and gives a fairly detailed address (redacted on the grounds of national security).</p>
-
-<h3>Fourth: Promote the new database to primary</h3>
-
-<div>
-  <pre><code class='bash'>$ heroku pg:promote HEROKU_POSTGRESQL_GOLD_URL
-Promoting HEROKU_POSTGRESQL_GOLD_URL to DATABASE_URL... done</code></pre>
-</div>
-
-
-<h3>Fifth: Check out the new database</h3>
-
-<div>
-  <pre><code class='bash'>$ heroku pg:info
-=== HEROKU_POSTGRESQL_GOLD_URL (DATABASE_URL)
-Plan:        Dev
-Status:      available
-Connections: 1
-PG Version:  9.2.4
-Created:     2013-07-27 22:46 UTC
-Data Size:   6.3 MB
-Tables:      0
-Rows:        0/10000 (In compliance)
-Fork/Follow: Unsupported</code></pre>
-</div>
-
-
-<h3>TADA</h3>
-
-<p>Do one final push to heroku and restart the server:</p>
-
-<div>
-  <pre><code class='bash'>$ git commit -a -m &quot;fixes the last two hours of disasterous troubleshooting&quot;
-$ git push heroku master
-...
-$ heroku restart</code></pre>
-</div>
-
-
-<p>Awesome</p>
 ]]></content>
   </entry>
   

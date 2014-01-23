@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="A few months ago I gave a small lightning talk to my code school class about automating tasks using Rake. Before I learned ruby I used bash scripts &hellip;">
+  <meta name="description" content="A few weeks ago I posted about using Thor to generate system-wide notes files with a standard format. Since then, I have been doing a lot of smaller &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,88 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-08T22:29:03-07:00" pubdate data-updated="true">Sep 8<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A few weeks ago I posted about <a href="http://www.katieleonard.ca/automation/2013/08/30/hammer-out-tasks-with-thor/">using Thor to generate system-wide notes files with a standard format</a>. Since then, I have been doing a lot of smaller code challenges, and I wanted to set up a Thor task for generating a standard project file tree.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/thor-sets-up-a-project/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/argf-all-you-want/">ARGF All You Want</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-05T22:29:03-07:00" pubdate data-updated="true">Sep 5<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Many of the fun, junior code challenges I have encountered deal a lot with input/output of data, and I found a great ruby feature that provides flexibility at the command line.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/argf-all-you-want/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -202,108 +284,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/parcel-parser/">Parcel Parser</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-16T22:29:03-07:00" pubdate data-updated="true">Aug 16<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>On the last episode, I described how to label chunks of code for processing through a parser. Strings are labeled as &lsquo;STRING&rsquo;, class definitions as &lsquo;A&rsquo; + &lsquo;CONSTANT&rsquo;, etc.</p>
-
-<h2>What is a parser?</h2>
-
-<p>A parser separates and analyzes a piece of text according to a set of rules specified by a formal grammar. The analysis is performed by assembling the tokenized code into an Abstract Syntax Tree (AST) &ndash; a tree of nodes that represent what the code means to the language. The AST evaluates the nodes in a similar manner to order of operations in math: each token is placed on the evaluation tree, and expressions are evaluated by reducing each branch in order.</p>
-
-<p>The parser itself is can be written by hand, but I am using RACC: an LALR (Look Ahead, Left to right, Reverse) parser written by <a href="https://github.com/tenderlove/racc">tenderlove</a> to generate Ruby programs. How do we specify a grammar that RACC will understand?</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/parcel-parser/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/flex-your-lexer/">Flex Your Lexer</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-15T22:29:03-07:00" pubdate data-updated="true">Aug 15<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>A Lexer is a ruby class with a single method: tokenize(). Its purpose is to label each chunk of code with a particular token. Strings are labeled as strings, numbers as numbers, and class names as constants. For example,</p>
-
-<div>
-  <pre><code class='ruby'>Lexer.new.tokenize(&quot;string&quot;)
-# =&gt;[[:STRING, &quot;string&quot;]]
-Lexer.new.tokenize(&quot;True&quot;)
-# =&gt;[[:CONSTANT, &quot;True&quot;]]
-Lexer.new.tokenize(&quot;a Car&quot;)
-# =&gt;[[:A, &#39;a&#39;], [:CONSTANT, &#39;Car&#39;]])
-Lexer.new.tokenize(&quot;+&quot;)
-# =&gt;[[&quot;+&quot;, &quot;+&quot;]]</code></pre>
-</div>
-
-
-<p>&ldquo;Lexing&rdquo; is accomplished using regular expressions. The lexer treats the text string of your code like a shish kabob &ndash; it slides recognizable chunks off the skewer one at a time and categorizes them (onion, pepper, method definition, etc).</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/flex-your-lexer/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -328,6 +308,14 @@ Lexer.new.tokenize(&quot;+&quot;)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/maintaining-mongod/">Maintaining Mongod</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/embrace-hrt-for-collabrative-nirvana/">Embrace HRT for Collabrative Nirvana</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/opensource-setup-git-checkout-the-ego/">Open-source Setup:</a>
       </li>
     
@@ -337,14 +325,6 @@ Lexer.new.tokenize(&quot;+&quot;)
     
       <li class="post">
         <a href="/blog/2014/get-clean/">Get Clean</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/meatier-apps-with-meteor/">Meatier Apps With Meteor</a>
       </li>
     
   </ul>
