@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-22T18:46:52-08:00</updated>
+  <updated>2014-01-22T22:04:06-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,95 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Git Retrieve: A Drama]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/git-retrieve/"/>
+    <updated>2014-01-23T20:47:46-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/git-retrieve</id>
+    <content type="html"><![CDATA[<p>Have you ever deleted a file on impulse, only to wake up with remorse later? It doesn&rsquo;t matter if later is the next morning or the next week, thanks to git you have the power to reanimate gone-but-not-forgotten files. Nothing is <del>ever</del> EVER lost with git. So how do you retrieve a file that has been deleted in a previous commit?</p>
+
+<!--more-->
+
+
+<p><a href="http://stackoverflow.com/a/953573">stackoverflow</a> has a few suggestions, and I like this one the best:</p>
+
+<h3>Git Drama in Three Acts</h3>
+
+<p><code>bash Act 1 Scene 1: foo.bar Folly
+$ cd ~/very_important_project/
+$ touch readme.md index.html foo.bar
+$ git commit -am "These changes are AWESOME."
+[master (root-commit) 9155e0b] These changes are AWESOME.
+ 0 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 foo.bar
+ create mode 100644 index.html
+ create mode 100644 readme.md
+</code>
+but wait! <code>foo.bar</code>?! that is just crazy talk?</p>
+
+<p><code>bash Act 1 Scene 2: Regret
+$ git rm foo.bar
+rm 'foo.bar'
+$ git add -u
+$ git commit -m "I have made a huge mistake."
+[master b045a52] I have made a huge mistake.
+ 0 files changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 foo.bar
+</code></p>
+
+<p>Everything seems back to normal!</p>
+
+<p><code>bash Act 2 Scene 1: I have made good life-choices
+$ echo "#I rock and I am smug about it!" &gt; bar.rb
+$ git commit -am "This work is the BOMB."
+[master 3535f28] This work is the BOMB.
+ 0 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 bar.rb
+$ cat foo.bar
+cat: foo.bar: No such file or directory you heartless creature!
+</code></p>
+
+<p>but wait! there is no bar without a foo! where is my foo.bar? How can I find it? I have to find the commit where it was deleted, but how? What if I list out the commits that include a deleted file?</p>
+
+<p>```bash Act 2 Scene 2: Regret
+$ git log &mdash;diff-filter=D &mdash;summary
+commit b045a528b4a0824f63562cad867b264983b32c7c
+Author: keighty <a href="&#109;&#x61;&#105;&#x6c;&#x74;&#x6f;&#58;&#x6b;&#101;&#x69;&#x67;&#x68;&#116;&#x79;&#x2e;&#x6c;&#x65;&#111;&#x6e;&#97;&#114;&#100;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#109;">&#107;&#x65;&#x69;&#103;&#x68;&#x74;&#x79;&#x2e;&#108;&#101;&#111;&#x6e;&#97;&#114;&#100;&#x40;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#x6f;&#109;</a>
+Date:   Wed Jan 22 20:46:16 2014 -0800</p>
+
+<pre><code>I have made a huge mistake.
+</code></pre>
+
+<p> delete mode 100644 foo.bar
+```</p>
+
+<p>There you are! in commit b045a528. The summary option shows the details, so you can see what files were deleted, when, and by whom. In some cases, there may be more than one change in a commit, so using <code>commitSHA~1 &lt;filename&gt;</code> will pluck the one precious deleted file from the commit and restore it to your working tree.</p>
+
+<p>```bash Act 3: foo.bar&rsquo;s Return
+$ git checkout b045a528~1 foo.bar
+$ git status</p>
+
+<h1>On branch master</h1>
+
+<h1>Changes to be committed:</h1>
+
+<h1>(use &ldquo;git reset HEAD <file>&hellip;&rdquo; to unstage)</h1>
+
+<p>#</p>
+
+<h1>new file:   foo.bar</h1>
+
+<p>#
+$ git commit -am &ldquo;Together at last, together forever.&rdquo;
+[master 8492eac] Together at last, together forever.
+ 0 files changed, 0 insertions(+), 0 deletions(&ndash;)
+ create mode 100644 foo.bar
+```</p>
+
+<p>EXEUNT.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Get Clean]]></title>

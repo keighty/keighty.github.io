@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-22T18:46:52-08:00</updated>
+  <updated>2014-01-22T22:04:06-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,155 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Meteor Subscribe, Autosubscribe, Unsubscribe?]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/meteor-subscribe/"/>
+    <updated>2014-01-24T20:28:28-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/meteor-subscribe</id>
+    <content type="html"><![CDATA[<p>subscribe: listens for events and fires once</p>
+
+<p>autosubscribe: session.set() triggers autosubscribe to fire again (resets subscription listener)</p>
+
+<!--more-->
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Git Retrieve: A Drama]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/git-retrieve/"/>
+    <updated>2014-01-23T20:47:46-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/git-retrieve</id>
+    <content type="html"><![CDATA[<p>Have you ever deleted a file on impulse, only to wake up with remorse later? It doesn&rsquo;t matter if later is the next morning or the next week, thanks to git you have the power to reanimate gone-but-not-forgotten files. Nothing is <del>ever</del> EVER lost with git. So how do you retrieve a file that has been deleted in a previous commit?</p>
+
+<!--more-->
+
+
+<p><a href="http://stackoverflow.com/a/953573">stackoverflow</a> has a few suggestions, and I like this one the best:</p>
+
+<h3>Git Drama in Three Acts</h3>
+
+<figure class='code'><figcaption><span>Act 1 Scene 1: foo.bar Folly</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">cd</span> ~/very_important_project/
+</span><span class='line'><span class="nv">$ </span>touch readme.md index.html foo.bar
+</span><span class='line'><span class="nv">$ </span>git commit -am <span class="s2">&quot;These changes are AWESOME.&quot;</span>
+</span><span class='line'><span class="o">[</span>master <span class="o">(</span>root-commit<span class="o">)</span> 9155e0b<span class="o">]</span> These changes are AWESOME.
+</span><span class='line'> 0 files changed, 0 insertions<span class="o">(</span>+<span class="o">)</span>, 0 deletions<span class="o">(</span>-<span class="o">)</span>
+</span><span class='line'> create mode 100644 foo.bar
+</span><span class='line'> create mode 100644 index.html
+</span><span class='line'> create mode 100644 readme.md
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>but wait! <code>foo.bar</code>?! that is just crazy talk?</p>
+
+<figure class='code'><figcaption><span>Act 1 Scene 2: Regret</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git rm foo.bar
+</span><span class='line'>rm <span class="s1">&#39;foo.bar&#39;</span>
+</span><span class='line'><span class="nv">$ </span>git add -u
+</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;I have made a huge mistake.&quot;</span>
+</span><span class='line'><span class="o">[</span>master b045a52<span class="o">]</span> I have made a huge mistake.
+</span><span class='line'> 0 files changed, 0 insertions<span class="o">(</span>+<span class="o">)</span>, 0 deletions<span class="o">(</span>-<span class="o">)</span>
+</span><span class='line'> delete mode 100644 foo.bar
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Everything seems back to normal!</p>
+
+<figure class='code'><figcaption><span>Act 2 Scene 1: I have made good life-choices</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;#I rock and I am smug about it!&quot;</span> &gt; bar.rb
+</span><span class='line'><span class="nv">$ </span>git commit -am <span class="s2">&quot;This work is the BOMB.&quot;</span>
+</span><span class='line'><span class="o">[</span>master 3535f28<span class="o">]</span> This work is the BOMB.
+</span><span class='line'> 0 files changed, 0 insertions<span class="o">(</span>+<span class="o">)</span>, 0 deletions<span class="o">(</span>-<span class="o">)</span>
+</span><span class='line'> create mode 100644 bar.rb
+</span><span class='line'><span class="nv">$ </span>cat foo.bar
+</span><span class='line'>cat: foo.bar: No such file or directory you heartless creature!
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>but wait! there is no bar without a foo! where is my foo.bar? How can I find it? I have to find the commit where it was deleted, but how? What if I list out the commits that include a deleted file?</p>
+
+<figure class='code'><figcaption><span>Act 2 Scene 2: Regret</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git log --diff-filter<span class="o">=</span>D --summary
+</span><span class='line'>commit b045a528b4a0824f63562cad867b264983b32c7c
+</span><span class='line'>Author: keighty &lt;keighty.leonard@gmail.com&gt;
+</span><span class='line'>Date:   Wed Jan 22 20:46:16 2014 -0800
+</span><span class='line'>
+</span><span class='line'>    I have made a huge mistake.
+</span><span class='line'>
+</span><span class='line'> delete mode 100644 foo.bar
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There you are! in commit b045a528. The summary option shows the details, so you can see what files were deleted, when, and by whom. In some cases, there may be more than one change in a commit, so using <code>commitSHA~1 &lt;filename&gt;</code> will pluck the one precious deleted file from the commit and restore it to your working tree.</p>
+
+<figure class='code'><figcaption><span>Act 3: foo.bar&#8217;s Return</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git checkout b045a528~1 foo.bar
+</span><span class='line'><span class="nv">$ </span>git status
+</span><span class='line'><span class="c"># On branch master</span>
+</span><span class='line'><span class="c"># Changes to be committed:</span>
+</span><span class='line'><span class="c">#   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)</span>
+</span><span class='line'><span class="c">#</span>
+</span><span class='line'><span class="c"># new file:   foo.bar</span>
+</span><span class='line'><span class="c">#</span>
+</span><span class='line'><span class="nv">$ </span>git commit -am <span class="s2">&quot;Together at last, together forever.&quot;</span>
+</span><span class='line'><span class="o">[</span>master 8492eac<span class="o">]</span> Together at last, together forever.
+</span><span class='line'> 0 files changed, 0 insertions<span class="o">(</span>+<span class="o">)</span>, 0 deletions<span class="o">(</span>-<span class="o">)</span>
+</span><span class='line'> create mode 100644 foo.bar
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>EXEUNT.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Til-duh]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/til-duh/"/>
+    <updated>2014-01-22T21:49:44-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/til-duh</id>
+    <content type="html"><![CDATA[<!--more-->
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Maintaining Mongod]]></title>
@@ -1467,328 +1616,6 @@ Lexer.new.tokenize(code)
 <p>Now that I have an array of tokens, it is time to write my grammar laws that will tell the parser what to do with them.</p>
 
 <p>Awesome</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Canadian Flair]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/canadian-flair/"/>
-    <updated>2013-08-10T22:29:03-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/canadian-flair</id>
-    <content type="html"><![CDATA[<p>For my last month at code school, I have decided to learn what it takes to develop a new programming language. Having been teased for my Canadian accent, I thought it appropriate to incorporate some idiomatic Canadianisms, and call my language Eh? Deciding what actual features I want to implement in my programming language is an interesting task, and I think I have narrowed it down to a couple of standard rules and a couple wacky ones:</p>
-
-<h3>Rules for Eh?</h3>
-
-<ul>
-<li>blocks of code are delimited by &lsquo;:&rsquo; and &lsquo;eh?&rsquo;</li>
-<li>classes are declared using &ldquo;A&rdquo; keyword</li>
-<li>methods are defined using &ldquo;CAN&rdquo; keyword</li>
-<li>lowercase identifiers are local variables or method names</li>
-<li>capitalized identifiers are global variables</li>
-<li>no parens for args</li>
-<li>last value evaluated in return value</li>
-<li>everything is an object</li>
-</ul>
-
-
-<!--more-->
-
-
-<h1>Steps for building an interpreted language</h1>
-
-<ol>
-<li>This code has to be provided as input to a lexer.</li>
-<li>The lexer will convert that input into tokens.</li>
-<li>The parser will organize those tokens into a tree of nodes.</li>
-<li>The runtime will evaluate the nodes using ruby.</li>
-</ol>
-
-
-<h3>Prototype</h3>
-
-<p>Here is what I would like the final result to look like:</p>
-
-<div>
-  <pre><code class='ruby'>a Canadian
-  with toque
-  with scarf
-  with broom
-
-  can curl
-    if skip:
-      say &quot;Hurry!&quot;
-    eh?
-    if lead:
-      pass
-    eh?
-    say &quot;How social the game...&quot;
-  eh?
-
-  can say_aboot:
-    say &quot;What&#39;s it all aboot?&quot;
-  eh?
-eh?</code></pre>
-</div>
-
-
-<p>With this vague action plan and <a href="http://createyourproglang.com/?hop=rubyinside">&ldquo;Create Your Own Programming Language&rdquo;</a> by Marc-Andre Cournoyer in hand, off we go!</p>
-
-<p>Awesome</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Show-off With GitHub and Docco]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/show-off-with-github/"/>
-    <updated>2013-08-06T22:29:03-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/show-off-with-github</id>
-    <content type="html"><![CDATA[<p>I was experimenting with some documentation styles today and discovered two bits of gold: gh-pages and docco<!--more-->:</p>
-
-<p>Creating a site for your project using GitHub is a 3 step process:
-1. create a new orphan branch called gh-pages
-2. remove all the contents
-3. fill the branch with your boastful new site</p>
-
-<div>
-  <pre><code class='bash'>$ cd repository
-
-$ git checkout --orphan gh-pages
-# Creates a branch, without any parents
-# Switched to a new branch &#39;gh-pages&#39;
-
-$ git rm -rf .
-# Remove all files from the old working tree</code></pre>
-</div>
-
-
-<p>From here you can use the <a href="https://help.github.com/articles/creating-pages-with-the-automatic-generator">GitHub Automatic Page generator</a> to throw up a theme and some standard content, you can roll out a <a href="http://jekyllbootstrap.com/">jekyll bootstrap</a> platform with blogging integration, or you can simply:</p>
-
-<div>
-  <pre><code class='bash'>$ echo &quot;Hello gh-pages!&quot; &gt; index.html
-$ git add index.html
-$ git commit -a -m &quot;First pages commit&quot;
-$ git push origin gh-pages</code></pre>
-</div>
-
-
-<p>Add and commit your content to your gh-pages branch, and GitHub will generate what needs to be generated in order to serve your website.</p>
-
-<p>Your pages are hosted for free by GitHub. If you have already configured a personal site using <a href="https://help.github.com/articles/user-organization-and-project-pages">User Pages</a>, your project pages will hang off the end of your domain like this : username.github.io/repo_name</p>
-
-<h3><a href="http://jashkenas.github.io/docco/">Docco</a></h3>
-
-<blockquote><p>Docco is a quick-and-dirty documentation generator, written in Literate CoffeeScript. It produces an HTML document that displays your comments intermingled with your code. All prose is passed through Markdown, and code is passed through Highlight.js syntax highlighting.</p></blockquote>
-
-<p>Docco works with  Python, Ruby, JavaScript, Java, and many other languages, with no configuration &mdash; just plug and play!</p>
-
-<p>Install Docco with npm:</p>
-
-<div>
-  <pre><code class='bash'>sudo npm install -g docco</code></pre>
-</div>
-
-
-<p>Run it against your code:</p>
-
-<div>
-  <pre><code class='javascript'>docco lib/*.ruby</code></pre>
-</div>
-
-
-<p>Docco will create a docs/ folder in your project and will generate an html file for each ruby file in the lib directory. This is where beautifully commented code really pays off, but docco does not format multi-line code the same way. Check out my <a href="http://www.katieleonard.ca/PCSnotes/docs/benchmark.html">benchmark.rb</a> for an example of how each comment style is treated by docco.</p>
-
-<p>TADA</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[State of the QuickUnion]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/state-of-the-quickunion/"/>
-    <updated>2013-08-04T22:29:03-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/state-of-the-quickunion</id>
-    <content type="html"><![CDATA[<p>In my last look at the UnionFind algorithm I made a quick-find implementation &mdash; finding if two elements were connected was fast but connecting two elements was slow. The union operation is a good candidate for optimization.</p>
-
-<!--more-->
-
-
-<h1>Quick Union</h1>
-
-<p>One way to optimize the union operation is to reduce the number of array accesses required.</p>
-
-<p>In QuickFind, the sets are arranged in a flat array of elements which all share the same value: they are all wearing the same t-shirt. When we connect elements from different sets, we must make sure that every element in the first set changes its t-shirt to match the elements in the other set. This is a time-consuming process, and uses a lot of t-shirts.</p>
-
-<p>What if only one element had to change its t-shirt? If the set had a single element in charge &ndash; a root &ndash; then joining elements from different sets would require identifying the t-shirt of the one in charge, and then changing to that element&rsquo;s t-shirt.</p>
-
-<p>Using an array instead of t-shirts to keep track of the values, we can walk through what this implementation would look like:</p>
-
-<table class="table table-bordered">
-  <tr>
-    <th>Index</th>
-    <td>1</td>
-    <td>2</td>
-    <td>3</td>
-    <td>4</td>
-    <td>5</td>
-    <td>6</td>
-    <td>7</td>
-    <td>8</td>
-    <td>9</td>
-    <td>0</td>
-    <th></th>
-  </tr>
-  <tr>
-    <th>Value</th>
-    <td>1</td>
-    <td>2</td>
-    <td>3</td>
-    <td>4</td>
-    <td>5</td>
-    <td>6</td>
-    <td>7</td>
-    <td>8</td>
-    <td>9</td>
-    <td>0</td>
-    <td> | Each element begins as the root of its own set</td>
-  </tr>
-  <tr>
-    <th>union(4,9)</th>
-    <td>1</td>
-    <td>2</td>
-    <td>3</td>
-    <td class="highlight">9</td>
-    <td>5</td>
-    <td>6</td>
-    <td>7</td>
-    <td>8</td>
-    <td class="highlight">9</td>
-    <td>0</td>
-    <td> | root(9) = 9, root(4) = 4, change array[4] = 9</td>
-  </tr>
-  <tr>
-    <th>union(2,4)</th>
-    <td>1</td>
-    <td class="highlight">9</td>
-    <td>3</td>
-    <td class="highlight">9</td>
-    <td>5</td>
-    <td>6</td>
-    <td>7</td>
-    <td>8</td>
-    <td>9</td>
-    <td>0</td>
-    <td> | root(4) = 9, root(2) = 2, change array[2] = 9</td>
-  </tr>
-  <tr>
-    <th>union(4,7)</th>
-    <td>1</td>
-    <td>9</td>
-    <td>3</td>
-    <td  class="highlight">9</td>
-    <td>5</td>
-    <td>6</td>
-    <td  class="highlight">7</td>
-    <td>8</td>
-    <td>7</td>
-    <td>0</td>
-    <td> | root(7) = 7, root(4) = 9, change array[9] = 7</td>
-  </tr>
-  <tr>
-    <th>find(2,7)</th>
-    <td>1</td>
-    <td class="highlight">9</td>
-    <td>3</td>
-    <td>9</td>
-    <td>5</td>
-    <td>6</td>
-    <td class="highlight">7</td>
-    <td>8</td>
-    <td class="highlight">7</td>
-    <td>0</td>
-    <td> | root(7) = 7, root(2) = 7. The two are connected </td>
-  </tr>
-</table>
-
-
-<h2>QuickUnion</h2>
-
-<p>Again following the basic API:</p>
-
-<div>
-  <pre><code class='java'>public class UF
----------------
-public UF(int N)
-public int find(int p, int q)
-public void union(int p, int q)</code></pre>
-</div>
-
-
-<p>I adapted the QuickUnion in ruby:</p>
-
-<div>
-  <pre><code class='ruby'>class QuickUnion
-  def initialize(size)
-    @find_array = Array.new(size){ |index| index }
-  end
-
-  # check if p and q have the same root
-  def find(p, q)
-    verify(p, q)
-    root(p) == root(q)
-  end
-
-  # set id of p&#39;s root to the id of q&#39;s root
-  def union(p, q)
-    verify(p, q)
-    @find_array[root(p)] = root(q)
-  end
-
-  private
-    def root(index)
-      # get root until root(index) == index
-      if @find_array[index] == index
-        return index
-      else
-        root(@find_array[index])
-      end
-    end
-
-    def verify(p, q)
-      raise NotAnElement if @find_array[p].nil?
-      raise NotAnElement if @find_array[q].nil?
-    end
-end
-
-class NotAnElement &lt; Exception
-end</code></pre>
-</div>
-
-
-<p>This implementation is a QuickUnion because in an array of 1,000,000 entries, connecting element p to element q is easy: you only have to find the root of p, and then change q to match (one root() and one array access). Finding if p and q are connected takes a little bit longer, because you have to perform two root operations: one for p and one for q, but it is still faster than accessing every element in the array.</p>
-
-<h2>Benchmark</h2>
-
-<div>
-  <pre><code class='bash'>$ ruby lib/benchmark.rb
-=&gt; Array Size: 100
-       user     system      total        real
-   0.000000   0.000000   0.000000 (  0.001865)
-   0.000000   0.000000   0.000000 (  0.000377)
-$ ruby lib/benchmark.rb
-=&gt; Array Size: 1000
-       user     system      total        real
-   0.120000   0.010000   0.130000 (  0.124929)
-   0.010000   0.000000   0.010000 (  0.008825)
-$ ruby lib/benchmark.rb
-=&gt; Array Size: 10000
-       user     system      total        real
-  10.120000   0.030000  10.150000 ( 10.146124)
-   0.520000   0.000000   0.520000 (  0.520377)</code></pre>
-</div>
-
-
-<p>Comparing QuickFind (top line) with QuickUnion(bottom line), we can actually measure how well this small optimization of the union operation has increased performance with larger datasets.</p>
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   
