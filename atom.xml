@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-22T22:04:06-08:00</updated>
+  <updated>2014-01-22T22:13:38-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,20 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Meteor Subscribe, Autosubscribe, Unsubscribe?]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/meteor-subscribe/"/>
-    <updated>2014-01-24T20:28:28-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/meteor-subscribe</id>
-    <content type="html"><![CDATA[<p>subscribe: listens for events and fires once</p>
-
-<p>autosubscribe: session.set() triggers autosubscribe to fire again (resets subscription listener)</p>
-
-<!--more-->
-
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Git Retrieve: A Drama]]></title>
@@ -153,21 +139,11 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Til-duh]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/til-duh/"/>
-    <updated>2014-01-22T21:49:44-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/til-duh</id>
-    <content type="html"><![CDATA[<!--more-->
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Maintaining Mongod]]></title>
+    <title type="html"><![CDATA[Mongod Maintenance]]></title>
     <link href="http://www.katieleonard.ca/blog/2014/maintaining-mongod/"/>
     <updated>2014-01-22T07:23:10-08:00</updated>
     <id>http://www.katieleonard.ca/blog/2014/maintaining-mongod</id>
-    <content type="html"><![CDATA[<p>My laptop&rsquo;s battery died. Not a big deal, it is an old laptop and is used to being abused. I do not, however, have an old installation of mongo. I am quite new to mongo (as with everything else), so when meteor told me that it could not find a running instance of mongodb, I immediately began by trying to start it up again<!--more-->:</p>
+    <content type="html"><![CDATA[<p>My laptop&rsquo;s battery died, and I let it. Not a big deal, it is an old laptop and is used to being abused. Every time it does a hard shut down like that I wonder if it will recover. The laptop recovered just fine, but mongo did not. When my computer coughed back to life, I politely requested a meteor server, to which meteor replied that it could not start my server because it could not find a running mongodb. My first instinct, naturally, was to start it up again<!--more-->:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1616,6 +1592,137 @@ Lexer.new.tokenize(code)
 <p>Now that I have an array of tokens, it is time to write my grammar laws that will tell the parser what to do with them.</p>
 
 <p>Awesome</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Canadian Flair]]></title>
+    <link href="http://www.katieleonard.ca/blog/2013/canadian-flair/"/>
+    <updated>2013-08-10T22:29:03-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2013/canadian-flair</id>
+    <content type="html"><![CDATA[<p>For my last month at code school, I have decided to learn what it takes to develop a new programming language. Having been teased for my Canadian accent, I thought it appropriate to incorporate some idiomatic Canadianisms, and call my language Eh? Deciding what actual features I want to implement in my programming language is an interesting task, and I think I have narrowed it down to a couple of standard rules and a couple wacky ones:</p>
+
+<h3>Rules for Eh?</h3>
+
+<ul>
+<li>blocks of code are delimited by &lsquo;:&rsquo; and &lsquo;eh?&rsquo;</li>
+<li>classes are declared using &ldquo;A&rdquo; keyword</li>
+<li>methods are defined using &ldquo;CAN&rdquo; keyword</li>
+<li>lowercase identifiers are local variables or method names</li>
+<li>capitalized identifiers are global variables</li>
+<li>no parens for args</li>
+<li>last value evaluated in return value</li>
+<li>everything is an object</li>
+</ul>
+
+
+<!--more-->
+
+
+<h1>Steps for building an interpreted language</h1>
+
+<ol>
+<li>This code has to be provided as input to a lexer.</li>
+<li>The lexer will convert that input into tokens.</li>
+<li>The parser will organize those tokens into a tree of nodes.</li>
+<li>The runtime will evaluate the nodes using ruby.</li>
+</ol>
+
+
+<h3>Prototype</h3>
+
+<p>Here is what I would like the final result to look like:</p>
+
+<div>
+  <pre><code class='ruby'>a Canadian
+  with toque
+  with scarf
+  with broom
+
+  can curl
+    if skip:
+      say &quot;Hurry!&quot;
+    eh?
+    if lead:
+      pass
+    eh?
+    say &quot;How social the game...&quot;
+  eh?
+
+  can say_aboot:
+    say &quot;What&#39;s it all aboot?&quot;
+  eh?
+eh?</code></pre>
+</div>
+
+
+<p>With this vague action plan and <a href="http://createyourproglang.com/?hop=rubyinside">&ldquo;Create Your Own Programming Language&rdquo;</a> by Marc-Andre Cournoyer in hand, off we go!</p>
+
+<p>Awesome</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Show-off With GitHub and Docco]]></title>
+    <link href="http://www.katieleonard.ca/blog/2013/show-off-with-github/"/>
+    <updated>2013-08-06T22:29:03-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2013/show-off-with-github</id>
+    <content type="html"><![CDATA[<p>I was experimenting with some documentation styles today and discovered two bits of gold: gh-pages and docco<!--more-->:</p>
+
+<p>Creating a site for your project using GitHub is a 3 step process:
+1. create a new orphan branch called gh-pages
+2. remove all the contents
+3. fill the branch with your boastful new site</p>
+
+<div>
+  <pre><code class='bash'>$ cd repository
+
+$ git checkout --orphan gh-pages
+# Creates a branch, without any parents
+# Switched to a new branch &#39;gh-pages&#39;
+
+$ git rm -rf .
+# Remove all files from the old working tree</code></pre>
+</div>
+
+
+<p>From here you can use the <a href="https://help.github.com/articles/creating-pages-with-the-automatic-generator">GitHub Automatic Page generator</a> to throw up a theme and some standard content, you can roll out a <a href="http://jekyllbootstrap.com/">jekyll bootstrap</a> platform with blogging integration, or you can simply:</p>
+
+<div>
+  <pre><code class='bash'>$ echo &quot;Hello gh-pages!&quot; &gt; index.html
+$ git add index.html
+$ git commit -a -m &quot;First pages commit&quot;
+$ git push origin gh-pages</code></pre>
+</div>
+
+
+<p>Add and commit your content to your gh-pages branch, and GitHub will generate what needs to be generated in order to serve your website.</p>
+
+<p>Your pages are hosted for free by GitHub. If you have already configured a personal site using <a href="https://help.github.com/articles/user-organization-and-project-pages">User Pages</a>, your project pages will hang off the end of your domain like this : username.github.io/repo_name</p>
+
+<h3><a href="http://jashkenas.github.io/docco/">Docco</a></h3>
+
+<blockquote><p>Docco is a quick-and-dirty documentation generator, written in Literate CoffeeScript. It produces an HTML document that displays your comments intermingled with your code. All prose is passed through Markdown, and code is passed through Highlight.js syntax highlighting.</p></blockquote>
+
+<p>Docco works with  Python, Ruby, JavaScript, Java, and many other languages, with no configuration &mdash; just plug and play!</p>
+
+<p>Install Docco with npm:</p>
+
+<div>
+  <pre><code class='bash'>sudo npm install -g docco</code></pre>
+</div>
+
+
+<p>Run it against your code:</p>
+
+<div>
+  <pre><code class='javascript'>docco lib/*.ruby</code></pre>
+</div>
+
+
+<p>Docco will create a docs/ folder in your project and will generate an html file for each ruby file in the lib directory. This is where beautifully commented code really pays off, but docco does not format multi-line code the same way. Check out my <a href="http://www.katieleonard.ca/PCSnotes/docs/benchmark.html">benchmark.rb</a> for an example of how each comment style is treated by docco.</p>
+
+<p>TADA</p>
 ]]></content>
   </entry>
   

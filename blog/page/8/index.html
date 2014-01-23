@@ -9,7 +9,8 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Spies vs Mocks vs Stubs? We are covering testing frameworks at PCS this week, particularly Jasmine and Sinon. Jasmine has a similar structure to &hellip;">
+  <meta name="description" content="Namespaces in jQuery getting you down? Chuck taught me a great trick today &mdash; how to avoid namespace
+conflicts in jQuery">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,125 +79,6 @@
     <div id="content">
       <div class="blog-index">
   
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/javascript-has-spies/">Javascript Has Spies</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-25T00:00:00-07:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>Spies vs Mocks vs Stubs?</h2>
-
-<p>We are covering testing frameworks at PCS this week,
- particularly Jasmine and Sinon.</p>
-
-<p>Jasmine has a similar structure to RSpec:</p>
-
-<div>
-  <pre><code class='java'>describe(&quot;Class to describe&quot;, function() {
-  it(&quot;should have some behavior&quot;. function() {
-    //assertions
-  });
-});</code></pre>
-</div>
-
-
-<p>Also similar to RSpec, Jasmine allows you to spy on behavior.</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/javascript-has-spies/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/jquery-objects-vs-strings/">jQuery Objects vs Strings</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-19T00:00:00-07:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>Object blocker!!</h2>
-
-<p>My pair was stuck for the longest time on the following code snip:</p>
-
-<div>
-  <pre><code class='javascript'>$(function(){
-  var new_square = &#39;$(&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;)&#39;;
-
-  $(&#39;body&#39;).on(&#39;click&#39;,&#39;.square&#39;, function(){
-    // var my_square = $(this);
-    $(this).toggleClass(&#39;blue&#39;);
-
-    b = $(new_square)
-      .insertAfter(this);
-    a = $(new_square)
-      .insertBefore(this);
-    b.toggleClass(&#39;blue&#39;);
-    a.toggleClass(&#39;blue&#39;);
-  });
-});</code></pre>
-</div>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/jquery-objects-vs-strings/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
   
   
     <article>
@@ -347,23 +229,23 @@ I love that ruby has a built in framework &mdash; so easy to use!</p>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/meteor-subscribe/">Meteor Subscribe, Autosubscribe, Unsubscribe?</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2014/git-retrieve/">Git Retrieve: A Drama</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/til-duh/">Til-duh</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/maintaining-mongod/">Maintaining Mongod</a>
+        <a href="/blog/2014/maintaining-mongod/">Mongod Maintenance</a>
       </li>
     
       <li class="post">
         <a href="/blog/2014/embrace-hrt-for-collabrative-nirvana/">Embrace HRT for Collabrative Nirvana</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/opensource-setup-git-checkout-the-ego/">Open-source Setup:</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/meteor-user/">Meteor User</a>
       </li>
     
   </ul>
