@@ -111,6 +111,7 @@ task :new_post, :title do |t, args|
     post.puts "comments: true"
     post.puts "categories: "
     post.puts "---"
+    post.puts "\n\n<!--more-->"
   end
 end
 
