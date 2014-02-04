@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-01-22T22:13:38-08:00</updated>
+  <updated>2014-02-04T07:46:05-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,138 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Git Add -p]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/git-add-p/"/>
+    <updated>2014-02-01T20:51:09-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/git-add-p</id>
+    <content type="html"><![CDATA[<p>I learned a new tool that has quickly become an essential part of my workflow. <code>git add -p</code><!--more--> lets you add small hunks of modified code to the index from your working tree in order to prepare your next commit.</p>
+
+<p>The best refactors are small atomic changes, and while I may not always work incrementally, I still want my git history to reflect the ideal. I use <code>git add -p</code> before every commit to ensure that each code change is intentional.</p>
+
+<figure class='code'><figcaption><span>An example from my latest test project.</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git add -p
+</span><span class='line'>diff --git a/send.rb b/send.rb
+</span><span class='line'>index 5e89eaf..a0f25b6 100644
+</span><span class='line'>--- a/send.rb
+</span><span class='line'>+++ b/send.rb
+</span><span class='line'>@@ -17,5 +17,5 @@ <span class="nv">queue</span> <span class="o">=</span> channel.queue<span class="o">(</span><span class="s2">&quot;hello&quot;</span><span class="o">)</span>
+</span><span class='line'> channel.default_exchange.publish<span class="o">(</span><span class="s2">&quot;Hello world!&quot;</span>, :routing_key <span class="o">=</span>&gt; q.name<span class="o">)</span>
+</span><span class='line'> puts <span class="s2">&quot; [x] Sent &#39;Hello World!&#39;&quot;</span>
+</span><span class='line'>
+</span><span class='line'>-# close the connection
+</span><span class='line'>-conn.close
+</span><span class='line'><span class="se">\ </span>No newline at end of file
+</span><span class='line'>+#close the connection
+</span><span class='line'>+connection.close
+</span><span class='line'>Stage this hunk <span class="o">[</span>y,n,q,a,d,/,e,?<span class="o">]</span>?
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Woah &mdash; that is a lot of information&hellip; lets go through by the numbers:</p>
+
+<ol>
+<li>the initial command</li>
+<li>tells me that it is showing the changes made in the send.rb file. &lsquo;a&rsquo; is the version already in the commit history, and &lsquo;b&rsquo; is the copy in the working directory.</li>
+<li>shows the commit SHA range for this branch</li>
+<li>tells me that lines marked with a &lsquo;&ndash;&rsquo; are from the committed version of send.rb</li>
+<li>tells me that lines marked with a &lsquo;+&rsquo; are from the working directory version of send.rb</li>
+<li><code>@@ -17,5 +17,5 @@</code> indicates that the hunk under scrutiny begins at line 17 of the committed version (&lsquo;-17&rsquo;) and affects 5 lines. It corresponds to the working directory version starting at line 17 (&lsquo;+17&rsquo;), also affecting 5 lines.</li>
+<li>the remaining lines contain the details of the changes in the hunk.</li>
+</ol>
+
+
+<h3>Know your options</h3>
+
+<p>Now that you have a hunk, what can you do with it?</p>
+
+<figure class='code'><figcaption><span>Type &#8216;?&#8217; to learn what you can do with your hunk</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>...
+</span><span class='line'>Stage this hunk <span class="o">[</span>y,n,q,a,d,/,e,?<span class="o">]</span> ?
+</span><span class='line'>y - stage this hunk
+</span><span class='line'>n - <span class="k">do </span>not stage this hunk
+</span><span class='line'>q - quit, <span class="k">do </span>not stage this hunk nor any of the remaining ones
+</span><span class='line'>a - stage this and all the remaining hunks in the file
+</span><span class='line'>d - <span class="k">do </span>not stage this hunk nor any of the remaining hunks in the file
+</span><span class='line'>g - <span class="k">select </span>a hunk to go to
+</span><span class='line'>/ - search <span class="k">for </span>a hunk matching the given regex
+</span><span class='line'>j - leave this hunk undecided, see next undecided hunk
+</span><span class='line'>J - leave this hunk undecided, see next hunk
+</span><span class='line'>k - leave this hunk undecided, see previous undecided hunk
+</span><span class='line'>K - leave this hunk undecided, see previous hunk
+</span><span class='line'>s - split the current hunk into smaller hunks
+</span><span class='line'>e - manually edit the current hunk
+</span><span class='line'>? - print <span class="nb">help</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The first few options are obvious choices &mdash; <code>y</code> (&ldquo;Yes, please!&rdquo;), and <code>n</code> (&ldquo;What was I thinking there?&rdquo;), as well as <code>q</code> (&ldquo;Hey, Jane! Get me off this crazy thing!&rdquo;).</p>
+
+<p>I haven&rsquo;t quite got a handle on the middle options, but I have skimmed down and used <code>s</code> to split the hunk into smaller pieces. Split will only divide a hunk if there is a logical place for separation, like a gap between changes. For real index-finesse and line-by-line control you have to&hellip; edit the hunk (gasp).</p>
+
+<p>Seasoned veterans may blanch at the thought of editing a hunk without a GUI, but I have discovered the secret to command-line-hunk-editing-prowess. The secret is:</p>
+
+<h2>Read the instructions</h2>
+
+<p>Revisiting the earlier example, I choose <code>e</code> to edit my hunk. I think the original comment on line 10 is better than the new one on line 13 (spacy == better). Selecting <code>e</code> opens your editor of choice with the now familiar hunk, along with&hellip;</p>
+
+<p>Lo, and behold! Instructions after the hunk!</p>
+
+<p><img src="http://www.katieleonard.ca/images/addp-hunk-edit_diff-8.png"></p>
+
+<p>Simple enough:</p>
+
+<ul>
+<li><code>-# close the connection</code> becomes <code># close the connection</code> &mdash; mind the space!</li>
+<li>remove <code>+#close the connection</code> entirely</li>
+<li>save and close.</li>
+</ul>
+
+
+<p>Success? If you have done everything right, the hunk will be staged and git will move on to the next hunk in your working directory. If you have made an error you will see the following message:</p>
+
+<figure class='code'><figcaption><span>Type &#8216;?&#8217; to learn what you can do with your hunk</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Your edited hunk does not apply.
+</span><span class='line'>Edit again <span class="o">(</span>saying <span class="s2">&quot;no&quot;</span> discards!<span class="o">)</span> <span class="o">[</span>y/n<span class="o">]</span>?
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Aw nuts. <code>y</code> will let you amend your transgressions (did you remember to save? did you forget to leave a space in place of the &lsquo;&ndash;&rsquo;?), and <code>n</code> will abandon your changes and take you back to the drawing board, where you are free to transgress anew.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Git Retrieve: A Drama]]></title>
@@ -1659,70 +1791,6 @@ eh?</code></pre>
 <p>With this vague action plan and <a href="http://createyourproglang.com/?hop=rubyinside">&ldquo;Create Your Own Programming Language&rdquo;</a> by Marc-Andre Cournoyer in hand, off we go!</p>
 
 <p>Awesome</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Show-off With GitHub and Docco]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/show-off-with-github/"/>
-    <updated>2013-08-06T22:29:03-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/show-off-with-github</id>
-    <content type="html"><![CDATA[<p>I was experimenting with some documentation styles today and discovered two bits of gold: gh-pages and docco<!--more-->:</p>
-
-<p>Creating a site for your project using GitHub is a 3 step process:
-1. create a new orphan branch called gh-pages
-2. remove all the contents
-3. fill the branch with your boastful new site</p>
-
-<div>
-  <pre><code class='bash'>$ cd repository
-
-$ git checkout --orphan gh-pages
-# Creates a branch, without any parents
-# Switched to a new branch &#39;gh-pages&#39;
-
-$ git rm -rf .
-# Remove all files from the old working tree</code></pre>
-</div>
-
-
-<p>From here you can use the <a href="https://help.github.com/articles/creating-pages-with-the-automatic-generator">GitHub Automatic Page generator</a> to throw up a theme and some standard content, you can roll out a <a href="http://jekyllbootstrap.com/">jekyll bootstrap</a> platform with blogging integration, or you can simply:</p>
-
-<div>
-  <pre><code class='bash'>$ echo &quot;Hello gh-pages!&quot; &gt; index.html
-$ git add index.html
-$ git commit -a -m &quot;First pages commit&quot;
-$ git push origin gh-pages</code></pre>
-</div>
-
-
-<p>Add and commit your content to your gh-pages branch, and GitHub will generate what needs to be generated in order to serve your website.</p>
-
-<p>Your pages are hosted for free by GitHub. If you have already configured a personal site using <a href="https://help.github.com/articles/user-organization-and-project-pages">User Pages</a>, your project pages will hang off the end of your domain like this : username.github.io/repo_name</p>
-
-<h3><a href="http://jashkenas.github.io/docco/">Docco</a></h3>
-
-<blockquote><p>Docco is a quick-and-dirty documentation generator, written in Literate CoffeeScript. It produces an HTML document that displays your comments intermingled with your code. All prose is passed through Markdown, and code is passed through Highlight.js syntax highlighting.</p></blockquote>
-
-<p>Docco works with  Python, Ruby, JavaScript, Java, and many other languages, with no configuration &mdash; just plug and play!</p>
-
-<p>Install Docco with npm:</p>
-
-<div>
-  <pre><code class='bash'>sudo npm install -g docco</code></pre>
-</div>
-
-
-<p>Run it against your code:</p>
-
-<div>
-  <pre><code class='javascript'>docco lib/*.ruby</code></pre>
-</div>
-
-
-<p>Docco will create a docs/ folder in your project and will generate an html file for each ruby file in the lib directory. This is where beautifully commented code really pays off, but docco does not format multi-line code the same way. Check out my <a href="http://www.katieleonard.ca/PCSnotes/docs/benchmark.html">benchmark.rb</a> for an example of how each comment style is treated by docco.</p>
-
-<p>TADA</p>
 ]]></content>
   </entry>
   
