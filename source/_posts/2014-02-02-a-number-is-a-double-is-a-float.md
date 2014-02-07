@@ -8,6 +8,9 @@ categories: [I_didn't_know_that, javascript]
 
 JavaScript has a single number type -- a 64-bit floating point number. Since there is no separate integer type, 1 and 1.0 are the same value.
 <!--more-->
+
+One of the consequences is that the ```/``` operator may return a floating point number even if both operands are integers. Goodbye casting!
+
 [JavaScript: The Good Parts](http://www.amazon.com/gp/product/0596517742/ref=as_li_tf_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0596517742&linkCode=as2&tag=bridgeforpoke-20)
 
 Awesome.
