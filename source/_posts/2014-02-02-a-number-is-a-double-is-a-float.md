@@ -3,7 +3,7 @@ layout: post
 title: "a number is a double is a float"
 date: 2014-02-02 19:56:17 -0800
 comments: true
-categories: [I_didn't_know_that, javascript]
+categories: [I didn't know that, javascript]
 ---
 
 JavaScript has a single number type -- a 64-bit floating point number. Since there is no separate integer type, 1 and 1.0 are the same value.
