@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Have you ever deleted a file on impulse, only to wake up with remorse later? It doesn&rsquo;t matter if later is the next morning or the next week, &hellip;">
+  <meta name="description" content="git checkout the Ego. In the interests of giving back to the software community, I have been looking for an active open-source project to contribute &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,127 +78,6 @@
     <div id="content">
       <div class="blog-index">
   
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/git-retrieve/">Git Retrieve: A Drama</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-23T20:47:46-08:00" pubdate data-updated="true">Jan 23<span>rd</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Have you ever deleted a file on impulse, only to wake up with remorse later? It doesn&rsquo;t matter if later is the next morning or the next week, thanks to git you have the power to reanimate gone-but-not-forgotten files. Nothing is <del>ever</del> EVER lost with git. So how do you retrieve a file that has been deleted in a previous commit?</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/git-retrieve/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/maintaining-mongod/">Mongod Maintenance</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-22T07:23:10-08:00" pubdate data-updated="true">Jan 22<span>nd</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>My laptop&rsquo;s battery died, and I let it. Not a big deal, it is an old laptop and is used to being abused. Every time it does a hard shut down like that I wonder if it will recover. The laptop recovered just fine, but mongo did not. When my computer coughed back to life, I politely requested a meteor server, to which meteor replied that it could not start my server because it could not find a running mongodb. My first instinct, naturally, was to start it up again</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/maintaining-mongod/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/embrace-hrt-for-collabrative-nirvana/">Embrace HRT for Collabrative Nirvana</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-20T07:07:15-08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://www.amazon.com/gp/product/1449302440/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1449302440&amp;linkCode=as2&amp;tag=keighty-20">Team Geek: A Software Developer&rsquo;s Guide to Working Well with Others</a> by Brian W. Fitzpatrick and Ben Collins-Sussman.</p>
-
-<p>With decades of collective experience, these two authors distill the essential philosophy required to be part of a healthy development team: HRT &mdash; humility, respect, and trust. These values are covered in the first chapter and the remainder of the book describes how to best use them as an engineer and as a manager. Some techniques particularly resonated with my world view.</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/embrace-hrt-for-collabrative-nirvana/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
   
   
     <article>
@@ -282,6 +161,148 @@
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/get-clean/">Get Clean</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-13T21:29:03-08:00" pubdate data-updated="true">Jan 13<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I experiment a lot before I choose an implementation I like. I am sure I am not alone in making a few (or many) false starts, and yet feeling sick at the thought of deleting any code. What if one of those paths I started down was the right one? This loss aversion often leads to working trees of non-working code, and <code>git stash</code>-es that I will never revisit. If I stop myself from going too far down yet another road without an end in sight, attempts to clean up my working directory often stall miserably at the end of a <code>git checkout .</code>:</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/get-clean/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-29T22:29:03-07:00" pubdate data-updated="true">Oct 29<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I am building an application that uses several nested attributes: Users have many Goals (Goals belong_to Users), and Goals have many Hours (Hours belong_to Goals).</p>
+
+<p>Using <a href="https://github.com/thoughtbot/factory_girl">FactoryGirl</a> to create a User is straightforward:</p>
+
+<div>
+  <pre><code class='ruby'>FactoryGirl.define do
+  factory :user do
+    sequence :name  { |n| &quot;person#{n}&quot; }
+    sequence :email { |n| &quot;person#{n}@example.com&quot; }
+  end
+end
+
+describe User do
+  before  { @user = FactoryGirl.create(:user) }
+  subject { @user }
+  it { should respond_to(:name) }
+  ...
+end</code></pre>
+</div>
+
+
+<p>How do I create Goals that are linked to the User?</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/factoring-in-nests/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/meatier-apps-with-meteor/">Meatier Apps With Meteor</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-20T22:29:03-07:00" pubdate data-updated="true">Oct 20<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.meteor.com/">Meteor</a> is a framework that allows you to write web applications using only javascript. All the work is done on the client-side. Meteor embraces new principles of web design: data on the wire, one language is enough, and simplicity makes for productivity.</p>
+
+<p>Simplicity is something I value as well, and while setting up meteor on my linux machine was not a three-step process as outlined in their examples, it only took a little tinkering to figure out the problem. </div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/meatier-apps-with-meteor/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -306,23 +327,23 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/strut-ures/">Strut-ures</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/afraid-of-commitment/">Afraid of Commitment</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/slack/">Slack</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2014/a-number-is-a-double-is-a-float/">A Number Is a Double Is a Float</a>
       </li>
     
       <li class="post">
         <a href="/blog/2014/git-add-p/">Git Add -p</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/git-retrieve/">Git Retrieve: A Drama</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/maintaining-mongod/">Mongod Maintenance</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/embrace-hrt-for-collabrative-nirvana/">Embrace HRT for Collabrative Nirvana</a>
       </li>
     
   </ul>
