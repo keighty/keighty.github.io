@@ -4,7 +4,7 @@
   <title><![CDATA[Category: I_didn't_know_that | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/i-didnt-know-that/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-06T20:29:15-08:00</updated>
+  <updated>2014-02-07T07:53:39-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -22,6 +22,8 @@
 
 <!--more-->
 
+
+<p>One of the consequences is that the <code>/</code> operator may return a floating point number even if both operands are integers. Goodbye casting!</p>
 
 <p><a href="http://www.amazon.com/gp/product/0596517742/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0596517742&amp;linkCode=as2&amp;tag=bridgeforpoke-20">JavaScript: The Good Parts</a></p>
 
