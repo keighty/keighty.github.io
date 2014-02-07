@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Having just discovered the magic of using partials to refactor html in rails, imagine my delight when I found it to be even easier in Sinatra. ">
+  <meta name="description" content="1. Write a failing test describe &quot;Static About page&quot; do it &quot;should have the content &#39;About Us&#39;&quot; do visit &#39;/ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,47 +78,6 @@
     <div id="content">
       <div class="blog-index">
   
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/partial-to-sinatra/">Partial to Sinatra</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-09T00:00:00-07:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Having just discovered the magic of using partials to refactor html in rails, imagine my delight when I found it to be even easier in Sinatra.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/partial-to-sinatra/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
   
   
     <article>
@@ -308,6 +267,70 @@ end</code></pre>
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/jquery-objects-vs-strings/">jQuery Objects vs Strings</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-19T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Object blocker!!</h2>
+
+<p>My pair was stuck for the longest time on the following code snip:</p>
+
+<div>
+  <pre><code class='javascript'>$(function(){
+  var new_square = &#39;$(&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;)&#39;;
+
+  $(&#39;body&#39;).on(&#39;click&#39;,&#39;.square&#39;, function(){
+    // var my_square = $(this);
+    $(this).toggleClass(&#39;blue&#39;);
+
+    b = $(new_square)
+      .insertAfter(this);
+    a = $(new_square)
+      .insertBefore(this);
+    b.toggleClass(&#39;blue&#39;);
+    a.toggleClass(&#39;blue&#39;);
+  });
+});</code></pre>
+</div>
+
+
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/jquery-objects-vs-strings/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/9/">&larr; Older</a>
@@ -332,10 +355,6 @@ end</code></pre>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/a-number-is-a-double-is-a-float/">A Number Is a Double Is a Float</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2014/strut-ures/">Strut-ures</a>
       </li>
     
@@ -349,6 +368,10 @@ end</code></pre>
     
       <li class="post">
         <a href="/blog/2014/a-number-is-a-double-is-a-float/">A Number Is a Double Is a Float</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/git-add-p/">Git Add -p</a>
       </li>
     
   </ul>
