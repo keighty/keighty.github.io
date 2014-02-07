@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: I_didn't_know_that | keighty]]></title>
+  <link href="http://www.katieleonard.ca/blog/categories/i-didnt-know-that/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2014-02-06T20:01:52-08:00</updated>
+  <id>http://www.katieleonard.ca/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[A Number Is a Double Is a Float]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/a-number-is-a-double-is-a-float/"/>
+    <updated>2014-02-02T19:56:17-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/a-number-is-a-double-is-a-float</id>
+    <content type="html"><![CDATA[<p>JavaScript has a single number type &mdash; a 64-bit floating point number. Since there is no separate integer type, 1 and 1.0 are the same value.</p>
+
+<!--more-->
+
+
+<p><a href="http://www.amazon.com/gp/product/0596517742/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0596517742&amp;linkCode=as2&amp;tag=bridgeforpoke-20">JavaScript: The Good Parts</a></p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+</feed>

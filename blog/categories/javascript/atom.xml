@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-04T07:51:39-08:00</updated>
+  <updated>2014-02-06T20:01:52-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,22 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[A Number Is a Double Is a Float]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/a-number-is-a-double-is-a-float/"/>
+    <updated>2014-02-02T19:56:17-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/a-number-is-a-double-is-a-float</id>
+    <content type="html"><![CDATA[<p>JavaScript has a single number type &mdash; a 64-bit floating point number. Since there is no separate integer type, 1 and 1.0 are the same value.</p>
+
+<!--more-->
+
+
+<p><a href="http://www.amazon.com/gp/product/0596517742/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0596517742&amp;linkCode=as2&amp;tag=bridgeforpoke-20">JavaScript: The Good Parts</a></p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Meteor User]]></title>
@@ -276,65 +292,6 @@ expect(mySpy.callCount).toEqual(3);
 </div>
 
 Tomorrow, I conquer Stubs and Mocks!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[jQuery Objects vs Strings]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/jquery-objects-vs-strings/"/>
-    <updated>2013-06-19T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/jquery-objects-vs-strings</id>
-    <content type="html"><![CDATA[<h2>Object blocker!!</h2>
-
-<p>My pair was stuck for the longest time on the following code snip:</p>
-
-<p><div>
-  <pre><code class='javascript'>$(function(){
-  var new_square = &amp;lsquo;$(&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;)&amp;rsquo;;&lt;/p&gt;
-
-&lt;p&gt;  $(&amp;lsquo;body&amp;rsquo;).on(&amp;lsquo;click&amp;rsquo;,&amp;lsquo;.square&amp;rsquo;, function(){&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;// var my_square = $(this);
-$(this).toggleClass(&#39;blue&#39;);
-
-b = $(new_square)
-  .insertAfter(this);
-a = $(new_square)
-  .insertBefore(this);
-b.toggleClass(&#39;blue&#39;);
-a.toggleClass(&#39;blue&#39;);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  });
-});</code></pre>
-</div>
-</p>
-
-<!--more-->
-
-
-<p> We expected out output to include three elements &mdash; the original square, one
- inserted after, and one inserted before. The output we were seeing included
- only two squares: the original one and the square inserted before. If
- we inverted the insert calls, we would see only one inserted after. We
- were totally stumped until we printed out the content of new_square:
- <div>
-  <pre><code class='javascript'>$(&amp;lsquo;&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;&amp;rsquo;);</code></pre>
-</div>
-
- We were actually passing a reference to a jQuery OBJECT into the insert methods,
- so in essence, we were creating the object once and then passing it around to
- different locations. When we changed new_square from a jQuery object:
- <div>
-  <pre><code class='javascript'>var new_square = &amp;lsquo;$(&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;)&amp;rsquo;;</code></pre>
-</div>
-
- to a string
- <div>
-  <pre><code class='javascript'>var new_square = &amp;lsquo;&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;&amp;rsquo;;</code></pre>
-</div>
-
- We saw our third element appear no problem.</p>
 ]]></content>
   </entry>
   
