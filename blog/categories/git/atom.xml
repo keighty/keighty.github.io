@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-08T10:51:03-08:00</updated>
+  <updated>2014-02-08T10:53:18-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,38 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Afraid of Commitment]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/afraid-of-commitment/"/>
+    <updated>2014-02-04T08:04:27-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/afraid-of-commitment</id>
+    <content type="html"><![CDATA[<h3>or, how to not fubar your git history</h3>
+
+<p>As with all the git lessons I have learned, this one started with a huge mistake. I had merged a commit to master that was breaking pages I didn&rsquo;t know existed. The sage developer sitting on my right shoulder told me that since I was unsure of how to fix the problem I should revert the offending commit forthwith. <!--more--></p>
+
+<p>I had two choices of commit to revert:</p>
+
+<ol>
+<li>remove the offending commit from the branch history</li>
+<li>remove the merge commit, where the broken code had infiltrated master</li>
+</ol>
+
+
+<p>While the former is like a surgical excision of a moment in history (eternal sunshine of a spotless git history?), the latter will preserve your branch history, and the context surrounding the changes made. I like a lot of context, so I chose to revert the merge commit.</p>
+
+<p>When you undo a merge, git doesn&rsquo;t know how to reassign the branches. Was the left one master? The right? Does git know left from right? Who is on first? Take the guesswork out of the equation</p>
+
+<p><code>bash
+$ git checkout -b revert_branch_name
+$ git revert -m 1 &lt;SHA of commit to be reverted&gt;
+</code></p>
+
+<p>Warning: If you don’t make the new branch first, you will mess up your merge history on master. Trust me. Just make the branch first. Now you can ensure that your test suite will pass with the commit reverted before you do something silly, like merge even more breakage into master. Crisis averted.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Git Add -p]]></title>
@@ -165,7 +197,7 @@ cat: foo.bar: No such file or directory you heartless creature!
 <p>```bash Act 2 Scene 2: Regret
 $ git log &mdash;diff-filter=D &mdash;summary
 commit b045a528b4a0824f63562cad867b264983b32c7c
-Author: keighty <a href="&#109;&#x61;&#105;&#108;&#x74;&#111;&#58;&#107;&#101;&#x69;&#103;&#104;&#x74;&#121;&#46;&#108;&#x65;&#111;&#x6e;&#97;&#114;&#x64;&#x40;&#103;&#109;&#97;&#x69;&#x6c;&#46;&#x63;&#111;&#109;">&#107;&#101;&#105;&#103;&#104;&#116;&#121;&#46;&#x6c;&#x65;&#111;&#110;&#x61;&#114;&#100;&#64;&#x67;&#109;&#x61;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;</a>
+Author: keighty <a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#58;&#x6b;&#x65;&#105;&#x67;&#x68;&#x74;&#x79;&#46;&#108;&#101;&#x6f;&#x6e;&#97;&#114;&#x64;&#64;&#103;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#111;&#x6d;">&#107;&#101;&#x69;&#x67;&#104;&#x74;&#121;&#46;&#108;&#101;&#x6f;&#x6e;&#x61;&#114;&#x64;&#x40;&#x67;&#109;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;</a>
 Date:   Wed Jan 22 20:46:16 2014 -0800</p>
 
 <pre><code>I have made a huge mistake.
@@ -347,43 +379,6 @@ $ git cherry-pick 8394b37494b63754f42ecaf19244fe6d8a36942f
 <p>Now you can merge this branch with master, or continue fleshing out the feature on a clean branch, keeping only the good stuff and abandoning the bad, making experimentation easy.</p>
 
 <p>AWESOME</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Best Practices - Pull Requests]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/best-practices-pull-requests/"/>
-    <updated>2013-07-11T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/best-practices-pull-requests</id>
-    <content type="html"><![CDATA[<p>Learning how to contribute to open source projects has been really exciting. Adding value to existing projects, getting social in the coding community, and working on production-level code has been a steep but rewarding learning curve. One important thing to learn is the etiquette of creating pull requests. I read a great post about what to include in a <a href="http://dev.solita.fi/2013/07/04/whats-in-a-good-commit.html">good commit</a>, but I also needed to know how to make a good pull request<!--more-->:</p>
-
-<h3>Branch it</h3>
-
-<p>Before making any changes to an open source project, open a new branch. This will allow you to isolate your changes into separate pull requests. For example, I add Feature A, push to master, and create pull request 1. The next day, I add Feature B, push to master, and create pull request 2. If Feature A has not already been reviewed and accepted, Feature B additions will now be encorporated into pull request 1. This is bad practice. Keep each contribution in a separate branch. This will also allow you to keep your current branch up to date with the upstream repository, without affecting your previous work.</p>
-
-<h3>One change, one commit</h3>
-
-<p>A commit is not just a backup. Like a migration, your commit history should read like a road map of changes you make to get to your current state &mdash; and changes you should undo when things go wrong. If your commits change dozens of lines of code, understanding the changes is going to require a deep dive into the code.</p>
-
-<h3>Pithy commit messages</h3>
-
-<p>Make it easy on your code reviewer by making your commits small enough, and your commit messages detailed enough that they can be understood at a glance.</p>
-
-<p>The workflow, in general:</p>
-
-<ol>
-  <li>fork the repo</li>
-  <li><code>git clone</code> to local machine</li>
-  <li><code>git checkout -b featureA</code></li>
-  <li><code>git pull upstream master</code></li>
-  <li>make your changes</li>
-  <li><code>git commit -am "adds one addition to feature A"</code></li>
-  <li><code>git push origin featureA</code></li>
-  <li>make pull request</li>
-</ol>
-
-
-<p>Awesome</p>
 ]]></content>
   </entry>
   
