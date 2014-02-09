@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "first in, first out"
-date: 2014-02-08 11:14:30 -0800
+date: 2014-02-05 11:14:30 -0800
 comments: true
 categories: [message queue]
 ---
