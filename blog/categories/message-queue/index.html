@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Git-Picking - keighty</title>
+  <title>Category: Message Queue - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="">
+  <meta name="description" content="Category: message queue">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2013/git-picking">
+  <link rel="canonical" href="http://www.katieleonard.cablog/categories/message-queue">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -77,176 +77,36 @@
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
   <header>
-    
-      <h1 class="entry-title">Git-Picking</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-24T22:29:03-07:00" pubdate data-updated="true">Jul 24<span>th</span>, 2013</time>
-        
-      </p>
+    <h1 class="entry-title">Category: Message Queue</h1>
     
   </header>
-
-
-<div class="entry-content"><h4>or, How to mine for cherries with Git</h4>
-
-<p>When I work on an experimental feature in a project branch, I have often found that I will have a mixture of commits I would like to keep, and commits that I wish had never happened.
-Using the principle of only committing atomic changes, and enjoying the fruits of your detailed-commit-message labour, there is a way to extract the gold from the ore, so to speak.</p>
-
-<!--more-->
-
-
-<h2>Locate the gold</h2>
-
-<p>Checkout the branch that contains your experiment, and use git log to get a list of all the commits:</p>
-
-<div>
-  <pre><code class='bash'>$ git checkout form_feature_branch
-$ git log --pretty=oneline
-a83f4c3aa5d800f846d075748a79a326e0971f67 reorg gemfile
-197964c091905a76f2172ca11fcbd49ccfb83c67 adds blog.db
-a793fe00c50a5956c5e9f7be48ac5a9861b1eb95 adds forme form to edit...
-8394b37494b63754f42ecaf19244fe6d8a36942f adds gitignore for db ...
-c52a6fd3f1706584ce3e47abf49ed627a1e28fd3 adds bundler gem for manag...
-1686664c4a98221ea04377bcbcf946e62a9f1cfa removes gems for simple...
-034d309a612dcce6f10bb55f0da2e78b2f7c10b1 adds cells to project
-...</code></pre>
-</div>
-
-
-<p>In form_feature_branch I was testing out different implementations of form generation in erb views. I tried a couple of different gems and found one that suits my sinatra project: <a href="https://github.com/jeremyevans/forme">Forme</a> is easy to use with or without models, and has great sinatra integration and documentation. Also along the way, I discovered how to include bundler for managing file dependencies and did some minor refactoring of my Gemfile.</p>
-
-<p>I wanted to keep the gem reorganization, as well as the forme, bundler, and gitignore commits, so I made this list of keeper-commits:</p>
-
-<div>
-  <pre><code class='bash'>a83f4c3aa5d800f846d075748a79a326e0971f67 reorg gemfile
-a793fe00c50a5956c5e9f7be48ac5a9861b1eb95 adds forme form to edit...
-c52a6fd3f1706584ce3e47abf49ed627a1e28fd3 adds bundler gem for manag...
-8394b37494b63754f42ecaf19244fe6d8a36942f adds gitignore for db ...</code></pre>
-</div>
-
-
-<p>Everything else is cruft.</p>
-
-<h2>Extract the gold</h2>
-
-<p>With this list of golden commits in hand, checkout a fresh branch and cherry-pick the commits you like!</p>
-
-<div>
-  <pre><code class='bash'>$ git checkout -b form_feature_additions
-$ git cherry-pick &lt;commit_identifier&gt;</code></pre>
-</div>
-
-
-<p>Do this command for each good commit:</p>
-
-<div>
-  <pre><code class='bash'>$ git cherry-pick a83f4c3aa5d800f846d075748a79a326e0971f67
-[master form_feature_additions] reorg gemfile
- 1 file changed, 4 insertions(+), 2 deletions(-)
- changed mode 100644 Gemfile
-$ git cherry-pick a793fe00c50a5956c5e9f7be48ac5a9861b1eb95
-[master form_feature_additions] adds forme form to edit...
-...
-$ git cherry-pick c52a6fd3f1706584ce3e47abf49ed627a1e28fd3
-[master form_feature_additions] adds bundler gem for manag..
-...
-$ git cherry-pick 8394b37494b63754f42ecaf19244fe6d8a36942f
-[master form_feature_additions] adds gitignore for db ...
-...</code></pre>
-</div>
-
-
-<p>If you look at your git status you will see</p>
-
-<div>
-  <pre><code class='bash'># On branch form_feature_additions
-# Your branch is ahead of &#39;origin/master&#39; by 4 commits.</code></pre>
-</div>
-
-
-<h2>Profit</h2>
-
-<p>Now you can merge this branch with master, or continue fleshing out the feature on a clean branch, keeping only the good stuff and abandoning the bad, making experimentation easy.</p>
-
-<p>AWESOME</p>
-</div>
-
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
-
-      
-
-
-
-
-
+  <div id="blog-archives" class="category">
 
 
 
   
+  <h2>2014</h2>
+
+<article>
+  
+<h1><a href="/blog/2014/first-in-first-out/">First in, First Out</a></h1>
+<time datetime="2014-02-08T11:14:30-08:00" pubdate><span class='month'>Feb</span> <span class='day'>08</span> <span class='year'>2014</span></time>
+
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/message-queue/'>message queue</a></span>
+</footer>
 
 
-<time datetime="2013-07-24T22:29:03-07:00" pubdate data-updated="true">Jul 24<span>th</span>, 2013</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/git/'>git</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2013/git-picking/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2013/git-picking/" >Tweet</a>
-  
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2013/sinatra-in-a-console/" title="Previous Post: Sinatra in a console">&laquo; Sinatra in a console</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2013/procuring-provisions/" title="Next Post: Procuring Provisions">Procuring Provisions &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-  </section>
+
+  
+</article>
 
 </div>
 
@@ -342,10 +202,7 @@ $ git cherry-pick 8394b37494b63754f42ecaf19244fe6d8a36942f
       var disqus_shortname = 'keightyleonard';
       
         
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2013/git-picking/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2013/git-picking/';
-        var disqus_script = 'embed.js';
+        var disqus_script = 'count.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Git-Picking - keighty</title>
+  <title>First in, First Out - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="">
+  <meta name="description" content="Why use message queues? Message queues offer the benefits of high reliability at the cost of performance. This is particularly useful for web tasks &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2013/git-picking">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/first-in-first-out">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -81,7 +81,7 @@
   
   <header>
     
-      <h1 class="entry-title">Git-Picking</h1>
+      <h1 class="entry-title">First in, First Out</h1>
     
     
       <p class="meta">
@@ -97,95 +97,49 @@
   
 
 
-<time datetime="2013-07-24T22:29:03-07:00" pubdate data-updated="true">Jul 24<span>th</span>, 2013</time>
+<time datetime="2014-02-08T11:14:30-08:00" pubdate data-updated="true">Feb 8<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h4>or, How to mine for cherries with Git</h4>
+<div class="entry-content"><h3>Why use message queues?</h3>
 
-<p>When I work on an experimental feature in a project branch, I have often found that I will have a mixture of commits I would like to keep, and commits that I wish had never happened.
-Using the principle of only committing atomic changes, and enjoying the fruits of your detailed-commit-message labour, there is a way to extract the gold from the ore, so to speak.</p>
+<p>Message queues offer the benefits of high reliability at the cost of performance. This is particularly useful for web tasks that may take longer than the typical HTTP request. Requests are persisted, acknowledged, and confirmed asynchronously. They are not dropped or timed out, no matter how long they take to process.</p>
 
 <!--more-->
 
 
-<h2>Locate the gold</h2>
+<h3>Asynchronous request processing with RabbitMQ</h3>
 
-<p>Checkout the branch that contains your experiment, and use git log to get a list of all the commits:</p>
+<p>A program that sends messages is a <strong>producer</strong>. A producer drops a message onto a <strong>queue</strong> (like a mailbox). A <strong>consumer</strong> is a program that mostly waits to receive messages, and processes them when they arrive.</p>
 
-<div>
-  <pre><code class='bash'>$ git checkout form_feature_branch
-$ git log --pretty=oneline
-a83f4c3aa5d800f846d075748a79a326e0971f67 reorg gemfile
-197964c091905a76f2172ca11fcbd49ccfb83c67 adds blog.db
-a793fe00c50a5956c5e9f7be48ac5a9861b1eb95 adds forme form to edit...
-8394b37494b63754f42ecaf19244fe6d8a36942f adds gitignore for db ...
-c52a6fd3f1706584ce3e47abf49ed627a1e28fd3 adds bundler gem for manag...
-1686664c4a98221ea04377bcbcf946e62a9f1cfa removes gems for simple...
-034d309a612dcce6f10bb55f0da2e78b2f7c10b1 adds cells to project
-...</code></pre>
-</div>
+<p>RabbitMQ provides message acknowledgments. An ack(nowledgement) is sent back from the consumer to tell the queue that a particular message has been received and processed, and that the queue is free to delete it</p>
 
+<h3>Lets be fair</h3>
 
-<p>In form_feature_branch I was testing out different implementations of form generation in erb views. I tried a couple of different gems and found one that suits my sinatra project: <a href="https://github.com/jeremyevans/forme">Forme</a> is easy to use with or without models, and has great sinatra integration and documentation. Also along the way, I discovered how to include bundler for managing file dependencies and did some minor refactoring of my Gemfile.</p>
+<p>By default, RabbitMQ will dispatch messages equitably to all workers, and will not check first to see if the worker is already busy. You can ask the queue to only send messages to a worker if it is available to process a message.</p>
 
-<p>I wanted to keep the gem reorganization, as well as the forme, bundler, and gitignore commits, so I made this list of keeper-commits:</p>
+<p>Use <code>channel.prefetch(1)</code> to prevent dispatching a new message to a worker until it has processed and acknowledged the previous one. Instead, RabbitMQ will dispatch it to the next worker that is not still busy. One possible ramification of prefetching is that the queue can become backed up if all workers are busy with long processes, so watch your queue length!</p>
 
-<div>
-  <pre><code class='bash'>a83f4c3aa5d800f846d075748a79a326e0971f67 reorg gemfile
-a793fe00c50a5956c5e9f7be48ac5a9861b1eb95 adds forme form to edit...
-c52a6fd3f1706584ce3e47abf49ed627a1e28fd3 adds bundler gem for manag...
-8394b37494b63754f42ecaf19244fe6d8a36942f adds gitignore for db ...</code></pre>
-</div>
+<h3>Useful Commands</h3>
+
+<ul>
+<li>list active queues: <code>sudo rabbitmqctl list_queues</code></li>
+<li>list queues along with unacknowledged messages: <code>sudo rabbitmqctl list_queues name messages_ready messages_unacknowledged</code></li>
+</ul>
 
 
-<p>Everything else is cruft.</p>
+<h3>Resources</h3>
 
-<h2>Extract the gold</h2>
+<ul>
+<li><a href="http://www.amazon.com/gp/product/B00HNG8ZFQ/ref=kinw_myk_ro_title">Queue based system architecture</a></li>
+<li><a href="http://manning.com/videla/">RabbitMQ in Action: Distributed messaging for everyone</a></li>
+<li><a href="http://www.rabbitmq.com/tutorials/tutorial-one-ruby.html">RabbitMQ.com</a></li>
+<li><a href="http://www.rabbitmq.com/install-debian.html">Installation</a></li>
+</ul>
 
-<p>With this list of golden commits in hand, checkout a fresh branch and cherry-pick the commits you like!</p>
-
-<div>
-  <pre><code class='bash'>$ git checkout -b form_feature_additions
-$ git cherry-pick &lt;commit_identifier&gt;</code></pre>
-</div>
-
-
-<p>Do this command for each good commit:</p>
-
-<div>
-  <pre><code class='bash'>$ git cherry-pick a83f4c3aa5d800f846d075748a79a326e0971f67
-[master form_feature_additions] reorg gemfile
- 1 file changed, 4 insertions(+), 2 deletions(-)
- changed mode 100644 Gemfile
-$ git cherry-pick a793fe00c50a5956c5e9f7be48ac5a9861b1eb95
-[master form_feature_additions] adds forme form to edit...
-...
-$ git cherry-pick c52a6fd3f1706584ce3e47abf49ed627a1e28fd3
-[master form_feature_additions] adds bundler gem for manag..
-...
-$ git cherry-pick 8394b37494b63754f42ecaf19244fe6d8a36942f
-[master form_feature_additions] adds gitignore for db ...
-...</code></pre>
-</div>
-
-
-<p>If you look at your git status you will see</p>
-
-<div>
-  <pre><code class='bash'># On branch form_feature_additions
-# Your branch is ahead of &#39;origin/master&#39; by 4 commits.</code></pre>
-</div>
-
-
-<h2>Profit</h2>
-
-<p>Now you can merge this branch with master, or continue fleshing out the feature on a clean branch, keeping only the good stuff and abandoning the bad, making experimentation easy.</p>
-
-<p>AWESOME</p>
 </div>
 
 
@@ -208,12 +162,12 @@ $ git cherry-pick 8394b37494b63754f42ecaf19244fe6d8a36942f
   
 
 
-<time datetime="2013-07-24T22:29:03-07:00" pubdate data-updated="true">Jul 24<span>th</span>, 2013</time>
+<time datetime="2014-02-08T11:14:30-08:00" pubdate data-updated="true">Feb 8<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/git/'>git</a>
+    <a class='category' href='/blog/categories/message-queue/'>message queue</a>
   
 </span>
 
@@ -222,7 +176,7 @@ $ git cherry-pick 8394b37494b63754f42ecaf19244fe6d8a36942f
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2013/git-picking/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2013/git-picking/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/first-in-first-out/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/first-in-first-out/" >Tweet</a>
   
   
   
@@ -233,10 +187,8 @@ $ git cherry-pick 8394b37494b63754f42ecaf19244fe6d8a36942f
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/sinatra-in-a-console/" title="Previous Post: Sinatra in a console">&laquo; Sinatra in a console</a>
+        <a class="basic-alignment left" href="/blog/2014/afraid-of-commitment/" title="Previous Post: Afraid of commitment">&laquo; Afraid of commitment</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/procuring-provisions/" title="Next Post: Procuring Provisions">Procuring Provisions &raquo;</a>
       
     </p>
   </footer>
@@ -343,8 +295,8 @@ $ git cherry-pick 8394b37494b63754f42ecaf19244fe6d8a36942f
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2013/git-picking/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2013/git-picking/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/first-in-first-out/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2014/first-in-first-out/';
         var disqus_script = 'embed.js';
       
     (function () {
