@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-09T14:34:29-08:00</updated>
+  <updated>2014-02-09T15:26:07-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,148 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Fanout]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/fanout/"/>
+    <updated>2014-02-06T14:38:12-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/fanout</id>
+    <content type="html"><![CDATA[<p>Continuing my exploration of message queues&hellip;</p>
+
+<p>A common MQ modality is publish/subscribe. A simplistic queue model has producers publishing messages directly to a queue and consumers taking messages off a queue. In the publish/subscribe model, the producer sends messages to an <strong>exchange</strong>, who&rsquo;s only job is to publish messages to queues. In this scenario, the exchange knows to which queue(s) the message should be published according to established rules. The relationship between an exchange and a queue is called a <strong>binding</strong>.</p>
+
+<!--more-->
+
+
+<h3>Types of exchanges</h3>
+
+<ol>
+<li><strong>direct</strong></li>
+<li><strong>topic</strong></li>
+<li><strong>headers</strong></li>
+<li><strong>fanout</strong> &ndash; broadcasts every message it receives to all the queues it knows</li>
+</ol>
+
+
+<h3>Create a fanout exchange:</h3>
+
+<figure class='code'><figcaption><span>emit_log.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># create and start the connection</span>
+</span><span class='line'><span class="n">connection</span> <span class="o">=</span> <span class="no">Bunny</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+</span><span class='line'><span class="n">connection</span><span class="o">.</span><span class="n">start</span>
+</span><span class='line'><span class="c1"># create and start the channel</span>
+</span><span class='line'><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">create_channel</span>
+</span><span class='line'><span class="c1"># create the exchange:</span>
+</span><span class='line'><span class="n">exchange</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">fanout</span><span class="p">(</span><span class="s1">&#39;logs&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># publish to your named exchange:</span>
+</span><span class='line'><span class="n">exchange</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># close the connection</span>
+</span><span class='line'><span class="n">connection</span><span class="o">.</span><span class="n">close</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Create a fanout worker</h3>
+
+<figure class='code'><figcaption><span>receive_log.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># create and start the connection</span>
+</span><span class='line'><span class="n">connection</span> <span class="o">=</span> <span class="no">Bunny</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+</span><span class='line'><span class="n">conn</span><span class="o">.</span><span class="n">start</span>
+</span><span class='line'><span class="c1"># create and start the channel</span>
+</span><span class='line'><span class="n">channel</span>  <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">create_channel</span>
+</span><span class='line'><span class="c1"># name the exchange to listen to</span>
+</span><span class='line'><span class="n">exchange</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">fanout</span><span class="p">(</span><span class="s2">&quot;logs&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># name the queue</span>
+</span><span class='line'><span class="n">q</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">queue</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:exclusive</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># bind the queue to the exchange</span>
+</span><span class='line'><span class="n">q</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">exchange</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># subscribe to the bound queue</span>
+</span><span class='line'><span class="n">q</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="ss">:block</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">delivery_info</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot; [x] </span><span class="si">#{</span><span class="n">body</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>In action</h3>
+
+<p>Start three terminals:</p>
+
+<ol>
+<li><code>$ ruby -rubygems receive_logs.rb &gt; logs_from_rabbit.log</code></li>
+<li><code>$ ruby -rubygems receive_logs.rb</code></li>
+<li><code>$ ruby -rubygems emit_log.rb</code></li>
+</ol>
+
+
+<p>In the last terminal, add a few more messages:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ruby -rubygems emit_log.rb this is a longer message
+</span><span class='line'>$ ruby -rubygems emit_log.rb this message should be logged in a file AND appear in my terminal window</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The output in terminal 2:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ruby -rubygems receive_logs.rb
+</span><span class='line'> [*] Waiting for logs. To exit press CTRL+C
+</span><span class='line'> [x] Hello World!
+</span><span class='line'> [x] this is a longer message
+</span><span class='line'> [x] this message should be logged in a file AND appear in my terminal</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The output from the log file:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat logs_from_rabbit.log
+</span><span class='line'> [*] Waiting for logs. To exit press CTRL+C
+</span><span class='line'> [x] Hello World!
+</span><span class='line'> [x] this is a longer message
+</span><span class='line'> [x] this message should be logged in a file AND appear in my terminal</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Resources</h2>
+
+<ul>
+<li><a href="http://www.rabbitmq.com/tutorials/tutorial-three-ruby.html">RabbitMQ.com</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[First in, First Out]]></title>
@@ -1507,84 +1649,6 @@ Done.</code></pre>
 
 
 <p>With my Thor notes task installed system-wide, I can create a note page in any directory, for any reason, without copying code.</p>
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Serving Some Java]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/serving-some-java/"/>
-    <updated>2013-08-24T22:29:03-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/serving-some-java</id>
-    <content type="html"><![CDATA[<p>For a recent java coding challenge I was asked, among other things, to make a server. It has been several years since I last attempted it, and I had forgotten how easy it could be.</p>
-
-<!--more-->
-
-
-<h4>Server</h4>
-
-<p>A server, like any good conversationalist, is a good listener. A server is a program running on a computer that listens at a port, waiting to receive instructions.</p>
-
-<div>
-  <pre><code class='java'>public class Server {
-  private static String inputLine;
-
-  public static void main(String[] args) {
-
-    private static final int PORT_NUMBER = 63400
-
-    try {
-      // Socket variables
-      ServerSocket serverSocket = new ServerSocket(PORT_NUMBER);
-      Socket clientSocket = serverSocket.accept();
-
-      // IO variables
-      InputStreamReader inputReader = new InputStreamReader(clientSocket.getInputStream());
-      BufferedReader bReader = new BufferedReader(inputReader);
-
-      while ((inputLine = bReader.readLine()) != null) {
-        System.out.println(inputLine);
-      }
-
-    } catch (Exception e) {
-      System.out.println(e);
-    }
-  }
-}</code></pre>
-</div>
-
-
-<p>The server opens a socket on a specified port (in this case, port 63400). A socket is the point at which two-way communication happens between computer programs. The server opens a socket at a port and waits for a client to bind the socket so they can exchange information. It waits for input from the client, with instructions to print out anything the client puts in (line 18). So where is the client?</p>
-
-<h4>Client</h4>
-
-<p>The client is even simpler than the server: it finds the server at the specified port and connects to the socket.</p>
-
-<div>
-  <pre><code class='java'>public class Client {
-
-  private static final int PORT_NUMBER = 63400
-
-  public static void main(String[] args) {
-
-    try {
-
-      // Socket variables
-      Socket socket = new Socket(&quot;localhost&quot;, PORT_NUMBER);
-      PrintWriter pWriter = new PrintWriter(socket.getOutputStream(), true);
-
-      pWriter.println(&quot;Hello World!&quot;);
-
-    } catch (Exception e) {
-      System.out.println(e);
-    }
-  }
-}</code></pre>
-</div>
-
-
-<p>With a successful connection, it generates an output stream. If you start the server in one console it will look like it isn&rsquo;t doing anything, but when you start the client in another console you can watch them communicate. The client writes &ldquo;Hello World&rdquo; directly into the port where the server is listening (socket.getOutputStream()), and as instructed, the server obediently prints &ldquo;Hello World&rdquo; to the console.</p>
 
 <p>Awesome.</p>
 ]]></content>
