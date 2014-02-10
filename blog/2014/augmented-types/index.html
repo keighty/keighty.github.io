@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Thor Sets Up a Project - keighty</title>
+  <title>Augmented Types - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="">
+  <meta name="description" content="Javascript and Ruby have many features in common, including the ability to add functionality to existing objects. Ruby monkeypatching Ruby allows you &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2013/thor-sets-up-a-project">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/augmented-types">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -81,7 +81,7 @@
   
   <header>
     
-      <h1 class="entry-title">Thor Sets Up a Project</h1>
+      <h1 class="entry-title">Augmented Types</h1>
     
     
       <p class="meta">
@@ -97,170 +97,70 @@
   
 
 
-<time datetime="2013-09-08T22:29:03-07:00" pubdate data-updated="true">Sep 8<span>th</span>, 2013</time>
+<time datetime="2014-02-08T00:00:00-08:00" pubdate data-updated="true">Feb 8<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>A few weeks ago I posted about <a href="http://www.katieleonard.ca/automation/2013/08/30/hammer-out-tasks-with-thor/">using Thor to generate system-wide notes files with a standard format</a>. Since then, I have been doing a lot of smaller code challenges, and I wanted to set up a Thor task for generating a standard project file tree.</p>
+<div class="entry-content"><p>Javascript and Ruby have many features in common, including the ability to add functionality to existing objects.</p>
 
 <!--more-->
 
 
-<p>My Goal Tree:</p>
+<h2>Ruby monkeypatching</h2>
 
-<div>
-  <pre><code class='bash'>project_name
-├── lib
-│   └── project_name.rb
-├── spec
-│   ├── project_name_spec.rb
-│   └── spec_helper.rb
-├── Gemfile
-└── README.md</code></pre>
-</div>
+<p>Ruby allows you to reopen classes to add new functionality. For example, I can reopen the String class to add a new method, &ldquo;foo()&rdquo;:</p>
 
-
-<p>I always begin with these files and this organization. A Gemfile and README are essential for setting up the environment and explaining the gist of the project. I am most comfortable with RSpec, and to get into the practice of TDD, setting up a testing environment right away is non-negotiable. All of these standard files contain some automatic content as well:</p>
-
-<h5>spec_helper.rb loads the library</h5>
-
-<div>
-  <pre><code class='ruby'>$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), &#39;..&#39;, &#39;lib&#39;))
-require &#39;rspec&#39;
-require &#39;project_name&#39;</code></pre>
-</div>
-
-
-<h5>project_name_spec.rb sets up the first test</h5>
-
-<div>
-  <pre><code class='ruby'>require &#39;spec_helper&#39;
-
-describe ProjectName do
-  before (:each) {  }
-  subject {  }
-
-  it &quot;should pass&quot;
-end</code></pre>
-</div>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>irb &gt; class String
+</span><span class='line'>irb &gt;   def foo
+</span><span class='line'>irb &gt;     <span class="s2">&quot;I see you!&quot;</span>
+</span><span class='line'>irb &gt;   end
+</span><span class='line'>irb &gt; end
+</span><span class='line'><span class="c"># =&gt; nil</span>
+</span><span class='line'>irb &gt; <span class="s2">&quot;&quot;</span>.class
+</span><span class='line'><span class="c"># =&gt; String</span>
+</span><span class='line'>irb &gt; <span class="s2">&quot;&quot;</span>.foo
+</span><span class='line'><span class="c"># =&gt; &quot;I see you!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<h5>Gemfile specifies the right gems for setting up the project</h5>
+<h2>Javascript augmenting</h2>
 
-<div>
-  <pre><code class='ruby'>ruby &#39;2.0.0&#39;
-gem &#39;rspec&#39;</code></pre>
-</div>
+<p>Javascript allows you to augment existing objects with additional functionality.</p>
 
-
-<p>There are other files that could have auto-generated content as well, like a Rakefile, or a config.ru, but this is a good start.</p>
-
-<h4>Create a Thor task (rb_project.thor):</h4>
-
-<div>
-  <pre><code class='ruby'>#!/usr/bin/env ruby
-require &quot;rubygems&quot;
-require &quot;thor&quot;
-
-class RbProject &lt; Thor
-  desc &quot;init&quot;, &quot;creates a ruby project with rspec&quot;
-
-  def init(title=&quot;new_project&quot;)
-    Dir.mkdir(title)
-    Dir.chdir(title)
-    Dir.mkdir(&quot;spec&quot;)
-    Dir.mkdir(&quot;lib&quot;)
-    filename = &quot;#{title}&quot;
-
-    open(File.new(&quot;README.md&quot;, &quot;w&quot;), &quot;w&quot;) do |note|
-      note.puts &quot;# #{title}&quot;
-    end
-
-    open(File.new(&quot;Gemfile&quot;, &quot;w&quot;), &quot;w&quot;) do |my_gem|
-      my_gem.puts &quot;ruby &#39;2.0.0&#39;&quot;
-      my_gem.puts &quot;gem &#39;rspec&#39;&quot;
-    end
-
-    open(File.new(&quot;spec/spec_helper.rb&quot;, &quot;w&quot;), &quot;w&quot;) do |spec|
-      spec.puts &quot;$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), &#39;..&#39;, &#39;lib&#39;))&quot;
-      spec.puts &quot;require &#39;rspec&#39;&quot;
-      spec.puts &quot;require &#39;#{filename}&#39;&quot;
-    end
-
-    open(File.new(&quot;spec/#{filename}_spec.rb&quot;, &quot;w&quot;), &quot;w&quot;) do |spec|
-      spec.puts &quot;require &#39;spec_helper&#39;&quot;
-      spec.puts &quot;&quot;
-      spec.puts &quot;describe #{camelize(filename)} do&quot;
-      spec.puts &quot;  before (:each) {  }&quot;
-      spec.puts &quot;  xit &#39;should pass&#39;&quot;
-      spec.puts &quot;end&quot;
-    end
-  end
-
-  private
-    def camelize(snake)
-      title = snake.split(&#39;_&#39;).each do |word|
-        word.capitalize!
-      end
-      title.join(&#39;&#39;)
-    end
-end</code></pre>
-</div>
-
-
-<p>I created a private method camelize in order to change the snake_case project name into a CamelCase class name.</p>
-
-<p>As before, I install my thor task system wide:</p>
-
-<div>
-  <pre><code class='bash'>$ thor install rb_project.thor</code></pre>
-</div>
-
-
-<p>And now my project generation task can be run from any directory, anywhere on my system:</p>
-
-<div>
-  <pre><code class='bash'>$ thor list
-note
-----
-thor note:create  # creates a notes file in markdown
-
-rb_project
-----------
-thor rb_project:init  # creates a ruby project with rspec
-
-$ thor rb_project:init test_project
-$ tree test_project/
-test_project/
-├── lib
-│   └── test_project.rb
-├── spec
-│   ├── spec_helper.rb
-│   └── test_project_spec.rb
-├── Gemfile
-├── README.md
-
-2 directories, 6 files</code></pre>
-</div>
-
-
-<p>Awesome.</p>
-
-<div>
-  <pre><code class='bash'></code></pre>
-</div>
-
-
-
-
-<div>
-  <pre><code class='bash'></code></pre>
-</div>
-
-
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">foo</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s2">&quot;I see you!&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s2">&quot;I see you!&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="k">typeof</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="s2">&quot;string&quot;</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">.</span><span class="nx">foo</span><span class="p">()</span>
+</span><span class='line'><span class="s2">&quot;I see you!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 </div>
 
@@ -284,12 +184,12 @@ test_project/
   
 
 
-<time datetime="2013-09-08T22:29:03-07:00" pubdate data-updated="true">Sep 8<span>th</span>, 2013</time>
+<time datetime="2014-02-08T00:00:00-08:00" pubdate data-updated="true">Feb 8<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ruby/'>ruby</a>
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>
   
 </span>
 
@@ -298,7 +198,7 @@ test_project/
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2013/thor-sets-up-a-project/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2013/thor-sets-up-a-project/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/augmented-types/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/augmented-types/" >Tweet</a>
   
   
   
@@ -309,10 +209,8 @@ test_project/
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/argf-all-you-want/" title="Previous Post: ARGF all you want">&laquo; ARGF all you want</a>
+        <a class="basic-alignment left" href="/blog/2014/global-abatement/" title="Previous Post: global abatement">&laquo; global abatement</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/ruby-execution/" title="Next Post: Ruby Execution">Ruby Execution &raquo;</a>
       
     </p>
   </footer>
@@ -419,8 +317,8 @@ test_project/
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2013/thor-sets-up-a-project/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2013/thor-sets-up-a-project/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/augmented-types/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2014/augmented-types/';
         var disqus_script = 'embed.js';
       
     (function () {

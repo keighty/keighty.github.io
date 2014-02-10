@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-09T18:29:17-08:00</updated>
+  <updated>2014-02-09T19:08:37-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,72 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Augmented Types]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/augmented-types/"/>
+    <updated>2014-02-08T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/augmented-types</id>
+    <content type="html"><![CDATA[<p>Javascript and Ruby have many features in common, including the ability to add functionality to existing objects.</p>
+
+<!--more-->
+
+
+<h2>Ruby monkeypatching</h2>
+
+<p>Ruby allows you to reopen classes to add new functionality. For example, I can reopen the String class to add a new method, &ldquo;foo()&rdquo;:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>irb &gt; class String
+</span><span class='line'>irb &gt;   def foo
+</span><span class='line'>irb &gt;     <span class="s2">&quot;I see you!&quot;</span>
+</span><span class='line'>irb &gt;   end
+</span><span class='line'>irb &gt; end
+</span><span class='line'><span class="c"># =&gt; nil</span>
+</span><span class='line'>irb &gt; <span class="s2">&quot;&quot;</span>.class
+</span><span class='line'><span class="c"># =&gt; String</span>
+</span><span class='line'>irb &gt; <span class="s2">&quot;&quot;</span>.foo
+</span><span class='line'><span class="c"># =&gt; &quot;I see you!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Javascript augmenting</h2>
+
+<p>Javascript allows you to augment existing objects with additional functionality.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nb">String</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">foo</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s2">&quot;I see you!&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s2">&quot;I see you!&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="k">typeof</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="s2">&quot;string&quot;</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">.</span><span class="nx">foo</span><span class="p">()</span>
+</span><span class='line'><span class="s2">&quot;I see you!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Global Abatement]]></title>
@@ -1536,84 +1602,6 @@ test_project/
 
 
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ARGF All You Want]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/argf-all-you-want/"/>
-    <updated>2013-09-05T22:29:03-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/argf-all-you-want</id>
-    <content type="html"><![CDATA[<p>Many of the fun, junior code challenges I have encountered deal a lot with input/output of data, and I found a great ruby feature that provides flexibility at the command line.</p>
-
-<!--more-->
-
-
-<h3>Data Input</h3>
-
-<p>There are a lot of ways to treat data at the command line, but the one I was most familiar with is passing in a filename as an argument:</p>
-
-<div>
-  <pre><code class='bash'>$ ruby example_script.rb file1.csv file2.csv ...
-$ ruby example_script.rb file1.csv | more
-$ ruby example_script.rb file1.csv &gt; output.txt</code></pre>
-</div>
-
-
-<h3>Filename Input</h3>
-
-<p>Using ARGV, we can access the list of filenames provided at the command line. ARGV is an array containing all the information that follows the command. For example:</p>
-
-<div>
-  <pre><code class='bash'>$ example_command apple banana orange
-# ARGV = [&quot;apple&quot;, &quot;banana&quot;, &quot;orange&quot;]</code></pre>
-</div>
-
-
-<p>One can process each filename in ARGV using regular array methods:</p>
-
-<div>
-  <pre><code class='ruby'>ARGV.each do |arg|
-  process_string(File.read(arg))
-end</code></pre>
-</div>
-
-
-<p>File.read(arg) reads the file into a &ldquo;\n&rdquo; delimited string, which can be processed further. If there are no arguments, ARGV is an empty array.</p>
-
-<h3>Piped Input</h3>
-
-<p>Say that we want to enter data directly into a program rather than use a fixed filename at the command line &mdash; a useful technique for when we want data to flow out of one process and into another:</p>
-
-<div>
-  <pre><code class='bash'>$ cat file1.csv | ruby example_script.rb
-$ cat *.csv | ruby example_script.rb
-$ ruby example_script.rb &lt; file1.csv</code></pre>
-</div>
-
-
-<p>Using the pipe, &ldquo;|&rdquo; or &ldquo;&lt;&rdquo;, we can push a string of data from one process into another, but what happens to our program when we try to do this?</p>
-
-<div>
-  <pre><code class='bash'>$ example.csv | ruby example_script.rb
-TypeError: can`t convert nil into String</code></pre>
-</div>
-
-
-<p>We get a TypeError! Recall that command line arguments are stored in ARGV, but we are not providing any command line arguments. ARGV is an empty array, and we are attempting to open a file from ARGV[0] = nil. Shame on us! How do we access data that is piped in as well as data that is appended to the command line? Do we have to check for the source of the data before we can treat it? Turns out, we DON&rsquo;T.</p>
-
-<h3>The ARGF Solution</h3>
-
-<p>Ruby has a nifty interface for handling data input, regardless of whether it arrives as a command line argument or from another data source. We can replace the code we wrote earlier with a single line:</p>
-
-<div>
-  <pre><code class='ruby'>process_string(ARGF.read)</code></pre>
-</div>
-
-
-<p>If ARGV is not empty, ARGF will assume it is an array of filenames and will treat them accordingly. If ARGV is empty, it will read from $stdin to get the data passed in via the pipe. One caveat is that you can&rsquo;t read from both ARGV and the pipe: if ARGV != [  ], $stdin is ignored.</p>
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   
