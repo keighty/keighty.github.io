@@ -1,10 +1,9 @@
 ---
 layout: post
 title: "global abatement"
-date: 2014-02-09 17:16:06 -0800
+date: 2014-02-07
 comments: true
 categories: [I didn't know that, javascript]
-published: false
 ---
 
 ###or, What the heck is global abatement?
