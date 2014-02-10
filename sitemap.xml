@@ -181,6 +181,14 @@
         <lastmod>2014-02-09T18:24:46-08:00</lastmod>
     </url>
     <url>
+        <loc>http://www.katieleonard.ca/blog/2014/augmented-types/</loc>
+        <lastmod>2014-02-09T18:26:57-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.katieleonard.ca/blog/2014/prototypal-inheritance/</loc>
+        <lastmod>2014-02-09T18:29:17-08:00</lastmod>
+    </url>
+    <url>
         <loc>http://www.katieleonard.ca/404.html</loc>
         <lastmod>2014-01-13T21:23:50-08:00</lastmod>
     </url>
@@ -190,7 +198,7 @@
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/archives/</loc>
-        <lastmod>2014-02-09T18:24:46-08:00</lastmod>
+        <lastmod>2014-02-09T18:29:17-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/robots.txt</loc>
@@ -198,6 +206,6 @@
     </url>
     <url>
         <loc>http://www.katieleonard.ca/</loc>
-        <lastmod>2014-02-09T18:24:46-08:00</lastmod>
+        <lastmod>2014-02-09T18:29:17-08:00</lastmod>
     </url>
 </urlset>
