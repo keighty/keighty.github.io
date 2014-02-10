@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-09T18:17:49-08:00</updated>
+  <updated>2014-02-09T18:21:29-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,53 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Global Abatement]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/global-abatement/"/>
+    <updated>2014-02-09T17:16:06-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/global-abatement</id>
+    <content type="html"><![CDATA[<h3>or, What the heck is global abatement?</h3>
+
+<p><strong>tldr</strong>: Global variables are <a href="http://en.wikipedia.org/wiki/Code_smell">code smells</a>. Declaring variables inside an application-level function serves to namespace the variables and minimizes the use of global variables. <!--more--></p>
+
+<p>Javascript has function-level scoping, which means that variables declared anywhere within a function are scoped to that function. Writing a javascript without an enclosing function leaves your declared variables vulnerable to name collisions, or reassignment by other javascripts.</p>
+
+<p>A <strong>global abatement</strong> is a strategy used to reduce the vulnerability of your javascript variables by removing them from the global scope. Application namespacing is one such strategy:</p>
+
+<figure class='code'><figcaption><span>BAD GLOBAL</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">first_name</span><span class="o">:</span> <span class="s1">&#39;Hello&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">last_name</span><span class="o">:</span> <span class="s1">&#39;Kitty&#39;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>GOOD LOCAL</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">MYAPP</span> <span class="o">=</span> <span class="p">{};</span>
+</span><span class='line'><span class="nx">MYAPP</span><span class="p">.</span><span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">first_name</span><span class="o">:</span> <span class="s1">&#39;Hello&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">last_name</span><span class="o">:</span> <span class="s1">&#39;Kitty&#39;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Declaring an application-level function ensures that the correct <code>person</code> is called when needed. It improves readability by essentially flagging the scope of the variable and reducing ambiguity.</p>
+
+<p><a href="http://www.amazon.com/gp/product/0596517742/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0596517742&amp;linkCode=as2&amp;tag=bridgeforpoke-20">JavaScript: The Good Parts</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Fanout]]></title>
@@ -1565,90 +1612,6 @@ TypeError: can`t convert nil into String</code></pre>
 
 
 <p>If ARGV is not empty, ARGF will assume it is an array of filenames and will treat them accordingly. If ARGV is empty, it will read from $stdin to get the data passed in via the pipe. One caveat is that you can&rsquo;t read from both ARGV and the pipe: if ARGV != [  ], $stdin is ignored.</p>
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hammer-out Tasks With Thor]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/hammer-out-tasks-with-thor/"/>
-    <updated>2013-08-30T22:29:03-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/hammer-out-tasks-with-thor</id>
-    <content type="html"><![CDATA[<p>A few months ago I gave a small lightning talk to my code school class about automating tasks using <a href="http://rake.rubyforge.org/">Rake</a>. Before I learned ruby I used bash scripts to accomplish similar things, but was often bogged down in learning the syntax of string-processing essentials like awk or sed. I wished for the simplicity of Ruby, and thought that Rake was the bees-knees. After my talk, <a href="chuckvose.com">Chuck</a>, my PCS mentor, put together a repo of <a href="http://whatisthor.com/">Thor</a> tasks that accomplished the same tasks but could be installed system wide.</p>
-
-<!--more-->
-
-
-<h3><a href="http://whatisthor.com/">Thor</a> is my new hero</h3>
-
-<p>Unlike Rake tasks, which are confined to the directory containing the Rakefile, Thor tasks can be installed on your system and called from anywhere. My note files are all formatted in a particular way. Before Thor, I used a rake task:</p>
-
-<div>
-  <pre><code class='bash'>$ cd notesDirWithRakefile
-$ rake post title=&quot;new post title&quot;
-$ Creating new post: &quot;./130830_new_post_title&quot;</code></pre>
-</div>
-
-
-<p>The Rake task auto-formats the filename, replacing spaces with underscores, and prepends today&rsquo;s date so that they will sort in the order they are made. This worked great for when I wanted to keep notes in that one folder, but later I wanted to be able to keep notes on a particular project. I would either have to copy the Rakefile (two places to update if I made any changes), or create a symbolic link (which would break if I ever moved my Rakefile). Neither of these options seemed to be the most practical. Enter Thor:</p>
-
-<p>Creating the Thor task is as easy as pie:</p>
-
-<div>
-  <pre><code class='ruby'>require &#39;thor&#39;
-
-class Note &lt; Thor
-  desc &quot;create&quot;, &quot;creates a notes file in markdown&quot;
-  def create(title=&quot;new note&quot;)
-    slug = title.downcase.strip.gsub(&#39; &#39;, &#39;_&#39;).gsub(/[^\w-]/, &#39;&#39;)
-    date = Time.parse(Time.now).strftime(&#39;%y%m%d&#39;)
-    filename = File.join(&quot;./&quot;, &quot;#{date}_#{slug}.md&quot;)
-
-    if File.exist?(filename)
-      abort(&quot;rake aborted!&quot;) if ask(&quot;#{filename} already exists. Do you want to overwrite?&quot;, [&#39;y&#39;, &#39;n&#39;]) == &#39;n&#39;
-    end
-
-    puts &quot;Creating new post: #{filename}&quot;
-    open(filename, &#39;w&#39;) do |post|
-      post.puts &quot;# #{title.gsub(/-/,&#39; &#39;).capitalize}&quot;
-    end
-  end
-end</code></pre>
-</div>
-
-
-<p>Listing all Thor tasks is easy:</p>
-
-<div>
-  <pre><code class='bash'>$ thor list
-note
-----
-thor note:create  # creates a notes file in markdown</code></pre>
-</div>
-
-
-<p>Installing a Thor task for system use is easy:</p>
-
-<div>
-  <pre><code class='bash'>$ thor install notes.thor
-...
-Do you wish to continue [y/N]? y
-Please specify a name for notes.thor in the system repository [notes.thor]: note
-Storing thor file in your system repository</code></pre>
-</div>
-
-
-<p>Uninstalling a Thor task is easy:</p>
-
-<div>
-  <pre><code class='bash'>$ thor uninstall note
-Uninstalling note.
-Done.</code></pre>
-</div>
-
-
-<p>With my Thor notes task installed system-wide, I can create a note page in any directory, for any reason, without copying code.</p>
 
 <p>Awesome.</p>
 ]]></content>
