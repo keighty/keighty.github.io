@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Sinatra in a Console - keighty</title>
+  <title>Augmented Objects - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="">
+  <meta name="description" content="Because it bears repeating: javascript and ruby have many features in common, including the ability to add functionality to existing objects. Ruby &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2013/sinatra-in-a-console">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/augmented-objects">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -81,7 +81,7 @@
   
   <header>
     
-      <h1 class="entry-title">Sinatra in a Console</h1>
+      <h1 class="entry-title">Augmented Objects</h1>
     
     
       <p class="meta">
@@ -97,86 +97,75 @@
   
 
 
-<time datetime="2013-07-22T00:00:00-07:00" pubdate data-updated="true"></time>
+<time datetime="2014-02-09T00:00:00-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Sinatra does not have a default console like rails does. If you are writing in a rails environment and need to test out a helper method, or want to check on the state of a record in the database, dropping down into the rails console is as easy as typing:</p>
+<div class="entry-content"><p>Because it bears repeating: javascript and ruby have many features in common, including the ability to add functionality to existing objects.</p>
 
-<div>
-  <pre><code class='bash'>$ rails c</code></pre>
-</div>
+<!--more-->
 
 
-<p>How can we achieve the same ability in Sinatra?<!--more--></p>
+<h2>Ruby singleton</h2>
 
-<h3>Tux</h3>
+<p>You can add methods to an instance of a class without affecting any other instances of that class.</p>
 
-<p>Tux is a ruby gem that generates a sinatra console. It reads the config.ru, allows you to interact with App methods, and provides empty request and response objects to for investigating communication between views and the Sinatra controller.</p>
-
-<p>Add Tux to your Gemfile:</p>
-
-<div>
-  <pre><code class='ruby'>group :development, :test do
-  ...
-  gem &#39;tux&#39;
-end</code></pre>
-</div>
-
-
-<p>Don&rsquo;t forget to bundle!</p>
-
-<p>At the command line, start up tux and use rack.actions to view all the methods available:</p>
-
-<div>
-  <pre><code class='bash'>$ tux
-Loading development environment (Rack 1.2)
-&gt;&gt; rack.actions
-=&gt; [:request, :get, :post, :put, :patch, :delete, :options, :head, :follow_redirect!, :header, :set_cookie, :clear_cookies, :authorize, :basic_authorize, :digest_authorize, :last_response, :last_request]
-&gt;&gt;</code></pre>
-</div>
-
-
-<p>You can access any method from your application as well.
-Of course, if you are working in Sinatra, you probably want to go as lightweight as possible, which is why you can also use:</p>
-
-<h3>Basic irb</h3>
-
-<p>It is as simple as using irb and requiring your main app file. You have access to all the dependencies and files that your application does by simply requiring that one file. You can check state, call methods, create objects, whatever you need:</p>
-
-<div>
-  <pre><code class='bash'>$ irb
-&gt; require &#39;./app.rb&#39;
- =&gt; true
-&gt; User.all
-D, [2013-07-22T15:47:49.230146 #54081] DEBUG -- :   User Load (0.2ms)  SELECT &quot;users&quot;.* FROM &quot;users&quot;
- =&gt; #&lt;ActiveRecord::Relation [#&lt;User id: 1, name: &quot;Gordon Shumway&quot;, email: &quot;gordon@example.com&quot;, created_at: &quot;2013-07-22 22:45:48&quot;, updated_at: &quot;2013-07-22 22:45:48&quot;&gt;, #&lt;User id: 2, name: &quot;Fanny Eubanks&quot;, email: &quot;fanny@example.com&quot;, created_at: &quot;2013-07-22 22:45:48&quot;, updated_at: &quot;2013-07-22 22:45:48&quot;&gt;]&gt;
-&gt;</code></pre>
-</div>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; x, <span class="nv">y</span> <span class="o">=</span> <span class="s2">&quot;stringA&quot;</span>, <span class="s2">&quot;stringB&quot;</span>
+</span><span class='line'>&gt; def x.baz
+</span><span class='line'>&gt;   puts <span class="s2">&quot;I can haz?&quot;</span>
+</span><span class='line'>&gt; end
+</span><span class='line'><span class="c"># =&gt; nil</span>
+</span><span class='line'>&gt; x.baz
+</span><span class='line'>I can haz?
+</span><span class='line'><span class="c"># =&gt; nil</span>
+</span><span class='line'>&gt; y.baz
+</span><span class='line'>NoMethodError: undefined method <span class="sb">`</span>baz<span class="s1">&#39; for &quot;stringB&quot;:String</span>
+</span><span class='line'><span class="s1">  from (irb):62</span>
+</span><span class='line'><span class="s1">  from /home/katherine/.rvm/rubies/ruby-2.0.0-rc1/bin/irb:12:in `&lt;main&gt;&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>This can be called even more elegantly at the command line:</p>
+<h2>Javascript augmenting</h2>
 
-<div>
-  <pre><code class='bash'>$ irb -r ./app.rb</code></pre>
-</div>
+<p>You can add methods to an of an Array object without affecting any other array objects.</p>
 
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; var <span class="nv">data1</span> <span class="o">=</span> <span class="o">[</span>1, 2, 3, 4, 5, 6<span class="o">]</span>;
+</span><span class='line'>undefined
+</span><span class='line'>&gt; var <span class="nv">data2</span> <span class="o">=</span> <span class="o">[</span>2, 4, 6, 8, 10, 12<span class="o">]</span>;
+</span><span class='line'>undefined
+</span><span class='line'>&gt; data1.total <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="k">return </span>21; <span class="o">}</span>;
+</span><span class='line'><span class="k">function</span> <span class="o">()</span> <span class="o">{</span> <span class="k">return </span>21; <span class="o">}</span>
+</span><span class='line'>&gt; data1.total<span class="o">()</span>;
+</span><span class='line'>21
+</span><span class='line'>&gt; data2.total<span class="o">()</span>
+</span><span class='line'>TypeError: Object <span class="o">[</span>object Array<span class="o">]</span> has no method <span class="s1">&#39;total&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>or through a Rake task:</p>
-
-<div>
-  <pre><code class='bash'>desc &quot;run irb console&quot;
-task :console, :environment do |t, args|
-  ENV[&#39;RACK_ENV&#39;] = args[:environment] || &#39;development&#39;
-  exec &quot;irb -r irb/completion -r ./app.rb&quot;
-end</code></pre>
-</div>
-
-
-<p>Awesome</p>
 </div>
 
 
@@ -199,12 +188,12 @@ end</code></pre>
   
 
 
-<time datetime="2013-07-22T00:00:00-07:00" pubdate data-updated="true"></time>
+<time datetime="2014-02-09T00:00:00-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/sinatra/'>sinatra</a>
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>
   
 </span>
 
@@ -213,7 +202,7 @@ end</code></pre>
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2013/sinatra-in-a-console/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2013/sinatra-in-a-console/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/augmented-objects/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/augmented-objects/" >Tweet</a>
   
   
   
@@ -224,10 +213,8 @@ end</code></pre>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/get-your-kicks-on-localhost4567/" title="Previous Post: Get your kicks on route localhost:4567">&laquo; Get your kicks on route localhost:4567</a>
+        <a class="basic-alignment left" href="/blog/2014/augmented-types/" title="Previous Post: augmented types">&laquo; augmented types</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/git-picking/" title="Next Post: Git-Picking">Git-Picking &raquo;</a>
       
     </p>
   </footer>
@@ -334,8 +321,8 @@ end</code></pre>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2013/sinatra-in-a-console/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2013/sinatra-in-a-console/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/augmented-objects/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2014/augmented-objects/';
         var disqus_script = 'embed.js';
       
     (function () {

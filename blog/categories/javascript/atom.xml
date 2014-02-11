@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-09T19:08:37-08:00</updated>
+  <updated>2014-02-11T08:13:38-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,59 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Augmented Objects]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/augmented-objects/"/>
+    <updated>2014-02-09T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/augmented-objects</id>
+    <content type="html"><![CDATA[<p>Because it bears repeating: javascript and ruby have many features in common, including the ability to add functionality to existing objects.</p>
+
+<!--more-->
+
+
+<h2>Ruby singleton</h2>
+
+<p>You can add methods to an instance of a class without affecting any other instances of that class.
+```bash</p>
+
+<blockquote><p>x, y = &ldquo;stringA&rdquo;, &ldquo;stringB&rdquo;
+def x.baz
+  puts &ldquo;I can haz?&rdquo;
+end</p>
+
+<h1>=> nil</h1>
+
+<p>x.baz
+I can haz?</p>
+
+<h1>=> nil</h1>
+
+<p>y.baz
+NoMethodError: undefined method <code>baz' for "stringB":String
+  from (irb):62
+  from /home/katherine/.rvm/rubies/ruby-2.0.0-rc1/bin/irb:12:in</code><main>&lsquo;
+```</p></blockquote>
+
+<h2>Javascript augmenting</h2>
+
+<p>You can add methods to an of an Array object without affecting any other array objects.</p>
+
+<p>```</p>
+
+<blockquote><p>var data1 = [1, 2, 3, 4, 5, 6];
+undefined
+var data2 = [2, 4, 6, 8, 10, 12];
+undefined
+data1.total = function() { return 21; };
+function () { return 21; }
+data1.total();
+21
+data2.total()
+TypeError: Object [object Array] has no method &lsquo;total&rsquo;
+```</p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Augmented Types]]></title>
@@ -192,94 +245,6 @@ Accounts.ui.config({
 <p>Thanks to this <a href="http://stackoverflow.com/a/20781135">stackoverflow</a> response, the Meteor <a href="http://docs.meteor.com/">docs</a>, and packtpub&rsquo;s awesome <a href="http://www.packtpub.com/getting-started-with-meteor-javascript-framework/book">support page</a> for helping me get reacquainted with javascript contexts.</p>
 
 <p>Awesome</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Meatier Apps With Meteor]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/meatier-apps-with-meteor/"/>
-    <updated>2013-10-20T22:29:03-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/meatier-apps-with-meteor</id>
-    <content type="html"><![CDATA[<p><a href="http://www.meteor.com/">Meteor</a> is a framework that allows you to write web applications using only javascript. All the work is done on the client-side. Meteor embraces new principles of web design: data on the wire, one language is enough, and simplicity makes for productivity.</p>
-
-<p>Simplicity is something I value as well, and while setting up meteor on my linux machine was not a three-step process as outlined in their examples, it only took a little tinkering to figure out the problem. <!--more-->First, a look at the three meteor setup steps:</p>
-
-<h4>Install</h4>
-
-<p><div>
-  <pre><code class='bash'>$ curl &lt;a href=&quot;https://install.meteor.com&quot;&gt;https://install.meteor.com&lt;/a&gt; | /bin/sh</code></pre>
-</div>
-</p>
-
-<h4>Create a sample application</h4>
-
-<p><div>
-  <pre><code class='bash'>$ meteor create testapp</code></pre>
-</div>
-</p>
-
-<h4>Run the sample application</h4>
-
-<p><div>
-  <pre><code class='bash'>$ cd testapp
-$ meteor</code></pre>
-</div>
-</p>
-
-<p>This is where the meteor server is supposed to start, connecting to your mongo installation, and serving your application on port 3000:
-<div>
-  <pre><code class='bash'>$ meteor
-[[[[[ /path/to/testapp ]]]]]&lt;/p&gt;
-
-&lt;p&gt;=&gt; Meteor server running on: &lt;a href=&quot;http://localhost:3000/&quot;&gt;http://localhost:3000/&lt;/a&gt;</code></pre>
-</div>
-</p>
-
-<p>Instead, my terminal became quite upset about it:
-<div>
-  <pre><code class='bash'>[[[[[ /path/to/testapp ]]]]]&lt;/p&gt;
-
-&lt;p&gt;Unexpected mongo exit code 1. Restarting.
-Unexpected mongo exit code 1. Restarting.
-Unexpected mongo exit code 1. Restarting.
-Can&amp;rsquo;t start mongod</code></pre>
-</div>
-</p>
-
-<p>Whups! Everything seems normal in my mongo installation, but after a lot of searching I finally found the problem on <a href="http://stackoverflow.com/questions/18505372/meteor-update-0-6-4-0-6-5-mongo-error">stackoverflow</a>. From among the answers I found this solution:</p>
-
-<blockquote><p>I&rsquo;m also getting this error on Ubuntu. As mentioned, it&rsquo;s caused by mongo and mongod from ~/.meteor/tools/latest/mongodb/bin being compiled with an older version of glib. You can replace the version of mongo bundled by meteor with the version installed in your system:
-<div>
-  <pre><code class='bash'>cd ~/.meteor/tools/latest/mongodb/bin/
-mv mongo mongo-backup
-mv mongod mongod-backup
-ln -s /usr/bin/mongo
-ln -s /usr/bin/mongod</code></pre>
-</div>
-</p></blockquote>
-
-<p>Brilliant! Following these instructions, I was finally able to start meteor.</p>
-
-<h3>Getting down to business</h3>
-
-<p>Now to test out some of the awesome functionality of this framework. I <a href="http://www.meteor.com/examples/todos">followed an example</a> and created a todo list:</p>
-
-<p><div>
-  <pre><code class='bash'>$ meteor create &amp;mdash;example todos
-$ cd todos
-$ meteor deploy totally-fake-url.meteor.com
-Deploying to totally-fake-url.meteor.com.  Bundling&amp;hellip;
-Uploading&amp;hellip;
-Now serving at totally-fake-url.meteor.com</code></pre>
-</div>
-</p>
-
-<p>Playing around with creating new todos and lists, it is clear that data is being added and changed instantly and persistently.</p>
-
-<p>A Meteor application is a mix of JavaScript that runs inside a client web browser, JavaScript that runs on the Meteor server inside a Node.js container, and all the supporting HTML fragments, CSS rules, and static assets.</p>
-
-<p>I am really looking forward to diving further into <a href="http://docs.meteor.com/#concepts">the docs</a> to learn more about this incredible framework.
-AWESOME</p>
 ]]></content>
   </entry>
   

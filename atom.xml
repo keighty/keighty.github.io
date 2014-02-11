@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-09T19:08:37-08:00</updated>
+  <updated>2014-02-11T08:13:38-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,76 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Augmented Objects]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/augmented-objects/"/>
+    <updated>2014-02-09T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/augmented-objects</id>
+    <content type="html"><![CDATA[<p>Because it bears repeating: javascript and ruby have many features in common, including the ability to add functionality to existing objects.</p>
+
+<!--more-->
+
+
+<h2>Ruby singleton</h2>
+
+<p>You can add methods to an instance of a class without affecting any other instances of that class.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; x, <span class="nv">y</span> <span class="o">=</span> <span class="s2">&quot;stringA&quot;</span>, <span class="s2">&quot;stringB&quot;</span>
+</span><span class='line'>&gt; def x.baz
+</span><span class='line'>&gt;   puts <span class="s2">&quot;I can haz?&quot;</span>
+</span><span class='line'>&gt; end
+</span><span class='line'><span class="c"># =&gt; nil</span>
+</span><span class='line'>&gt; x.baz
+</span><span class='line'>I can haz?
+</span><span class='line'><span class="c"># =&gt; nil</span>
+</span><span class='line'>&gt; y.baz
+</span><span class='line'>NoMethodError: undefined method <span class="sb">`</span>baz<span class="s1">&#39; for &quot;stringB&quot;:String</span>
+</span><span class='line'><span class="s1">  from (irb):62</span>
+</span><span class='line'><span class="s1">  from /home/katherine/.rvm/rubies/ruby-2.0.0-rc1/bin/irb:12:in `&lt;main&gt;&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Javascript augmenting</h2>
+
+<p>You can add methods to an of an Array object without affecting any other array objects.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; var <span class="nv">data1</span> <span class="o">=</span> <span class="o">[</span>1, 2, 3, 4, 5, 6<span class="o">]</span>;
+</span><span class='line'>undefined
+</span><span class='line'>&gt; var <span class="nv">data2</span> <span class="o">=</span> <span class="o">[</span>2, 4, 6, 8, 10, 12<span class="o">]</span>;
+</span><span class='line'>undefined
+</span><span class='line'>&gt; data1.total <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="k">return </span>21; <span class="o">}</span>;
+</span><span class='line'><span class="k">function</span> <span class="o">()</span> <span class="o">{</span> <span class="k">return </span>21; <span class="o">}</span>
+</span><span class='line'>&gt; data1.total<span class="o">()</span>;
+</span><span class='line'>21
+</span><span class='line'>&gt; data2.total<span class="o">()</span>
+</span><span class='line'>TypeError: Object <span class="o">[</span>object Array<span class="o">]</span> has no method <span class="s1">&#39;total&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Augmented Types]]></title>
@@ -1436,172 +1506,6 @@ Blocks.new.process_input</code></pre>
 <p>I liked this solution so much, I added it to my thor project setup! Oh, and if you are interested in seeing my solution for the blocks problem, checkout my <a href="https://github.com/keighty/datastructures/tree/master/ruby/blocks">github repo</a></p>
 
 <p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Thor Sets Up a Project]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/thor-sets-up-a-project/"/>
-    <updated>2013-09-08T22:29:03-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/thor-sets-up-a-project</id>
-    <content type="html"><![CDATA[<p>A few weeks ago I posted about <a href="http://www.katieleonard.ca/automation/2013/08/30/hammer-out-tasks-with-thor/">using Thor to generate system-wide notes files with a standard format</a>. Since then, I have been doing a lot of smaller code challenges, and I wanted to set up a Thor task for generating a standard project file tree.</p>
-
-<!--more-->
-
-
-<p>My Goal Tree:</p>
-
-<div>
-  <pre><code class='bash'>project_name
-├── lib
-│   └── project_name.rb
-├── spec
-│   ├── project_name_spec.rb
-│   └── spec_helper.rb
-├── Gemfile
-└── README.md</code></pre>
-</div>
-
-
-<p>I always begin with these files and this organization. A Gemfile and README are essential for setting up the environment and explaining the gist of the project. I am most comfortable with RSpec, and to get into the practice of TDD, setting up a testing environment right away is non-negotiable. All of these standard files contain some automatic content as well:</p>
-
-<h5>spec_helper.rb loads the library</h5>
-
-<div>
-  <pre><code class='ruby'>$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), &#39;..&#39;, &#39;lib&#39;))
-require &#39;rspec&#39;
-require &#39;project_name&#39;</code></pre>
-</div>
-
-
-<h5>project_name_spec.rb sets up the first test</h5>
-
-<div>
-  <pre><code class='ruby'>require &#39;spec_helper&#39;
-
-describe ProjectName do
-  before (:each) {  }
-  subject {  }
-
-  it &quot;should pass&quot;
-end</code></pre>
-</div>
-
-
-<h5>Gemfile specifies the right gems for setting up the project</h5>
-
-<div>
-  <pre><code class='ruby'>ruby &#39;2.0.0&#39;
-gem &#39;rspec&#39;</code></pre>
-</div>
-
-
-<p>There are other files that could have auto-generated content as well, like a Rakefile, or a config.ru, but this is a good start.</p>
-
-<h4>Create a Thor task (rb_project.thor):</h4>
-
-<div>
-  <pre><code class='ruby'>#!/usr/bin/env ruby
-require &quot;rubygems&quot;
-require &quot;thor&quot;
-
-class RbProject &lt; Thor
-  desc &quot;init&quot;, &quot;creates a ruby project with rspec&quot;
-
-  def init(title=&quot;new_project&quot;)
-    Dir.mkdir(title)
-    Dir.chdir(title)
-    Dir.mkdir(&quot;spec&quot;)
-    Dir.mkdir(&quot;lib&quot;)
-    filename = &quot;#{title}&quot;
-
-    open(File.new(&quot;README.md&quot;, &quot;w&quot;), &quot;w&quot;) do |note|
-      note.puts &quot;# #{title}&quot;
-    end
-
-    open(File.new(&quot;Gemfile&quot;, &quot;w&quot;), &quot;w&quot;) do |my_gem|
-      my_gem.puts &quot;ruby &#39;2.0.0&#39;&quot;
-      my_gem.puts &quot;gem &#39;rspec&#39;&quot;
-    end
-
-    open(File.new(&quot;spec/spec_helper.rb&quot;, &quot;w&quot;), &quot;w&quot;) do |spec|
-      spec.puts &quot;$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), &#39;..&#39;, &#39;lib&#39;))&quot;
-      spec.puts &quot;require &#39;rspec&#39;&quot;
-      spec.puts &quot;require &#39;#{filename}&#39;&quot;
-    end
-
-    open(File.new(&quot;spec/#{filename}_spec.rb&quot;, &quot;w&quot;), &quot;w&quot;) do |spec|
-      spec.puts &quot;require &#39;spec_helper&#39;&quot;
-      spec.puts &quot;&quot;
-      spec.puts &quot;describe #{camelize(filename)} do&quot;
-      spec.puts &quot;  before (:each) {  }&quot;
-      spec.puts &quot;  xit &#39;should pass&#39;&quot;
-      spec.puts &quot;end&quot;
-    end
-  end
-
-  private
-    def camelize(snake)
-      title = snake.split(&#39;_&#39;).each do |word|
-        word.capitalize!
-      end
-      title.join(&#39;&#39;)
-    end
-end</code></pre>
-</div>
-
-
-<p>I created a private method camelize in order to change the snake_case project name into a CamelCase class name.</p>
-
-<p>As before, I install my thor task system wide:</p>
-
-<div>
-  <pre><code class='bash'>$ thor install rb_project.thor</code></pre>
-</div>
-
-
-<p>And now my project generation task can be run from any directory, anywhere on my system:</p>
-
-<div>
-  <pre><code class='bash'>$ thor list
-note
-----
-thor note:create  # creates a notes file in markdown
-
-rb_project
-----------
-thor rb_project:init  # creates a ruby project with rspec
-
-$ thor rb_project:init test_project
-$ tree test_project/
-test_project/
-├── lib
-│   └── test_project.rb
-├── spec
-│   ├── spec_helper.rb
-│   └── test_project_spec.rb
-├── Gemfile
-├── README.md
-
-2 directories, 6 files</code></pre>
-</div>
-
-
-<p>Awesome.</p>
-
-<div>
-  <pre><code class='bash'></code></pre>
-</div>
-
-
-
-
-<div>
-  <pre><code class='bash'></code></pre>
-</div>
-
-
-
 ]]></content>
   </entry>
   
