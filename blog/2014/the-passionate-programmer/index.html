@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Global Abatement - keighty</title>
+  <title>The Passionate Programmer - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="or, What the heck is global abatement? tldr: Global variables are code smells. Declaring variables inside an application-level function serves to &hellip;">
+  <meta name="description" content="The Passionate Programmer: Creating a Remarkable Career in Software Development (Pragmatic Life), by Chad Fowler
+(affiliate link) This book is aptly &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/global-abatement">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/the-passionate-programmer">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -81,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">Global Abatement</h1>
+      <h1 class="entry-title">The Passionate Programmer</h1>
     
     
       <p class="meta">
@@ -97,52 +98,17 @@
   
 
 
-<time datetime="2014-02-07T00:00:00-08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2014</time>
+<time datetime="2014-02-10T00:00:00-08:00" pubdate data-updated="true">Feb 10<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h3>or, What the heck is global abatement?</h3>
+<div class="entry-content"><p><a href="http://www.amazon.com/gp/product/B00AYQNR5U/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B00AYQNR5U&amp;linkCode=as2&amp;tag=bridgeforpoke-20">The Passionate Programmer: Creating a Remarkable Career in Software Development</a> (Pragmatic Life), by Chad Fowler
+(affiliate link)</p>
 
-<p><strong>tldr</strong>: Global variables are <a href="http://en.wikipedia.org/wiki/Code_smell">code smells</a>. Declaring variables inside an application-level function serves to namespace the variables and minimizes the use of global variables. <!--more--></p>
-
-<p>Javascript has function-level scoping, which means that variables declared anywhere within a function are scoped to that function. Writing a javascript without an enclosing function leaves your declared variables vulnerable to name collisions, or reassignment by other javascripts.</p>
-
-<p>A <strong>global abatement</strong> is a strategy used to reduce the vulnerability of your javascript variables by removing them from the global scope. Application namespacing is one such strategy:</p>
-
-<figure class='code'><figcaption><span>BAD GLOBAL</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">first_name</span><span class="o">:</span> <span class="s1">&#39;Hello&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">last_name</span><span class="o">:</span> <span class="s1">&#39;Kitty&#39;</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>GOOD LOCAL</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">MYAPP</span> <span class="o">=</span> <span class="p">{};</span>
-</span><span class='line'><span class="nx">MYAPP</span><span class="p">.</span><span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">first_name</span><span class="o">:</span> <span class="s1">&#39;Hello&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">last_name</span><span class="o">:</span> <span class="s1">&#39;Kitty&#39;</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Declaring an application-level function ensures that the correct <code>person</code> is called when needed. It improves readability by essentially flagging the scope of the variable and reducing ambiguity.</p>
-
-<p><a href="http://www.amazon.com/gp/product/0596517742/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0596517742&amp;linkCode=as2&amp;tag=bridgeforpoke-20">JavaScript: The Good Parts</a></p>
+<p>This book is aptly titled, and an awesome read. It consists of a series of tips &mdash; strategies Fowler has employed to build his own remarkable career. The most important tip is one that can&rsquo;t really be crossed off a list, and that is to build a successful career in software development one must be passionate about software development.</p>
 </div>
 
 
@@ -165,12 +131,12 @@
   
 
 
-<time datetime="2014-02-07T00:00:00-08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2014</time>
+<time datetime="2014-02-10T00:00:00-08:00" pubdate data-updated="true">Feb 10<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/i-didnt-know-that/'>I didn't know that</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
+    <a class='category' href='/blog/categories/read/'>read</a>
   
 </span>
 
@@ -179,7 +145,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/global-abatement/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/global-abatement/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/the-passionate-programmer/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/the-passionate-programmer/" >Tweet</a>
   
   
   
@@ -190,10 +156,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/fanout/" title="Previous Post: fanout">&laquo; fanout</a>
+        <a class="basic-alignment left" href="/blog/2014/augmented-objects/" title="Previous Post: augmented objects">&laquo; augmented objects</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/augmented-types/" title="Next Post: augmented types">augmented types &raquo;</a>
       
     </p>
   </footer>
@@ -300,8 +264,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/global-abatement/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2014/global-abatement/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/the-passionate-programmer/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2014/the-passionate-programmer/';
         var disqus_script = 'embed.js';
       
     (function () {

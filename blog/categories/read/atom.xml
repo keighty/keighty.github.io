@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Read | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/read/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-11T08:13:38-08:00</updated>
+  <updated>2014-02-13T18:43:00-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,18 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The Passionate Programmer]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/the-passionate-programmer/"/>
+    <updated>2014-02-10T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/the-passionate-programmer</id>
+    <content type="html"><![CDATA[<p><a href="http://www.amazon.com/gp/product/B00AYQNR5U/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B00AYQNR5U&amp;linkCode=as2&amp;tag=bridgeforpoke-20">The Passionate Programmer: Creating a Remarkable Career in Software Development</a> (Pragmatic Life), by Chad Fowler
+(affiliate link)</p>
+
+<p>This book is aptly titled, and an awesome read. It consists of a series of tips &mdash; strategies Fowler has employed to build his own remarkable career. The most important tip is one that can&rsquo;t really be crossed off a list, and that is to build a successful career in software development one must be passionate about software development.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Slack]]></title>
