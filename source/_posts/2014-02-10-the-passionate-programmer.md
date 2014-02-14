@@ -10,3 +10,6 @@ categories: [read]
 (affiliate link)
 
 This book is aptly titled, and an awesome read. It consists of a series of tips -- strategies Fowler has employed to build his own remarkable career. The most important tip is one that can't really be crossed off a list, and that is to build a successful career in software development one must be passionate about software development.
+
+##Update:
+Unbeknownst to me when I was finishing this book, but knownst to me now is that there has been a vibrant conversation occurring on the interweb about passion and programming. Check out Avdi Grimm's latest, [The Passion Gospel](http://devblog.avdi.org/2014/02/10/the-passion-gospel/).
