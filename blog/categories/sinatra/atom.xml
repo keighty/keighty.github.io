@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Sinatra | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/sinatra/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-13T18:43:00-08:00</updated>
+  <updated>2014-02-13T19:43:36-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -19,10 +19,8 @@
     <updated>2013-07-22T00:00:00-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/sinatra-in-a-console</id>
     <content type="html"><![CDATA[<p>Sinatra does not have a default console like rails does. If you are writing in a rails environment and need to test out a helper method, or want to check on the state of a record in the database, dropping down into the rails console is as easy as typing:
-<div>
-  <pre><code class='bash'>$ rails c</code></pre>
-</div>
-</p>
+{% highlight bash %}
+$ rails c{% endhighlight %}</p>
 
 <p>How can we achieve the same ability in Sinatra?<!--more--></p>
 
@@ -31,25 +29,22 @@
 <p>Tux is a ruby gem that generates a sinatra console. It reads the config.ru, allows you to interact with App methods, and provides empty request and response objects to for investigating communication between views and the Sinatra controller.</p>
 
 <p>Add Tux to your Gemfile:
-<div>
-  <pre><code class='ruby'>group :development, :test do
-  &amp;hellip;
-  gem &amp;lsquo;tux&amp;rsquo;
-end</code></pre>
-</div>
-</p>
+{% highlight ruby %}
+group :development, :test do
+  &hellip;
+  gem &lsquo;tux&rsquo;
+end{% endhighlight %}</p>
 
 <p>Don&rsquo;t forget to bundle!</p>
 
 <p>At the command line, start up tux and use rack.actions to view all the methods available:
-<div>
-  <pre><code class='bash'>$ tux
-Loading development environment (Rack 1.2)&lt;/p&gt;
+{% highlight bash %}
+$ tux
+Loading development environment (Rack 1.2)</p>
 
-&lt;blockquote&gt;&lt;blockquote&gt;&lt;p&gt;rack.actions
-=&gt; [:request, :get, :post, :put, :patch, :delete, :options, :head, :follow_redirect!, :header, :set_cookie, :clear_cookies, :authorize, :basic_authorize, :digest_authorize, :last_response, :last_request]</code></pre>
-</div>
-</p></blockquote></blockquote>
+<blockquote><blockquote><p>rack.actions
+=> [:request, :get, :post, :put, :patch, :delete, :options, :head, :follow_redirect!, :header, :set_cookie, :clear_cookies, :authorize, :basic_authorize, :digest_authorize, :last_response, :last_request]
+{% endhighlight %}</p></blockquote></blockquote>
 
 <p>You can access any method from your application as well.
 Of course, if you are working in Sinatra, you probably want to go as lightweight as possible, which is why you can also use:</p>
@@ -57,32 +52,27 @@ Of course, if you are working in Sinatra, you probably want to go as lightweight
 <h3>Basic irb</h3>
 
 <p>It is as simple as using irb and requiring your main app file. You have access to all the dependencies and files that your application does by simply requiring that one file. You can check state, call methods, create objects, whatever you need:
-<div>
-  <pre><code class='bash'>$ irb&lt;/p&gt;
+{% highlight bash %}
+$ irb</p>
 
-&lt;blockquote&gt;&lt;p&gt;require &amp;lsquo;./app.rb&amp;rsquo;
- =&gt; true
+<blockquote><p>require &lsquo;./app.rb&rsquo;
+ => true
 User.all
-D, [2013-07-22T15:47:49.230146 #54081] DEBUG &amp;mdash; :   User Load (0.2ms)  SELECT &amp;ldquo;users&amp;rdquo;.* FROM &amp;ldquo;users&amp;rdquo;
- =&gt; #&amp;lt;ActiveRecord::Relation [#&lt;User id: 1, name: &quot;Gordon Shumway&quot;, email: &quot;gordon@example.com&quot;, created_at: &quot;2013-07-22 22:45:48&quot;, updated_at: &quot;2013-07-22 22:45:48&quot;&gt;, #&lt;User id: 2, name: &quot;Fanny Eubanks&quot;, email: &quot;fanny@example.com&quot;, created_at: &quot;2013-07-22 22:45:48&quot;, updated_at: &quot;2013-07-22 22:45:48&quot;&gt;]&gt;</code></pre>
-</div>
-</p></blockquote>
+D, [2013-07-22T15:47:49.230146 #54081] DEBUG &mdash; :   User Load (0.2ms)  SELECT &ldquo;users&rdquo;.* FROM &ldquo;users&rdquo;
+ => #&lt;ActiveRecord::Relation [#<User id: 1, name: "Gordon Shumway", email: "gordon@example.com", created_at: "2013-07-22 22:45:48", updated_at: "2013-07-22 22:45:48">, #<User id: 2, name: "Fanny Eubanks", email: "fanny@example.com", created_at: "2013-07-22 22:45:48", updated_at: "2013-07-22 22:45:48">]>
+{% endhighlight %}</p></blockquote>
 
 <p>This can be called even more elegantly at the command line:
-<div>
-  <pre><code class='bash'>$ irb -r ./app.rb</code></pre>
-</div>
-</p>
+{% highlight bash %}
+$ irb -r ./app.rb{% endhighlight %}</p>
 
 <p>or through a Rake task:
-<div>
-  <pre><code class='bash'>desc &amp;ldquo;run irb console&amp;rdquo;
+{% highlight bash %}
+desc &ldquo;run irb console&rdquo;
 task :console, :environment do |t, args|
-  ENV[&amp;lsquo;RACK_ENV&amp;rsquo;] = args[:environment] || &amp;lsquo;development&amp;rsquo;
-  exec &amp;ldquo;irb -r irb/completion -r ./app.rb&amp;rdquo;
-end</code></pre>
-</div>
-</p>
+  ENV[&lsquo;RACK_ENV&rsquo;] = args[:environment] || &lsquo;development&rsquo;
+  exec &ldquo;irb -r irb/completion -r ./app.rb&rdquo;
+end{% endhighlight %}</p>
 
 <p>Awesome</p>
 ]]></content>
@@ -111,24 +101,22 @@ end</code></pre>
 
 <p>An ajax call is built up from a few minimum parameters: a url, the HTTP method, the dataType expected, and a callback function that handles the return. You can include data from the user in the form of a data hash:</p>
 
-<p><div>
-  <pre><code class='javascript'>var the_url = &amp;ldquo;&lt;a href=&quot;http://&quot;&gt;http://&lt;/a&gt;&amp;rdquo; + window.location.host + &amp;ldquo;/game/&amp;rdquo; + guess_string;
-  var mark_string = $.ajax({&lt;/p&gt;
+<p>{% highlight javascript linenos%}
+var the_url = &ldquo;<a href="http://">http://</a>&rdquo; + window.location.host + &ldquo;/game/&rdquo; + guess_string;
+  var mark_string = $.ajax({</p>
 
-&lt;pre&gt;&lt;code&gt;type: &quot;POST&quot;,
+<pre><code>type: "POST",
 url: the_url,
-accepts: &quot;application/json&quot;,
-dataType: &quot;json&quot;,
-data: { &#39;code&#39; : secret_code },
+accepts: "application/json",
+dataType: "json",
+data: { 'code' : secret_code },
 complete: function(data){
-  output_mark = data[&#39;responseText&#39;];
+  output_mark = data['responseText'];
   process_output(secret_code, guess_string, output_mark);
 }
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;  });</code></pre>
-</div>
-</p>
+<p>  });{% endhighlight %}</p>
 
 <p>This code snippet is using Ajax to send the secret code and guess to the Sinatra route.</p>
 
@@ -136,27 +124,23 @@ complete: function(data){
 
 <p>A route has three ingredients: an HTTP method, a URL matching pattern, and a code block.
 Typically they look like this:
-<div>
-  <pre><code class='ruby'>get &amp;lsquo;/&amp;rsquo; do
-  &amp;ldquo;hello world&amp;rdquo;
-end</code></pre>
-</div>
-</p>
+{% highlight ruby %}
+get &lsquo;/&rsquo; do
+  &ldquo;hello world&rdquo;
+end{% endhighlight %}</p>
 
 <p>But they can also look like this:
-<div>
-  <pre><code class='ruby'>post &amp;lsquo;/game/:guess&amp;rsquo; do
+{% highlight ruby %}
+post &lsquo;/game/:guess&rsquo; do
   game.guess(params[:guess])
 end
 private
-  def game&lt;/p&gt;
+  def game</p>
 
-&lt;pre&gt;&lt;code&gt;@game ||= Mastermind::Game.new_with_code(params[:code])
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>@game ||= Mastermind::Game.new_with_code(params[:code])
+</code></pre>
 
-&lt;p&gt;  end</code></pre>
-</div>
-</p>
+<p>  end{% endhighlight %}</p>
 
 <p>The code block returns information. That information can be anything, from a plain string (first example), or an html web page, to a JSON representation of an object (second example). What the browser does with the information it receives is the browser&rsquo;s business.</p>
 
@@ -178,11 +162,9 @@ private
 <p>ANYTHING can make an HTTP request. Ok, maybe that is a slight overstatement.</p>
 
 <p>Browsers interpret the information retrieved using HTTP requests, but they are far from the only category of software that can. Turns out, the command-line functions just as well:
-<div>
-  <pre><code class='bash'>$ curl -X POST -H &amp;ldquo;Accept: application/json&amp;rdquo; -d &amp;ldquo;code=12345&amp;rdquo; js-games.herokuapp.com/12345
-+++++$</code></pre>
-</div>
-</p>
+{% highlight bash linenos%}
+$ curl -X POST -H &ldquo;Accept: application/json&rdquo; -d &ldquo;code=12345&rdquo; js-games.herokuapp.com/12345
++++++${% endhighlight %}</p>
 
 <p>The command on line 1 will return the same string I am retrieving with $.ajax in javascript (output on line2). Sure it is a fairly plain result &mdash; it doesn&rsquo;t even include a new line character, for pity&rsquo;s sake &mdash; but it does the job of making an HTTP request to a route and using the result.</p>
 
@@ -211,38 +193,30 @@ private
 <p>The solution?</p>
 
 <p>Factor out the duplicate html into a partial (begin name with _ for identification purposes). For example <code>_gameDescription.erb</code>
-<div>
-  <pre><code class='html'>&lt;/p&gt;
+{% highlight html %}</p>
 
-&lt;h1&gt;Game Title&lt;/h1&gt;
-
-
-&lt;p&gt;Game description&lt;/p&gt;
+<h1>Game Title</h1>
 
 
-&lt;p&gt;</code></pre>
-</div>
-</p>
+<p>Game description</p>
+
+
+<p>{% endhighlight %}</p>
 
 <p>Add that partial wherever you want to display this snippet of code:
-<div>
-  <pre><code class='ruby'>&amp;lt;%= erb :_gameDescription  %&gt;</code></pre>
-</div>
-</p>
+{% highlight ruby %}
+&lt;%= erb :_gameDescription  %>{% endhighlight %}</p>
 
 <p>For example:
-<div>
-  <pre><code class='ruby'>&lt;/p&gt;
+{% highlight ruby %}</p>
 
-&lt;div class=&quot;span4 pagination-centered&quot;&gt;
-  &lt;%= erb :_solitaireDesc  %&gt;
-  &lt;a href=&quot;http://www.katieleonard.ca/game&quot; class=&quot;btn btn-large&quot;&gt;Play&lt;/a&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;</code></pre>
+<div class="span4 pagination-centered">
+  <%= erb :_solitaireDesc  %>
+  <a href="http://www.katieleonard.ca/game" class="btn btn-large">Play</a>
 </div>
-</p>
+
+
+<p>{% endhighlight %}</p>
 
 <p>Check out the final product on <a href="http://js-games.herokuapp.com/solitaire">JSGames</a>.</p>
 
