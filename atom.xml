@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-15T18:13:46-08:00</updated>
+  <updated>2014-02-15T18:51:35-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,68 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Custom Asides]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/custom-asides/"/>
+    <updated>2014-02-15T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/custom-asides</id>
+    <content type="html"><![CDATA[<p>I was following a <a href="http://blog.jmac.org/blog/2013/03/30/putting-twitter-back-into-octopress/">tutorial</a> on how to include a twitter widget in the sidebar of my octopress site and couldn&rsquo;t figure out why my twitter content wouldn&rsquo;t render. It turns out that custom asides require an internal div. <!--more-->The process:</p>
+
+<h3>1. Create a twitter timeline widget</h3>
+
+<p>This was surprisingly easy. Just login to <a href="https://twitter.com/">twitter.com</a> and click the settings icon: <i class="fa fa-cog fa-2x"></i></p>
+
+<p>Click &ldquo;Widgets&rdquo; on the bottom of the left nav and follow the instructions.</p>
+
+<p>CAKE WALK.</p>
+
+<h3>2. Create a custom aside</h3>
+
+<p>Perhaps it is the tutorial showing its age, but I couldn&rsquo;t get the content to render as described. I grabbed the widget html and created a file in source/custom/asides:</p>
+
+<figure class='code'><figcaption><span>twitter.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;section&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;h1&gt;</span>Twitter<span class="nt">&lt;/h1&gt;</span>
+</span><span class='line'>  <span class="c">&lt;!-- paste twitter widget code here --&gt;</span>
+</span><span class='line'><span class="nt">&lt;/section&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I looked to the other asides for help, and realized that the content had to be anchored to a div of its own:</p>
+
+<figure class='code'><figcaption><span>div: my saviour</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;section&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;h1&gt;</span>Twitter<span class="nt">&lt;/h1&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- paste twitter widget code here --&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/section&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>3. Add the aside to your _config.yml</h3>
+
+<figure class='code'><figcaption><span>What my _config.yml looks like</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># list each of the sidebar modules you want to include, in the order you want them to appear.</span>
+</span><span class='line'><span class="c1"># To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like &#39;custom/asides/custom_aside_name.html&#39;</span>
+</span><span class='line'><span class="n">default_asides</span><span class="p">:</span> <span class="o">[</span><span class="n">custom</span><span class="o">/</span><span class="n">asides</span><span class="o">/</span><span class="n">contactme</span><span class="o">.</span><span class="n">html</span><span class="p">,</span> <span class="n">asides</span><span class="o">/</span><span class="n">recent_posts</span><span class="o">.</span><span class="n">html</span><span class="p">,</span> <span class="n">asides</span><span class="o">/</span><span class="n">github</span><span class="o">.</span><span class="n">html</span><span class="p">,</span> <span class="n">custom</span><span class="o">/</span><span class="n">asides</span><span class="o">/</span><span class="n">aboutme</span><span class="o">.</span><span class="n">html</span><span class="p">,</span> <span class="n">custom</span><span class="o">/</span><span class="n">asides</span><span class="o">/</span><span class="n">twitter</span><span class="o">.</span><span class="n">html</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[For Score]]></title>
@@ -1335,82 +1397,6 @@ Now serving at totally-fake-url.meteor.com</code></pre>
 
 <p>I am really looking forward to diving further into <a href="http://docs.meteor.com/#concepts">the docs</a> to learn more about this incredible framework.
 AWESOME</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Partial to Ajax]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/partial-to-ajax/"/>
-    <updated>2013-10-18T22:29:03-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/partial-to-ajax</id>
-    <content type="html"><![CDATA[<p>I have been building a new project and getting creative with views. I am working with bootstrap and jquery to develop tabbed displays, and in the process have been gleaning a deeper understanding of rails routes, controllers, and assets. Using Ajax to load partials into rails views is a three part process:</p>
-
-<!--more-->
-
-
-<h4>1. In the View, Add a Link</h4>
-
-<p>/path/to/view.html.erb</p>
-
-<div>
-  <pre><code class='ruby'>&lt;%= link_to &quot;Show my partial&quot;, path_to_controller, remote: true %&gt;</code></pre>
-</div>
-
-
-<p>The key difference in the syntax for this link is &ldquo;remote: true&rdquo;, which signals to the controller action to respond using ajax, not html.</p>
-
-<h4>2. Create a Partial</h4>
-
-<p>/path/to/view/_my_partial.html.erb</p>
-
-<div>
-  <pre><code class='ruby'>&lt;div&gt;
-  &lt;%= form_for @model do |f| %&gt;
-    &lt;%= f.label :my_text_field, &quot;Text Field Label&quot; %&gt;
-    &lt;%= f.text_area :my_text_field %&gt;
-    &lt;%= f.submit &quot;New&quot;, class: &quot;btn btn-primary&quot; %&gt;
-  &lt;% end %&gt;
-&lt;/div&gt;</code></pre>
-</div>
-
-
-<h4>3. In the Controller Action, Add a js Response</h4>
-
-<p>/path/to/controller.rb</p>
-
-<div>
-  <pre><code class='ruby'>def my_action
-  respond_to do |format|
-    format.js
-  end
-end</code></pre>
-</div>
-
-
-<p>Normally, Rails will render the view that corresponds to the name of the action in response to an html request. The format.js line asks rails to look for a javascript file instead of an html file when it tries to render a view.</p>
-
-<h4>3. Create a my_action.js.erb File to Shape the Ajax Response</h4>
-
-<p>/path/to/view/my_action.js.erb</p>
-
-<div>
-  <pre><code class='javascript'>$(&quot;#your-placeholder-id&quot;).prepend(&#39;&lt;%= escape_javascript(render &#39;path/to/view/my_partial&#39;) %&gt;</code></pre>
-</div>
-
-
-<p>Files with multiple extensions are processed from last to the first one. With js.erb, the erb will process all the ruby content first, and then the javascript will be run. Your js.erb file should be saved in the same folder as the rest of your controller&rsquo;s views. This is an example :</p>
-
-<div>
-  <pre><code class='bash'>app/views/users/
-├── _my_partial.html.erb
-├── edit.js.erb
-├── show.html.erb</code></pre>
-</div>
-
-
-<p>Voila! When you click the link in your view the partial is loaded using Ajax.</p>
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   
