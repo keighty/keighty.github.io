@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: octopress | keighty]]></title>
+  <link href="http://www.katieleonard.ca/blog/categories/octopress/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2014-02-15T18:22:02-08:00</updated>
+  <id>http://www.katieleonard.ca/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[custom asides]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/custom-asides/"/>
+    <updated>2014-02-15T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/custom-asides</id>
+    <content type="html"><![CDATA[<p>I was following a <a href="http://blog.jmac.org/blog/2013/03/30/putting-twitter-back-into-octopress/">tutorial</a> on how to include a twitter widget in the sidebar of my octopress site and couldn&rsquo;t figure out why my twitter content wouldn&rsquo;t render. It turns out that custom asides require an internal div. <!--more-->The process:</p>
+
+<h3>1. Create a twitter timeline widget</h3>
+
+<p>This was surprisingly easy. Just login to <a href="https://twitter.com/">twitter.com</a> and click the settings icon. Click &ldquo;Widgets&rdquo; on the bottom of the left nav and follow the instructions.</p>
+
+<p>CAKE WALK.</p>
+
+<h3>2. Create a custom aside</h3>
+
+<p>Perhaps it is the tutorial showing its age, but I couldn&rsquo;t get the content to render as described. I grabbed the widget html and created a file in source/custom/asides:</p>
+
+<p><code>html twitter.html
+&lt;section&gt;
+  &lt;h1&gt;Twitter&lt;/h1&gt;
+  &lt;!-- paste twitter widget code here --&gt;
+&lt;/section&gt;
+</code></p>
+
+<p>I looked to the other asides for help, and realized that the content had to be anchored to a div of its own:</p>
+
+<p>```html div: my saviour
+<section>
+  <div></p>
+
+<pre><code>&lt;h1&gt;Twitter&lt;/h1&gt;
+&lt;!-- paste twitter widget code here --&gt;
+</code></pre>
+
+<p>  </div>
+</section>
+```</p>
+
+<h3>3. Add the aside to your _config.yml</h3>
+
+<p>```What my _config.yml looks like</p>
+
+<h1>list each of the sidebar modules you want to include, in the order you want them to appear.</h1>
+
+<h1>To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like &lsquo;custom/asides/custom_aside_name.html&rsquo;</h1>
+
+<p>default_asides: [custom/asides/contactme.html, asides/recent_posts.html, asides/github.html, custom/asides/aboutme.html, custom/asides/twitter.html]
+```</p>
+]]></content>
+  </entry>
+  
+</feed>

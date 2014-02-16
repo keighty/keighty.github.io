@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: I Didn't Know That | keighty]]></title>
+  <title><![CDATA[Category: I didn't know that | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/i-didnt-know-that/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-13T19:48:33-08:00</updated>
+  <updated>2014-02-15T18:22:02-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Global Abatement]]></title>
+    <title type="html"><![CDATA[global abatement]]></title>
     <link href="http://www.katieleonard.ca/blog/2014/global-abatement/"/>
     <updated>2014-02-07T00:00:00-08:00</updated>
     <id>http://www.katieleonard.ca/blog/2014/global-abatement</id>
@@ -26,29 +26,20 @@
 
 <p>A <strong>global abatement</strong> is a strategy used to reduce the vulnerability of your javascript variables by removing them from the global scope. Application namespacing is one such strategy:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>BAD GLOBAL</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">first_name</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Hello</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;,</span>
-</span><span class='line'>  <span class="nx">last_name</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Kitty</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:javascript BAD GLOBAL%}
+person = {
+  first_name: &lsquo;Hello&rsquo;,
+  last_name: &lsquo;Kitty&rsquo;
+};
+{% endcodeblock %}</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>GOOD LOCAL</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">MYAPP</span> <span class="o">=</span> <span class="p">{};</span>
-</span><span class='line'><span class="nx">MYAPP</span><span class="p">.</span><span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">first_name</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Hello</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;,</span>
-</span><span class='line'>  <span class="nx">last_name</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Kitty</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:javascript GOOD LOCAL%}
+var MYAPP = {};
+MYAPP.person = {
+  first_name: &lsquo;Hello&rsquo;,
+  last_name: &lsquo;Kitty&rsquo;
+};
+{% endcodeblock %}</p>
 
 <p>Declaring an application-level function ensures that the correct <code>person</code> is called when needed. It improves readability by essentially flagging the scope of the variable and reducing ambiguity.</p>
 
@@ -57,7 +48,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[A Number Is a Double Is a Float]]></title>
+    <title type="html"><![CDATA[a number is a double is a float]]></title>
     <link href="http://www.katieleonard.ca/blog/2014/a-number-is-a-double-is-a-float/"/>
     <updated>2014-02-02T19:56:17-08:00</updated>
     <id>http://www.katieleonard.ca/blog/2014/a-number-is-a-double-is-a-float</id>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Rails | keighty]]></title>
+  <title><![CDATA[Category: rails | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-13T19:48:33-08:00</updated>
+  <updated>2014-02-15T18:22:02-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Factoring in Nests]]></title>
+    <title type="html"><![CDATA[Factoring In Nests]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/factoring-in-nests/"/>
     <updated>2013-10-29T22:29:03-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/factoring-in-nests</id>
@@ -22,25 +22,23 @@
 
 <p>Using <a href="https://github.com/thoughtbot/factory_girl">FactoryGirl</a> to create a User is straightforward:</p>
 
-<p><div>
-  <pre><code class='ruby'>FactoryGirl.define do
-  factory :user do&lt;/p&gt;
+<p>{% highlight ruby %}
+FactoryGirl.define do
+  factory :user do</p>
 
-&lt;pre&gt;&lt;code&gt;sequence :name  { |n| &quot;person#{n}&quot; }
-sequence :email { |n| &quot;person#{n}@example.com&quot; }
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>sequence :name  { |n| "person#{n}" }
+sequence :email { |n| "person#{n}@example.com" }
+</code></pre>
 
-&lt;p&gt;  end
-end&lt;/p&gt;
+<p>  end
+end</p>
 
-&lt;p&gt;describe User do
+<p>describe User do
   before  { @user = FactoryGirl.create(:user) }
   subject { @user }
   it { should respond_to(:name) }
-  &amp;hellip;
-end</code></pre>
-</div>
-</p>
+  &hellip;
+end {% endhighlight %}</p>
 
 <p>How do I create Goals that are linked to the User?</p>
 
@@ -51,94 +49,82 @@ end</code></pre>
 
 <h5>1. Make a new Factory for producing Goals:</h5>
 
-<p><div>
-  <pre><code class='ruby'>FactoryGirl.define do
-  factory :goal do&lt;/p&gt;
+<p>{% highlight ruby %}
+FactoryGirl.define do
+  factory :goal do</p>
 
-&lt;pre&gt;&lt;code&gt;sequence :description { |n| &quot;my goal #{n}&quot; }
-sequence :motivation  { |n| &quot;my motivation #{n}&quot; }
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>sequence :description { |n| "my goal #{n}" }
+sequence :motivation  { |n| "my motivation #{n}" }
+</code></pre>
 
-&lt;p&gt;  end
-end</code></pre>
-</div>
-</p>
+<p>  end
+end {% endhighlight %}</p>
 
 <h5>2. Call the Goal Factory from the User Factory and store the Goals in an Array</h5>
 
-<p><div>
-  <pre><code class='ruby'>FactoryGirl.define do
-  factory :user do&lt;/p&gt;
+<p>{% highlight ruby %}
+FactoryGirl.define do
+  factory :user do</p>
 
-&lt;pre&gt;&lt;code&gt;sequence :name { |n| &quot;person#{n}&quot; }
-sequence :email { |n| &quot;person#{n}@example.com&quot; }
+<pre><code>sequence :name { |n| "person#{n}" }
+sequence :email { |n| "person#{n}@example.com" }
 
 goals { Array.new(1) { FactoryGirl.build(:goal) } }
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;  end
-end</code></pre>
-</div>
-</p>
+<p>  end
+end {% endhighlight %}</p>
 
 <p>Your objects will look like this:
-<div>
-  <pre><code class='bash'>&lt;/p&gt;
+{% highlight bash %}</p>
 
-&lt;blockquote&gt;&lt;p&gt;p @user&lt;/p&gt;
+<blockquote><p>p @user</p>
 
-&lt;h1&gt;&lt;User id: 1, name: &quot;person1&quot;, email: &quot;person1@example.com&quot;, ... &gt;&lt;/h1&gt;
+<h1><User id: 1, name: "person1", email: "person1@example.com", ... ></h1>
 
-&lt;p&gt;p @user.goals.first&lt;/p&gt;
+<p>p @user.goals.first</p>
 
-&lt;h1&gt;&amp;lt;ActiveRecord::Associations::CollectionProxy [#&lt;Goal id: 1, user_id: 1, description: &quot;my goal 1&quot;, motivation: &quot;my motivation 1&quot;, ...]&gt;</code></pre>
-</div>
-</h1></blockquote>
+<h1>&lt;ActiveRecord::Associations::CollectionProxy [#<Goal id: 1, user_id: 1, description: "my goal 1", motivation: "my motivation 1", ...]> {% endhighlight %}</h1></blockquote>
 
 <p>Create Hours for Goals in the same manner: create a Factory for making Hours, call the Hours Factory from the Goals Factory.</p>
 
-<p><div>
-  <pre><code class='ruby'>FactoryGirl.define do
-  factory :hour do&lt;/p&gt;
+<p>{% highlight ruby %}
+FactoryGirl.define do
+  factory :hour do</p>
 
-&lt;pre&gt;&lt;code&gt;duration { 100 * rand(36) }
+<pre><code>duration { 100 * rand(36) }
 ...
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;  end
-end&lt;/p&gt;
+<p>  end
+end</p>
 
-&lt;p&gt;FactoryGirl.define do
-  factory :goal do&lt;/p&gt;
+<p>FactoryGirl.define do
+  factory :goal do</p>
 
-&lt;pre&gt;&lt;code&gt;sequence :description { |n| &quot;my goal #{n}&quot; }
-sequence :motivation  { |n| &quot;my motivation #{n}&quot; }
+<pre><code>sequence :description { |n| "my goal #{n}" }
+sequence :motivation  { |n| "my motivation #{n}" }
 
 hours { Array.new(3) { FactoryGirl.build(:hour) } }
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;  end
-end</code></pre>
-</div>
-</p>
+<p>  end
+end {% endhighlight %}</p>
 
 <p>Checking your objects:
-<div>
-  <pre><code class='bash'>&lt;/p&gt;
+{% highlight bash %}</p>
 
-&lt;blockquote&gt;&lt;p&gt;p @user&lt;/p&gt;
+<blockquote><p>p @user</p>
 
-&lt;h1&gt;&lt;User id: 1, name: &quot;person1&quot;, email: &quot;person1@example.com&quot;, ... &gt;&lt;/h1&gt;
+<h1><User id: 1, name: "person1", email: "person1@example.com", ... ></h1>
 
-&lt;p&gt;p @user.goals.first&lt;/p&gt;
+<p>p @user.goals.first</p>
 
-&lt;h1&gt;&amp;lt;ActiveRecord::Associations::CollectionProxy [#&lt;Goal id: 1, user_id: 1, description: &quot;my goal 1&quot;, motivation: &quot;my motivation 1&quot;, ...]&gt;&lt;/h1&gt;
+<h1>&lt;ActiveRecord::Associations::CollectionProxy [#<Goal id: 1, user_id: 1, description: "my goal 1", motivation: "my motivation 1", ...]></h1>
 
-&lt;p&gt;p @user.goals.first.hours.first&lt;/p&gt;
+<p>p @user.goals.first.hours.first</p>
 
-&lt;h1&gt;&amp;lt;ActiveRecord::Associations::CollectionProxy [#&lt;Hour id: 1, goal_id: 1, duration: 3200 , ...]&gt;</code></pre>
-</div>
-</h1></blockquote>
+<h1>&lt;ActiveRecord::Associations::CollectionProxy [#<Hour id: 1, goal_id: 1, duration: 3200 , ...]> {% endhighlight %}</h1></blockquote>
 
 <p>Awesome.</p>
 ]]></content>
@@ -158,47 +144,40 @@ end</code></pre>
 
 <p>/path/to/view.html.erb</p>
 
-<p><div>
-  <pre><code class='ruby'>&amp;lt;%= link_to &amp;ldquo;Show my partial&amp;rdquo;, path_to_controller, remote: true %&gt;</code></pre>
-</div>
-</p>
+<p>{% highlight ruby %}
+&lt;%= link_to &ldquo;Show my partial&rdquo;, path_to_controller, remote: true %> {% endhighlight %}</p>
 
 <p>The key difference in the syntax for this link is &ldquo;remote: true&rdquo;, which signals to the controller action to respond using ajax, not html.</p>
 
 <h4>2. Create a Partial</h4>
 
 <p>/path/to/view/_my_partial.html.erb
+{% highlight ruby %}</p>
+
 <div>
-  <pre><code class='ruby'>&lt;/p&gt;
-
-&lt;div&gt;
-  &lt;%= form_for @model do |f| %&gt;
-    &lt;%= f.label :my_text_field, &quot;Text Field Label&quot; %&gt;
-    &lt;%= f.text_area :my_text_field %&gt;
-    &lt;%= f.submit &quot;New&quot;, class: &quot;btn btn-primary&quot; %&gt;
-  &lt;% end %&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;</code></pre>
+  <%= form_for @model do |f| %>
+    <%= f.label :my_text_field, "Text Field Label" %>
+    <%= f.text_area :my_text_field %>
+    <%= f.submit "New", class: "btn btn-primary" %>
+  <% end %>
 </div>
-</p>
+
+
+<p>{% endhighlight %}</p>
 
 <h4>3. In the Controller Action, Add a js Response</h4>
 
 <p>/path/to/controller.rb</p>
 
-<p><div>
-  <pre><code class='ruby'>def my_action
-  respond_to do |format|&lt;/p&gt;
+<p>{% highlight ruby %}
+def my_action
+  respond_to do |format|</p>
 
-&lt;pre&gt;&lt;code&gt;format.js
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>format.js
+</code></pre>
 
-&lt;p&gt;  end
-end</code></pre>
-</div>
-</p>
+<p>  end
+end{% endhighlight %}</p>
 
 <p>Normally, Rails will render the view that corresponds to the name of the action in response to an html request. The format.js line asks rails to look for a javascript file instead of an html file when it tries to render a view.</p>
 
@@ -206,19 +185,16 @@ end</code></pre>
 
 <p>/path/to/view/my_action.js.erb</p>
 
-<p><div>
-  <pre><code class='javascript'>$(&amp;ldquo;#your-placeholder-id&amp;rdquo;).prepend(&amp;lsquo;&amp;lt;%= escape_javascript(render &#39;path/to/view/my_partial&amp;rsquo;) %&gt;</code></pre>
-</div>
-</p>
+<p>{% highlight javascript %}
+$(&ldquo;#your-placeholder-id&rdquo;).prepend(&lsquo;&lt;%= escape_javascript(render 'path/to/view/my_partial&rsquo;) %>
+{% endhighlight %}</p>
 
 <p>Files with multiple extensions are processed from last to the first one. With js.erb, the erb will process all the ruby content first, and then the javascript will be run. Your js.erb file should be saved in the same folder as the rest of your controller&rsquo;s views. This is an example :
-<div>
-  <pre><code class='bash'>app/views/users/
+{% highlight bash %}
+app/views/users/
 ├── _my_partial.html.erb
 ├── edit.js.erb
-├── show.html.erb</code></pre>
-</div>
-</p>
+├── show.html.erb {% endhighlight %}</p>
 
 <p>Voila! When you click the link in your view the partial is loaded using Ajax.</p>
 
@@ -236,14 +212,12 @@ end</code></pre>
 <h3>Rails requires a javascript runtime environment</h3>
 
 <p>I am running an Ubuntu 9.4 remix on my little Atom Netbook. Getting rails up and running anew is a lesson in returning to fundamentals.
-<div>
-  <pre><code class='bash'>$ gem install rails
+{% highlight bash %}
+$ gem install rails
 $ rails new testapp -T
 $ rails generate rspec:install
-&amp;hellip;
-Could not find a JavaScript runtime. See &lt;a href=&quot;https://github.com/sstephenson/execjs&quot;&gt;https://github.com/sstephenson/execjs&lt;/a&gt; for a list of available runtimes</code></pre>
-</div>
-</p>
+&hellip;
+Could not find a JavaScript runtime. See <a href="https://github.com/sstephenson/execjs">https://github.com/sstephenson/execjs</a> for a list of available runtimes{% endhighlight %}</p>
 
 <!--more-->
 
@@ -259,35 +233,27 @@ Could not find a JavaScript runtime. See &lt;a href=&quot;https://github.com/sst
 <h3>Setup Node.js on Linux</h3>
 
 <p>In Ubuntu 10.4 and above, a JavaScript runtime is included, but installing Node on an older Ubuntu distro is not as simple as
-<div>
-  <pre><code class='bash'>$ sudo apt-get nodejs</code></pre>
-</div>
-</p>
+{% highlight bash %}
+$ sudo apt-get nodejs{% endhighlight %}</p>
 
 <p>I found the key sequence of commands on the Node.js website. First, update your packages and install node.js dependencies: python, g++, make, etc
-<div>
-  <pre><code class='bash'>$ sudo apt-get update
-$ sudo apt-get install python-software-properties python g++ make</code></pre>
-</div>
-</p>
+{% highlight bash %}
+$ sudo apt-get update
+$ sudo apt-get install python-software-properties python g++ make {% endhighlight %}</p>
 
 <p>Next, add the location of the nodejs repository, update, and install.
-<div>
-  <pre><code class='bash'>$ sudo add-apt-repository ppa:chris-lea/node.js
+{% highlight bash %}
+$ sudo add-apt-repository ppa:chris-lea/node.js
 $ sudo apt-get update
-$ sudo apt-get install nodejs</code></pre>
-</div>
-</p>
+$ sudo apt-get install nodejs {% endhighlight %}</p>
 
 <p>Wow &mdash; with all of that done, I can finally:
-<div>
-  <pre><code class='bash'>$ rails generate rspec:install&lt;/p&gt;
+{% highlight bash %}
+$ rails generate rspec:install</p>
 
-&lt;pre&gt;&lt;code&gt;  create  .rspec
+<pre><code>  create  .rspec
   create  spec
-  create  spec/spec_helper.rb</code></pre>
-</div>
-
+  create  spec/spec_helper.rb {% endhighlight %}
 </code></pre>
 
 <p>Awesome.</p>
@@ -295,7 +261,7 @@ $ sudo apt-get install nodejs</code></pre>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Mass Assignment X Gravity]]></title>
+    <title type="html"><![CDATA[Mass assignment X Gravity]]></title>
     <link href="http://www.katieleonard.ca/blog/2013/mass-assignment-x-gravity/"/>
     <updated>2013-07-15T00:00:00-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2013/mass-assignment-x-gravity</id>
@@ -304,47 +270,43 @@ $ sudo apt-get install nodejs</code></pre>
 <p>Mass assignment is using a ruby-esque shortcut to interact with models<!--more-->:</p>
 
 <p>This is NOT mass assignment.
-<div>
-  <pre><code class='ruby'>def create
+{% highlight ruby %}
+def create
   u = User.new
   u.first_name = params[:user][:firstname]
   u.last_name = params[:user][:lastname]
-  if u.save&lt;/p&gt;
+  if u.save</p>
 
-&lt;pre&gt;&lt;code&gt;redirect_to :index, flash: { success: &quot;Created!&quot; }
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>redirect_to :index, flash: { success: "Created!" }
+</code></pre>
 
-&lt;p&gt;  else&lt;/p&gt;
+<p>  else</p>
 
-&lt;pre&gt;&lt;code&gt;render :action =&amp;gt; &#39;new&#39;
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>render :action =&gt; 'new'
+</code></pre>
 
-&lt;p&gt;  end
-end</code></pre>
-</div>
-</p>
+<p>  end
+end{% endhighlight %}</p>
 
 <p>Each param is extracted from the params hash and assigned explicitly. Any params that are not assigned are thrown on the floor.</p>
 
 <p>This IS mass assignment.</p>
 
-<p><div>
-  <pre><code class='ruby'>def create
+<p>{% highlight ruby %}
+def create
   u = User.new(params[:user])
-  if u.save&lt;/p&gt;
+  if u.save</p>
 
-&lt;pre&gt;&lt;code&gt;redirect_to :index, flash: { success: &quot;Created!&quot; }
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>redirect_to :index, flash: { success: "Created!" }
+</code></pre>
 
-&lt;p&gt;  else&lt;/p&gt;
+<p>  else</p>
 
-&lt;pre&gt;&lt;code&gt;render :action =&amp;gt; &#39;new&#39;
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>render :action =&gt; 'new'
+</code></pre>
 
-&lt;p&gt;  end
-end</code></pre>
-</div>
-
+<p>  end
+end{% endhighlight %}
 The programmer assumes that the params include all the data necessary, and <em>only</em> the data necessary. All params in the hash are used to create the new user record.</p>
 
 <h3>Why is mass assignment a problem?</h3>
@@ -355,27 +317,25 @@ The programmer assumes that the params include all the data necessary, and <em>o
 
 <p>There is! With Rails 4 comes <strong>strong params</strong>.
 Strong params live in the controller and tell it explicitly what params can be trusted.
-<div>
-  <pre><code class='ruby'>def create
+{% highlight ruby %}
+def create
   u = User.new(user_params)
-  if u.save&lt;/p&gt;
+  if u.save</p>
 
-&lt;pre&gt;&lt;code&gt;redirect_to :index, flash: { success: &quot;Created!&quot; }
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>redirect_to :index, flash: { success: "Created!" }
+</code></pre>
 
-&lt;p&gt;  else&lt;/p&gt;
+<p>  else</p>
 
-&lt;pre&gt;&lt;code&gt;render :action =&amp;gt; &#39;new&#39;
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>render :action =&gt; 'new'
+</code></pre>
 
-&lt;p&gt;  end
+<p>  end
 end
-&amp;hellip;
+&hellip;
 def user_params
   params.require(:user).permit(:name, :email, :password, :password_confirmation)
-end</code></pre>
-</div>
-
+end{% endhighlight %}
 The only parameters our controller will send to the model are those specified on our white-list. If rails detects a user attempting to access a param that is not on the white-list, said user had better be prepared for <em>grave consequences</em>. Their session will be <strong>deleted</strong>, their attempt will be <strong>logged</strong>, and Rails will email their mother.</p>
 
 <p>Awesome.</p>
@@ -393,58 +353,52 @@ The only parameters our controller will send to the model are those specified on
 
 <p>As a <a href="http://www.katieleonard.ca/tdd/testing/2013/06/14/TDD-is-the-way-to-be/">loyal TDD-er</a>, I wrote a test to check that users see a success message if they are able to update their infomation:<!--more--></p>
 
-<p><div>
-  <pre><code class='ruby'>describe &amp;ldquo;updating with valid information&amp;rdquo; do
-  let(:new_name) { &amp;ldquo;New Name&amp;rdquo; }
-  let(:new_email) { &amp;ldquo;&lt;a href=&quot;&amp;#x6d;&amp;#x61;&amp;#105;&amp;#108;&amp;#x74;&amp;#111;&amp;#58;&amp;#110;&amp;#101;&amp;#x77;&amp;#x40;&amp;#x65;&amp;#120;&amp;#x61;&amp;#109;&amp;#112;&amp;#x6c;&amp;#x65;&amp;#x2e;&amp;#99;&amp;#x6f;&amp;#109;&quot;&gt;&amp;#x6e;&amp;#101;&amp;#119;&amp;#x40;&amp;#101;&amp;#x78;&amp;#x61;&amp;#109;&amp;#x70;&amp;#108;&amp;#101;&amp;#x2e;&amp;#x63;&amp;#x6f;&amp;#x6d;&lt;/a&gt;&amp;rdquo; }
-  before do&lt;/p&gt;
+<p>{% highlight ruby %}
+describe &ldquo;updating with valid information&rdquo; do
+  let(:new_name) { &ldquo;New Name&rdquo; }
+  let(:new_email) { &ldquo;<a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#110;&#101;&#119;&#64;&#x65;&#x78;&#97;&#x6d;&#x70;&#x6c;&#x65;&#46;&#x63;&#111;&#x6d;">&#110;&#101;&#x77;&#64;&#101;&#x78;&#97;&#x6d;&#112;&#x6c;&#101;&#x2e;&#x63;&#x6f;&#109;</a>&rdquo; }
+  before do</p>
 
-&lt;pre&gt;&lt;code&gt;fill_in &quot;Name&quot;, with: new_name
-fill_in &quot;Email&quot;, with: new_email
-fill_in &quot;Password&quot;, with: user.password
-fill_in &quot;Confirm Password&quot;, with: user.password
-click_button &quot;Save changes&quot;
-&lt;/code&gt;&lt;/pre&gt;
+<pre><code>fill_in "Name", with: new_name
+fill_in "Email", with: new_email
+fill_in "Password", with: user.password
+fill_in "Confirm Password", with: user.password
+click_button "Save changes"
+</code></pre>
 
-&lt;p&gt;  end
-  it { should have_selector(&amp;lsquo;div.alert.alert-success&amp;rsquo;) }
-end</code></pre>
-</div>
-</p>
+<p>  end
+  it { should have_selector(&lsquo;div.alert.alert-success&rsquo;) }
+end
+{% endhighlight %}</p>
 
 <p>As expected, the tests should fail until I am able to log in.</p>
 
 <p>Since the Rails4 user scaffold comes with some nifty built in methods, I thought it would be easy to adapt them for my own ends:</p>
 
-<p><div>
-  <pre><code class='ruby'>&lt;/p&gt;
+<p>{% highlight ruby linenum %}</p>
 
-&lt;h1&gt;PATCH/PUT /users/1&lt;/h1&gt;
+<h1>PATCH/PUT /users/1</h1>
 
-&lt;h1&gt;PATCH/PUT /users/1.json&lt;/h1&gt;
+<h1>PATCH/PUT /users/1.json</h1>
 
-&lt;p&gt;def update
-  respond_to do |format|&lt;/p&gt;
+<p>def update
+  respond_to do |format|</p>
 
-&lt;pre&gt;&lt;code&gt;if @user.update(user_params)
-  format.html { redirect_to @user, notice: &#39;Profile updated.&#39; }
+<pre><code>if @user.update(user_params)
+  format.html { redirect_to @user, notice: 'Profile updated.' }
   format.json { head :no_content }
 else
-  format.html { render action: &#39;edit&#39; }
+  format.html { render action: 'edit' }
   format.json { render json: @user.errors, status: :unprocessable_entity }
 end
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;  end
-end</code></pre>
-</div>
-</p>
+<p>  end
+end{% endhighlight %}</p>
 
 <p>I modify the line 5 of the user controller to change the &ldquo;notice&rdquo; message to a &ldquo;success&rdquo; message:
-<div>
-  <pre><code class='ruby'>format.html { redirect_to @user, success: &amp;ldquo;Profile updated&amp;rdquo; }</code></pre>
-</div>
-</p>
+{% highlight ruby %}
+format.html { redirect_to @user, success: &ldquo;Profile updated&rdquo; }{% endhighlight %}</p>
 
 <p>Seems reasonable, but my test for the flash message is still failing. Why won&rsquo;t my page flash the user?!</p>
 
@@ -454,10 +408,8 @@ end</code></pre>
 
 <p>Thanks to <a href="http://en.wikipedia.org/wiki/Duck_typing">duck-typing</a> (if it walks like a duck and quacks like a duck, it is probably a hash.. right?) we can add our spiffy <code>success:</code> tag to flash, and share the appropriate level of enthusiasm with our users:</p>
 
-<p><div>
-  <pre><code class='ruby'>format.html { redirect_to @user, flash: { success: &amp;ldquo;Profile updated&amp;rdquo; }}</code></pre>
-</div>
-</p>
+<p>{% highlight ruby %}
+format.html { redirect_to @user, flash: { success: &ldquo;Profile updated&rdquo; }}{% endhighlight %}</p>
 
 <p>All tests are green, and today I learned that flash is</p>
 

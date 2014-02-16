@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Git | keighty]]></title>
+  <title><![CDATA[Category: git | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-13T19:48:33-08:00</updated>
+  <updated>2014-02-15T18:22:02-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Afraid of Commitment]]></title>
+    <title type="html"><![CDATA[Afraid of commitment]]></title>
     <link href="http://www.katieleonard.ca/blog/2014/afraid-of-commitment/"/>
     <updated>2014-02-04T08:04:27-08:00</updated>
     <id>http://www.katieleonard.ca/blog/2014/afraid-of-commitment</id>
@@ -46,7 +46,7 @@ $ git revert -m 1 &lt;SHA of commit to be reverted&gt;
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Git Add -p]]></title>
+    <title type="html"><![CDATA[git add -p]]></title>
     <link href="http://www.katieleonard.ca/blog/2014/git-add-p/"/>
     <updated>2014-02-01T20:51:09-08:00</updated>
     <id>http://www.katieleonard.ca/blog/2014/git-add-p</id>
@@ -120,7 +120,7 @@ e - manually edit the current hunk
 
 <p>Lo, and behold! Instructions after the hunk!</p>
 
-<p><img src="/images/addp-hunk-edit_diff-8.png"></p>
+<p>{% img /images/addp-hunk-edit_diff-8.png %}</p>
 
 <p>Simple enough:</p>
 
@@ -145,7 +145,7 @@ Edit again (saying "no" discards!) [y/n]?
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Git Retrieve: A Drama]]></title>
+    <title type="html"><![CDATA[git retrieve: a drama]]></title>
     <link href="http://www.katieleonard.ca/blog/2014/git-retrieve/"/>
     <updated>2014-01-23T20:47:46-08:00</updated>
     <id>http://www.katieleonard.ca/blog/2014/git-retrieve</id>
@@ -197,7 +197,7 @@ cat: foo.bar: No such file or directory you heartless creature!
 <p>```bash Act 2 Scene 2: Regret
 $ git log &mdash;diff-filter=D &mdash;summary
 commit b045a528b4a0824f63562cad867b264983b32c7c
-Author: keighty <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#107;&#x65;&#x69;&#x67;&#x68;&#x74;&#x79;&#46;&#x6c;&#101;&#x6f;&#x6e;&#x61;&#114;&#100;&#x40;&#x67;&#x6d;&#97;&#105;&#x6c;&#46;&#x63;&#x6f;&#109;">&#107;&#x65;&#105;&#x67;&#x68;&#116;&#x79;&#46;&#x6c;&#101;&#111;&#x6e;&#x61;&#114;&#100;&#x40;&#x67;&#x6d;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a>
+Author: keighty <a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#x6b;&#x65;&#x69;&#103;&#x68;&#x74;&#121;&#x2e;&#x6c;&#x65;&#111;&#x6e;&#97;&#x72;&#100;&#64;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;">&#x6b;&#x65;&#x69;&#x67;&#104;&#x74;&#121;&#x2e;&#108;&#101;&#x6f;&#110;&#97;&#114;&#x64;&#x40;&#103;&#109;&#x61;&#105;&#108;&#46;&#99;&#x6f;&#x6d;</a>
 Date:   Wed Jan 22 20:46:16 2014 -0800</p>
 
 <pre><code>I have made a huge mistake.
@@ -234,7 +234,7 @@ $ git commit -am &ldquo;Together at last, together forever.&rdquo;
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Get Clean]]></title>
+    <title type="html"><![CDATA[get clean]]></title>
     <link href="http://www.katieleonard.ca/blog/2014/get-clean/"/>
     <updated>2014-01-13T21:29:03-08:00</updated>
     <id>http://www.katieleonard.ca/blog/2014/get-clean</id>
@@ -308,71 +308,61 @@ Using the principle of only committing atomic changes, and enjoying the fruits o
 
 <p>Checkout the branch that contains your experiment, and use git log to get a list of all the commits:</p>
 
-<p><div>
-  <pre><code class='bash'>$ git checkout form_feature_branch
-$ git log &amp;mdash;pretty=oneline
+<p>{% highlight bash %}
+$ git checkout form_feature_branch
+$ git log &mdash;pretty=oneline
 a83f4c3aa5d800f846d075748a79a326e0971f67 reorg gemfile
 197964c091905a76f2172ca11fcbd49ccfb83c67 adds blog.db
-a793fe00c50a5956c5e9f7be48ac5a9861b1eb95 adds forme form to edit&amp;hellip;
-8394b37494b63754f42ecaf19244fe6d8a36942f adds gitignore for db &amp;hellip;
-c52a6fd3f1706584ce3e47abf49ed627a1e28fd3 adds bundler gem for manag&amp;hellip;
-1686664c4a98221ea04377bcbcf946e62a9f1cfa removes gems for simple&amp;hellip;
+a793fe00c50a5956c5e9f7be48ac5a9861b1eb95 adds forme form to edit&hellip;
+8394b37494b63754f42ecaf19244fe6d8a36942f adds gitignore for db &hellip;
+c52a6fd3f1706584ce3e47abf49ed627a1e28fd3 adds bundler gem for manag&hellip;
+1686664c4a98221ea04377bcbcf946e62a9f1cfa removes gems for simple&hellip;
 034d309a612dcce6f10bb55f0da2e78b2f7c10b1 adds cells to project
-&amp;hellip;</code></pre>
-</div>
-</p>
+&hellip;{% endhighlight %}</p>
 
 <p>In form_feature_branch I was testing out different implementations of form generation in erb views. I tried a couple of different gems and found one that suits my sinatra project: <a href="https://github.com/jeremyevans/forme">Forme</a> is easy to use with or without models, and has great sinatra integration and documentation. Also along the way, I discovered how to include bundler for managing file dependencies and did some minor refactoring of my Gemfile.</p>
 
 <p>I wanted to keep the gem reorganization, as well as the forme, bundler, and gitignore commits, so I made this list of keeper-commits:</p>
 
-<p><div>
-  <pre><code class='bash'>a83f4c3aa5d800f846d075748a79a326e0971f67 reorg gemfile
-a793fe00c50a5956c5e9f7be48ac5a9861b1eb95 adds forme form to edit&amp;hellip;
-c52a6fd3f1706584ce3e47abf49ed627a1e28fd3 adds bundler gem for manag&amp;hellip;
-8394b37494b63754f42ecaf19244fe6d8a36942f adds gitignore for db &amp;hellip;</code></pre>
-</div>
-</p>
+<p>{% highlight bash %}
+a83f4c3aa5d800f846d075748a79a326e0971f67 reorg gemfile
+a793fe00c50a5956c5e9f7be48ac5a9861b1eb95 adds forme form to edit&hellip;
+c52a6fd3f1706584ce3e47abf49ed627a1e28fd3 adds bundler gem for manag&hellip;
+8394b37494b63754f42ecaf19244fe6d8a36942f adds gitignore for db &hellip;{% endhighlight %}</p>
 
 <p>Everything else is cruft.</p>
 
 <h2>Extract the gold</h2>
 
 <p>With this list of golden commits in hand, checkout a fresh branch and cherry-pick the commits you like!
-<div>
-  <pre><code class='bash'>$ git checkout -b form_feature_additions
-$ git cherry-pick &amp;lt;commit_identifier&gt;</code></pre>
-</div>
-</p>
+{% highlight bash %}
+$ git checkout -b form_feature_additions
+$ git cherry-pick &lt;commit_identifier>
+{% endhighlight %}</p>
 
 <p>Do this command for each good commit:
-<div>
-  <pre><code class='bash'>$ git cherry-pick a83f4c3aa5d800f846d075748a79a326e0971f67
+{% highlight bash %}
+$ git cherry-pick a83f4c3aa5d800f846d075748a79a326e0971f67
 [master form_feature_additions] reorg gemfile
- 1 file changed, 4 insertions(+), 2 deletions(&amp;ndash;)
+ 1 file changed, 4 insertions(+), 2 deletions(&ndash;)
  changed mode 100644 Gemfile
 $ git cherry-pick a793fe00c50a5956c5e9f7be48ac5a9861b1eb95
-[master form_feature_additions] adds forme form to edit&amp;hellip;
-&amp;hellip;
+[master form_feature_additions] adds forme form to edit&hellip;
+&hellip;
 $ git cherry-pick c52a6fd3f1706584ce3e47abf49ed627a1e28fd3
 [master form_feature_additions] adds bundler gem for manag..
-&amp;hellip;
+&hellip;
 $ git cherry-pick 8394b37494b63754f42ecaf19244fe6d8a36942f
-[master form_feature_additions] adds gitignore for db &amp;hellip;
-&amp;hellip;</code></pre>
-</div>
-</p>
+[master form_feature_additions] adds gitignore for db &hellip;
+&hellip;{% endhighlight %}</p>
 
 <p>If you look at your git status you will see</p>
 
-<p><div>
-  <pre><code class='bash'>&lt;/p&gt;
+<p>{% highlight bash %}</p>
 
-&lt;h1&gt;On branch form_feature_additions&lt;/h1&gt;
+<h1>On branch form_feature_additions</h1>
 
-&lt;h1&gt;Your branch is ahead of &amp;lsquo;origin/master&amp;rsquo; by 4 commits.</code></pre>
-</div>
-</h1>
+<h1>Your branch is ahead of &lsquo;origin/master&rsquo; by 4 commits.{% endhighlight %}</h1>
 
 <h2>Profit</h2>
 

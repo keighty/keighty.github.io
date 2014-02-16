@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Message Queue | keighty]]></title>
+  <title><![CDATA[Category: message queue | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/message-queue/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-13T19:48:33-08:00</updated>
+  <updated>2014-02-15T18:22:02-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Fanout]]></title>
+    <title type="html"><![CDATA[fanout]]></title>
     <link href="http://www.katieleonard.ca/blog/2014/fanout/"/>
     <updated>2014-02-06T14:38:12-08:00</updated>
     <id>http://www.katieleonard.ca/blog/2014/fanout</id>
@@ -37,113 +37,61 @@
 
 <h3>Create a fanout exchange:</h3>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>emit_log.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;create and start the connection&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">connection</span> <span class="o">=</span> <span class="no">Bunny</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
-</span><span class='line'><span class="n">connection</span><span class="o">.</span><span class="n">start</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;create and start the channel&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">create_channel</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;create the exchange:&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">exchange</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">fanout</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">logs</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;publish to your named exchange:&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">exchange</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;close the connection&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">connection</span><span class="o">.</span><span class="n">close</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:ruby emit_log.rb %}</p>
+
+<h1>create and start the connection</h1>
+
+<p>connection = Bunny.new()
+connection.start</p>
+
+<h1>create and start the channel</h1>
+
+<p>channel = connection.create_channel</p>
+
+<h1>create the exchange:</h1>
+
+<p>exchange = channel.fanout(&lsquo;logs&rsquo;)</p>
+
+<h1>publish to your named exchange:</h1>
+
+<p>exchange.publish(msg)</p>
+
+<h1>close the connection</h1>
+
+<p>connection.close
+{% endcodeblock %}</p>
 
 <h3>Create a fanout worker</h3>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>receive_log.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;create and start the connection&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">connection</span> <span class="o">=</span> <span class="no">Bunny</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
-</span><span class='line'><span class="n">conn</span><span class="o">.</span><span class="n">start</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;create and start the channel&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">channel</span>  <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">create_channel</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;name the exchange to listen to&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">exchange</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">fanout</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">logs</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;name the queue&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">q</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">queue</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="ss">:exclusive</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;bind the queue to the exchange&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">q</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">exchange</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;h1&gt;subscribe to the bound queue&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">q</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="ss">:block</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">delivery_info</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="o">|</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span> <span class="o">[</span><span class="n">x</span><span class="o">]</span> <span class="c1">#{body}&amp;rdquo;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:ruby receive_log.rb %}</p>
+
+<h1>create and start the connection</h1>
+
+<p>connection = Bunny.new()
+conn.start</p>
+
+<h1>create and start the channel</h1>
+
+<p>channel  = connection.create_channel</p>
+
+<h1>name the exchange to listen to</h1>
+
+<p>exchange = ch.fanout(&ldquo;logs&rdquo;)</p>
+
+<h1>name the queue</h1>
+
+<p>q = ch.queue(&ldquo;&rdquo;, :exclusive => true)</p>
+
+<h1>bind the queue to the exchange</h1>
+
+<p>q.bind(exchange)</p>
+
+<h1>subscribe to the bound queue</h1>
+
+<p>q.subscribe(:block => true) do |delivery_info, properties, body|
+  puts &ldquo; [x] #{body}&rdquo;
+end
+{% endcodeblock %}</p>
 
 <h3>In action</h3>
 
@@ -193,7 +141,7 @@ $ cat logs_from_rabbit.log
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[First in, First Out]]></title>
+    <title type="html"><![CDATA[first in, first out]]></title>
     <link href="http://www.katieleonard.ca/blog/2014/first-in-first-out/"/>
     <updated>2014-02-05T11:14:30-08:00</updated>
     <id>http://www.katieleonard.ca/blog/2014/first-in-first-out</id>
