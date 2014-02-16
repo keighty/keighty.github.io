@@ -9,7 +9,9 @@ categories: [octopress, jekyll]
 I was following a [tutorial](http://blog.jmac.org/blog/2013/03/30/putting-twitter-back-into-octopress/) on how to include a twitter widget in the sidebar of my octopress site and couldn't figure out why my twitter content wouldn't render. It turns out that custom asides require an internal div. <!--more-->The process:
 
 ###1. Create a twitter timeline widget
-This was surprisingly easy. Just login to [twitter.com](https://twitter.com/) and click the settings icon. Click "Widgets" on the bottom of the left nav and follow the instructions.
+This was surprisingly easy. Just login to [twitter.com](https://twitter.com/) and click the settings icon: <i class="fa fa-cog fa-2x"></i>
+
+Click "Widgets" on the bottom of the left nav and follow the instructions.
 
 CAKE WALK.
 
@@ -36,8 +38,10 @@ I looked to the other asides for help, and realized that the content had to be a
 
 ###3. Add the aside to your _config.yml
 
-```What my _config.yml looks like
+```ruby What my _config.yml looks like
 # list each of the sidebar modules you want to include, in the order you want them to appear.
 # To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like 'custom/asides/custom_aside_name.html'
 default_asides: [custom/asides/contactme.html, asides/recent_posts.html, asides/github.html, custom/asides/aboutme.html, custom/asides/twitter.html]
 ```
+
+Awesome.
