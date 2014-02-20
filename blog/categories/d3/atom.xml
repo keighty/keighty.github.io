@@ -4,7 +4,7 @@
   <title><![CDATA[Category: D3 | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/d3/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-20T08:02:55-08:00</updated>
+  <updated>2014-02-20T08:06:51-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -18,7 +18,7 @@
     <link href="http://www.katieleonard.ca/blog/2014/functional-arguing/"/>
     <updated>2014-02-20T00:00:00-08:00</updated>
     <id>http://www.katieleonard.ca/blog/2014/functional-arguing</id>
-    <content type="html"><![CDATA[<p>The <code>arguments</code> variable is a hidden parameter that contains all the arguments for the invocation in an pseudo-array (ie: it does not have array functions other than length and indexing).</p>
+    <content type="html"><![CDATA[<p>The <code>arguments</code> variable is a hidden parameter in javascript functions that contains all the arguments for the invocation in an pseudo-array (ie: it does not have array functions other than length and indexing).</p>
 
 <p><code>javascript
 instance.headline = function (h) {
