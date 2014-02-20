@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-18T18:53:14-08:00</updated>
+  <updated>2014-02-20T08:02:55-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,37 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Functional Arguing]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/functional-arguing/"/>
+    <updated>2014-02-20T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/functional-arguing</id>
+    <content type="html"><![CDATA[<p>The <code>arguments</code> variable is a hidden parameter that contains all the arguments for the invocation in an pseudo-array (ie: it does not have array functions other than length and indexing).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">instance</span><span class="p">.</span><span class="nx">headline</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">h</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="k">return</span> <span class="nx">headline</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">headline</span> <span class="o">=</span> <span class="nx">h</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">instance</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Even though the function specifically calls for an argument (<code>h</code>), it can still be called without one. This construction has a ruby equivalent, <code>attr_accessor :headline</code>, which behaves as a getter and a setter, depending on the arguments provided (none, or <code>headline = new_value</code>).</p>
+
+<!--more-->
+
+
+<h3>Resources</h3>
+
+<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to Live on 24 Hours a Day]]></title>
@@ -1286,113 +1317,6 @@ In the Meteor client side, <code>this</code> has a different context: the <code>
 
 
 <p>Now I can be as crufty as I want to be in my working tree, because <code>git</code> will be there to clean up the mess.</p>
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Factoring in Nests]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/factoring-in-nests/"/>
-    <updated>2013-10-29T22:29:03-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/factoring-in-nests</id>
-    <content type="html"><![CDATA[<p>I am building an application that uses several nested attributes: Users have many Goals (Goals belong_to Users), and Goals have many Hours (Hours belong_to Goals).</p>
-
-<p>Using <a href="https://github.com/thoughtbot/factory_girl">FactoryGirl</a> to create a User is straightforward:</p>
-
-<div>
-  <pre><code class='ruby'>FactoryGirl.define do
-  factory :user do
-    sequence :name  { |n| &quot;person#{n}&quot; }
-    sequence :email { |n| &quot;person#{n}@example.com&quot; }
-  end
-end
-
-describe User do
-  before  { @user = FactoryGirl.create(:user) }
-  subject { @user }
-  it { should respond_to(:name) }
-  ...
-end</code></pre>
-</div>
-
-
-<p>How do I create Goals that are linked to the User?</p>
-
-<!--more-->
-
-
-<h3>How to create Factories for nested attributes</h3>
-
-<h5>1. Make a new Factory for producing Goals:</h5>
-
-<div>
-  <pre><code class='ruby'>FactoryGirl.define do
-  factory :goal do
-    sequence :description { |n| &quot;my goal #{n}&quot; }
-    sequence :motivation  { |n| &quot;my motivation #{n}&quot; }
-  end
-end</code></pre>
-</div>
-
-
-<h5>2. Call the Goal Factory from the User Factory and store the Goals in an Array</h5>
-
-<div>
-  <pre><code class='ruby'>FactoryGirl.define do
-  factory :user do
-    sequence :name { |n| &quot;person#{n}&quot; }
-    sequence :email { |n| &quot;person#{n}@example.com&quot; }
-
-    goals { Array.new(1) { FactoryGirl.build(:goal) } }
-
-  end
-end</code></pre>
-</div>
-
-
-<p>Your objects will look like this:</p>
-
-<div>
-  <pre><code class='bash'>&gt; p @user
-#&lt;User id: 1, name: &quot;person1&quot;, email: &quot;person1@example.com&quot;, ... &gt;
-&gt; p @user.goals.first
-#&lt;ActiveRecord::Associations::CollectionProxy [#&lt;Goal id: 1, user_id: 1, description: &quot;my goal 1&quot;, motivation: &quot;my motivation 1&quot;, ...]&gt;</code></pre>
-</div>
-
-
-<p>Create Hours for Goals in the same manner: create a Factory for making Hours, call the Hours Factory from the Goals Factory.</p>
-
-<div>
-  <pre><code class='ruby'>FactoryGirl.define do
-  factory :hour do
-    duration { 100 * rand(36) }
-    ...
-  end
-end
-
-FactoryGirl.define do
-  factory :goal do
-    sequence :description { |n| &quot;my goal #{n}&quot; }
-    sequence :motivation  { |n| &quot;my motivation #{n}&quot; }
-
-    hours { Array.new(3) { FactoryGirl.build(:hour) } }
-  end
-end</code></pre>
-</div>
-
-
-<p>Checking your objects:</p>
-
-<div>
-  <pre><code class='bash'>&gt; p @user
-#&lt;User id: 1, name: &quot;person1&quot;, email: &quot;person1@example.com&quot;, ... &gt;
-&gt; p @user.goals.first
-#&lt;ActiveRecord::Associations::CollectionProxy [#&lt;Goal id: 1, user_id: 1, description: &quot;my goal 1&quot;, motivation: &quot;my motivation 1&quot;, ...]&gt;
-&gt; p @user.goals.first.hours.first
-#&lt;ActiveRecord::Associations::CollectionProxy [#&lt;Hour id: 1, goal_id: 1, duration: 3200 , ...]&gt;</code></pre>
-</div>
-
 
 <p>Awesome.</p>
 ]]></content>

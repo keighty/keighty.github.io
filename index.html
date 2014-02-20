@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="How to Live on 24 Hours a Day, by Arnold Bennett (published in 1910) Arnold Bennett&rsquo;s recommendations for leading a full and happy life: Wake &hellip;">
+  <meta name="description" content="The arguments variable is a hidden parameter that contains all the arguments for the invocation in an pseudo-array (ie: it does not have array &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -71,6 +71,7 @@
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
   <li><a href="/projects/index.html">Projects</a></li>
+  <li><a href="/reads/index.html">Reads</a></li>
 </ul>
 
 </nav>
@@ -78,6 +79,62 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/functional-arguing/">Functional Arguing</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-20T00:00:00-08:00" pubdate data-updated="true">Feb 20<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The <code>arguments</code> variable is a hidden parameter that contains all the arguments for the invocation in an pseudo-array (ie: it does not have array functions other than length and indexing).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">instance</span><span class="p">.</span><span class="nx">headline</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">h</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="k">return</span> <span class="nx">headline</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">headline</span> <span class="o">=</span> <span class="nx">h</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">instance</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Even though the function specifically calls for an argument (<code>h</code>), it can still be called without one. This construction has a ruby equivalent, <code>attr_accessor :headline</code>, which behaves as a getter and a setter, depending on the arguments provided (none, or <code>headline = new_value</code>).</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/functional-arguing/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -286,47 +343,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/augmented-objects/">Augmented Objects</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-09T00:00:00-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Because it bears repeating: javascript and ruby have many features in common, including the ability to add functionality to existing objects.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/augmented-objects/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -349,6 +365,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/functional-arguing/">Functional Arguing</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/how-to-live-on-24-hours-a-day/">How to Live on 24 Hours a Day</a>
       </li>
     
@@ -362,10 +382,6 @@
     
       <li class="post">
         <a href="/blog/2014/the-passionate-programmer/">The Passionate Programmer</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/augmented-objects/">Augmented Objects</a>
       </li>
     
   </ul>

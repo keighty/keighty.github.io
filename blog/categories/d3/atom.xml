@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: D3 | keighty]]></title>
+  <link href="http://www.katieleonard.ca/blog/categories/d3/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2014-02-20T08:02:55-08:00</updated>
+  <id>http://www.katieleonard.ca/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Functional Arguing]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/functional-arguing/"/>
+    <updated>2014-02-20T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/functional-arguing</id>
+    <content type="html"><![CDATA[<p>The <code>arguments</code> variable is a hidden parameter that contains all the arguments for the invocation in an pseudo-array (ie: it does not have array functions other than length and indexing).</p>
+
+<p><code>javascript
+instance.headline = function (h) {
+  if (!arguments.length) return headline;
+  headline = h;
+  return instance;
+};
+</code>
+Even though the function specifically calls for an argument (<code>h</code>), it can still be called without one. This construction has a ruby equivalent, <code>attr_accessor :headline</code>, which behaves as a getter and a setter, depending on the arguments provided (none, or <code>headline = new_value</code>).</p>
+
+<!--more-->
+
+
+<h3>Resources</h3>
+
+<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
+]]></content>
+  </entry>
+  
+</feed>

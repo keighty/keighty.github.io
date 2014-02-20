@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-18T18:53:14-08:00</updated>
+  <updated>2014-02-20T08:02:55-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Functional Arguing]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/functional-arguing/"/>
+    <updated>2014-02-20T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/functional-arguing</id>
+    <content type="html"><![CDATA[<p>The <code>arguments</code> variable is a hidden parameter that contains all the arguments for the invocation in an pseudo-array (ie: it does not have array functions other than length and indexing).</p>
+
+<p><code>javascript
+instance.headline = function (h) {
+  if (!arguments.length) return headline;
+  headline = h;
+  return instance;
+};
+</code>
+Even though the function specifically calls for an argument (<code>h</code>), it can still be called without one. This construction has a ruby equivalent, <code>attr_accessor :headline</code>, which behaves as a getter and a setter, depending on the arguments provided (none, or <code>headline = new_value</code>).</p>
+
+<!--more-->
+
+
+<h3>Resources</h3>
+
+<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[For Score]]></title>
@@ -206,24 +231,6 @@ typeof(&ldquo;&rdquo;);
 <p>Declaring an application-level function ensures that the correct <code>person</code> is called when needed. It improves readability by essentially flagging the scope of the variable and reducing ambiguity.</p>
 
 <p><a href="http://www.amazon.com/gp/product/0596517742/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0596517742&amp;linkCode=as2&amp;tag=bridgeforpoke-20">JavaScript: The Good Parts</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A Number Is a Double Is a Float]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/a-number-is-a-double-is-a-float/"/>
-    <updated>2014-02-02T19:56:17-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/a-number-is-a-double-is-a-float</id>
-    <content type="html"><![CDATA[<p>JavaScript has a single number type &mdash; a 64-bit floating point number. Since there is no separate integer type, 1 and 1.0 are the same value.</p>
-
-<!--more-->
-
-
-<p>One of the consequences is that the <code>/</code> operator may return a floating point number even if both operands are integers. Goodbye casting!</p>
-
-<p><a href="http://www.amazon.com/gp/product/0596517742/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0596517742&amp;linkCode=as2&amp;tag=bridgeforpoke-20">JavaScript: The Good Parts</a></p>
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   
