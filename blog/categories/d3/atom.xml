@@ -4,7 +4,7 @@
   <title><![CDATA[Category: D3 | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/d3/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-21T07:57:36-08:00</updated>
+  <updated>2014-02-21T08:04:52-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,44 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[D3 Is Selective]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/d3-is-selective/"/>
+    <updated>2014-02-21T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/d3-is-selective</id>
+    <content type="html"><![CDATA[<p>D3 uses the W3C standard selector library, and selection modifiers work on both single and multiple element selections, and will automatically apply the modifier iteratively over the entire collection, which makes your code simpler and easier to maintain.</p>
+
+<!--more-->
+
+
+<h4>Selection modifiers</h4>
+
+<ul>
+<li><strong>d3.select(&lsquo;p&rsquo;).text()</strong>     : retrieve or modify text</li>
+<li><strong>d3.select(&lsquo;p&rsquo;).attr()</strong>     : retrieve or modify a given attribute</li>
+<li><strong>d3.select(&lsquo;p&rsquo;).classed()</strong>  : retrieve or modify css classes</li>
+<li><strong>d3.select(&lsquo;p&rsquo;).style()</strong>    : retrieve or modify styles</li>
+<li><strong>d3.select(&lsquo;p&rsquo;).html()</strong>     : retrieve or modify a selections inner html (like text but with tags)</li>
+</ul>
+
+
+<p>```
+d3.selectAll(&lsquo;div&rsquo;)</p>
+
+<pre><code>        .attr("class", "alert")
+        .each(function(d, i) {
+          d3.select(this).append("h1").text(i);
+        });
+</code></pre>
+
+<p>```</p>
+
+<p>Selections are essentially arrays with some extra variables baked in. The <code>.each</code> call on line 3 treats the selected elements as an array, and performs a function on each one. The extra variables provided to the iterator function for free are: the data bound to the element (d), the index of the element, and the element itself (this).</p>
+
+<p>Awesome</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Functional Arguing]]></title>

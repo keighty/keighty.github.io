@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-21T07:57:36-08:00</updated>
+  <updated>2014-02-21T08:04:52-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,44 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[D3 Is Selective]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/d3-is-selective/"/>
+    <updated>2014-02-21T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/d3-is-selective</id>
+    <content type="html"><![CDATA[<p>D3 uses the W3C standard selector library, and selection modifiers work on both single and multiple element selections, and will automatically apply the modifier iteratively over the entire collection, which makes your code simpler and easier to maintain.</p>
+
+<!--more-->
+
+
+<h4>Selection modifiers</h4>
+
+<ul>
+<li><strong>d3.select(&lsquo;p&rsquo;).text()</strong>     : retrieve or modify text</li>
+<li><strong>d3.select(&lsquo;p&rsquo;).attr()</strong>     : retrieve or modify a given attribute</li>
+<li><strong>d3.select(&lsquo;p&rsquo;).classed()</strong>  : retrieve or modify css classes</li>
+<li><strong>d3.select(&lsquo;p&rsquo;).style()</strong>    : retrieve or modify styles</li>
+<li><strong>d3.select(&lsquo;p&rsquo;).html()</strong>     : retrieve or modify a selections inner html (like text but with tags)</li>
+</ul>
+
+
+<p>```
+d3.selectAll(&lsquo;div&rsquo;)</p>
+
+<pre><code>        .attr("class", "alert")
+        .each(function(d, i) {
+          d3.select(this).append("h1").text(i);
+        });
+</code></pre>
+
+<p>```</p>
+
+<p>Selections are essentially arrays with some extra variables baked in. The <code>.each</code> call on line 3 treats the selected elements as an array, and performs a function on each one. The extra variables provided to the iterator function for free are: the data bound to the element (d), the index of the element, and the element itself (this).</p>
+
+<p>Awesome</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Functional Arguing]]></title>
@@ -200,49 +238,6 @@ typeof(&ldquo;&rdquo;);
 &ldquo;&rdquo;.foo()
 &ldquo;I see you!&rdquo;
 ```</p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Global Abatement]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/global-abatement/"/>
-    <updated>2014-02-07T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/global-abatement</id>
-    <content type="html"><![CDATA[<h3>or, What the heck is global abatement?</h3>
-
-<p><strong>tldr</strong>: Global variables are <a href="http://en.wikipedia.org/wiki/Code_smell">code smells</a>. Declaring variables inside an application-level function serves to namespace the variables and minimizes the use of global variables. <!--more--></p>
-
-<p>Javascript has function-level scoping, which means that variables declared anywhere within a function are scoped to that function. Writing a javascript without an enclosing function leaves your declared variables vulnerable to name collisions, or reassignment by other javascripts.</p>
-
-<p>A <strong>global abatement</strong> is a strategy used to reduce the vulnerability of your javascript variables by removing them from the global scope. Application namespacing is one such strategy:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>BAD GLOBAL</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">first_name</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Hello</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;,</span>
-</span><span class='line'>  <span class="nx">last_name</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Kitty</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>GOOD LOCAL</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">MYAPP</span> <span class="o">=</span> <span class="p">{};</span>
-</span><span class='line'><span class="nx">MYAPP</span><span class="p">.</span><span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">first_name</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Hello</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;,</span>
-</span><span class='line'>  <span class="nx">last_name</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Kitty</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Declaring an application-level function ensures that the correct <code>person</code> is called when needed. It improves readability by essentially flagging the scope of the variable and reducing ambiguity.</p>
-
-<p><a href="http://www.amazon.com/gp/product/0596517742/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0596517742&amp;linkCode=as2&amp;tag=bridgeforpoke-20">JavaScript: The Good Parts</a></p>
 ]]></content>
   </entry>
   

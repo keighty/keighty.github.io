@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Following along with Rails tutorial by Michael Hartl, I built a sample app with a simple database, linking users to microposts in a twitter-like &hellip;">
+  <meta name="description" content="1. Write a failing test describe &quot;Static About page&quot; do it &quot;should have the content &#39;About Us&#39;&quot; do visit &#39;/ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,57 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/red-green-refactor/">Red, Green, Refactor! A Workflow for Rails</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-03T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>1. Write a failing test</h3>
+
+<div>
+  <pre><code class='ruby'>describe &quot;Static About page&quot; do
+  it &quot;should have the content &#39;About Us&#39;&quot; do
+    visit &#39;/static_pages/about&#39;
+    page.should have_content(&#39;About Us&#39;)
+  end
+end</code></pre>
+</div>
+
+
+<p>Use the failures to drive development</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/red-green-refactor/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -281,48 +332,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/solving-namespace-conflicts-with-jquery/">Namespaces and jQuery</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-18T00:00:00-07:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Namespaces in jQuery getting you down?</h3>
-
-<p>Chuck taught me a great trick today &mdash; how to avoid namespace
-conflicts in jQuery</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/solving-namespace-conflicts-with-jquery/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/11/">&larr; Older</a>
@@ -347,6 +356,10 @@ conflicts in jQuery</div>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/d3-is-selective/">D3 Is Selective</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/functional-arguing/">Functional Arguing</a>
       </li>
     
@@ -360,10 +373,6 @@ conflicts in jQuery</div>
     
       <li class="post">
         <a href="/blog/2014/for-score/">For Score</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/the-passionate-programmer/">The Passionate Programmer</a>
       </li>
     
   </ul>

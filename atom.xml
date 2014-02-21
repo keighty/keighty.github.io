@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-21T07:57:36-08:00</updated>
+  <updated>2014-02-21T08:04:52-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,45 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[D3 Is Selective]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/d3-is-selective/"/>
+    <updated>2014-02-21T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/d3-is-selective</id>
+    <content type="html"><![CDATA[<p>D3 uses the W3C standard selector library, and selection modifiers work on both single and multiple element selections, and will automatically apply the modifier iteratively over the entire collection, which makes your code simpler and easier to maintain.</p>
+
+<!--more-->
+
+
+<h4>Selection modifiers</h4>
+
+<ul>
+<li><strong>d3.select(&lsquo;p&rsquo;).text()</strong>     : retrieve or modify text</li>
+<li><strong>d3.select(&lsquo;p&rsquo;).attr()</strong>     : retrieve or modify a given attribute</li>
+<li><strong>d3.select(&lsquo;p&rsquo;).classed()</strong>  : retrieve or modify css classes</li>
+<li><strong>d3.select(&lsquo;p&rsquo;).style()</strong>    : retrieve or modify styles</li>
+<li><strong>d3.select(&lsquo;p&rsquo;).html()</strong>     : retrieve or modify a selections inner html (like text but with tags)</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>d3.selectAll('div')
+</span><span class='line'>            .attr("class", "alert")
+</span><span class='line'>            .each(function(d, i) {
+</span><span class='line'>              d3.select(this).append("h1").text(i);
+</span><span class='line'>            });</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Selections are essentially arrays with some extra variables baked in. The <code>.each</code> call on line 3 treats the selected elements as an array, and performs a function on each one. The extra variables provided to the iterator function for free are: the data bound to the element (d), the index of the element, and the element itself (this).</p>
+
+<p>Awesome</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Functional Arguing]]></title>
@@ -1262,78 +1301,6 @@ In the Meteor client side, <code>this</code> has a different context: the <code>
 <p>Thanks to this <a href="http://stackoverflow.com/a/20781135">stackoverflow</a> response, the Meteor <a href="http://docs.meteor.com/">docs</a>, and packtpub&rsquo;s awesome <a href="http://www.packtpub.com/getting-started-with-meteor-javascript-framework/book">support page</a> for helping me get reacquainted with javascript contexts.</p>
 
 <p>Awesome</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Get Clean]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/get-clean/"/>
-    <updated>2014-01-13T21:29:03-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/get-clean</id>
-    <content type="html"><![CDATA[<p>I experiment a lot before I choose an implementation I like. I am sure I am not alone in making a few (or many) false starts, and yet feeling sick at the thought of deleting any code. What if one of those paths I started down was the right one? This loss aversion often leads to working trees of non-working code, and <code>git stash</code>-es that I will never revisit. If I stop myself from going too far down yet another road without an end in sight, attempts to clean up my working directory often stall miserably at the end of a <code>git checkout .</code>:<!--more--></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>On branch intelligent_branch_name
-</span><span class='line'><span class="c"># Untracked files:</span>
-</span><span class='line'><span class="c">#   (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)</span>
-</span><span class='line'><span class="c">#</span>
-</span><span class='line'><span class="c"># ../test/yay_I_wrote_tests.rb</span>
-</span><span class='line'><span class="c"># ../helpers/yay_I_wrote_a_helper.rb</span>
-</span><span class='line'><span class="c"># ../helpers/how_many_helpers_did_I_write.rb</span>
-</span><span class='line'><span class="c"># ../views/i_dont_remember_creating_this_file.rb</span>
-</span><span class='line'><span class="c"># ../models/oh_thats_where_that_went.rb</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Once upon a time, I would click my way through <code>rm</code> after <code>rm</code>. A small improvement in <code>rm</code> efficiency came when I discovered I could <code>rm</code> more than one file at a time (don&rsquo;t judge me, I am new at this). Still, the biggest break-through came when a coworker, perhaps observing my struggles, pointed me to <a href="http://ndpsoftware.com/git-cheatsheet.html">git-cheatsheet</a> &mdash; a interactive visual tool to display the relevant commands for each stage of my git workflow.</p>
-
-<h3>Enter <code>git clean</code></h3>
-
-<p>Git clean is a force to be reckoned with, and not just because it doesn&rsquo;t do anything unless you force it.</p>
-
-<figure class='code'><figcaption><span>Use the -n flag to describe the action the cleaner would take linenos:false</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clean -n
-</span><span class='line'>Would remove ../helpers/yay_I_wrote_a_helper.rb
-</span><span class='line'>Would remove ../helpers/how_many_helpers_did_I_write.rb
-</span><span class='line'>Would remove ../views/i_dont_remember_creating_this_file.rb
-</span><span class='line'>Would remove ../models/oh_thats_where_that_went.rb
-</span><span class='line'><span class="err">$</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>Use the -f flag to force the cleanup linenos:false</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clean -f
-</span><span class='line'>removed ../helpers/yay_I_wrote_a_helper.rb
-</span><span class='line'>removed ../helpers/how_many_helpers_did_I_write.rb
-</span><span class='line'>removed ../views/i_dont_remember_creating_this_file.rb
-</span><span class='line'>removed ../models/oh_thats_where_that_went.rb
-</span><span class='line'><span class="err">$</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now I can be as crufty as I want to be in my working tree, because <code>git</code> will be there to clean up the mess.</p>
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   
