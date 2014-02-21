@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-20T08:06:51-08:00</updated>
+  <updated>2014-02-21T07:15:47-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -18,7 +18,7 @@
     <link href="http://www.katieleonard.ca/blog/2014/functional-arguing/"/>
     <updated>2014-02-20T00:00:00-08:00</updated>
     <id>http://www.katieleonard.ca/blog/2014/functional-arguing</id>
-    <content type="html"><![CDATA[<p>The <code>arguments</code> variable is a hidden parameter in javascript functions that contains all the arguments for the invocation in an pseudo-array (ie: it does not have array functions other than length and indexing).</p>
+    <content type="html"><![CDATA[<p>The <code>arguments</code> variable is a hidden parameter in javascript functions that contains all the arguments for the invocation in a pseudo-array (ie: it does not have array functions other than length and indexing).</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -34,6 +34,21 @@
 
 
 <p>Even though the function specifically calls for an argument (<code>h</code>), it can still be called without one. This construction has a ruby equivalent, <code>attr_accessor :headline</code>, which behaves as a getter and a setter, depending on the arguments provided (none, or <code>headline = new_value</code>).</p>
+
+<p>This &ldquo;variable-parameter&rdquo; function design is what enables method chaining. When the function is called as a getter it returns a string, but when it is called as a setter it returns the invoking object, passing itself along to the next method:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">widget</span> <span class="o">=</span> <span class="nx">SimpleWidget</span><span class="p">({</span> <span class="nx">color</span><span class="o">:</span> <span class="s2">&quot;#6439ed&quot;</span> <span class="p">})</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">headline</span><span class="p">(</span><span class="s2">&quot;SimpleWidget&quot;</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">description</span><span class="p">(</span><span class="s2">&quot;This is a simple widget&quot;</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
 
 <!--more-->
 
