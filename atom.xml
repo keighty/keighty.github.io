@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-21T08:04:52-08:00</updated>
+  <updated>2014-02-25T08:32:33-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,45 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Enter Update Exit]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/enter-update-exit/"/>
+    <updated>2014-02-25T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/enter-update-exit</id>
+    <content type="html"><![CDATA[<p>D3 is a data visualization tool that uses method chaining to produce big pictures with little code. The selection library performs a full Outer Join between the data (D) and the visual elements (V), and the enter-update-exit pattern performs work on subsets of this join<!--more-->:</p>
+
+<h3>UPDATE: Inner Join (D union V)</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>selection.data(data_points)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>data() binds data_points to the html or svg elements returned by the selection and returns the data not visualized.</p>
+
+<h3>ENTER: Left excluding join (D/V)</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>selection.data(data_points).enter()</span></code></pre></td></tr></table></div></figure>
+
+
+<p>enter() returns data_points that are not yet represented visually by html or svg. Chain .append() to add a new element to the page.</p>
+
+<h3>EXIT: Right excluding join (V/D)</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>selection.data(data_points).exit()</span></code></pre></td></tr></table></div></figure>
+
+
+<p>exit() returns html or svg elements that no longer have data associated with them. Chain .remove() to eliminate them, or .translate() to make them slide off the page.</p>
+
+<h3>Resources</h3>
+
+<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
+
+<p><a href="http://www.codeproject.com/Articles/33052/Visual-Representation-of-SQL-Joins">Visual Representation of SQL Joins</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[D3 Is Selective]]></title>
@@ -1224,83 +1263,6 @@
 <p>Perhaps I should go get started&hellip;</p>
 
 <p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Meteor User]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/meteor-user/"/>
-    <updated>2014-01-14T19:38:16-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/meteor-user</id>
-    <content type="html"><![CDATA[<p><a href="http://www.packtpub.com/getting-started-with-meteor-javascript-framework/book">&ldquo;Getting Started with Meteor.js JavaScript Framework&rdquo;</a> by Isaac Strack is a great introduction to a powerful tool.</p>
-
-<!--more-->
-
-
-<h3>User accounts in three easy steps</h3>
-
-<p>Meteor rolls its own user accounts system, and getting it running on your application is a three step process:</p>
-
-<figure class='code'><figcaption><span>1) command line: Add the relevant packages</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor add accounts-base
-</span><span class='line'>accounts-base: A user account system
-</span><span class='line'><span class="nv">$ </span>meteor add accounts-password
-</span><span class='line'>accounts-password: Password support <span class="k">for </span>accounts
-</span><span class='line'><span class="nv">$ </span>meteor add email
-</span><span class='line'>email: Send email messages
-</span><span class='line'><span class="nv">$ </span>meteor add accounts-ui
-</span><span class='line'>accounts-ui: Simple templates to add login widgets to an app
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>2) html: Add a div to hold the login button</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;float:right; margin-right:20px;&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  {{loginButtons align=&quot;right&quot;}}
-</span><span class='line'><span class="nt">&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>3) client javascript: Add an Accounts config</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Accounts</span><span class="p">.</span><span class="nx">ui</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">passwordSignupFields</span><span class="o">:</span> <span class="s1">&#39;USERNAME_AND_OPTIONAL_EMAIL&#39;</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>The catch</h2>
-
-<p>While the server side and client side code looks similar they are definitely not interchangeable. Server code run on the client side will likely fail silently, but client code run on the server will crash the app. One place where I got tripped up was accessing the userId:</p>
-
-<h3>Server side <code>this.userId</code></h3>
-
-<p><span class='pullquote-right' data-pullquote='Use this.userId inside the server publish function'>
-In Meteor server side javascript the context is clear: <code>this</code> is called in the context of a Meteor object, and you can therefore make inquiries about its properties. Use this.userId inside the server publish function to access the id of the current user (or null if no user is logged in &mdash; from the <a href="http://docs.meteor.com/#publish_userId">docs</a>).
-</span></p>
-
-<h3>Client side: <code>Meteor.userId()</code></h3>
-
-<p><span class='pullquote-right' data-pullquote='Use Meteor.userId() anywhere BUT in the server publish function'>
-In the Meteor client side, <code>this</code> has a different context: the <code>window</code> object. The window object has a userId property that can be set at Document.ready(), but in the case that a user logs out and another user logs in to that same window without a page refresh, <code>window.userId</code> will retain the id of the first user. Use Meteor.userId() anywhere BUT in the server publish function to get the current user id (or null if no user is logged in &mdash; from the <a href="http://docs.meteor.com/#accounts_api">docs</a>).
-</span></p>
-
-<p>Thanks to this <a href="http://stackoverflow.com/a/20781135">stackoverflow</a> response, the Meteor <a href="http://docs.meteor.com/">docs</a>, and packtpub&rsquo;s awesome <a href="http://www.packtpub.com/getting-started-with-meteor-javascript-framework/book">support page</a> for helping me get reacquainted with javascript contexts.</p>
-
-<p>Awesome</p>
 ]]></content>
   </entry>
   
