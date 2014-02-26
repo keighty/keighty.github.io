@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-25T08:32:33-08:00</updated>
+  <updated>2014-02-26T07:46:39-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,29 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Visualize With Purpose]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/why-visualize/"/>
+    <updated>2014-02-26T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/why-visualize</id>
+    <content type="html"><![CDATA[<p>Information visualization (insight, understanding, and discovery) and information art (aesthetics) differ in their context, audience, and goals. In my exploration of D3 I came across an <a href="http://www.visualcomplexity.com/vc/blog/?p=644">Information Visualization Manifesto</a> by Manuel Lima, and this is what I have learned<!--more-->:</p>
+
+<ul>
+<li><strong>Form follows function</strong>: keep your problem domain in mind when assembling a visualization.</li>
+<li><strong>Question</strong>: Drive your work through questions and curiosity.</li>
+<li><strong>Interactivity</strong> is key.</li>
+<li><strong>Sources</strong>: Provide access to the raw data if possible.</li>
+<li><strong>Narrative</strong>: Tell a story with your data.</li>
+<li><strong>Aesthetics</strong> Are a consequence of visualization, not a goal.</li>
+<li><strong>Relevancy</strong>: What is the context? What patterns are discernable?</li>
+<li><strong>Time</strong>: Consider time when your data is affected by it.</li>
+<li><strong>Knowledge</strong>: Bring new understanding and insight.</li>
+<li><strong>Ease up</strong>: Not everything can or should be visualized. Be deliberate and add to information, don&rsquo;t obfuscate with unnecessary visualizations.</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Enter Update Exit]]></title>
@@ -1141,126 +1164,6 @@
 <h3>Core values</h3>
 
 <p>HRT is the heart of high-functioning teams of any ilk. When I was interviewing for my first job in software development (all those weeks ago) the most difficult question an interviewer could pose to me was &ldquo;where do you see yourself in 5 years&rdquo;? It was difficult because I had just spent the last five years dreaming about writing code for a living. I couldn&rsquo;t even verbalize what I was looking for in a company, only that I would know it when I met it. Now I can identify the traits I was looking for: teams that value writing code and shipping product, consensus based team decision making, asynchronous communication (I am not room-meat), and of course, they&rsquo;ve got to have HeaRT.</p>
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Open-source Setup:]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/opensource-setup-git-checkout-the-ego/"/>
-    <updated>2014-01-18T11:18:29-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/opensource-setup-git-checkout-the-ego</id>
-    <content type="html"><![CDATA[<h2><code>git checkout</code> the Ego.</h2>
-
-<p>In the interests of giving back to the software community, I have been looking for an active open-source project to contribute to. I am working to gain mastery of ruby on rails, so naturally I gravitate towards projects of that ilk. Unfortunately, I have gained just enough knowledge to be a little smug, so when I found a project I wanted to work on I scrolled immediately to the README and started scanning.<!--more--> The first block of text was headed by:</p>
-
-<h3>Start here if this is your first ruby on rails project&hellip;</h3>
-
-<p>&hellip;with a link to a blog post. I kept scanning for information that would be relevant to ME. This was not my first ruby on rails project. I have my elaborate dev environment set up just the way I like it, thank you very much, and I can reproduce your project with a flick of my config file, I am sure (chuckles condescendingly). This is a snippet of the proceeding workflow:</p>
-
-<figure class='code'><figcaption><span>Workflow of the egotistical programmer.</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone repo
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>repo/
-</span><span class='line'><span class="nv">$ </span>bundle install
-</span><span class='line'>Errors: need to update your rubygems
-</span><span class='line'><span class="nv">$ </span>gem update --system
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:setup
-</span><span class='line'>Errors: need postgres installed <span class="o">(</span>no inkling in the README<span class="o">)</span>
-</span><span class='line'><span class="nv">$ </span>brew install postgres
-</span><span class='line'>... follow half of the required instructions
-</span><span class='line'>Errors
-</span><span class='line'>Frustration because you don<span class="err">&#39;</span>t know how to follow instructions
-</span><span class='line'><span class="nv">$ </span>brew info postgres
-</span><span class='line'>...
-</span><span class='line'><span class="s2">&quot;ooooohhhhhhhh... I missed a step&quot;</span>
-</span><span class='line'><span class="nv">$ </span>follow instructions this <span class="nb">time</span>
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:setup
-</span><span class='line'>Errors: need redis installed
-</span><span class='line'><span class="nv">$ </span>brew install redis
-</span><span class='line'><span class="nv">$ </span>follow instructions because I have learned my lesson
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:setup
-</span><span class='line'>Errors: redis config file missing information
-</span><span class='line'>Frustration because redis config file was removed 100 commits ago
-</span><span class='line'>...
-</span><span class='line'>Determine that first pull request
-</span><span class='line'>will be an amendment to setup documentation
-</span><span class='line'>Rebuild config file and add host name
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:setup
-</span><span class='line'>Errors: required seeds file was removed 100 commits ago
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:migrate
-</span><span class='line'><span class="nv">$ </span>SUCCESS!!!
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake spec
-</span><span class='line'>Errors: run db:test:prepare
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:test:prepare
-</span><span class='line'>Errors
-</span><span class='line'>Frustration
-</span><span class='line'><span class="nv">$ RAILS_ENV</span><span class="o">=</span><span class="nb">test </span>bundle <span class="nb">exec </span>rake db:migrate
-</span><span class='line'><span class="nv">$ </span>SUCCESS!!
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake spec
-</span><span class='line'>Errors... sigh.. more errors
-</span><span class='line'><span class="nv">$ </span>limp away <span class="k">for </span>lunch, live to contribute another day
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Getting a new project setup and functional is not an easy chore, and I was quite chastened when I swallowed my pride and checked out the blog post for first timers, which boiled down to:</p>
-
-<ol>
-<li>Install <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a></li>
-<li>Install <a href="http://www.vagrantup.com/">Vagrant</a></li>
-<li><code>git clone repo</code></li>
-<li><code>cd repo</code></li>
-<li><code>vagrant up</code></li>
-<li><code>vagrant ssh</code></li>
-<li><code>cd /vagrant</code></li>
-<li><code>bundle install</code></li>
-<li><code>bundle exec rake db:migrate</code></li>
-<li><code>bundle exec rails s</code></li>
-</ol>
-
-
-<p>I could have been contributing hours ago, when I still had momentum! Perhaps my first pull request should still be to modify the README. I would rephrase the heading to read &ldquo;For all developers: get started right here&rdquo;, and then remove every other instruction that followed.</p>
-
-<p>Perhaps I should go get started&hellip;</p>
 
 <p>Awesome.</p>
 ]]></content>
