@@ -4,7 +4,6 @@ title: "d3 is selective"
 date: 2014-02-21
 comments: true
 categories: [javascript, d3]
-published: false
 ---
 
 D3 uses the W3C standard selector library, and selection modifiers work on both single and multiple element selections, and will automatically apply the modifier iteratively over the entire collection, which makes your code simpler and easier to maintain.
