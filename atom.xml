@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-27T07:25:34-08:00</updated>
+  <updated>2014-02-27T07:56:08-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -28,6 +28,44 @@
 
 
 <blockquote><p>Besides a mathematical inclination, an exceptionally good mastery of one&rsquo;s native tongue is the most vital asset of a competent programmer. &mdash;Djikstra</p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Binding Functions as Data]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/binding-functions-as-data/"/>
+    <updated>2014-02-27T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/binding-functions-as-data</id>
+    <content type="html"><![CDATA[<p>Primitives and object literals are not the only things you can bind to a D3 visualization. After all, aren&rsquo;t javascript functions objects as well?</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">next</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">15</span> <span class="o">+</span> <span class="nx">x</span><span class="o">*</span><span class="nx">x</span> <span class="p">};</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">newData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">next</span><span class="p">);</span> <span class="k">return</span> <span class="nx">data</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">selection</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;#container&quot;</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">newData</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'>                  <span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;#span&quot;</span><span class="p">)</span>
+</span><span class='line'>                    <span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span> <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you provide a function to the data function, D3 will simply invoke the function and use the returned value as a parameter of the data function.</p>
+
+<h3>Resources</h3>
+
+<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
 ]]></content>
   </entry>
   
@@ -104,6 +142,10 @@
 <p>&hellip; but better.</p>
 
 <p>Awesome.</p>
+
+<h3>Resources</h3>
+
+<p><a href="http://mbostock.github.io/d3/tutorial/circle.html">Three Little Circles D3 Tutorial</a></p>
 ]]></content>
   </entry>
   
@@ -1006,131 +1048,6 @@
 <p>Aw nuts. <code>y</code> will let you amend your transgressions (did you remember to save? did you forget to leave a space in place of the &lsquo;&ndash;&rsquo;?), and <code>n</code> will abandon your changes and take you back to the drawing board, where you are free to transgress anew.</p>
 
 <p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Git Retrieve: A Drama]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/git-retrieve/"/>
-    <updated>2014-01-23T20:47:46-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/git-retrieve</id>
-    <content type="html"><![CDATA[<p>Have you ever deleted a file on impulse, only to wake up with remorse later? It doesn&rsquo;t matter if later is the next morning or the next week, thanks to git you have the power to reanimate gone-but-not-forgotten files. Nothing is <del>ever</del> EVER lost with git. So how do you retrieve a file that has been deleted in a previous commit?</p>
-
-<!--more-->
-
-
-<p><a href="http://stackoverflow.com/a/953573">stackoverflow</a> has a few suggestions, and I like this one the best:</p>
-
-<h3>Git Drama in Three Acts</h3>
-
-<figure class='code'><figcaption><span>Act 1 Scene 1: foo.bar Folly</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">cd</span> ~/very_important_project/
-</span><span class='line'><span class="nv">$ </span>touch readme.md index.html foo.bar
-</span><span class='line'><span class="nv">$ </span>git commit -am <span class="s2">&quot;These changes are AWESOME.&quot;</span>
-</span><span class='line'><span class="o">[</span>master <span class="o">(</span>root-commit<span class="o">)</span> 9155e0b<span class="o">]</span> These changes are AWESOME.
-</span><span class='line'> 0 files changed, 0 insertions<span class="o">(</span>+<span class="o">)</span>, 0 deletions<span class="o">(</span>-<span class="o">)</span>
-</span><span class='line'> create mode 100644 foo.bar
-</span><span class='line'> create mode 100644 index.html
-</span><span class='line'> create mode 100644 readme.md
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>but wait! <code>foo.bar</code>?! that is just crazy talk?</p>
-
-<figure class='code'><figcaption><span>Act 1 Scene 2: Regret</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git rm foo.bar
-</span><span class='line'>rm <span class="s1">&#39;foo.bar&#39;</span>
-</span><span class='line'><span class="nv">$ </span>git add -u
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;I have made a huge mistake.&quot;</span>
-</span><span class='line'><span class="o">[</span>master b045a52<span class="o">]</span> I have made a huge mistake.
-</span><span class='line'> 0 files changed, 0 insertions<span class="o">(</span>+<span class="o">)</span>, 0 deletions<span class="o">(</span>-<span class="o">)</span>
-</span><span class='line'> delete mode 100644 foo.bar
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Everything seems back to normal!</p>
-
-<figure class='code'><figcaption><span>Act 2 Scene 1: I have made good life-choices</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;#I rock and I am smug about it!&quot;</span> &gt; bar.rb
-</span><span class='line'><span class="nv">$ </span>git commit -am <span class="s2">&quot;This work is the BOMB.&quot;</span>
-</span><span class='line'><span class="o">[</span>master 3535f28<span class="o">]</span> This work is the BOMB.
-</span><span class='line'> 0 files changed, 0 insertions<span class="o">(</span>+<span class="o">)</span>, 0 deletions<span class="o">(</span>-<span class="o">)</span>
-</span><span class='line'> create mode 100644 bar.rb
-</span><span class='line'><span class="nv">$ </span>cat foo.bar
-</span><span class='line'>cat: foo.bar: No such file or directory you heartless creature!
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>but wait! there is no bar without a foo! where is my foo.bar? How can I find it? I have to find the commit where it was deleted, but how? What if I list out the commits that include a deleted file?</p>
-
-<figure class='code'><figcaption><span>Act 2 Scene 2: Regret</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git log --diff-filter<span class="o">=</span>D --summary
-</span><span class='line'>commit b045a528b4a0824f63562cad867b264983b32c7c
-</span><span class='line'>Author: keighty &lt;keighty.leonard@gmail.com&gt;
-</span><span class='line'>Date:   Wed Jan 22 20:46:16 2014 -0800
-</span><span class='line'>
-</span><span class='line'>    I have made a huge mistake.
-</span><span class='line'>
-</span><span class='line'> delete mode 100644 foo.bar
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There you are! in commit b045a528. The summary option shows the details, so you can see what files were deleted, when, and by whom. In some cases, there may be more than one change in a commit, so using <code>commitSHA~1 &lt;filename&gt;</code> will pluck the one precious deleted file from the commit and restore it to your working tree.</p>
-
-<figure class='code'><figcaption><span>Act 3: foo.bar&#8217;s Return</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git checkout b045a528~1 foo.bar
-</span><span class='line'><span class="nv">$ </span>git status
-</span><span class='line'><span class="c"># On branch master</span>
-</span><span class='line'><span class="c"># Changes to be committed:</span>
-</span><span class='line'><span class="c">#   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)</span>
-</span><span class='line'><span class="c">#</span>
-</span><span class='line'><span class="c"># new file:   foo.bar</span>
-</span><span class='line'><span class="c">#</span>
-</span><span class='line'><span class="nv">$ </span>git commit -am <span class="s2">&quot;Together at last, together forever.&quot;</span>
-</span><span class='line'><span class="o">[</span>master 8492eac<span class="o">]</span> Together at last, together forever.
-</span><span class='line'> 0 files changed, 0 insertions<span class="o">(</span>+<span class="o">)</span>, 0 deletions<span class="o">(</span>-<span class="o">)</span>
-</span><span class='line'> create mode 100644 foo.bar
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>EXEUNT.</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: D3 | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/d3/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-27T07:25:34-08:00</updated>
+  <updated>2014-02-27T07:56:08-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,39 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Binding Functions as Data]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/binding-functions-as-data/"/>
+    <updated>2014-02-27T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/binding-functions-as-data</id>
+    <content type="html"><![CDATA[<p>Primitives and object literals are not the only things you can bind to a D3 visualization. After all, aren&rsquo;t javascript functions objects as well?</p>
+
+<p>```javascript
+var data = [];
+var next = function(x) { return 15 + x*x };
+var newData = function() { data.push(next); return data; }
+var selection = d3.select(&ldquo;#container&rdquo;)</p>
+
+<pre><code>              .selectAll("div")
+              .data(newData);
+</code></pre>
+
+<p>&hellip;</p>
+
+<pre><code>              .select("#span")
+                .text(function(d, i) { return d(i); });
+</code></pre>
+
+<p>```</p>
+
+<p>If you provide a function to the data function, D3 will simply invoke the function and use the returned value as a parameter of the data function.</p>
+
+<h3>Resources</h3>
+
+<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Implied Functions Applied]]></title>
@@ -59,6 +92,10 @@ svg.selectAll(&ldquo;circle&rdquo;)</p>
 <p>&hellip; but better.</p>
 
 <p>Awesome.</p>
+
+<h3>Resources</h3>
+
+<p><a href="http://mbostock.github.io/d3/tutorial/circle.html">Three Little Circles D3 Tutorial</a></p>
 ]]></content>
   </entry>
   
