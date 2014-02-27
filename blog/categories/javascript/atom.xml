@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-26T07:46:39-08:00</updated>
+  <updated>2014-02-27T07:25:34-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Implied Functions Applied]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/implied-functions-applied/"/>
+    <updated>2014-02-26T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/implied-functions-applied</id>
+    <content type="html"><![CDATA[<p>When binding a primitive datum to a node in a D3 visualization, the callback function can be implicitly called on the datum without the typical verbosity<!--more-->:</p>
+
+<p>```javascript
+svg.selectAll(&ldquo;circle&rdquo;)</p>
+
+<pre><code>.data([32, 57, 112, 293])
+</code></pre>
+
+<p>  .enter().append(&ldquo;circle&rdquo;)</p>
+
+<pre><code>.attr("cy", 90)
+.attr("cx", String)
+.attr("r", Math.sqrt);
+</code></pre>
+
+<p>```</p>
+
+<p>In line 5, String() is performed on the data element, as is Math.sqrt in line 6, with the same result as:</p>
+
+<p>```
+svg.selectAll(&ldquo;circle&rdquo;)</p>
+
+<pre><code>.data([32, 57, 112, 293])
+</code></pre>
+
+<p>  .enter().append(&ldquo;circle&rdquo;)</p>
+
+<pre><code>.attr("cy", 90)
+.attr("cx", function(d) {
+  return String(d);
+})
+.attr("r", function(d) {
+  return Math.sqrt(d);
+});
+</code></pre>
+
+<p>```</p>
+
+<p>&hellip; but better.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Enter Update Exit]]></title>
@@ -162,59 +211,6 @@ last_name : Leonard
 <h3>Resources</h3>
 
 <p><a href="http://www.amazon.com/gp/product/0596517742/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0596517742&amp;linkCode=as2&amp;tag=bridgeforpoke-20">JavaScript: The Good Parts</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Augmented Objects]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/augmented-objects/"/>
-    <updated>2014-02-09T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/augmented-objects</id>
-    <content type="html"><![CDATA[<p>Because it bears repeating: javascript and ruby have many features in common, including the ability to add functionality to existing objects.</p>
-
-<!--more-->
-
-
-<h2>Ruby singleton</h2>
-
-<p>You can add methods to an instance of a class without affecting any other instances of that class.
-```bash</p>
-
-<blockquote><p>x, y = &ldquo;stringA&rdquo;, &ldquo;stringB&rdquo;
-def x.baz
-  puts &ldquo;I can haz?&rdquo;
-end</p>
-
-<h1>=> nil</h1>
-
-<p>x.baz
-I can haz?</p>
-
-<h1>=> nil</h1>
-
-<p>y.baz
-NoMethodError: undefined method <code>baz' for "stringB":String
-  from (irb):62
-  from /home/katherine/.rvm/rubies/ruby-2.0.0-rc1/bin/irb:12:in</code><main>&lsquo;
-```</p></blockquote>
-
-<h2>Javascript augmenting</h2>
-
-<p>You can add methods to an of an Array object without affecting any other array objects.</p>
-
-<p>```</p>
-
-<blockquote><p>var data1 = [1, 2, 3, 4, 5, 6];
-undefined
-var data2 = [2, 4, 6, 8, 10, 12];
-undefined
-data1.total = function() { return 21; };
-function () { return 21; }
-data1.total();
-21
-data2.total()
-TypeError: Object [object Array] has no method &lsquo;total&rsquo;
-```</p></blockquote>
 ]]></content>
   </entry>
   

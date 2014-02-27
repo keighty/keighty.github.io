@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-26T07:46:39-08:00</updated>
+  <updated>2014-02-27T07:25:34-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,24 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The Neuroscience of Programming]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/programming-and-linguistics/"/>
+    <updated>2014-02-27T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/programming-and-linguistics</id>
+    <content type="html"><![CDATA[<h3><a href="http://www.huffingtonpost.com/chris-parnin/scientists-begin-looking-_b_4829981.html">Scientists Begin Looking at Programmers&#8217; Brains: The Neuroscience of Programming</a> from The Huffington Post.</h3>
+
+<blockquote><p>A new study provides new evidence that programmers are using language regions of the brain when understanding code and found little activation in other regions of the brain devoted to mathematical thinking.</p></blockquote>
+
+<ul>
+<li>Each programming language you learn requires expressing abstract concepts with a different syntax &mdash; and in the case of punctuation (~>, =>, :, {}, [], etc) an augmented alphabet. How is a programming language NOT like linguistics?</li>
+</ul>
+
+
+<blockquote><p>Besides a mathematical inclination, an exceptionally good mastery of one&rsquo;s native tongue is the most vital asset of a competent programmer. &mdash;Djikstra</p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Visualize With Purpose]]></title>
@@ -33,6 +51,59 @@
 <li><strong>Ease up</strong>: Not everything can or should be visualized. Be deliberate and add to information, don&rsquo;t obfuscate with unnecessary visualizations.</li>
 </ul>
 
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Implied Functions Applied]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/implied-functions-applied/"/>
+    <updated>2014-02-26T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/implied-functions-applied</id>
+    <content type="html"><![CDATA[<p>When binding a primitive datum to a node in a D3 visualization, the callback function can be implicitly called on the datum without the typical verbosity<!--more-->:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">data</span><span class="p">([</span><span class="mi">32</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">293</span><span class="p">])</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">enter</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span> <span class="nb">String</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In line 5, String() is performed on the data element, as is Math.sqrt in line 6, with the same result as:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">data</span><span class="p">([</span><span class="mi">32</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">293</span><span class="p">])</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">enter</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">String</span><span class="p">(</span><span class="nx">d</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">})</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">d</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&hellip; but better.</p>
+
+<p>Awesome.</p>
 ]]></content>
   </entry>
   
@@ -1060,112 +1131,6 @@
 
 
 <p>EXEUNT.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mongod Maintenance]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/maintaining-mongod/"/>
-    <updated>2014-01-22T07:23:10-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/maintaining-mongod</id>
-    <content type="html"><![CDATA[<p>My laptop&rsquo;s battery died, and I let it. Not a big deal, it is an old laptop and is used to being abused. Every time it does a hard shut down like that I wonder if it will recover. The laptop recovered just fine, but mongo did not. When my computer coughed back to life, I politely requested a meteor server, to which meteor replied that it could not start my server because it could not find a running mongodb. My first instinct, naturally, was to start it up again<!--more-->:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mongo start
-</span><span class='line'>MongoDB shell version: 2.4.6
-</span><span class='line'>connecting to: start
-</span><span class='line'>Mon Jan 20 07:42:47.289 Error: couldn<span class="err">&#39;</span>t connect to server 127.0.0.1:27017 at src/mongo/shell/mongo.js:145
-</span><span class='line'>exception: connect failed
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Followed by a trip to the logs:</p>
-
-<figure class='code'><figcaption><span>This error has been reformatted to fit your tv.</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>tail /var/log/mongodb/mongodb.log
-</span><span class='line'>*************
-</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> exception in initAndListen: 10309 Unable to create/open lock file: /var/lib/mongodb/mongod.lock errno:13 Permission denied Is a mongod instance already running?, terminating
-</span><span class='line'>dbexit:
-</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> shutdown: going to close listening sockets...
-</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> shutdown: going to flush diaglog...
-</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> shutdown: going to close sockets...
-</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> shutdown: waiting <span class="k">for </span>fs preallocator...
-</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> shutdown: closing all files...
-</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> closeAllFiles<span class="o">()</span> finished
-</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> shutdown: removing fs lock...
-</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> couldn<span class="err">&#39;</span>t remove fs lock errno:9 Bad file descriptor
-</span><span class='line'>dbexit: really exiting now
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>A lock file, you say? Well! I know what to do with those!</p>
-
-<figure class='code'><figcaption><span>Are you sure you want to mess with this?</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rm /var/lib/mongodb/mongod.lock
-</span><span class='line'>rm: remove write-protected regular file <span class="sb">`</span>/var/lib/mongodb/mongod.lock<span class="err">&#39;</span>? n
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>No, I am not sure &mdash; thanks for asking! After a deep breath and a reminder that I should not be so hasty (rtfm, katie), I found this note on <a href="http://docs.mongodb.org/manual/reference/configuration-options/#repair">mongodb.org</a>:</p>
-
-<blockquote><p>Note: Because mongod rewrites all of the database files during the repair routine, if you do not run repair under the same user account as mongod usually runs, you will need to run chown on your database files to correct the permissions before starting mongod again.</p></blockquote>
-
-<p>A file rewrite will include a lock file, will it not?</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u mongodb mongod --repair --dbpath /var/lib/mongodb/
-</span><span class='line'><span class="o">[</span>sudo<span class="o">]</span> password <span class="k">for </span>keighty:
-</span><span class='line'>...
-</span><span class='line'>sudo service mongodb start
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Embrace HRT for Collabrative Nirvana]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/embrace-hrt-for-collabrative-nirvana/"/>
-    <updated>2014-01-20T07:07:15-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/embrace-hrt-for-collabrative-nirvana</id>
-    <content type="html"><![CDATA[<p><a href="http://www.amazon.com/gp/product/1449302440/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1449302440&amp;linkCode=as2&amp;tag=keighty-20">Team Geek: A Software Developer&rsquo;s Guide to Working Well with Others</a> by Brian W. Fitzpatrick and Ben Collins-Sussman.</p>
-
-<p>With decades of collective experience, these two authors distill the essential philosophy required to be part of a healthy development team: HRT &mdash; humility, respect, and trust. These values are covered in the first chapter and the remainder of the book describes how to best use them as an engineer and as a manager. Some techniques particularly resonated with my world view.<!--more--></p>
-
-<h3>Fail early. Fail fast. Fail often</h3>
-
-<p>It is easy to pay lip-service to this philosophy, but it is impossible to adopt without a culture of HRT. From my own limited experience I can add &mdash; Communicate early. Communicate fast. Communicate often. &mdash; as another mantra of healthy team dynamics. Failure is always an option, but without HRT and open lines of communication it can take much more time to discover.</p>
-
-<h3>Make time vs manager time</h3>
-
-<p>Fitzpatrick and Collins-Sussman drew on a lot of great resources, and there is as much gold in the footnotes as there is in the text. They referenced Paul Graham&rsquo;s essay, <a href="http://www.paulgraham.com/makersschedule.html">Maker&rsquo;s Schedule</a>, in which he contrasts the different working styles of managers and makers (writers or programmers). The manager&rsquo;s schedule can be divided into hour-long chunks that may be apportioned to meetings, appointments, or tasks.: the essence of David Allen&rsquo;s <a href="http://www.davidco.com/about-gtd">GTD</a> (Getting Things Done). Makers, on the other hand, cannot be effective in one hour intervals. Graham writes that a single meeting in the afternoon can affect the productivity for a whole day. First it breaks up the afternoon into two pieces that are not long enough to really get into the zone, then it psychologically leaks into the morning where you are &ldquo;less likely to start something ambitious&rdquo;. I can definitely identify with this propensity. The cost of task switching around meetings often results in a lost day.</p>
-
-<h3>Core values</h3>
-
-<p>HRT is the heart of high-functioning teams of any ilk. When I was interviewing for my first job in software development (all those weeks ago) the most difficult question an interviewer could pose to me was &ldquo;where do you see yourself in 5 years&rdquo;? It was difficult because I had just spent the last five years dreaming about writing code for a living. I couldn&rsquo;t even verbalize what I was looking for in a company, only that I would know it when I met it. Now I can identify the traits I was looking for: teams that value writing code and shipping product, consensus based team decision making, asynchronous communication (I am not room-meat), and of course, they&rsquo;ve got to have HeaRT.</p>
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   

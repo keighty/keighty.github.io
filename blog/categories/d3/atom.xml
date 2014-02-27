@@ -4,7 +4,7 @@
   <title><![CDATA[Category: D3 | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/d3/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-26T07:46:39-08:00</updated>
+  <updated>2014-02-27T07:25:34-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Implied Functions Applied]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/implied-functions-applied/"/>
+    <updated>2014-02-26T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/implied-functions-applied</id>
+    <content type="html"><![CDATA[<p>When binding a primitive datum to a node in a D3 visualization, the callback function can be implicitly called on the datum without the typical verbosity<!--more-->:</p>
+
+<p>```javascript
+svg.selectAll(&ldquo;circle&rdquo;)</p>
+
+<pre><code>.data([32, 57, 112, 293])
+</code></pre>
+
+<p>  .enter().append(&ldquo;circle&rdquo;)</p>
+
+<pre><code>.attr("cy", 90)
+.attr("cx", String)
+.attr("r", Math.sqrt);
+</code></pre>
+
+<p>```</p>
+
+<p>In line 5, String() is performed on the data element, as is Math.sqrt in line 6, with the same result as:</p>
+
+<p>```
+svg.selectAll(&ldquo;circle&rdquo;)</p>
+
+<pre><code>.data([32, 57, 112, 293])
+</code></pre>
+
+<p>  .enter().append(&ldquo;circle&rdquo;)</p>
+
+<pre><code>.attr("cy", 90)
+.attr("cx", function(d) {
+  return String(d);
+})
+.attr("r", function(d) {
+  return Math.sqrt(d);
+});
+</code></pre>
+
+<p>```</p>
+
+<p>&hellip; but better.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Enter Update Exit]]></title>
