@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-27T21:38:06-08:00</updated>
+  <updated>2014-02-27T21:46:30-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -197,7 +197,7 @@ cat: foo.bar: No such file or directory you heartless creature!
 <p>```bash Act 2 Scene 2: Regret
 $ git log &mdash;diff-filter=D &mdash;summary
 commit b045a528b4a0824f63562cad867b264983b32c7c
-Author: keighty <a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#x6b;&#101;&#105;&#x67;&#104;&#116;&#x79;&#46;&#x6c;&#101;&#111;&#x6e;&#x61;&#x72;&#x64;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#111;&#109;">&#107;&#x65;&#105;&#x67;&#104;&#116;&#121;&#46;&#x6c;&#x65;&#111;&#x6e;&#97;&#x72;&#100;&#64;&#x67;&#x6d;&#x61;&#105;&#108;&#x2e;&#99;&#111;&#109;</a>
+Author: keighty <a href="&#109;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#107;&#101;&#x69;&#103;&#104;&#x74;&#x79;&#x2e;&#108;&#x65;&#x6f;&#110;&#97;&#x72;&#x64;&#64;&#x67;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;">&#107;&#x65;&#x69;&#103;&#104;&#x74;&#121;&#46;&#108;&#101;&#x6f;&#110;&#97;&#114;&#100;&#x40;&#x67;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;</a>
 Date:   Wed Jan 22 20:46:16 2014 -0800</p>
 
 <pre><code>I have made a huge mistake.

@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-27T21:38:06-08:00</updated>
+  <updated>2014-02-27T21:46:30-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,31 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[String Conversion in Javascript]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/to-i-in-javascript/"/>
-    <updated>2014-02-28T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/to-i-in-javascript</id>
-    <content type="html"><![CDATA[<p>Almost every day, javascript blows my mind. Today I discovered that you can convert a string to a number simply by prepending a +:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; typeof(+"this is a string")
-</span><span class='line'>"number"
-</span><span class='line'>&gt; typeof(+"100")
-</span><span class='line'>"number"
-</span><span class='line'>&gt; +"100" + 50
-</span><span class='line'>150</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[String Conversion in Javascript]]></title>
@@ -948,6 +923,24 @@
     <content type="html"><![CDATA[<p><a href="http://www.amazon.com/gp/product/0932633617/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633617&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Slack</a>: Getting Past Burnout, Busywork and the Myth of Total Efficiency, by Tom DeMarco</p>
 
 <p>Trimming the slack from an organization in an effort to reduce overhead will leave a company with an increased profit margin at the cost of becoming inflexible. &ldquo;Slack is the natural enemy of efficiency, and efficiency is the natural enemy of slack.&rdquo; Knowledge work cannot be optimized in the same manner as manufacturing because it is creative by nature, and creative work is requires immersion, experimentation, and&hellip; well.. slack.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Number Is a Double Is a Float]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/a-number-is-a-double-is-a-float/"/>
+    <updated>2014-02-02T19:56:17-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/a-number-is-a-double-is-a-float</id>
+    <content type="html"><![CDATA[<p>JavaScript has a single number type &mdash; a 64-bit floating point number. Since there is no separate integer type, 1 and 1.0 are the same value.</p>
+
+<!--more-->
+
+
+<p>One of the consequences is that the <code>/</code> operator may return a floating point number even if both operands are integers. Goodbye casting!</p>
+
+<p><a href="http://www.amazon.com/gp/product/0596517742/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0596517742&amp;linkCode=as2&amp;tag=bridgeforpoke-20">JavaScript: The Good Parts</a></p>
+
+<p>Awesome.</p>
 ]]></content>
   </entry>
   
