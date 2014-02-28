@@ -4,7 +4,7 @@
   <title><![CDATA[Category: I Didn't Know That | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/i-didnt-know-that/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-27T07:56:08-08:00</updated>
+  <updated>2014-02-27T21:38:06-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,48 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[String Conversion in Javascript]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/to-i-in-javascript/"/>
+    <updated>2014-02-28T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/to-i-in-javascript</id>
+    <content type="html"><![CDATA[<p>Almost every day, javascript blows my mind. Today I discovered that you can convert a string to a number simply by prepending a +:</p>
+
+<p>```</p>
+
+<blockquote><p>typeof(+&ldquo;this is a string&rdquo;)
+&ldquo;number&rdquo;
+typeof(+&ldquo;100&rdquo;)
+&ldquo;number&rdquo;
++&ldquo;100&rdquo; + 50
+150
+```</p></blockquote>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[String Conversion in Javascript]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/to-i-in-javascript/"/>
+    <updated>2014-02-27T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/to-i-in-javascript</id>
+    <content type="html"><![CDATA[<p>Almost every day, javascript blows my mind. Today I discovered that you can convert a string to a number simply by prepending a +:</p>
+
+<p>```</p>
+
+<blockquote><p>typeof(+&ldquo;this is a string&rdquo;)
+&ldquo;number&rdquo;
+typeof(+&ldquo;100&rdquo;)
+&ldquo;number&rdquo;
++&ldquo;100&rdquo; + 50
+150
+```</p></blockquote>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Implied Functions Applied]]></title>
