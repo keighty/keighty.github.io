@@ -4,7 +4,7 @@
   <title><![CDATA[Category: I Didn't Know That | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/i-didnt-know-that/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-27T21:46:30-08:00</updated>
+  <updated>2014-03-01T10:13:13-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Javascript Dates]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/javascript-dates/"/>
+    <updated>2014-03-01T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/javascript-dates</id>
+    <content type="html"><![CDATA[<p>Javascript Date objects have zero indexed months but not dates.</p>
+
+<p>```</p>
+
+<blockquote><p>(new Date(2014, 0, 1)).strftime(&ldquo;%b %d, %Y&rdquo;)
+&ldquo;Jan 1, 2014&rdquo;
+(new Date(2013, 11, 31)).strftime(&ldquo;%b %d, %Y&rdquo;)
+&ldquo;Dec 31, 2013&rdquo;
+(new Date(2014, 0, 0)).strftime(&ldquo;%b %d, %Y&rdquo;)
+&ldquo;Dec 31, 2013&rdquo;
+```</p></blockquote>
+
+<p>Wat?</p>
+
+<!--more-->
+
+
+<h3>Resources</h3>
+
+<p><a href="http://tech.bluesmoon.info/2008/04/strftime-in-javascript.html">Javascript strftime</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[String Conversion in Javascript]]></title>

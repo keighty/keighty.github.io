@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-02-27T21:46:30-08:00</updated>
+  <updated>2014-03-01T10:13:13-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Javascript Dates]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/javascript-dates/"/>
+    <updated>2014-03-01T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/javascript-dates</id>
+    <content type="html"><![CDATA[<p>Javascript Date objects have zero indexed months but not dates.</p>
+
+<p>```</p>
+
+<blockquote><p>(new Date(2014, 0, 1)).strftime(&ldquo;%b %d, %Y&rdquo;)
+&ldquo;Jan 1, 2014&rdquo;
+(new Date(2013, 11, 31)).strftime(&ldquo;%b %d, %Y&rdquo;)
+&ldquo;Dec 31, 2013&rdquo;
+(new Date(2014, 0, 0)).strftime(&ldquo;%b %d, %Y&rdquo;)
+&ldquo;Dec 31, 2013&rdquo;
+```</p></blockquote>
+
+<p>Wat?</p>
+
+<!--more-->
+
+
+<h3>Resources</h3>
+
+<p><a href="http://tech.bluesmoon.info/2008/04/strftime-in-javascript.html">Javascript strftime</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[String Conversion in Javascript]]></title>
@@ -153,44 +181,6 @@ exit() returns html or svg elements that no longer have data associated with the
 <p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
 
 <p><a href="http://www.codeproject.com/Articles/33052/Visual-Representation-of-SQL-Joins">Visual Representation of SQL Joins</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[D3 Is Selective]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/d3-is-selective/"/>
-    <updated>2014-02-21T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/d3-is-selective</id>
-    <content type="html"><![CDATA[<p>D3 uses the W3C standard selector library, and selection modifiers work on both single and multiple element selections, and will automatically apply the modifier iteratively over the entire collection, which makes your code simpler and easier to maintain.</p>
-
-<!--more-->
-
-
-<h4>Selection modifiers</h4>
-
-<ul>
-<li><strong>d3.select(&lsquo;p&rsquo;).text()</strong>     : retrieve or modify text</li>
-<li><strong>d3.select(&lsquo;p&rsquo;).attr()</strong>     : retrieve or modify a given attribute</li>
-<li><strong>d3.select(&lsquo;p&rsquo;).classed()</strong>  : retrieve or modify css classes</li>
-<li><strong>d3.select(&lsquo;p&rsquo;).style()</strong>    : retrieve or modify styles</li>
-<li><strong>d3.select(&lsquo;p&rsquo;).html()</strong>     : retrieve or modify a selections inner html (like text but with tags)</li>
-</ul>
-
-
-<p>```
-d3.selectAll(&lsquo;div&rsquo;)</p>
-
-<pre><code>        .attr("class", "alert")
-        .each(function(d, i) {
-          d3.select(this).append("h1").text(i);
-        });
-</code></pre>
-
-<p>```</p>
-
-<p>Selections are essentially arrays with some extra variables baked in. The <code>.each</code> call on line 3 treats the selected elements as an array, and performs a function on each one. The extra variables provided to the iterator function for free are: the data bound to the element (d), the index of the element, and the element itself (this).</p>
-
-<p>Awesome</p>
 ]]></content>
   </entry>
   
