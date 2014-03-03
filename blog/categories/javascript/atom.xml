@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-03-01T10:54:39-08:00</updated>
+  <updated>2014-03-03T08:00:10-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,108 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Scaling D3]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/d3-scaling/"/>
+    <updated>2014-03-03T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/d3-scaling</id>
+    <content type="html"><![CDATA[<p>Add scales to a d3 plot in three easy steps:</p>
+
+<h3>1. Define the scale</h3>
+
+<p>``` javascript
+// Image dimensions
+var width = 500,</p>
+
+<pre><code>height = 500,
+margin = 50;
+</code></pre>
+
+<p>var scaleX=d3.scale.linear().domain([0,10]).range([margin, width-margin]);
+var scaleY=d3.scale.linear().domain([0,10]).range([height-margin, margin]);
+```</p>
+
+<h3>2. Draw the scale</h3>
+
+<p>``` javascript
+// Image container
+var svg=d3.select(&ldquo;body&rdquo;).append(&ldquo;svg&rdquo;)</p>
+
+<pre><code>  .attr("width",width)
+  .attr("height",height);
+</code></pre>
+
+<p>// Axis definition
+var xAxis = d3.svg.axis()
+  .scale(scaleX)
+  .orient(&ldquo;bottom&rdquo;);</p>
+
+<p>var yAxis = d3.svg.axis()
+  .scale(scaleY)
+  .orient(&ldquo;left&rdquo;);</p>
+
+<p>// Axis graphics
+svg.append(&ldquo;g&rdquo;)
+  .attr(&ldquo;class&rdquo;, &ldquo;axis&rdquo;)
+  .attr(&ldquo;transform&rdquo;, &ldquo;translate(0,&rdquo; + (height &ndash; margin) + &ldquo;)&rdquo;)
+  .call(xAxis);</p>
+
+<p>svg.append(&ldquo;g&rdquo;)
+  .attr(&ldquo;class&rdquo;, &ldquo;axis&rdquo;)
+  .attr(&ldquo;transform&rdquo;, &ldquo;translate(&rdquo; + margin + &ldquo;,0)&rdquo;)
+  .call(yAxis);
+```</p>
+
+<h3>3. Apply the scale to your data</h3>
+
+<p>``` javascript Apply the scale. <a href="https://gist.github.com/keighty/9327604">https://gist.github.com/keighty/9327604</a>
+d3.csv(&ldquo;test_data.csv&rdquo;,function(csv) {</p>
+
+<p>  svg.selectAll(&ldquo;circle&rdquo;).data(csv).enter()</p>
+
+<pre><code>.append("circle")
+.attr("cx",getX)
+.attr("cy",getY)
+.attr("r", getR)
+.style("fill", getColor);
+</code></pre>
+
+<p>  // Apply scale to the x value
+  function getX(d) {</p>
+
+<pre><code>return scaleX(d.X);
+</code></pre>
+
+<p>  }</p>
+
+<p>  //Apply scale to the y value
+  function getY(d) {</p>
+
+<pre><code>return scaleY(d.Y);
+</code></pre>
+
+<p>  }</p>
+
+<p>  function getR(d) {</p>
+
+<pre><code>return d.Quantity / 10;
+</code></pre>
+
+<p>  }</p>
+
+<p>  function getColor(d) {</p>
+
+<pre><code>return d.Colors;
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Javascript Dates]]></title>
@@ -145,42 +247,6 @@ svg.selectAll(&ldquo;circle&rdquo;)</p>
 <h3>Resources</h3>
 
 <p><a href="http://mbostock.github.io/d3/tutorial/circle.html">Three Little Circles D3 Tutorial</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Enter Update Exit]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/enter-update-exit/"/>
-    <updated>2014-02-25T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/enter-update-exit</id>
-    <content type="html"><![CDATA[<p>D3 is a data visualization tool that uses method chaining to produce big pictures with little code. The selection library performs a full Outer Join between the data (D) and the visual elements (V), and the enter-update-exit pattern performs work on subsets of this join<!--more-->:</p>
-
-<h3>UPDATE: Inner Join (D union V)</h3>
-
-<p><code>
-selection.data(data_points)
-</code>
-data() binds data_points to the html or svg elements returned by the selection and returns the data not visualized.</p>
-
-<h3>ENTER: Left excluding join (D/V)</h3>
-
-<p><code>
-selection.data(data_points).enter()
-</code>
-enter() returns data_points that are not yet represented visually by html or svg. Chain .append() to add a new element to the page.</p>
-
-<h3>EXIT: Right excluding join (V/D)</h3>
-
-<p><code>
-selection.data(data_points).exit()
-</code>
-exit() returns html or svg elements that no longer have data associated with them. Chain .remove() to eliminate them, or .translate() to make them slide off the page.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
-
-<p><a href="http://www.codeproject.com/Articles/33052/Visual-Representation-of-SQL-Joins">Visual Representation of SQL Joins</a></p>
 ]]></content>
   </entry>
   
