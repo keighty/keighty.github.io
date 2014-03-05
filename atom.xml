@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-03-03T08:00:10-08:00</updated>
+  <updated>2014-03-04T18:52:36-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,220 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[D3 Nests and Rollups]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/d3-nests-and-rollups+%28cyclops%27s+conflicted+copy+2014-03-04%29/"/>
+    <updated>2014-03-04T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/d3-nests-and-rollups (cyclops&#8217;s conflicted copy 2014-03-04)</id>
+    <content type="html"><![CDATA[<p>D3 provides powerful functions for manipulating raw data sets, including csv(), nest(), and rollup().</p>
+
+<!--more-->
+
+
+<h3>csv()</h3>
+
+<p>You can import a raw, comma-delimited data file, and bind the data directly to an svg.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>d3.csv("test_data.csv", function(csv_data) {
+</span><span class='line'>
+</span><span class='line'>  svg.selectAll("circle").data(csv).enter()
+</span><span class='line'>    .append("circle")
+</span><span class='line'>    .attr("cx",getX)
+</span><span class='line'>    .attr("cy",getY)
+</span><span class='line'>    .attr("r", getR)
+</span><span class='line'>    .style("fill", getColor);
+</span><span class='line'>})</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href=""></a><img src="source/images/post_d3_csv_data.png" />
+<img src="source/images/post_d3_csv_data.png"></p>
+
+<h3>nest() and rollup()</h3>
+
+<p>You can also aggregate data on any property &mdash; just tell D3 which one, and use any of D3&rsquo;s handy utility functions (mean, median, sum, min/max, quantile, etc) to return the aggregate data you want to display.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>d3.csv("apples.csv",function(csv) {
+</span><span class='line'>  data = d3.nest()
+</span><span class='line'>          .key(function(d) { return d.Colors; })
+</span><span class='line'>          .rollup( function(d) {
+</span><span class='line'>            return {
+</span><span class='line'>              "X": d3.mean(d, function(e) { return +e.X; }),
+</span><span class='line'>              "Y": d3.mean(d, function(e) { return +e.Y; }),
+</span><span class='line'>              "Quantity": d3.mean(d, function(e) { return +e.Quantity; })
+</span><span class='line'>            };
+</span><span class='line'>          })
+</span><span class='line'>          .entries(csv);
+</span><span class='line'>
+</span><span class='line'>  svg.selectAll("circle").data(data).enter()
+</span><span class='line'>    .append("circle")
+</span><span class='line'>    .attr("cx",getX)
+</span><span class='line'>    .attr("cy",getY)
+</span><span class='line'>    .attr("r", getR)
+</span><span class='line'>    .style("fill", getColor);
+</span><span class='line'>
+</span><span class='line'>})</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="source/images/post_d3_rollupdata_image.png"></p>
+
+<p>D3 is awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[D3 Nests and Rollups]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/d3-nests-and-rollups/"/>
+    <updated>2014-03-04T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/d3-nests-and-rollups</id>
+    <content type="html"><![CDATA[<p>D3 provides powerful functions for manipulating raw data sets, including csv(), nest(), and rollup().</p>
+
+<!--more-->
+
+
+<p>I generated a hundred rows of test_data.csv using <a href="http://www.generatedata.com/#about">generatedata.com</a>:</p>
+
+<figure class='code'><figcaption><span>test_data.csv</span><a href='https://gist.github.com/keighty/9348444#file-test_data-csv'>Gist </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Colors,X,Y,Quantity
+</span><span class='line'>violet,1,8,91
+</span><span class='line'>blue,9,1,32
+</span><span class='line'>blue,3,1,67
+</span><span class='line'>yellow,5,5,63
+</span><span class='line'>violet,6,6,57
+</span><span class='line'>green,5,10,65
+</span><span class='line'>red,8,2,36
+</span><span class='line'>...
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The basic properties are a Color (one of blue, yellow, violet, green, and red), an X-value (between 1 and 10), a Y-value (also between 1 and 10), and a Quantity value (between 1 and 100).</p>
+
+<h3>csv()</h3>
+
+<p>You can import a raw, comma-delimited data file, and bind the data directly to an svg.</p>
+
+<figure class='code'><figcaption><span>csv()</span><a href='https://gist.github.com/keighty/9348444'>Gist </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">d3</span><span class="p">.</span><span class="nx">csv</span><span class="p">(</span><span class="s2">&quot;test_data.csv&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">csv</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="nx">csv</span><span class="p">).</span><span class="nx">enter</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">);</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://www.katieleonard.ca/images/post_d3_csv_data.png"></p>
+
+<h3>nest() and rollup()</h3>
+
+<p>You can also aggregate data on any property &mdash; just tell D3 which one, and use any of D3&rsquo;s handy utility functions (mean, median, sum, min/max, quantile, etc) to return the aggregate data you want to display. For example, I want to plot the average data for each color. I tell my D3 selection to nest the data on the color key. Then I tell the rollup function to take the average for each property of the data. Pass the new data to the svg instead of the csv, and voila</p>
+
+<figure class='code'><figcaption><span>nest() and rollup()</span><a href='https://gist.github.com/keighty/9348540'>Gist </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">d3</span><span class="p">.</span><span class="nx">csv</span><span class="p">(</span><span class="s2">&quot;test_data.csv&quot;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">csv</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">data</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">nest</span><span class="p">()</span>
+</span><span class='line'>          <span class="p">.</span><span class="nx">key</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">Colors</span><span class="p">;</span> <span class="p">})</span>
+</span><span class='line'>          <span class="p">.</span><span class="nx">rollup</span><span class="p">(</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>              <span class="s2">&quot;X&quot;</span><span class="o">:</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">mean</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">+</span><span class="nx">e</span><span class="p">.</span><span class="nx">X</span><span class="p">;</span> <span class="p">}),</span>
+</span><span class='line'>              <span class="s2">&quot;Y&quot;</span><span class="o">:</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">mean</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">+</span><span class="nx">e</span><span class="p">.</span><span class="nx">Y</span><span class="p">;</span> <span class="p">}),</span>
+</span><span class='line'>              <span class="s2">&quot;Quantity&quot;</span><span class="o">:</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">mean</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">+</span><span class="nx">e</span><span class="p">.</span><span class="nx">Quantity</span><span class="p">;</span> <span class="p">})</span>
+</span><span class='line'>            <span class="p">};</span>
+</span><span class='line'>          <span class="p">})</span>
+</span><span class='line'>          <span class="p">.</span><span class="nx">entries</span><span class="p">(</span><span class="nx">csv</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="nx">data</span><span class="p">).</span><span class="nx">enter</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://www.katieleonard.ca/images/post_d3_rollupdata_image.png"></p>
+
+<p>D3 is so awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Technique for Producing Ideas]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/a-technique-for-producing-ideas/"/>
+    <updated>2014-03-04T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/a-technique-for-producing-ideas</id>
+    <content type="html"><![CDATA[<!--more-->
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Scaling D3]]></title>
@@ -866,226 +1080,6 @@
 <p>Declaring an application-level function ensures that the correct <code>person</code> is called when needed. It improves readability by essentially flagging the scope of the variable and reducing ambiguity.</p>
 
 <p><a href="http://www.amazon.com/gp/product/0596517742/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0596517742&amp;linkCode=as2&amp;tag=bridgeforpoke-20">JavaScript: The Good Parts</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Fanout]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/fanout/"/>
-    <updated>2014-02-06T14:38:12-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/fanout</id>
-    <content type="html"><![CDATA[<p>Continuing my exploration of message queues&hellip;</p>
-
-<p>A common MQ modality is publish/subscribe. A simplistic queue model has producers publishing messages directly to a queue and consumers taking messages off a queue. In the publish/subscribe model, the producer sends messages to an <strong>exchange</strong>, who&rsquo;s only job is to publish messages to queues. In this scenario, the exchange knows to which queue(s) the message should be published according to established rules. The relationship between an exchange and a queue is called a <strong>binding</strong>.</p>
-
-<!--more-->
-
-
-<h3>Types of exchanges</h3>
-
-<ol>
-<li><strong>direct</strong></li>
-<li><strong>topic</strong></li>
-<li><strong>headers</strong></li>
-<li><strong>fanout</strong> &ndash; broadcasts every message it receives to all the queues it knows</li>
-</ol>
-
-
-<h3>Create a fanout exchange:</h3>
-
-<figure class='code'><figcaption><span>emit_log.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># create and start the connection</span>
-</span><span class='line'><span class="n">connection</span> <span class="o">=</span> <span class="no">Bunny</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
-</span><span class='line'><span class="n">connection</span><span class="o">.</span><span class="n">start</span>
-</span><span class='line'><span class="c1"># create and start the channel</span>
-</span><span class='line'><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">create_channel</span>
-</span><span class='line'><span class="c1"># create the exchange:</span>
-</span><span class='line'><span class="n">exchange</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">fanout</span><span class="p">(</span><span class="s1">&#39;logs&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># publish to your named exchange:</span>
-</span><span class='line'><span class="n">exchange</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># close the connection</span>
-</span><span class='line'><span class="n">connection</span><span class="o">.</span><span class="n">close</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Create a fanout worker</h3>
-
-<figure class='code'><figcaption><span>receive_log.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># create and start the connection</span>
-</span><span class='line'><span class="n">connection</span> <span class="o">=</span> <span class="no">Bunny</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
-</span><span class='line'><span class="n">conn</span><span class="o">.</span><span class="n">start</span>
-</span><span class='line'><span class="c1"># create and start the channel</span>
-</span><span class='line'><span class="n">channel</span>  <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">create_channel</span>
-</span><span class='line'><span class="c1"># name the exchange to listen to</span>
-</span><span class='line'><span class="n">exchange</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">fanout</span><span class="p">(</span><span class="s2">&quot;logs&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># name the queue</span>
-</span><span class='line'><span class="n">q</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">queue</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:exclusive</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># bind the queue to the exchange</span>
-</span><span class='line'><span class="n">q</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">exchange</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># subscribe to the bound queue</span>
-</span><span class='line'><span class="n">q</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="ss">:block</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">delivery_info</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="o">|</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot; [x] </span><span class="si">#{</span><span class="n">body</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>In action</h3>
-
-<p>Start three terminals:</p>
-
-<ol>
-<li><code>$ ruby -rubygems receive_logs.rb &gt; logs_from_rabbit.log</code></li>
-<li><code>$ ruby -rubygems receive_logs.rb</code></li>
-<li><code>$ ruby -rubygems emit_log.rb</code></li>
-</ol>
-
-
-<p>In the last terminal, add a few more messages:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ ruby -rubygems emit_log.rb this is a longer message
-</span><span class='line'>$ ruby -rubygems emit_log.rb this message should be logged in a file AND appear in my terminal window</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The output in terminal 2:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ ruby -rubygems receive_logs.rb
-</span><span class='line'> [*] Waiting for logs. To exit press CTRL+C
-</span><span class='line'> [x] Hello World!
-</span><span class='line'> [x] this is a longer message
-</span><span class='line'> [x] this message should be logged in a file AND appear in my terminal</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The output from the log file:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat logs_from_rabbit.log
-</span><span class='line'> [*] Waiting for logs. To exit press CTRL+C
-</span><span class='line'> [x] Hello World!
-</span><span class='line'> [x] this is a longer message
-</span><span class='line'> [x] this message should be logged in a file AND appear in my terminal</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Resources</h2>
-
-<ul>
-<li><a href="http://www.rabbitmq.com/tutorials/tutorial-three-ruby.html">RabbitMQ.com</a></li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[First in, First Out]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/first-in-first-out/"/>
-    <updated>2014-02-05T11:14:30-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/first-in-first-out</id>
-    <content type="html"><![CDATA[<h3>Why use message queues?</h3>
-
-<p>Message queues offer the benefits of high reliability at the cost of performance. This is particularly useful for web tasks that may take longer than the typical HTTP request. Requests are persisted, acknowledged, and confirmed asynchronously. They are not dropped or timed out, no matter how long they take to process.</p>
-
-<!--more-->
-
-
-<h3>Asynchronous request processing with RabbitMQ</h3>
-
-<p>A program that sends messages is a <strong>producer</strong>. A producer drops a message onto a <strong>queue</strong> (like a mailbox). A <strong>consumer</strong> is a program that mostly waits to receive messages, and processes them when they arrive.</p>
-
-<p>RabbitMQ provides message acknowledgments. An ack(nowledgement) is sent back from the consumer to tell the queue that a particular message has been received and processed, and that the queue is free to delete it</p>
-
-<h3>Lets be fair</h3>
-
-<p>By default, RabbitMQ will dispatch messages equitably to all workers, and will not check first to see if the worker is already busy. You can ask the queue to only send messages to a worker if it is available to process a message.</p>
-
-<p>Use <code>channel.prefetch(1)</code> to prevent dispatching a new message to a worker until it has processed and acknowledged the previous one. Instead, RabbitMQ will dispatch it to the next worker that is not still busy. One possible ramification of prefetching is that the queue can become backed up if all workers are busy with long processes, so watch your queue length!</p>
-
-<h3>Useful Commands</h3>
-
-<ul>
-<li>list active queues: <code>sudo rabbitmqctl list_queues</code></li>
-<li>list queues along with unacknowledged messages: <code>sudo rabbitmqctl list_queues name messages_ready messages_unacknowledged</code></li>
-</ul>
-
-
-<h3>Resources</h3>
-
-<ul>
-<li><a href="http://www.amazon.com/gp/product/B00HNG8ZFQ/ref=kinw_myk_ro_title">Queue based system architecture</a></li>
-<li><a href="http://manning.com/videla/">RabbitMQ in Action: Distributed messaging for everyone</a></li>
-<li><a href="http://www.rabbitmq.com/tutorials/tutorial-one-ruby.html">RabbitMQ.com</a></li>
-<li><a href="http://www.rabbitmq.com/install-debian.html">Installation</a></li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Afraid of Commitment]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/afraid-of-commitment/"/>
-    <updated>2014-02-04T08:04:27-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/afraid-of-commitment</id>
-    <content type="html"><![CDATA[<h3>or, how to not fubar your git history</h3>
-
-<p>As with all the git lessons I have learned, this one started with a huge mistake. I had merged a commit to master that was breaking pages I didn&rsquo;t know existed. The sage developer sitting on my right shoulder told me that since I was unsure of how to fix the problem I should revert the offending commit forthwith. <!--more--></p>
-
-<p>I had two choices of commit to revert:</p>
-
-<ol>
-<li>remove the offending commit from the branch history</li>
-<li>remove the merge commit, where the broken code had infiltrated master</li>
-</ol>
-
-
-<p>While the former is like a surgical excision of a moment in history (eternal sunshine of a spotless git history?), the latter will preserve your branch history, and the context surrounding the changes made. I like a lot of context, so I chose to revert the merge commit.</p>
-
-<p>When you undo a merge, git doesn&rsquo;t know how to reassign the branches. Was the left one master? The right? Does git know left from right? Who is on first? Take the guesswork out of the equation</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git checkout -b revert_branch_name
-</span><span class='line'><span class="nv">$ </span>git revert -m 1 &lt;SHA of commit to be reverted&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Warning: If you don’t make the new branch first, you will mess up your merge history on master. Trust me. Just make the branch first. Now you can ensure that your test suite will pass with the commit reverted before you do something silly, like merge even more breakage into master. Crisis averted.</p>
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   

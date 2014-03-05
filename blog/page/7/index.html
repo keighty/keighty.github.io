@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Meteor is a framework that allows you to write web applications using only javascript. All the work is done on the client-side. Meteor embraces new &hellip;">
+  <meta name="description" content="&ldquo;Getting Started with Meteor.js JavaScript Framework&rdquo; by Isaac Strack is a great introduction to a powerful tool. ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,148 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/meteor-user/">Meteor User</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-14T19:38:16-08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.packtpub.com/getting-started-with-meteor-javascript-framework/book">&ldquo;Getting Started with Meteor.js JavaScript Framework&rdquo;</a> by Isaac Strack is a great introduction to a powerful tool.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/meteor-user/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/get-clean/">Get Clean</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-13T21:29:03-08:00" pubdate data-updated="true">Jan 13<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I experiment a lot before I choose an implementation I like. I am sure I am not alone in making a few (or many) false starts, and yet feeling sick at the thought of deleting any code. What if one of those paths I started down was the right one? This loss aversion often leads to working trees of non-working code, and <code>git stash</code>-es that I will never revisit. If I stop myself from going too far down yet another road without an end in sight, attempts to clean up my working directory often stall miserably at the end of a <code>git checkout .</code>:</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/get-clean/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-29T22:29:03-07:00" pubdate data-updated="true">Oct 29<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I am building an application that uses several nested attributes: Users have many Goals (Goals belong_to Users), and Goals have many Hours (Hours belong_to Goals).</p>
+
+<p>Using <a href="https://github.com/thoughtbot/factory_girl">FactoryGirl</a> to create a User is straightforward:</p>
+
+<div>
+  <pre><code class='ruby'>FactoryGirl.define do
+  factory :user do
+    sequence :name  { |n| &quot;person#{n}&quot; }
+    sequence :email { |n| &quot;person#{n}@example.com&quot; }
+  end
+end
+
+describe User do
+  before  { @user = FactoryGirl.create(:user) }
+  subject { @user }
+  it { should respond_to(:name) }
+  ...
+end</code></pre>
+</div>
+
+
+<p>How do I create Goals that are linked to the User?</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/factoring-in-nests/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -162,144 +304,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/rails-depends-on-javascript/">Rails, You Can Depend on Javascript</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-16T22:29:03-07:00" pubdate data-updated="true">Sep 16<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I am between computers at the moment, and I really really miss my OSX development environment. Dependency installation is so smooth and painless on mac, that I had quite forgotten the complications of setting up a complete environment in linux. For instance</p>
-
-<h3>Rails requires a javascript runtime environment</h3>
-
-<p>I am running an Ubuntu 9.4 remix on my little Atom Netbook. Getting rails up and running anew is a lesson in returning to fundamentals.</p>
-
-<div>
-  <pre><code class='bash'>$ gem install rails
-$ rails new testapp -T
-$ rails generate rspec:install
-...
-Could not find a JavaScript runtime. See https://github.com/sstephenson/execjs for a list of available runtimes</code></pre>
-</div>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/rails-depends-on-javascript/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/ruby-execution/">Ruby Execution</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-10T22:29:03-07:00" pubdate data-updated="true">Sep 10<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have started including an executable in my project setup. Many of the code challenges I have been practicing lately have included file I/O, and while TDD and code exercising with RSpec is still my main process, developing a stand-alone fully-functional project requires something more.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/ruby-execution/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-08T22:29:03-07:00" pubdate data-updated="true">Sep 8<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>A few weeks ago I posted about <a href="http://www.katieleonard.ca/automation/2013/08/30/hammer-out-tasks-with-thor/">using Thor to generate system-wide notes files with a standard format</a>. Since then, I have been doing a lot of smaller code challenges, and I wanted to set up a Thor task for generating a standard project file tree.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/thor-sets-up-a-project/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -324,23 +328,23 @@ Could not find a JavaScript runtime. See https://github.com/sstephenson/execjs f
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/d3-nests-and-rollups+%28cyclops%27s+conflicted+copy+2014-03-04%29/">D3 Nests and Rollups</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/d3-nests-and-rollups/">D3 Nests and Rollups</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/a-technique-for-producing-ideas/">A Technique for Producing Ideas</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/d3-scaling/">Scaling D3</a>
       </li>
     
       <li class="post">
         <a href="/blog/2014/javascript-dates/">Javascript Dates</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/to-i-in-javascript/">String Conversion in Javascript</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/programming-and-linguistics/">The Neuroscience of Programming</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/binding-functions-as-data/">Binding Functions as Data</a>
       </li>
     
   </ul>

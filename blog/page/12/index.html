@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="I am really enjoying Test-Driven Development by Christian Johansen I picked up this little gem this morning as I was learning about functions and the &hellip;">
+  <meta name="description" content="Having just discovered the magic of using partials to refactor html in rails, imagine my delight when I found it to be even easier in Sinatra. ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,137 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/partial-to-sinatra/">Partial to Sinatra</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-09T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Having just discovered the magic of using partials to refactor html in rails, imagine my delight when I found it to be even easier in Sinatra.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/partial-to-sinatra/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/red-green-refactor/">Red, Green, Refactor! A Workflow for Rails</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-03T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>1. Write a failing test</h3>
+
+<div>
+  <pre><code class='ruby'>describe &quot;Static About page&quot; do
+  it &quot;should have the content &#39;About Us&#39;&quot; do
+    visit &#39;/static_pages/about&#39;
+    page.should have_content(&#39;About Us&#39;)
+  end
+end</code></pre>
+</div>
+
+
+<p>Use the failures to drive development</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/red-green-refactor/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/no-indexhtml-no-cry/">No index.html, No Cry</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-29T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Following along with <a href="http://www.amazon.com/Ruby-Rails-Tutorial-Addison-Wesley-Professional/dp/0321832051">Rails tutorial</a> by Michael Hartl, I built a sample app with a simple database, linking users to microposts in a twitter-like manner. Everything worked well locally, but when it came time to deploy on heroku, I ran across some interesting stumbling blocks</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/no-indexhtml-no-cry/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -178,154 +309,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/jquery-objects-vs-strings/">jQuery Objects vs Strings</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-19T00:00:00-07:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>Object blocker!!</h2>
-
-<p>My pair was stuck for the longest time on the following code snip:</p>
-
-<div>
-  <pre><code class='javascript'>$(function(){
-  var new_square = &#39;$(&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;)&#39;;
-
-  $(&#39;body&#39;).on(&#39;click&#39;,&#39;.square&#39;, function(){
-    // var my_square = $(this);
-    $(this).toggleClass(&#39;blue&#39;);
-
-    b = $(new_square)
-      .insertAfter(this);
-    a = $(new_square)
-      .insertBefore(this);
-    b.toggleClass(&#39;blue&#39;);
-    a.toggleClass(&#39;blue&#39;);
-  });
-});</code></pre>
-</div>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/jquery-objects-vs-strings/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/solving-namespace-conflicts-with-jquery/">Namespaces and jQuery</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-18T00:00:00-07:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>Namespaces in jQuery getting you down?</h3>
-
-<p>Chuck taught me a great trick today &mdash; how to avoid namespace
-conflicts in jQuery</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/solving-namespace-conflicts-with-jquery/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/blogging-with-jekyll-bootstrap/">Blogging With Jekyll Bootstrap</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-15T00:00:00-07:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Building a portfolio has been a lot of fun and has required a couple of
-different technologies. A fellow PCS student has been blogging a long time,
-and he suggested using Jekyll in combination with github pages. What a
-fantastic gem! I found an even more awesome one at <a href="http://jekyllbootstrap.com/">jekyll-bootstrap</a>.</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/blogging-with-jekyll-bootstrap/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/13/">&larr; Older</a>
@@ -350,23 +333,23 @@ fantastic gem! I found an even more awesome one at <a href="http://jekyllbootstr
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/d3-nests-and-rollups+%28cyclops%27s+conflicted+copy+2014-03-04%29/">D3 Nests and Rollups</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/d3-nests-and-rollups/">D3 Nests and Rollups</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/a-technique-for-producing-ideas/">A Technique for Producing Ideas</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/d3-scaling/">Scaling D3</a>
       </li>
     
       <li class="post">
         <a href="/blog/2014/javascript-dates/">Javascript Dates</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/to-i-in-javascript/">String Conversion in Javascript</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/programming-and-linguistics/">The Neuroscience of Programming</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/binding-functions-as-data/">Binding Functions as Data</a>
       </li>
     
   </ul>

@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="My page wouldn&rsquo;t flash the user. Trundling along the Hartl railstutorial, I needed to write some logic to allow a user to update their &hellip;">
+  <meta name="description" content="Sinatra does not have a default console like rails does. If you are writing in a rails environment and need to test out a helper method, or want to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,143 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/sinatra-in-a-console/">Sinatra in a Console</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-22T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Sinatra does not have a default console like rails does. If you are writing in a rails environment and need to test out a helper method, or want to check on the state of a record in the database, dropping down into the rails console is as easy as typing:</p>
+
+<div>
+  <pre><code class='bash'>$ rails c</code></pre>
+</div>
+
+
+<p>How can we achieve the same ability in Sinatra?</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/sinatra-in-a-console/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/get-your-kicks-on-localhost4567/">Get Your Kicks on Route Localhost:4567</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-17T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I am building a code breaking game along the lines of Mastermind and I encountered a block.</p>
+
+<h2>The problem</h2>
+
+<ul>
+<li>I have a javascript that generates a secret code.</li>
+<li>I have a ruby class that compares a guess to the secret code and returns an analysis of the accuracy of the guess.</li>
+<li>How do I get the ruby class to process a guess and secret code from the browser?</li>
+</ul>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/get-your-kicks-on-localhost4567/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/mass-assignment-x-gravity/">Mass Assignment X Gravity</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-15T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>What is Mass Assignment?</h3>
+
+<p>Mass assignment is using a ruby-esque shortcut to interact with models</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/mass-assignment-x-gravity/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -162,137 +299,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/partial-to-sinatra/">Partial to Sinatra</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-09T00:00:00-07:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Having just discovered the magic of using partials to refactor html in rails, imagine my delight when I found it to be even easier in Sinatra.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/partial-to-sinatra/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/red-green-refactor/">Red, Green, Refactor! A Workflow for Rails</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-03T00:00:00-07:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>1. Write a failing test</h3>
-
-<div>
-  <pre><code class='ruby'>describe &quot;Static About page&quot; do
-  it &quot;should have the content &#39;About Us&#39;&quot; do
-    visit &#39;/static_pages/about&#39;
-    page.should have_content(&#39;About Us&#39;)
-  end
-end</code></pre>
-</div>
-
-
-<p>Use the failures to drive development</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/red-green-refactor/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/no-indexhtml-no-cry/">No index.html, No Cry</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-29T00:00:00-07:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Following along with <a href="http://www.amazon.com/Ruby-Rails-Tutorial-Addison-Wesley-Professional/dp/0321832051">Rails tutorial</a> by Michael Hartl, I built a sample app with a simple database, linking users to microposts in a twitter-like manner. Everything worked well locally, but when it came time to deploy on heroku, I ran across some interesting stumbling blocks</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/no-indexhtml-no-cry/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/12/">&larr; Older</a>
@@ -317,23 +323,23 @@ end</code></pre>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/d3-nests-and-rollups+%28cyclops%27s+conflicted+copy+2014-03-04%29/">D3 Nests and Rollups</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/d3-nests-and-rollups/">D3 Nests and Rollups</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/a-technique-for-producing-ideas/">A Technique for Producing Ideas</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/d3-scaling/">Scaling D3</a>
       </li>
     
       <li class="post">
         <a href="/blog/2014/javascript-dates/">Javascript Dates</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/to-i-in-javascript/">String Conversion in Javascript</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/programming-and-linguistics/">The Neuroscience of Programming</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/binding-functions-as-data/">Binding Functions as Data</a>
       </li>
     
   </ul>
