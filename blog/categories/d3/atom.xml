@@ -4,7 +4,7 @@
   <title><![CDATA[Category: D3 | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/d3/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-03-04T21:53:07-08:00</updated>
+  <updated>2014-03-04T22:02:44-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -96,7 +96,7 @@
 <ul>
 <li><strong>orient()</strong>: set which side of the axis will be ticked and labeled</li>
 <li><strong>ticks()</strong>: set the number of major ticks</li>
-<li><strong>*tickSubdivide()</strong>: set the number of minor ticks</li>
+<li><strong>tickSubdivide()</strong>: set the number of minor ticks</li>
 <li><strong>tickPadding()</strong>: set the distance between the ticks and their label</li>
 <li><strong>tickFormat()</strong>: set the units to appear after the label on the major ticks</li>
 <li><strong>tickSize()</strong>: specify one arg for inner ticks, another argument for outer ticks, or use outerTickSize() or innerTickSize() to specify one or the other. Outer ticks are at the ends of the scales.</li>
