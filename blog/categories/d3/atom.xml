@@ -4,7 +4,7 @@
   <title><![CDATA[Category: D3 | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/d3/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-03-04T18:52:36-08:00</updated>
+  <updated>2014-03-04T18:57:34-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,73 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[D3 Nests and Rollups]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/d3-nests-and-rollups+%28cyclops%27s+conflicted+copy+2014-03-04%29/"/>
-    <updated>2014-03-04T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/d3-nests-and-rollups (cyclops's conflicted copy 2014-03-04)</id>
-    <content type="html"><![CDATA[<p>D3 provides powerful functions for manipulating raw data sets, including csv(), nest(), and rollup().</p>
-
-<!--more-->
-
-
-<h3>csv()</h3>
-
-<p>You can import a raw, comma-delimited data file, and bind the data directly to an svg.</p>
-
-<p>```
-d3.csv(&ldquo;test_data.csv&rdquo;, function(csv_data) {</p>
-
-<p>  svg.selectAll(&ldquo;circle&rdquo;).data(csv).enter()</p>
-
-<pre><code>.append("circle")
-.attr("cx",getX)
-.attr("cy",getY)
-.attr("r", getR)
-.style("fill", getColor);
-</code></pre>
-
-<p>})
-```
-<a href=""></a><img src="source/images/post_d3_csv_data.png" />
-<img src="source/images/post_d3_csv_data.png"></p>
-
-<h3>nest() and rollup()</h3>
-
-<p>You can also aggregate data on any property &mdash; just tell D3 which one, and use any of D3&rsquo;s handy utility functions (mean, median, sum, min/max, quantile, etc) to return the aggregate data you want to display.</p>
-
-<p>```
-d3.csv(&ldquo;apples.csv&rdquo;,function(csv) {
-  data = d3.nest()</p>
-
-<pre><code>      .key(function(d) { return d.Colors; })
-      .rollup( function(d) {
-        return {
-          "X": d3.mean(d, function(e) { return +e.X; }),
-          "Y": d3.mean(d, function(e) { return +e.Y; }),
-          "Quantity": d3.mean(d, function(e) { return +e.Quantity; })
-        };
-      })
-      .entries(csv);
-</code></pre>
-
-<p>  svg.selectAll(&ldquo;circle&rdquo;).data(data).enter()</p>
-
-<pre><code>.append("circle")
-.attr("cx",getX)
-.attr("cy",getY)
-.attr("r", getR)
-.style("fill", getColor);
-</code></pre>
-
-<p>})
-```
-<img src="source/images/post_d3_rollupdata_image.png"></p>
-
-<p>D3 is awesome.</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[D3 Nests and Rollups]]></title>
@@ -394,6 +327,42 @@ svg.selectAll(&ldquo;circle&rdquo;)</p>
 <h3>Resources</h3>
 
 <p><a href="http://mbostock.github.io/d3/tutorial/circle.html">Three Little Circles D3 Tutorial</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Enter Update Exit]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/enter-update-exit/"/>
+    <updated>2014-02-25T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/enter-update-exit</id>
+    <content type="html"><![CDATA[<p>D3 is a data visualization tool that uses method chaining to produce big pictures with little code. The selection library performs a full Outer Join between the data (D) and the visual elements (V), and the enter-update-exit pattern performs work on subsets of this join<!--more-->:</p>
+
+<h3>UPDATE: Inner Join (D union V)</h3>
+
+<p><code>
+selection.data(data_points)
+</code>
+data() binds data_points to the html or svg elements returned by the selection and returns the data not visualized.</p>
+
+<h3>ENTER: Left excluding join (D/V)</h3>
+
+<p><code>
+selection.data(data_points).enter()
+</code>
+enter() returns data_points that are not yet represented visually by html or svg. Chain .append() to add a new element to the page.</p>
+
+<h3>EXIT: Right excluding join (V/D)</h3>
+
+<p><code>
+selection.data(data_points).exit()
+</code>
+exit() returns html or svg elements that no longer have data associated with them. Chain .remove() to eliminate them, or .translate() to make them slide off the page.</p>
+
+<h3>Resources</h3>
+
+<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
+
+<p><a href="http://www.codeproject.com/Articles/33052/Visual-Representation-of-SQL-Joins">Visual Representation of SQL Joins</a></p>
 ]]></content>
   </entry>
   

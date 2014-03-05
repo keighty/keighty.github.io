@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-03-04T18:52:36-08:00</updated>
+  <updated>2014-03-04T18:57:34-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,95 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[D3 Nests and Rollups]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/d3-nests-and-rollups+%28cyclops%27s+conflicted+copy+2014-03-04%29/"/>
-    <updated>2014-03-04T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/d3-nests-and-rollups (cyclops&#8217;s conflicted copy 2014-03-04)</id>
-    <content type="html"><![CDATA[<p>D3 provides powerful functions for manipulating raw data sets, including csv(), nest(), and rollup().</p>
-
-<!--more-->
-
-
-<h3>csv()</h3>
-
-<p>You can import a raw, comma-delimited data file, and bind the data directly to an svg.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>d3.csv("test_data.csv", function(csv_data) {
-</span><span class='line'>
-</span><span class='line'>  svg.selectAll("circle").data(csv).enter()
-</span><span class='line'>    .append("circle")
-</span><span class='line'>    .attr("cx",getX)
-</span><span class='line'>    .attr("cy",getY)
-</span><span class='line'>    .attr("r", getR)
-</span><span class='line'>    .style("fill", getColor);
-</span><span class='line'>})</span></code></pre></td></tr></table></div></figure>
-
-
-<p><a href=""></a><img src="source/images/post_d3_csv_data.png" />
-<img src="source/images/post_d3_csv_data.png"></p>
-
-<h3>nest() and rollup()</h3>
-
-<p>You can also aggregate data on any property &mdash; just tell D3 which one, and use any of D3&rsquo;s handy utility functions (mean, median, sum, min/max, quantile, etc) to return the aggregate data you want to display.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>d3.csv("apples.csv",function(csv) {
-</span><span class='line'>  data = d3.nest()
-</span><span class='line'>          .key(function(d) { return d.Colors; })
-</span><span class='line'>          .rollup( function(d) {
-</span><span class='line'>            return {
-</span><span class='line'>              "X": d3.mean(d, function(e) { return +e.X; }),
-</span><span class='line'>              "Y": d3.mean(d, function(e) { return +e.Y; }),
-</span><span class='line'>              "Quantity": d3.mean(d, function(e) { return +e.Quantity; })
-</span><span class='line'>            };
-</span><span class='line'>          })
-</span><span class='line'>          .entries(csv);
-</span><span class='line'>
-</span><span class='line'>  svg.selectAll("circle").data(data).enter()
-</span><span class='line'>    .append("circle")
-</span><span class='line'>    .attr("cx",getX)
-</span><span class='line'>    .attr("cy",getY)
-</span><span class='line'>    .attr("r", getR)
-</span><span class='line'>    .style("fill", getColor);
-</span><span class='line'>
-</span><span class='line'>})</span></code></pre></td></tr></table></div></figure>
-
-
-<p><img src="source/images/post_d3_rollupdata_image.png"></p>
-
-<p>D3 is awesome.</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[D3 Nests and Rollups]]></title>
@@ -222,7 +133,10 @@
     <link href="http://www.katieleonard.ca/blog/2014/a-technique-for-producing-ideas/"/>
     <updated>2014-03-04T00:00:00-08:00</updated>
     <id>http://www.katieleonard.ca/blog/2014/a-technique-for-producing-ideas</id>
-    <content type="html"><![CDATA[<!--more-->
+    <content type="html"><![CDATA[<p>&ldquo;First, the gathering of raw materials—both the materials of your immediate problem and the materials which come from a constant enrichment of your store of general knowledge.
+Second, the working over …&rdquo; &ndash; A Technique for Producing Ideas by James Webb Young.</p>
+
+<!--more-->
 
 ]]></content>
   </entry>
@@ -1080,6 +994,148 @@
 <p>Declaring an application-level function ensures that the correct <code>person</code> is called when needed. It improves readability by essentially flagging the scope of the variable and reducing ambiguity.</p>
 
 <p><a href="http://www.amazon.com/gp/product/0596517742/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0596517742&amp;linkCode=as2&amp;tag=bridgeforpoke-20">JavaScript: The Good Parts</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Fanout]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/fanout/"/>
+    <updated>2014-02-06T14:38:12-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/fanout</id>
+    <content type="html"><![CDATA[<p>Continuing my exploration of message queues&hellip;</p>
+
+<p>A common MQ modality is publish/subscribe. A simplistic queue model has producers publishing messages directly to a queue and consumers taking messages off a queue. In the publish/subscribe model, the producer sends messages to an <strong>exchange</strong>, who&rsquo;s only job is to publish messages to queues. In this scenario, the exchange knows to which queue(s) the message should be published according to established rules. The relationship between an exchange and a queue is called a <strong>binding</strong>.</p>
+
+<!--more-->
+
+
+<h3>Types of exchanges</h3>
+
+<ol>
+<li><strong>direct</strong></li>
+<li><strong>topic</strong></li>
+<li><strong>headers</strong></li>
+<li><strong>fanout</strong> &ndash; broadcasts every message it receives to all the queues it knows</li>
+</ol>
+
+
+<h3>Create a fanout exchange:</h3>
+
+<figure class='code'><figcaption><span>emit_log.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># create and start the connection</span>
+</span><span class='line'><span class="n">connection</span> <span class="o">=</span> <span class="no">Bunny</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+</span><span class='line'><span class="n">connection</span><span class="o">.</span><span class="n">start</span>
+</span><span class='line'><span class="c1"># create and start the channel</span>
+</span><span class='line'><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">create_channel</span>
+</span><span class='line'><span class="c1"># create the exchange:</span>
+</span><span class='line'><span class="n">exchange</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">fanout</span><span class="p">(</span><span class="s1">&#39;logs&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># publish to your named exchange:</span>
+</span><span class='line'><span class="n">exchange</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># close the connection</span>
+</span><span class='line'><span class="n">connection</span><span class="o">.</span><span class="n">close</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Create a fanout worker</h3>
+
+<figure class='code'><figcaption><span>receive_log.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># create and start the connection</span>
+</span><span class='line'><span class="n">connection</span> <span class="o">=</span> <span class="no">Bunny</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+</span><span class='line'><span class="n">conn</span><span class="o">.</span><span class="n">start</span>
+</span><span class='line'><span class="c1"># create and start the channel</span>
+</span><span class='line'><span class="n">channel</span>  <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">create_channel</span>
+</span><span class='line'><span class="c1"># name the exchange to listen to</span>
+</span><span class='line'><span class="n">exchange</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">fanout</span><span class="p">(</span><span class="s2">&quot;logs&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># name the queue</span>
+</span><span class='line'><span class="n">q</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">queue</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:exclusive</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># bind the queue to the exchange</span>
+</span><span class='line'><span class="n">q</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">exchange</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># subscribe to the bound queue</span>
+</span><span class='line'><span class="n">q</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="ss">:block</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">delivery_info</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot; [x] </span><span class="si">#{</span><span class="n">body</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>In action</h3>
+
+<p>Start three terminals:</p>
+
+<ol>
+<li><code>$ ruby -rubygems receive_logs.rb &gt; logs_from_rabbit.log</code></li>
+<li><code>$ ruby -rubygems receive_logs.rb</code></li>
+<li><code>$ ruby -rubygems emit_log.rb</code></li>
+</ol>
+
+
+<p>In the last terminal, add a few more messages:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ruby -rubygems emit_log.rb this is a longer message
+</span><span class='line'>$ ruby -rubygems emit_log.rb this message should be logged in a file AND appear in my terminal window</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The output in terminal 2:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ruby -rubygems receive_logs.rb
+</span><span class='line'> [*] Waiting for logs. To exit press CTRL+C
+</span><span class='line'> [x] Hello World!
+</span><span class='line'> [x] this is a longer message
+</span><span class='line'> [x] this message should be logged in a file AND appear in my terminal</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The output from the log file:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat logs_from_rabbit.log
+</span><span class='line'> [*] Waiting for logs. To exit press CTRL+C
+</span><span class='line'> [x] Hello World!
+</span><span class='line'> [x] this is a longer message
+</span><span class='line'> [x] this message should be logged in a file AND appear in my terminal</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Resources</h2>
+
+<ul>
+<li><a href="http://www.rabbitmq.com/tutorials/tutorial-three-ruby.html">RabbitMQ.com</a></li>
+</ul>
+
 ]]></content>
   </entry>
   

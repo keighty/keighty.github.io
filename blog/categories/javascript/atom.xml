@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-03-04T18:52:36-08:00</updated>
+  <updated>2014-03-04T18:57:34-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,73 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[D3 Nests and Rollups]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/d3-nests-and-rollups+%28cyclops%27s+conflicted+copy+2014-03-04%29/"/>
-    <updated>2014-03-04T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/d3-nests-and-rollups (cyclops's conflicted copy 2014-03-04)</id>
-    <content type="html"><![CDATA[<p>D3 provides powerful functions for manipulating raw data sets, including csv(), nest(), and rollup().</p>
-
-<!--more-->
-
-
-<h3>csv()</h3>
-
-<p>You can import a raw, comma-delimited data file, and bind the data directly to an svg.</p>
-
-<p>```
-d3.csv(&ldquo;test_data.csv&rdquo;, function(csv_data) {</p>
-
-<p>  svg.selectAll(&ldquo;circle&rdquo;).data(csv).enter()</p>
-
-<pre><code>.append("circle")
-.attr("cx",getX)
-.attr("cy",getY)
-.attr("r", getR)
-.style("fill", getColor);
-</code></pre>
-
-<p>})
-```
-<a href=""></a><img src="source/images/post_d3_csv_data.png" />
-<img src="source/images/post_d3_csv_data.png"></p>
-
-<h3>nest() and rollup()</h3>
-
-<p>You can also aggregate data on any property &mdash; just tell D3 which one, and use any of D3&rsquo;s handy utility functions (mean, median, sum, min/max, quantile, etc) to return the aggregate data you want to display.</p>
-
-<p>```
-d3.csv(&ldquo;apples.csv&rdquo;,function(csv) {
-  data = d3.nest()</p>
-
-<pre><code>      .key(function(d) { return d.Colors; })
-      .rollup( function(d) {
-        return {
-          "X": d3.mean(d, function(e) { return +e.X; }),
-          "Y": d3.mean(d, function(e) { return +e.Y; }),
-          "Quantity": d3.mean(d, function(e) { return +e.Quantity; })
-        };
-      })
-      .entries(csv);
-</code></pre>
-
-<p>  svg.selectAll(&ldquo;circle&rdquo;).data(data).enter()</p>
-
-<pre><code>.append("circle")
-.attr("cx",getX)
-.attr("cy",getY)
-.attr("r", getR)
-.style("fill", getColor);
-</code></pre>
-
-<p>})
-```
-<img src="source/images/post_d3_rollupdata_image.png"></p>
-
-<p>D3 is awesome.</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[D3 Nests and Rollups]]></title>
@@ -357,6 +290,39 @@ typeof(+&ldquo;100&rdquo;)
 ```</p></blockquote>
 
 <p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Binding Functions as Data]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/binding-functions-as-data/"/>
+    <updated>2014-02-27T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/binding-functions-as-data</id>
+    <content type="html"><![CDATA[<p>Primitives and object literals are not the only things you can bind to a D3 visualization. After all, aren&rsquo;t javascript functions objects as well?</p>
+
+<p>```javascript
+var data = [];
+var next = function(x) { return 15 + x*x };
+var newData = function() { data.push(next); return data; }
+var selection = d3.select(&ldquo;#container&rdquo;)</p>
+
+<pre><code>              .selectAll("div")
+              .data(newData);
+</code></pre>
+
+<p>&hellip;</p>
+
+<pre><code>              .select("#span")
+                .text(function(d, i) { return d(i); });
+</code></pre>
+
+<p>```</p>
+
+<p>If you provide a function to the data function, D3 will simply invoke the function and use the returned value as a parameter of the data function.</p>
+
+<h3>Resources</h3>
+
+<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
 ]]></content>
   </entry>
   
