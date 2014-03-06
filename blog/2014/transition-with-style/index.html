@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Get Your Kicks on Route Localhost:4567 - keighty</title>
+  <title>Transition With Style - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="">
+  <meta name="description" content="Making things zoom across the page is what I used to think javascript was all about, but it wasn&rsquo;t until I started learning d3 that I found out &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2013/get-your-kicks-on-localhost4567">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/transition-with-style">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">Get Your Kicks on Route Localhost:4567</h1>
+      <h1 class="entry-title">Transition With Style</h1>
     
     
       <p class="meta">
@@ -98,108 +98,61 @@
   
 
 
-<time datetime="2013-07-17T00:00:00-07:00" pubdate data-updated="true"></time>
+<time datetime="2014-03-06T00:00:00-08:00" pubdate data-updated="true">Mar 6<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I am building a code breaking game along the lines of Mastermind and I encountered a block.</p>
-
-<h2>The problem</h2>
-
-<ul>
-<li>I have a javascript that generates a secret code.</li>
-<li>I have a ruby class that compares a guess to the secret code and returns an analysis of the accuracy of the guess.</li>
-<li>How do I get the ruby class to process a guess and secret code from the browser?</li>
-</ul>
-
+<div class="entry-content"><p>Making things zoom across the page is what I used to think javascript was all about, but it wasn&rsquo;t until I started learning d3 that I found out how to make it happen.</p>
 
 <!--more-->
 
 
-<h2>I learned something about Ajax today.</h2>
-
-<p>An ajax call is built up from a few minimum parameters: a url, the HTTP method, the dataType expected, and a callback function that handles the return. You can include data from the user in the form of a data hash:</p>
-
-<div>
-  <pre><code class='javascript'>var the_url = &quot;http://&quot; + window.location.host + &quot;/game/&quot; + guess_string;
-  var mark_string = $.ajax({
-    type: &quot;POST&quot;,
-    url: the_url,
-    accepts: &quot;application/json&quot;,
-    dataType: &quot;json&quot;,
-    data: { &#39;code&#39; : secret_code },
-    complete: function(data){
-      output_mark = data[&#39;responseText&#39;];
-      process_output(secret_code, guess_string, output_mark);
-    }
-  });</code></pre>
-</div>
 
 
-<p>This code snippet is using Ajax to send the secret code and guess to the Sinatra route.</p>
-
-<h2>I learned something about Sinatra today.</h2>
-
-<p>A route has three ingredients: an HTTP method, a URL matching pattern, and a code block.
-Typically they look like this:</p>
-
-<div>
-  <pre><code class='ruby'>get &#39;/&#39; do
-  &quot;hello world&quot;
-end</code></pre>
-</div>
-
-
-<p>But they can also look like this:</p>
-
-<div>
-  <pre><code class='ruby'>post &#39;/game/:guess&#39; do
-  game.guess(params[:guess])
-end
-private
-  def game
-    @game ||= Mastermind::Game.new_with_code(params[:code])
-  end</code></pre>
-</div>
-
-
-<p>The code block returns information. That information can be anything, from a plain string (first example), or an html web page, to a JSON representation of an object (second example). What the browser does with the information it receives is the browser&rsquo;s business.</p>
-
-<p>The overall workflow:
-1. The url on my local machine looks like this: &ldquo;<a href="http://localhost:4567/game/12345">http://localhost:4567/game/12345</a>&rdquo; (line 1). The submitted guess is 12345.
-2. Ajax packages the url with the data hash containing the secret code (line 7).
-3. Javascript submits the HTTP POST request to Sinatra which matches the route.
-4. The route creates a Mastermind::Game object with the provided secret code.
-5. The route calls the guess method on the Game object with the submitted guess.
-6. The route returns a json of the method output (in this case it is a string of +/&ndash; characters indicating exact number matches(+) or matched numbers in the wrong position(&ndash;)).
-7. In the ajax callback function the data from the json object is parsed and passed on for further processing.</p>
-
-<h2>I learned something about routes today.</h2>
-
-<p>I had a mental block about routes. I thought that building the &ldquo;/game/:guess&rdquo; route in Sinatra meant that the user would be constantly navigating between &ldquo;/mastermind&rdquo; and &ldquo;/game/:guess&rdquo;, and that the game would always be reloading with a new secret. I was thinking about routes the wrong way &mdash; when javascript calls the route, it doesn&rsquo;t reload the page, it just retrieves data! I had conflated routes with navigation in my imagination, and forgot that a route is just a method call containing a request for information. Just because the information returned is often rendered as an html page doesn&rsquo;t mean that it has to be html. Which leads me to the penultimate point&hellip;</p>
-
-<h2>I learned something about curl today.</h2>
-
-<p>ANYTHING can make an HTTP request. Ok, maybe that is a slight overstatement.</p>
-
-<p>Browsers interpret the information retrieved using HTTP requests, but they are far from the only category of software that can. Turns out, the command-line functions just as well:</p>
-
-<div>
-  <pre><code class='bash'>$ curl -X POST -H &quot;Accept: application/json&quot; -d &quot;code=12345&quot; js-games.herokuapp.com/12345
-+++++$</code></pre>
-</div>
+<figure class='code'><figcaption><span>Simple Transition </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">duration</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">body</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;background-color&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;margin&quot;</span><span class="p">,</span> <span class="s2">&quot;40px&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span> <span class="s2">&quot;200px&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">,</span> <span class="s2">&quot;200px&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;border&quot;</span><span class="p">,</span> <span class="s2">&quot;black solid thin&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">transition</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">duration</span><span class="p">(</span><span class="nx">duration</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;background-color&quot;</span><span class="p">,</span> <span class="s2">&quot;black&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;margin-left&quot;</span><span class="p">,</span> <span class="s2">&quot;600px&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span> <span class="s2">&quot;100px&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">,</span> <span class="s2">&quot;100px&quot;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>The command on line 1 will return the same string I am retrieving with $.ajax in javascript (output on line2). Sure it is a fairly plain result &mdash; it doesn&rsquo;t even include a new line character, for pity&rsquo;s sake &mdash; but it does the job of making an HTTP request to a route and using the result.</p>
+<p>D3 is smart enough to select an appropriate scale for the property in transition. If a transitioning element is not given an explicit starting point, D3 will use the computed style. If the end value is missing, the property will be treated as a constant. In the example above, the border stays the same, as do the top and bottom margins. The only properties that change are the ones specified below the transition().</p>
 
-<h2>I learned something about myself today.</h2>
+<p>Awesome.</p>
 
-<p>I didn&rsquo;t even realize I was misunderstanding HTTP! It was one of those concepts I had already checked off my mental list of technologies to cover on my quest to become a web developer. This breakthrough has reminded me that reviewing the fundamentals in the context of learning new technologies will bring a deeper understanding of everything.</p>
+<h3>Resources</h3>
 
-<p>Awesome</p>
+<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
 </div>
 
 
@@ -222,12 +175,12 @@ private
   
 
 
-<time datetime="2013-07-17T00:00:00-07:00" pubdate data-updated="true"></time>
+<time datetime="2014-03-06T00:00:00-08:00" pubdate data-updated="true">Mar 6<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/sinatra/'>sinatra</a>
+    <a class='category' href='/blog/categories/d3/'>d3</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
   
 </span>
 
@@ -236,7 +189,7 @@ private
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2013/get-your-kicks-on-localhost4567/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2013/get-your-kicks-on-localhost4567/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/transition-with-style/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/transition-with-style/" >Tweet</a>
   
   
   
@@ -247,10 +200,8 @@ private
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/mass-assignment-x-gravity/" title="Previous Post: Mass assignment X Gravity">&laquo; Mass assignment X Gravity</a>
+        <a class="basic-alignment left" href="/blog/2014/scales-and-ticks/" title="Previous Post: fun with ticks">&laquo; fun with ticks</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/sinatra-in-a-console/" title="Next Post: Sinatra in a console">Sinatra in a console &raquo;</a>
       
     </p>
   </footer>
@@ -367,8 +318,8 @@ private
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2013/get-your-kicks-on-localhost4567/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2013/get-your-kicks-on-localhost4567/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/transition-with-style/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2014/transition-with-style/';
         var disqus_script = 'embed.js';
       
     (function () {
