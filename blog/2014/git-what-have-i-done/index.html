@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Implied Functions Applied - keighty</title>
+  <title>Git, What Have I Done? - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="When binding a primitive datum to a node in a D3 visualization, the callback function can be implicitly called on the datum without the typical &hellip;">
+  <meta name="description" content="Git, the superhero of version control, allows you to review all the commands that have modified the HEAD tag in a git repo: git reflog The output for &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/implied-functions-applied">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/git-what-have-i-done">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">Implied Functions Applied</h1>
+      <h1 class="entry-title">Git, What Have I Done?</h1>
     
     
       <p class="meta">
@@ -98,33 +98,19 @@
   
 
 
-<time datetime="2014-02-26T00:00:00-08:00" pubdate data-updated="true">Feb 26<span>th</span>, 2014</time>
+<time datetime="2014-03-08T00:00:00-08:00" pubdate data-updated="true">Mar 8<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>When binding a primitive datum to a node in a D3 visualization, the callback function can be implicitly called on the datum without the typical verbosity<!--more-->:</p>
+<div class="entry-content"><p>Git, the superhero of version control, allows you to review all the commands that have modified the HEAD tag in a git repo: <code>git reflog</code></p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">data</span><span class="p">([</span><span class="mi">32</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">293</span><span class="p">])</span>
-</span><span class='line'>  <span class="p">.</span><span class="nx">enter</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span> <span class="nb">String</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>The output for one of my demo apps:</p>
 
-
-<p>In line 5, String() is performed on the data element, as is Math.sqrt in line 6, with the same result as:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>Git, you&#8217;re my hero </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -134,26 +120,24 @@
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">data</span><span class="p">([</span><span class="mi">32</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">293</span><span class="p">])</span>
-</span><span class='line'>  <span class="p">.</span><span class="nx">enter</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="nb">String</span><span class="p">(</span><span class="nx">d</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">})</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">d</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">});</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>5075d26 HEAD@<span class="o">{</span>0<span class="o">}</span>: checkout: moving from master to kleonard/add_skyline_background
+</span><span class='line'>531c396 HEAD@<span class="o">{</span>1<span class="o">}</span>: pull: fast forward
+</span><span class='line'>435f6de HEAD@<span class="o">{</span>2<span class="o">}</span>: commit: Adds logic <span class="k">for </span>running and testing
+</span><span class='line'>043e35a HEAD@<span class="o">{</span>3<span class="o">}</span>: commit: Adds logic to process input
+</span><span class='line'>5155ba4 HEAD@<span class="o">{</span>4<span class="o">}</span>: commit: Adds input file
+</span><span class='line'>a629871 HEAD@<span class="o">{</span>5<span class="o">}</span>: rebase finished: returning to refs/heads/kleonard/create_input_files
+</span><span class='line'>a010021 HEAD@<span class="o">{</span>6<span class="o">}</span>: rebase: Add input file
+</span><span class='line'>b7cd86a HEAD@<span class="o">{</span>7<span class="o">}</span>: commit: Initial commit arbitrage
+</span><span class='line'>5ed00ea HEAD@<span class="o">{</span>8<span class="o">}</span>: commit: Adds launcher
+</span><span class='line'>7b2d720 HEAD@<span class="o">{</span>9<span class="o">}</span>: commit: Adds logic to find smallest number of moves
+</span><span class='line'>9c0dfce HEAD@<span class="o">{</span>10<span class="o">}</span>: commit: Adds implementation <span class="k">for </span>bin creation
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>&hellip; but better.</p>
+<p>Hmmm&hellip; looks like my commit messages need a little work&hellip; Still, it is a great tool for catching up on the changes to a repo (especially if you haven&rsquo;t touched it in a while), finding out where the bulk of the work is happening, or just reminding yourself what you did yesterday.</p>
 
 <p>Awesome.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://mbostock.github.io/d3/tutorial/circle.html">Three Little Circles D3 Tutorial</a></p>
 </div>
 
 
@@ -176,12 +160,12 @@
   
 
 
-<time datetime="2014-02-26T00:00:00-08:00" pubdate data-updated="true">Feb 26<span>th</span>, 2014</time>
+<time datetime="2014-03-08T00:00:00-08:00" pubdate data-updated="true">Mar 8<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/i-didnt-know-that/'>I didn't know that</a>, <a class='category' href='/blog/categories/d3/'>d3</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
+    <a class='category' href='/blog/categories/git/'>git</a>
   
 </span>
 
@@ -190,7 +174,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/implied-functions-applied/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/implied-functions-applied/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/git-what-have-i-done/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/git-what-have-i-done/" >Tweet</a>
   
   
   
@@ -201,10 +185,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/enter-update-exit/" title="Previous Post: enter update exit">&laquo; enter update exit</a>
+        <a class="basic-alignment left" href="/blog/2014/transition-with-style/" title="Previous Post: transition with style">&laquo; transition with style</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/why-visualize/" title="Next Post: visualize with purpose">visualize with purpose &raquo;</a>
       
     </p>
   </footer>
@@ -321,8 +303,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/implied-functions-applied/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2014/implied-functions-applied/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/git-what-have-i-done/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2014/git-what-have-i-done/';
         var disqus_script = 'embed.js';
       
     (function () {
