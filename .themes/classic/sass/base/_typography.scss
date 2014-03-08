@@ -86,7 +86,7 @@ sub { bottom: -.5em; }
 
 a[rev='footnote']{ font-size: .75em; padding: 0 .3em; line-height: 1; }
 
-q { font-style: italic;
+q {
   &:before { content: "\201C"; }
   &:after { content: "\201D"; }
 }
@@ -109,14 +109,12 @@ big { font-size: 1.2em; }
 
 article blockquote {
   $bq-margin: 1.2em;
-  font-style: italic;
   position: relative;
   font-size: 1.2em;
   line-height: 1.5em;
   padding-left: 1em;
   border-left: 4px solid rgba($text-color-light, .5);
   cite {
-    font-style: italic;
     a { color: $text-color-light !important; word-wrap: break-word; }
     &:before { content: '\2014'; padding:{right: .3em; left: .3em;} color: $text-color-light; }
   }
