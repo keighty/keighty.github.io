@@ -4,7 +4,7 @@
   <title><![CDATA[Category: D3 | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/d3/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-03-08T11:26:05-08:00</updated>
+  <updated>2014-03-14T08:10:23-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,59 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Easing Does It]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/easing-does-it/"/>
+    <updated>2014-03-12T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/easing-does-it</id>
+    <content type="html"><![CDATA[<p>With the possible exception of UFOs, things don&rsquo;t usually switch from being stationary to moving at maximum velocity without an intervening period of acceleration or deceleration. Similarly, it can be difficult to track elements on a web page that move from one position to another with no warning, or faster than the human eye can perceive. Enter easing functions: <!--more--></p>
+
+<blockquote><p>&ldquo;<strong>Easing functions</strong> specify the rate of change of a parameter over time.&rdquo; &mdash;Robert Penner</p></blockquote>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Easy easing <a href="https://gist.github.com/keighty/9508948">https://gist.github.com/keighty/9508948</a> Gist </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">enter</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">circle</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">cx</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span><span class="nx">scaleX</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">cy</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span><span class="nx">scaleY</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">r</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">ease</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">cubic</span><span class="o">-</span><span class="k">in</span><span class="o">-</span><span class="nx">out</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;).</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">cx</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span><span class="nx">getX</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">cy</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span><span class="nx">getY</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">r</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span> <span class="nx">getR</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">fill</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span> <span class="nx">getColor</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The transition will act on the selection in the following ways:</p>
+
+<ul>
+<li>it will move the element from its starting x position of 0 to the x position defined by <code>getX()</code></li>
+<li>it will move the element from its starting y position of 0 to the y position defined by <code>getY()</code></li>
+<li>it will increase the element&rsquo;s radius from 0 to the radius returned from <code>getR()</code></li>
+<li>it will gradually change the element&rsquo;s color using an ordinal color scale, from black to the color returned from <code>getColor()</code></li>
+<li>all of this movement will be performed with a &ldquo;cubic-in-out&rdquo; easing function</li>
+</ul>
+
+
+<p>The cubic-in-out easing function is the standard D3 easing function. The element will increase velocity by a power of 3 until halfway down the path it is destined to trace. It will then decrease velocity by a power of 3 until it reaches its final location. There are many different types of easing functions. Check out the resources for more information, and ask your doctor which easing function is right for you!</p>
+
+<h3>Resources</h3>
+
+<p>Robert Penner&rsquo;s <a href="http://www.robertpenner.com/easing/">Easing Functions</a></p>
+
+<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The Value of Slow Transitions]]></title>
@@ -348,108 +401,6 @@
 <p><img src="/images/post_d3_rollupdata_image.png"></p>
 
 <p>D3 is so awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Scaling D3]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/d3-scaling/"/>
-    <updated>2014-03-03T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/d3-scaling</id>
-    <content type="html"><![CDATA[<p>Add scales to a d3 plot in three easy steps:</p>
-
-<h3>1. Define the scale</h3>
-
-<p>``` javascript
-// Image dimensions
-var width = 500,</p>
-
-<pre><code>height = 500,
-margin = 50;
-</code></pre>
-
-<p>var scaleX=d3.scale.linear().domain([0,10]).range([margin, width-margin]);
-var scaleY=d3.scale.linear().domain([0,10]).range([height-margin, margin]);
-```</p>
-
-<h3>2. Draw the scale</h3>
-
-<p>``` javascript
-// Image container
-var svg=d3.select(&ldquo;body&rdquo;).append(&ldquo;svg&rdquo;)</p>
-
-<pre><code>  .attr("width",width)
-  .attr("height",height);
-</code></pre>
-
-<p>// Axis definition
-var xAxis = d3.svg.axis()
-  .scale(scaleX)
-  .orient(&ldquo;bottom&rdquo;);</p>
-
-<p>var yAxis = d3.svg.axis()
-  .scale(scaleY)
-  .orient(&ldquo;left&rdquo;);</p>
-
-<p>// Axis graphics
-svg.append(&ldquo;g&rdquo;)
-  .attr(&ldquo;class&rdquo;, &ldquo;axis&rdquo;)
-  .attr(&ldquo;transform&rdquo;, &ldquo;translate(0,&rdquo; + (height &ndash; margin) + &ldquo;)&rdquo;)
-  .call(xAxis);</p>
-
-<p>svg.append(&ldquo;g&rdquo;)
-  .attr(&ldquo;class&rdquo;, &ldquo;axis&rdquo;)
-  .attr(&ldquo;transform&rdquo;, &ldquo;translate(&rdquo; + margin + &ldquo;,0)&rdquo;)
-  .call(yAxis);
-```</p>
-
-<h3>3. Apply the scale to your data</h3>
-
-<p>``` javascript Apply the scale. <a href="https://gist.github.com/keighty/9327604">https://gist.github.com/keighty/9327604</a>
-d3.csv(&ldquo;test_data.csv&rdquo;,function(csv) {</p>
-
-<p>  svg.selectAll(&ldquo;circle&rdquo;).data(csv).enter()</p>
-
-<pre><code>.append("circle")
-.attr("cx",getX)
-.attr("cy",getY)
-.attr("r", getR)
-.style("fill", getColor);
-</code></pre>
-
-<p>  // Apply scale to the x value
-  function getX(d) {</p>
-
-<pre><code>return scaleX(d.X);
-</code></pre>
-
-<p>  }</p>
-
-<p>  //Apply scale to the y value
-  function getY(d) {</p>
-
-<pre><code>return scaleY(d.Y);
-</code></pre>
-
-<p>  }</p>
-
-<p>  function getR(d) {</p>
-
-<pre><code>return d.Quantity / 10;
-</code></pre>
-
-<p>  }</p>
-
-<p>  function getColor(d) {</p>
-
-<pre><code>return d.Colors;
-</code></pre>
-
-<p>  }
-}
-```</p>
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   

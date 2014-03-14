@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-03-08T11:26:05-08:00</updated>
+  <updated>2014-03-14T08:10:23-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,59 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Easing Does It]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/easing-does-it/"/>
+    <updated>2014-03-12T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/easing-does-it</id>
+    <content type="html"><![CDATA[<p>With the possible exception of UFOs, things don&rsquo;t usually switch from being stationary to moving at maximum velocity without an intervening period of acceleration or deceleration. Similarly, it can be difficult to track elements on a web page that move from one position to another with no warning, or faster than the human eye can perceive. Enter easing functions: <!--more--></p>
+
+<blockquote><p>&ldquo;<strong>Easing functions</strong> specify the rate of change of a parameter over time.&rdquo; &mdash;Robert Penner</p></blockquote>
+
+<figure class='code'><figcaption><span>Easy easing</span><a href='https://gist.github.com/keighty/9508948'>Gist </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">enter</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">scaleX</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">scaleY</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">ease</span><span class="p">(</span><span class="s2">&quot;cubic-in-out&quot;</span><span class="p">).</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The transition will act on the selection in the following ways:</p>
+
+<ul>
+<li>it will move the element from its starting x position of 0 to the x position defined by <code>getX()</code></li>
+<li>it will move the element from its starting y position of 0 to the y position defined by <code>getY()</code></li>
+<li>it will increase the element&rsquo;s radius from 0 to the radius returned from <code>getR()</code></li>
+<li>it will gradually change the element&rsquo;s color using an ordinal color scale, from black to the color returned from <code>getColor()</code></li>
+<li>all of this movement will be performed with a &ldquo;cubic-in-out&rdquo; easing function</li>
+</ul>
+
+
+<p>The cubic-in-out easing function is the standard D3 easing function. The element will increase velocity by a power of 3 until halfway down the path it is destined to trace. It will then decrease velocity by a power of 3 until it reaches its final location. There are many different types of easing functions. Check out the resources for more information, and ask your doctor which easing function is right for you!</p>
+
+<h3>Resources</h3>
+
+<p>Robert Penner&rsquo;s <a href="http://www.robertpenner.com/easing/">Easing Functions</a></p>
+
+<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The Value of Slow Transitions]]></title>
@@ -1027,22 +1080,6 @@
 <h3>Resources</h3>
 
 <p><a href="http://www.amazon.com/gp/product/0596517742/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0596517742&amp;linkCode=as2&amp;tag=bridgeforpoke-20">JavaScript: The Good Parts</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The Passionate Programmer]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/the-passionate-programmer/"/>
-    <updated>2014-02-10T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/the-passionate-programmer</id>
-    <content type="html"><![CDATA[<p><a href="http://www.amazon.com/gp/product/B00AYQNR5U/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B00AYQNR5U&amp;linkCode=as2&amp;tag=bridgeforpoke-20">The Passionate Programmer: Creating a Remarkable Career in Software Development</a> (Pragmatic Life), by Chad Fowler
-(affiliate link)</p>
-
-<p>This book is aptly titled, and an awesome read. It consists of a series of tips &mdash; strategies Fowler has employed to build his own remarkable career. The most important tip is one that can&rsquo;t really be crossed off a list, and that is to build a successful career in software development one must be passionate about software development.</p>
-
-<h2>Update:</h2>
-
-<p>Unbeknownst to me when I was finishing this book, but knownst to me now is that there has been a vibrant conversation occurring on the interweb about passion and programming. Check out Avdi Grimm&rsquo;s latest, <a href="http://devblog.avdi.org/2014/02/10/the-passion-gospel/">The Passion Gospel</a>.</p>
 ]]></content>
   </entry>
   

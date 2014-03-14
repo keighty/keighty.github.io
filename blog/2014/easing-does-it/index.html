@@ -5,22 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>For Score - keighty</title>
+  <title>Easing Does It - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="The for in statement can function as a quick and semantic iterator for looping over object properties. In your console, try1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12 &hellip;">
+  <meta name="description" content="With the possible exception of UFOs, things don&rsquo;t usually switch from being stationary to moving at maximum velocity without an intervening &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -29,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/for-score">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/easing-does-it">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -93,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">For Score</h1>
+      <h1 class="entry-title">Easing Does It</h1>
     
     
       <p class="meta">
@@ -109,16 +98,18 @@
   
 
 
-<time datetime="2014-02-11T00:00:00-08:00" pubdate data-updated="true">Feb 11<span>th</span>, 2014</time>
+<time datetime="2014-03-12T00:00:00-07:00" pubdate data-updated="true">Mar 12<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>The <code>for in</code> statement can function as a quick and semantic iterator for looping over object properties.</p>
+<div class="entry-content"><p>With the possible exception of UFOs, things don&rsquo;t usually switch from being stationary to moving at maximum velocity without an intervening period of acceleration or deceleration. Similarly, it can be difficult to track elements on a web page that move from one position to another with no warning, or faster than the human eye can perceive. Enter easing functions: <!--more--></p>
 
-<figure class='code'><figcaption><span>In your console, try</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<blockquote><p>&ldquo;<strong>Easing functions</strong> specify the rate of change of a parameter over time.&rdquo; &mdash;Robert Penner</p></blockquote>
+
+<figure class='code'><figcaption><span>Easy easing</span><a href='https://gist.github.com/keighty/9508948'>Gist </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -128,33 +119,37 @@
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">first_name</span><span class="o">:</span> <span class="s2">&quot;Katie&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">last_name</span> <span class="o">:</span> <span class="s2">&quot;Leonard&quot;</span>
-</span><span class='line'>  <span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">name</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="k">for</span><span class="p">(</span><span class="nx">name</span> <span class="k">in</span> <span class="nx">person</span><span class="p">){</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot; : &quot;</span> <span class="o">+</span> <span class="nx">person</span><span class="p">[</span><span class="nx">name</span><span class="p">];</span>
-</span><span class='line'>  <span class="p">)};</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">first_name</span> <span class="o">:</span> <span class="nx">Katie</span>
-</span><span class='line'><span class="nx">last_name</span> <span class="o">:</span> <span class="nx">Leonard</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">enter</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">scaleX</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">scaleY</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">ease</span><span class="p">(</span><span class="s2">&quot;cubic-in-out&quot;</span><span class="p">).</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<!--more-->
+<p>The transition will act on the selection in the following ways:</p>
+
+<ul>
+<li>it will move the element from its starting x position of 0 to the x position defined by <code>getX()</code></li>
+<li>it will move the element from its starting y position of 0 to the y position defined by <code>getY()</code></li>
+<li>it will increase the element&rsquo;s radius from 0 to the radius returned from <code>getR()</code></li>
+<li>it will gradually change the element&rsquo;s color using an ordinal color scale, from black to the color returned from <code>getColor()</code></li>
+<li>all of this movement will be performed with a &ldquo;cubic-in-out&rdquo; easing function</li>
+</ul>
 
 
-<p>Awesome</p>
+<p>The cubic-in-out easing function is the standard D3 easing function. The element will increase velocity by a power of 3 until halfway down the path it is destined to trace. It will then decrease velocity by a power of 3 until it reaches its final location. There are many different types of easing functions. Check out the resources for more information, and ask your doctor which easing function is right for you!</p>
 
 <h3>Resources</h3>
 
-<p><a href="http://www.amazon.com/gp/product/0596517742/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0596517742&amp;linkCode=as2&amp;tag=bridgeforpoke-20">JavaScript: The Good Parts</a></p>
+<p>Robert Penner&rsquo;s <a href="http://www.robertpenner.com/easing/">Easing Functions</a></p>
+
+<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
 </div>
 
 
@@ -177,12 +172,12 @@
   
 
 
-<time datetime="2014-02-11T00:00:00-08:00" pubdate data-updated="true">Feb 11<span>th</span>, 2014</time>
+<time datetime="2014-03-12T00:00:00-07:00" pubdate data-updated="true">Mar 12<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/javascript/'>javascript</a>
+    <a class='category' href='/blog/categories/d3/'>d3</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
   
 </span>
 
@@ -191,7 +186,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/for-score/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/for-score/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/easing-does-it/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/easing-does-it/" >Tweet</a>
   
   
   
@@ -202,10 +197,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/the-passionate-programmer/" title="Previous Post: the passionate programmer">&laquo; the passionate programmer</a>
+        <a class="basic-alignment left" href="/blog/2014/the-value-of-transition/" title="Previous Post: the value of slow transitions">&laquo; the value of slow transitions</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/custom-asides/" title="Next Post: custom asides">custom asides &raquo;</a>
       
     </p>
   </footer>
@@ -322,8 +315,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/for-score/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2014/for-score/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/easing-does-it/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2014/easing-does-it/';
         var disqus_script = 'embed.js';
       
     (function () {

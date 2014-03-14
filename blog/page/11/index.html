@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="I was scraping the rust off my data-structures synapses last week, and found that there was still some functionality underneath. UnionFind is one of &hellip;">
+  <meta name="description" content="In my last look at the UnionFind algorithm I made a quick-find implementation &mdash; finding if two elements were connected was fast but connecting &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,47 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/state-of-the-quickunion/">State of the QuickUnion</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-04T22:29:03-07:00" pubdate data-updated="true">Aug 4<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In my last look at the UnionFind algorithm I made a quick-find implementation &mdash; finding if two elements were connected was fast but connecting two elements was slow. The union operation is a good candidate for optimization.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/state-of-the-quickunion/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -254,56 +295,6 @@ Using the principle of only committing atomic changes, and enjoying the fruits o
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/get-your-kicks-on-localhost4567/">Get Your Kicks on Route Localhost:4567</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-17T00:00:00-07:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I am building a code breaking game along the lines of Mastermind and I encountered a block.</p>
-
-<h2>The problem</h2>
-
-<ul>
-<li>I have a javascript that generates a secret code.</li>
-<li>I have a ruby class that compares a guess to the secret code and returns an analysis of the accuracy of the guess.</li>
-<li>How do I get the ruby class to process a guess and secret code from the browser?</li>
-</ul>
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/get-your-kicks-on-localhost4567/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/12/">&larr; Older</a>
@@ -328,6 +319,10 @@ Using the principle of only committing atomic changes, and enjoying the fruits o
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/easing-does-it/">Easing Does It</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/the-value-of-transition/">The Value of Slow Transitions</a>
       </li>
     
@@ -341,10 +336,6 @@ Using the principle of only committing atomic changes, and enjoying the fruits o
     
       <li class="post">
         <a href="/blog/2014/scales-and-ticks/">Fun With Ticks</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/d3-nests-and-rollups/">D3 Nests and Rollups</a>
       </li>
     
   </ul>
