@@ -241,8 +241,8 @@ function importData() {
           .key(function(d) { return d.Color; })
           .rollup(aggregateData)
           .entries(dataFromCsv);
-  drawElements();
-  setTimeout( drawElements, 4000 );
+  // drawElements();
+  setInterval( drawElements, 4000 );
 }
 
 /***********************
@@ -338,6 +338,8 @@ importData();
         <a class="basic-alignment left" href="/blog/2014/easing-does-it/" title="Previous Post: easing does it">&laquo; easing does it</a>
       
       
+        <a class="basic-alignment right" href="/blog/2014/multiple-remotes/" title="Next Post: multiple remotes">multiple remotes &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -364,6 +366,10 @@ importData();
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/multiple-remotes/">Multiple Remotes</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/delay-chained-transitions/">Delay Chained Transitions</a>
       </li>
     
@@ -377,10 +383,6 @@ importData();
     
       <li class="post">
         <a href="/blog/2014/git-what-have-i-done/">Git, What Have I Done?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/transition-with-style/">Transition With Style</a>
       </li>
     
   </ul>

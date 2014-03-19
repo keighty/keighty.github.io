@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-03-15T09:04:18-07:00</updated>
+  <updated>2014-03-19T07:32:35-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -179,8 +179,8 @@ function importData() {
           .key(function(d) { return d.Color; })
           .rollup(aggregateData)
           .entries(dataFromCsv);
-  drawElements();
-  setTimeout( drawElements, 4000 );
+  // drawElements();
+  setInterval( drawElements, 4000 );
 }
 
 /***********************

@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-03-15T09:04:18-07:00</updated>
+  <updated>2014-03-19T07:32:35-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,116 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Multiple Remotes]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/multiple-remotes/"/>
+    <updated>2014-03-19T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/multiple-remotes</id>
+    <content type="html"><![CDATA[<p>Somehow I had worked out in my head that there could be only one remote. Origin. Turns out you can set and push to a (presumably) infinite number of remote repositories <!--more-->:</p>
+
+<figure class='code'><figcaption><span>Checkout your git config </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git config --list
+</span><span class='line'>push.default=nothing
+</span><span class='line'>alias.hist=log --pretty=format:"%h %ad | %s%d [%an]" --graph --date=short
+</span><span class='line'>user.name=Katie Leonard
+</span><span class='line'>…
+</span><span class='line'>remote.origin.url=git@github.com:keighty/thorfiles.git
+</span><span class='line'>remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+</span><span class='line'>branch.master.remote=origin
+</span><span class='line'>branch.master.merge=refs/heads/master</span></code></pre></td></tr></table></div></figure>
+
+
+<p>(On a side note, I am not sure I remember putting <code>alias.hist</code> in my git config, but I find it to be wickedly useful.)</p>
+
+<p>Setting a new remote is as easy as:</p>
+
+<figure class='code'><figcaption><span>1 2 3 a b c </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git remote add new_destination git@github.com:otheruser/thorfiles.git</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Standing back to admire the results:</p>
+
+<figure class='code'><figcaption><span>Simple, but does it work? </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git config --list
+</span><span class='line'>push.default=nothing
+</span><span class='line'>alias.hist=log --pretty=format:"%h %ad | %s%d [%an]" --graph --date=short
+</span><span class='line'>user.name=Katie Leonard
+</span><span class='line'>…
+</span><span class='line'>remote.origin.url=git@github.com:keighty/thorfiles.git
+</span><span class='line'>remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+</span><span class='line'>branch.master.remote=origin
+</span><span class='line'>branch.master.merge=refs/heads/master
+</span><span class='line'>remote.new_destination.url=git@github.com:otheruser/thorfiles.git
+</span><span class='line'>remote.new_destination.fetch=+refs/heads/*:refs/remotes/new_destination/*</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Fast-forward through some excellent and brilliant feature work on <code>my_branch</code>, and I naturally want to save it for posterity:</p>
+
+<figure class='code'><figcaption><span>Chizeled in metal on GitHub servers </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git push origin my_branch
+</span><span class='line'>Counting objects: 611, done.
+</span><span class='line'>Delta compression using up to 4 threads.
+</span><span class='line'>Compressing objects: 100% (263/263), done.
+</span><span class='line'>Writing objects: 100% (375/375), 63.40 KiB | 0 bytes/s, done.
+</span><span class='line'>Total 375 (delta 280), reused 189 (delta 105)
+</span><span class='line'>To git@github.com:keighty/thorfiles.git
+</span><span class='line'> * [new branch]      my_branch -> my_branch</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I can also share it with my friend&rsquo;s repo, presuming I have write access, and knowing full well he will want to use my new feature:</p>
+
+<figure class='code'><figcaption><span>Update your friends! </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git push new_destination my_branch
+</span><span class='line'>Counting objects: 611, done.
+</span><span class='line'>Delta compression using up to 4 threads.
+</span><span class='line'>Compressing objects: 100% (263/263), done.
+</span><span class='line'>Writing objects: 100% (375/375), 63.40 KiB | 0 bytes/s, done.
+</span><span class='line'>Total 375 (delta 280), reused 189 (delta 105)
+</span><span class='line'>To git@github.com:otheruser/thorfiles.git
+</span><span class='line'> * [new branch]      my_branch -> my_branch</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Git is so awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Delay Chained Transitions]]></title>
@@ -154,8 +264,8 @@ function importData() {
           .key(function(d) { return d.Color; })
           .rollup(aggregateData)
           .entries(dataFromCsv);
-  drawElements();
-  setTimeout( drawElements, 4000 );
+  // drawElements();
+  setInterval( drawElements, 4000 );
 }
 
 /***********************
@@ -1162,68 +1272,6 @@ importData();
 
 
 <p>What an awesome find.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Custom Asides]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/custom-asides/"/>
-    <updated>2014-02-15T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/custom-asides</id>
-    <content type="html"><![CDATA[<p>I was following a <a href="http://blog.jmac.org/blog/2013/03/30/putting-twitter-back-into-octopress/">tutorial</a> on how to include a twitter widget in the sidebar of my octopress site and couldn&rsquo;t figure out why my twitter content wouldn&rsquo;t render. It turns out that custom asides require an internal div. <!--more-->The process:</p>
-
-<h3>1. Create a twitter timeline widget</h3>
-
-<p>This was surprisingly easy. Just login to <a href="https://twitter.com/">twitter.com</a> and click the settings icon: <i class="fa fa-cog fa-2x"></i></p>
-
-<p>Click &ldquo;Widgets&rdquo; on the bottom of the left nav and follow the instructions.</p>
-
-<p>CAKE WALK.</p>
-
-<h3>2. Create a custom aside</h3>
-
-<p>Perhaps it is the tutorial showing its age, but I couldn&rsquo;t get the content to render as described. I grabbed the widget html and created a file in source/custom/asides:</p>
-
-<figure class='code'><figcaption><span>twitter.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;section&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;h1&gt;</span>Twitter<span class="nt">&lt;/h1&gt;</span>
-</span><span class='line'>  <span class="c">&lt;!-- paste twitter widget code here --&gt;</span>
-</span><span class='line'><span class="nt">&lt;/section&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I looked to the other asides for help, and realized that the content had to be anchored to a div of its own:</p>
-
-<figure class='code'><figcaption><span>div: my saviour</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;section&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;div&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;h1&gt;</span>Twitter<span class="nt">&lt;/h1&gt;</span>
-</span><span class='line'>    <span class="c">&lt;!-- paste twitter widget code here --&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'><span class="nt">&lt;/section&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>3. Add the aside to your _config.yml</h3>
-
-<figure class='code'><figcaption><span>What my _config.yml looks like</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># list each of the sidebar modules you want to include, in the order you want them to appear.</span>
-</span><span class='line'><span class="c1"># To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like &#39;custom/asides/custom_aside_name.html&#39;</span>
-</span><span class='line'><span class="n">default_asides</span><span class="p">:</span> <span class="o">[</span><span class="n">custom</span><span class="o">/</span><span class="n">asides</span><span class="o">/</span><span class="n">contactme</span><span class="o">.</span><span class="n">html</span><span class="p">,</span> <span class="n">asides</span><span class="o">/</span><span class="n">recent_posts</span><span class="o">.</span><span class="n">html</span><span class="p">,</span> <span class="n">asides</span><span class="o">/</span><span class="n">github</span><span class="o">.</span><span class="n">html</span><span class="p">,</span> <span class="n">custom</span><span class="o">/</span><span class="n">asides</span><span class="o">/</span><span class="n">aboutme</span><span class="o">.</span><span class="n">html</span><span class="p">,</span> <span class="n">custom</span><span class="o">/</span><span class="n">asides</span><span class="o">/</span><span class="n">twitter</span><span class="o">.</span><span class="n">html</span><span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   

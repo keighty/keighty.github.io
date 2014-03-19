@@ -4,7 +4,7 @@
   <title><![CDATA[Category: I Didn't Know That | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/i-didnt-know-that/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-03-15T09:04:18-07:00</updated>
+  <updated>2014-03-19T07:32:35-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,110 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Multiple Remotes]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/multiple-remotes/"/>
+    <updated>2014-03-19T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/multiple-remotes</id>
+    <content type="html"><![CDATA[<p>Somehow I had worked out in my head that there could be only one remote. Origin. Turns out you can set and push to a (presumably) infinite number of remote repositories <!--more-->:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Checkout your git config </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git config &mdash;list
+</span><span class='line'>push.default=nothing
+</span><span class='line'>alias.hist=log &mdash;pretty=format:&ldquo;%h %ad | %s%d [%an]&rdquo; &mdash;graph &mdash;date=short
+</span><span class='line'>user.name=Katie Leonard
+</span><span class='line'>…
+</span><span class='line'>remote.origin.url=git@github.com:keighty/thorfiles.git
+</span><span class='line'>remote.origin.fetch=+refs/heads/&lt;em>:refs/remotes/origin/&lt;/em>
+</span><span class='line'>branch.master.remote=origin
+</span><span class='line'>branch.master.merge=refs/heads/master</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>(On a side note, I am not sure I remember putting <code>alias.hist</code> in my git config, but I find it to be wickedly useful.)</p>
+
+<p>Setting a new remote is as easy as:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>1 2 3 a b c </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git remote add new_destination git@github.com:otheruser/thorfiles.git</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Standing back to admire the results:
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Simple, but does it work? </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git config &mdash;list
+</span><span class='line'>push.default=nothing
+</span><span class='line'>alias.hist=log &mdash;pretty=format:&ldquo;%h %ad | %s%d [%an]&rdquo; &mdash;graph &mdash;date=short
+</span><span class='line'>user.name=Katie Leonard
+</span><span class='line'>…
+</span><span class='line'>remote.origin.url=git@github.com:keighty/thorfiles.git
+</span><span class='line'>remote.origin.fetch=+refs/heads/&lt;em>:refs/remotes/origin/&lt;/em>
+</span><span class='line'>branch.master.remote=origin
+</span><span class='line'>branch.master.merge=refs/heads/master
+</span><span class='line'>remote.new_destination.url=git@github.com:otheruser/thorfiles.git
+</span><span class='line'>remote.new_destination.fetch=+refs/heads/&lt;em>:refs/remotes/new_destination/&lt;/em></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Fast-forward through some excellent and brilliant feature work on <code>my_branch</code>, and I naturally want to save it for posterity:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Chizeled in metal on GitHub servers </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git push origin my_branch
+</span><span class='line'>Counting objects: 611, done.
+</span><span class='line'>Delta compression using up to 4 threads.
+</span><span class='line'>Compressing objects: 100% (263/263), done.
+</span><span class='line'>Writing objects: 100% (375/375), 63.40 KiB | 0 bytes/s, done.
+</span><span class='line'>Total 375 (delta 280), reused 189 (delta 105)
+</span><span class='line'>To git@github.com:keighty/thorfiles.git
+</span><span class='line'> * [new branch]      my_branch &ndash;> my_branch</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>I can also share it with my friend&rsquo;s repo, presuming I have write access, and knowing full well he will want to use my new feature:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Update your friends! </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git push new_destination my_branch
+</span><span class='line'>Counting objects: 611, done.
+</span><span class='line'>Delta compression using up to 4 threads.
+</span><span class='line'>Compressing objects: 100% (263/263), done.
+</span><span class='line'>Writing objects: 100% (375/375), 63.40 KiB | 0 bytes/s, done.
+</span><span class='line'>Total 375 (delta 280), reused 189 (delta 105)
+</span><span class='line'>To git@github.com:otheruser/thorfiles.git
+</span><span class='line'> * [new branch]      my_branch &ndash;> my_branch</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Git is so awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Javascript Dates]]></title>
@@ -155,24 +259,6 @@ svg.selectAll(&ldquo;circle&rdquo;)</p>
 <p>Declaring an application-level function ensures that the correct <code>person</code> is called when needed. It improves readability by essentially flagging the scope of the variable and reducing ambiguity.</p>
 
 <p><a href="http://www.amazon.com/gp/product/0596517742/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0596517742&amp;linkCode=as2&amp;tag=bridgeforpoke-20">JavaScript: The Good Parts</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A Number Is a Double Is a Float]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/a-number-is-a-double-is-a-float/"/>
-    <updated>2014-02-02T19:56:17-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/a-number-is-a-double-is-a-float</id>
-    <content type="html"><![CDATA[<p>JavaScript has a single number type &mdash; a 64-bit floating point number. Since there is no separate integer type, 1 and 1.0 are the same value.</p>
-
-<!--more-->
-
-
-<p>One of the consequences is that the <code>/</code> operator may return a floating point number even if both operands are integers. Goodbye casting!</p>
-
-<p><a href="http://www.amazon.com/gp/product/0596517742/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0596517742&amp;linkCode=as2&amp;tag=bridgeforpoke-20">JavaScript: The Good Parts</a></p>
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   
