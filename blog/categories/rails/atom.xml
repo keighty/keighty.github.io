@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-03-20T08:01:43-07:00</updated>
+  <updated>2014-03-20T08:08:49-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -396,7 +396,7 @@ The only parameters our controller will send to the model are those specified on
 <p><div>
   <pre><code class='ruby'>describe &amp;ldquo;updating with valid information&amp;rdquo; do
   let(:new_name) { &amp;ldquo;New Name&amp;rdquo; }
-  let(:new_email) { &amp;ldquo;&lt;a href=&quot;&amp;#x6d;&amp;#97;&amp;#x69;&amp;#108;&amp;#x74;&amp;#x6f;&amp;#58;&amp;#x6e;&amp;#x65;&amp;#x77;&amp;#x40;&amp;#101;&amp;#120;&amp;#x61;&amp;#109;&amp;#112;&amp;#108;&amp;#101;&amp;#46;&amp;#x63;&amp;#111;&amp;#x6d;&quot;&gt;&amp;#110;&amp;#101;&amp;#119;&amp;#64;&amp;#x65;&amp;#120;&amp;#97;&amp;#x6d;&amp;#x70;&amp;#x6c;&amp;#101;&amp;#46;&amp;#99;&amp;#x6f;&amp;#109;&lt;/a&gt;&amp;rdquo; }
+  let(:new_email) { &amp;ldquo;&lt;a href=&quot;&amp;#x6d;&amp;#97;&amp;#x69;&amp;#x6c;&amp;#116;&amp;#x6f;&amp;#x3a;&amp;#110;&amp;#101;&amp;#119;&amp;#x40;&amp;#x65;&amp;#120;&amp;#x61;&amp;#x6d;&amp;#112;&amp;#108;&amp;#101;&amp;#x2e;&amp;#x63;&amp;#x6f;&amp;#109;&quot;&gt;&amp;#x6e;&amp;#101;&amp;#x77;&amp;#64;&amp;#101;&amp;#120;&amp;#x61;&amp;#109;&amp;#112;&amp;#108;&amp;#x65;&amp;#x2e;&amp;#x63;&amp;#x6f;&amp;#109;&lt;/a&gt;&amp;rdquo; }
   before do&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;fill_in &quot;Name&quot;, with: new_name

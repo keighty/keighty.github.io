@@ -4,7 +4,7 @@
   <title><![CDATA[Category: D3 | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/d3/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-03-20T08:01:43-07:00</updated>
+  <updated>2014-03-20T08:08:49-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Line, Spline]]></title>
     <link href="http://www.katieleonard.ca/blog/2014/line-spline/"/>
-    <updated>2014-03-19T00:00:00-07:00</updated>
+    <updated>2014-03-20T00:00:00-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2014/line-spline</id>
     <content type="html"><![CDATA[<p>D3 lines are rendered using linear interpolation by default. This means that the line connecting a series of points will trace a direct path from one node to another:</p>
 
