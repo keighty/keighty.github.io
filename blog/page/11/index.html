@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="A Lexer is a ruby class with a single method: tokenize(). Its purpose is to label each chunk of code with a particular token. Strings are labeled as &hellip;">
+  <meta name="description" content="On the last episode, I described how to label chunks of code for processing through a parser. Strings are labeled as &lsquo;STRING&rsquo;, class &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,53 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/parcel-parser/">Parcel Parser</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-16T22:29:03-07:00" pubdate data-updated="true">Aug 16<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>On the last episode, I described how to label chunks of code for processing through a parser. Strings are labeled as &lsquo;STRING&rsquo;, class definitions as &lsquo;A&rsquo; + &lsquo;CONSTANT&rsquo;, etc.</p>
+
+<h2>What is a parser?</h2>
+
+<p>A parser separates and analyzes a piece of text according to a set of rules specified by a formal grammar. The analysis is performed by assembling the tokenized code into an Abstract Syntax Tree (AST) &ndash; a tree of nodes that represent what the code means to the language. The AST evaluates the nodes in a similar manner to order of operations in math: each token is placed on the evaluation tree, and expressions are evaluated by reducing each branch in order.</p>
+
+<p>The parser itself is can be written by hand, but I am using RACC: an LALR (Look Ahead, Left to right, Reverse) parser written by <a href="https://github.com/tenderlove/racc">tenderlove</a> to generate Ruby programs. How do we specify a grammar that RACC will understand?</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/parcel-parser/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -270,49 +317,6 @@ Lexer.new.tokenize(&quot;+&quot;)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/state-of-the-unionfind/">State of the UnionFind</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-30T22:29:03-07:00" pubdate data-updated="true">Jul 30<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I was scraping the rust off my data-structures synapses last week, and found that there was still some functionality underneath. UnionFind is one of those sneaky algorithms that crops up in non-linear arrangements of data, such as computer or social networks. Specifically, it keeps track of sets of connected elements. The API consists of a union(p, q), which connects the two elements p and q, and a find(p, q), which determines if p is in the same set as q.</p>
-
-<p>I learned about this algorithm through <a href="https://www.coursera.org/">Coursera</a>, and their class <a href="https://www.coursera.org/course/algs4partI">Algorithms Part 1</a> with Kevin Wayne and Robert Sedgewick. The focus of this course was not only on implementation of algorithms, but also optimization.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/state-of-the-unionfind/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/12/">&larr; Older</a>
@@ -337,6 +341,10 @@ Lexer.new.tokenize(&quot;+&quot;)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/the-ambition-gap-lean-in/">The Ambition Gap - Leaning In</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/line-spline/">Line, Spline</a>
       </li>
     
@@ -350,10 +358,6 @@ Lexer.new.tokenize(&quot;+&quot;)
     
       <li class="post">
         <a href="/blog/2014/easing-does-it/">Easing Does It</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/the-value-of-transition/">The Value of Slow Transitions</a>
       </li>
     
   </ul>
