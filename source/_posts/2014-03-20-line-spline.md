@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "line, spline"
-date: 2014-03-19
+date: 2014-03-20
 comments: true
 categories: [d3]
 ---
