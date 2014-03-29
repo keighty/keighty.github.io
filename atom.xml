@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-03-25T07:36:19-07:00</updated>
+  <updated>2014-03-29T11:54:10-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,36 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Situations Matter]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/situations-matter/"/>
+    <updated>2014-03-28T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/situations-matter</id>
+    <content type="html"><![CDATA[<p><a href="http://www.amazon.com/Situations-Matter-Understanding-Context-Transforms-ebook/dp/B005ERIS5S/ref=sr_1_1?ie=UTF8&amp;qid=1396016834&amp;sr=8-1&amp;keywords=situations+matter">Situations Matter</a> by Sam Sommers is an eye-opening study of the influence of context on human interactions. Social psychologists call it &ldquo;fundamental attribution error&rdquo;, which is a tendency to interpret someone else&rsquo;s behavior as stemming from their core characteristics, rather than to external circumstances. A simplistic example of attribution error is assuming that the person driving the speeding car is a reckless speed-freak rather than someone rushing a woman in labor to the hospital. Sommers has studied the power of situations over human interactions and how the attribution error interferes with our ability to empathize with the unfamiliar. I have read similar studies of how bias infiltrates our relationships, but what surprised me the most is how it also influences our perception of the self. <!--more--></p>
+
+<h3>You&rsquo;re not the person you thought you were</h3>
+
+<p>A provocative but aptly named chapter, Sommers overturns the concept of an &ldquo;authentic self&rdquo; with a simple fill-in-the-blanks exercise:</p>
+
+<ol>
+<li>I am _________________</li>
+<li>I am _________________</li>
+<li>I am _________________</li>
+<li>I am _________________</li>
+<li>I am _________________</li>
+</ol>
+
+
+<p>His study subjects were required to fill in 20 of these blanks, but 5 is enough to illustrate his point to the reader. The open-endedness of this exercise allows for a fantastic range of responses: &ldquo;I am 36 years old, I am hungry, I am tall, I am a lifelong learner&rdquo;. Taking the 20 questions test in different contexts will yield different definitions of yourself. Sommers has discovered that &ldquo;we tend to think of ourselves in terms of that which makes us distinctive&rdquo;, so your answers will have more to do with the people around you than with a fixed set of characteristics. A woman is more likely to include gender on her list if she is in a room full of men than if she is in a room full of women. So it seems that &ldquo;identity is malleable and personal preferences are constructed on the spot.&rdquo; Introspection will gain us little but a hazy snap-shot of our identity at any given moment.</p>
+
+<blockquote><p>&ldquo;It&rsquo;s refreshing to realize that you&rsquo;re not a finished product &mdash; that who you are in the here and now may not be the same person you&rsquo;ll be in the then and there. In fact, it&rsquo;s the opposite view of the self as a fixed entity that causes problems. When you assume that there&rsquo;s a true core self waiting to be discovered, that&rsquo;s when your potential seems limited and the world around you is full of threats to be rationalized away.&rdquo;</p></blockquote>
+
+<p>One quality that is typically presumed to be fixed is intelligence. Challenging this truism, another study was conducted where students were grouped according to their belief that either intelligence is a stable attribute, or that their intellect can be changed. The researchers asked the students to predict the likelihood that they will attend a remedial language course, and then tracked their performance. It was found that among the students who fared poorly in the language course, those who viewed intelligence as a permanent, unchangeable trait were less likely to enroll in the remedial course &mdash; that is, to take steps in order to improve their performance. For students who believe that intelligence is fixed, a poor exam grade is a mark of their limitations rather than an opportunity for improvement. Students who believe that intelligence is malleable are more likely to show the stick-to-itiveness necessary for self-improvement.</p>
+
+<p>Viewing the self less like a rigid Rubik&rsquo;s Cube to be solved, and more like Silly Putty that conforms to the shape of its container, will likely free up a lot of my time. Instead of trying to solve the puzzle. I can spend energy on finding the container that makes me happy&hellip; for the moment.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The Ambition Gap - Leaning In]]></title>
@@ -1196,45 +1226,6 @@ importData();
 <p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
 
 <p><a href="http://www.codeproject.com/Articles/33052/Visual-Representation-of-SQL-Joins">Visual Representation of SQL Joins</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[D3 Is Selective]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/d3-is-selective/"/>
-    <updated>2014-02-21T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/d3-is-selective</id>
-    <content type="html"><![CDATA[<p>D3 uses the W3C standard selector library, and selection modifiers work on both single and multiple element selections, and will automatically apply the modifier iteratively over the entire collection, which makes your code simpler and easier to maintain.</p>
-
-<!--more-->
-
-
-<h4>Selection modifiers</h4>
-
-<ul>
-<li><strong>d3.select(&lsquo;p&rsquo;).text()</strong>     : retrieve or modify text</li>
-<li><strong>d3.select(&lsquo;p&rsquo;).attr()</strong>     : retrieve or modify a given attribute</li>
-<li><strong>d3.select(&lsquo;p&rsquo;).classed()</strong>  : retrieve or modify css classes</li>
-<li><strong>d3.select(&lsquo;p&rsquo;).style()</strong>    : retrieve or modify styles</li>
-<li><strong>d3.select(&lsquo;p&rsquo;).html()</strong>     : retrieve or modify a selections inner html (like text but with tags)</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>d3.selectAll('div')
-</span><span class='line'>            .attr("class", "alert")
-</span><span class='line'>            .each(function(d, i) {
-</span><span class='line'>              d3.select(this).append("h1").text(i);
-</span><span class='line'>            });</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Selections are essentially arrays with some extra variables baked in. The <code>.each</code> call on line 3 treats the selected elements as an array, and performs a function on each one. The extra variables provided to the iterator function for free are: the data bound to the element (d), the index of the element, and the element itself (this).</p>
-
-<p>Awesome</p>
 ]]></content>
   </entry>
   
