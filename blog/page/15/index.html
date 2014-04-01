@@ -9,8 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Namespaces in jQuery getting you down? Chuck taught me a great trick today &mdash; how to avoid namespace
-conflicts in jQuery">
+  <meta name="description" content="Object blocker!! My pair was stuck for the longest time on the following code snip: $(function(){ var new_square = &#39;$(&lt;div class=&quot;square& &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,70 @@ conflicts in jQuery">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/jquery-objects-vs-strings/">jQuery Objects vs Strings</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-19T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Object blocker!!</h2>
+
+<p>My pair was stuck for the longest time on the following code snip:</p>
+
+<div>
+  <pre><code class='javascript'>$(function(){
+  var new_square = &#39;$(&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;)&#39;;
+
+  $(&#39;body&#39;).on(&#39;click&#39;,&#39;.square&#39;, function(){
+    // var my_square = $(this);
+    $(this).toggleClass(&#39;blue&#39;);
+
+    b = $(new_square)
+      .insertAfter(this);
+    a = $(new_square)
+      .insertBefore(this);
+    b.toggleClass(&#39;blue&#39;);
+    a.toggleClass(&#39;blue&#39;);
+  });
+});</code></pre>
+</div>
+
+
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/jquery-objects-vs-strings/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -230,6 +293,10 @@ I love that ruby has a built in framework &mdash; so easy to use!</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/meteor-fetch/">Meteor, Fetch!</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/situations-matter/">Situations Matter</a>
       </li>
     
@@ -243,10 +310,6 @@ I love that ruby has a built in framework &mdash; so easy to use!</p>
     
       <li class="post">
         <a href="/blog/2014/multiple-remotes/">Multiple Remotes</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/delay-chained-transitions/">Delay Chained Transitions</a>
       </li>
     
   </ul>

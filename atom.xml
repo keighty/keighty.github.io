@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-03-29T11:54:10-07:00</updated>
+  <updated>2014-04-01T07:39:20-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,88 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Meteor, Fetch!]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/meteor-fetch/"/>
+    <updated>2014-03-31T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/meteor-fetch</id>
+    <content type="html"><![CDATA[<p>From <a href="http://book.discovermeteor.com/">Discover Meteor</a>: in Meteor, find() returns a cursor, which is a reactive data source.</p>
+
+<p>Data from reactive data sources will be updated automatically to track changes in the data used to generate it. <!--more-->Cursors are derived from specific sources:</p>
+
+<ul>
+<li>Session variables</li>
+<li>Database queries on Collections</li>
+<li>Meteor.status</li>
+<li>The ready() method on a subscription handle</li>
+<li>Meteor.user</li>
+<li>Meteor.userId</li>
+<li>Meteor.loggingIn</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>For example, find() using a database query </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="nx">Posts</span><span class="p">.</span><span class="nx">find</span><span class="p">()</span>
+</span><span class='line'><span class="nx">LocalCollection</span><span class="p">.</span><span class="nx">Cursor</span> <span class="p">{</span><span class="nx">collection</span><span class="o">:</span> <span class="nx">LocalCollection</span><span class="p">,</span> <span class="nx">sorter</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">_selectorId</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">,</span> <span class="nx">matcher</span><span class="o">:</span> <span class="nx">Minimongo</span><span class="p">.</span><span class="nx">Matcher</span><span class="p">,</span> <span class="nx">skip</span><span class="o">:</span> <span class="kc">undefined</span><span class="err">…</span><span class="p">}</span>
+</span><span class='line'>      <span class="nx">_selectorId</span><span class="o">:</span> <span class="kc">undefined</span>
+</span><span class='line'>      <span class="nx">_transform</span><span class="o">:</span> <span class="kc">null</span>
+</span><span class='line'>      <span class="nx">collection</span><span class="o">:</span> <span class="nx">LocalCollection</span>
+</span><span class='line'>      <span class="nx">cursor_pos</span><span class="o">:</span> <span class="mi">0</span>
+</span><span class='line'>      <span class="nx">db_objects</span><span class="o">:</span> <span class="kc">null</span>
+</span><span class='line'>      <span class="nx">fields</span><span class="o">:</span> <span class="kc">undefined</span>
+</span><span class='line'>      <span class="nx">limit</span><span class="o">:</span> <span class="kc">undefined</span>
+</span><span class='line'>      <span class="nx">matcher</span><span class="o">:</span> <span class="nx">Minimongo</span><span class="p">.</span><span class="nx">Matcher</span>
+</span><span class='line'>      <span class="nx">reactive</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'>      <span class="nx">skip</span><span class="o">:</span> <span class="kc">undefined</span>
+</span><span class='line'>      <span class="nx">sorter</span><span class="o">:</span> <span class="kc">null</span>
+</span><span class='line'>      <span class="nx">__proto__</span><span class="o">:</span> <span class="nb">Object</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Cursors are not query snapshots. They are query snapshot containers &mdash; the contents of which are updated by changes to the underlying data. To interact with the data contained in a cursor, we can use fetch() to transform the cursor into an array.</p>
+
+<figure class='code'><figcaption><span>A cursor becomes an array with find().fetch() </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="nx">Posts</span><span class="p">.</span><span class="nx">find</span><span class="p">().</span><span class="nx">fetch</span><span class="p">()</span>
+</span><span class='line'><span class="p">[</span>
+</span><span class='line'>    <span class="nb">Object</span>
+</span><span class='line'>    <span class="nx">_id</span><span class="o">:</span> <span class="s2">&quot;z4z36DFCaGr8Ptuqd&quot;</span>
+</span><span class='line'>    <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;The Way We Live Now&quot;</span>
+</span><span class='line'>    <span class="nx">author</span><span class="o">:</span> <span class="s2">&quot;Anthony Trollope&quot;</span>
+</span><span class='line'>    <span class="nx">__proto__</span><span class="o">:</span> <span class="nb">Object</span>
+</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Meteor can iterate over a cursor without first converting it to an array, but in order to interact with the data directly, you must first use fetch(), map(), or forEach(). For more cursor fun, checkout the <a href="http://docs.meteor.com/#reactivity">Meteor docs</a>.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Situations Matter]]></title>
@@ -1187,45 +1269,6 @@ importData();
 <h3>Resources</h3>
 
 <p><a href="http://mbostock.github.io/d3/tutorial/circle.html">Three Little Circles D3 Tutorial</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Enter Update Exit]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/enter-update-exit/"/>
-    <updated>2014-02-25T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/enter-update-exit</id>
-    <content type="html"><![CDATA[<p>D3 is a data visualization tool that uses method chaining to produce big pictures with little code. The selection library performs a full Outer Join between the data (D) and the visual elements (V), and the enter-update-exit pattern performs work on subsets of this join<!--more-->:</p>
-
-<h3>UPDATE: Inner Join (D union V)</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>selection.data(data_points)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>data() binds data_points to the html or svg elements returned by the selection and returns the data not visualized.</p>
-
-<h3>ENTER: Left excluding join (D/V)</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>selection.data(data_points).enter()</span></code></pre></td></tr></table></div></figure>
-
-
-<p>enter() returns data_points that are not yet represented visually by html or svg. Chain .append() to add a new element to the page.</p>
-
-<h3>EXIT: Right excluding join (V/D)</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>selection.data(data_points).exit()</span></code></pre></td></tr></table></div></figure>
-
-
-<p>exit() returns html or svg elements that no longer have data associated with them. Chain .remove() to eliminate them, or .translate() to make them slide off the page.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
-
-<p><a href="http://www.codeproject.com/Articles/33052/Visual-Representation-of-SQL-Joins">Visual Representation of SQL Joins</a></p>
 ]]></content>
   </entry>
   

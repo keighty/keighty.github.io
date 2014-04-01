@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>The Ambition Gap - Leaning In - keighty</title>
+  <title>Meteor, Fetch! - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="I may be a little late to the game, but I am finally reading Sheryl Sandberg&rsquo;s &ldquo;Lean In&rdquo;, and right from the introduction I can &hellip;">
+  <meta name="description" content="From Discover Meteor: in Meteor, find() returns a cursor, which is a reactive data source. Data from reactive data sources will be updated &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/the-ambition-gap-lean-in">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/meteor-fetch">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">The Ambition Gap - Leaning In</h1>
+      <h1 class="entry-title">Meteor, Fetch!</h1>
     
     
       <p class="meta">
@@ -98,26 +98,87 @@
   
 
 
-<time datetime="2014-03-23T00:00:00-07:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2014</time>
+<time datetime="2014-03-31T00:00:00-07:00" pubdate data-updated="true">Mar 31<span>st</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I may be a little late to the game, but I am finally reading Sheryl Sandberg&rsquo;s &ldquo;Lean In&rdquo;, and right from the introduction I can understand why it caused such a stir when it came out in 2012. Sandberg addresses the issue of why there are relatively few women in leadership roles, and ways that women have held themselves back.<!--more--> Women earn more than 57% of undergraduate degrees and 60% of masters degrees, and yet hold less than 14% of C level positions. I always assumed that as women disproportionately fill the ranks of entry level positions, there would be a proportional increase of women filling senior level positions as well. Apparently this is not the case. &ldquo;The exodus of highly educated women is a major contributor to the leadership gap.&rdquo;</p>
+<div class="entry-content"><p>From <a href="http://book.discovermeteor.com/">Discover Meteor</a>: in Meteor, find() returns a cursor, which is a reactive data source.</p>
 
-<p><span class='pullquote-right' data-pullquote='36% of men want to reach the C-suite and only 18% of women.'>
-Sandberg shares a story about a kindergarten class where the students were asked &ldquo;What do you want to be when you grow up?&rdquo;. Several of the boys wanted to be president, but none of the girls did. This disparity continues into middle school, where more boys than girls aspire to leadership roles in future careers. 36% of men want to reach the C-suite and only 18% of women. Why so few? If the question were ever posed to me I would honestly say that rising to the C-levels has never been of any interest, and I think Sandberg is right to ask why.
-</span></p>
+<p>Data from reactive data sources will be updated automatically to track changes in the data used to generate it. <!--more-->Cursors are derived from specific sources:</p>
 
-<h3>Too much Barbie or not enough Hillary?</h3>
+<ul>
+<li>Session variables</li>
+<li>Database queries on Collections</li>
+<li>Meteor.status</li>
+<li>The ready() method on a subscription handle</li>
+<li>Meteor.user</li>
+<li>Meteor.userId</li>
+<li>Meteor.loggingIn</li>
+</ul>
 
-<p>Sandberg is quick to link the relative derth of women in leadership roles on the messages of obedience and passivity we instill in girls and the general indulgence of opposite traits in boys (&ldquo;boys will be boys&rdquo;). &ldquo;Gender stereotypes introduced in childhood are reinforced throughout our lives and become self-fulfilling prophesies.&rdquo; While gender stereotypes have held women back in the past, today the difference is in their perceived options, not in perceived abilities. When the kindergarten-ers in Sandberg&rsquo;s story were asked what they wanted to be when they grew up they looked to the immediate role models around them. Call it a lack of imagination about one&rsquo;s future career, rather than a lack of ambition.</p>
 
-<p>She has recently begun a campaign to <a href="http://banbossy.com/">ban the word &ldquo;bossy&rdquo;</a>, and while words have the power to shape our values, it is a passive approach to solving the problem. Boys don&rsquo;t show a propensity towards leadership in middle-school any more than girls show a propensity towards secretarial work. Sandberg&rsquo;s <a href="http://leanin.org/">&ldquo;Lean In&rdquo;</a> project comes closer to directly addressing the issue. She realizes that you can&rsquo;t be what you can&rsquo;t see&#8221;, and works to raise the profiles of powerful women. When it becomes normal to have female leaders, I am sure we will find more girls expressing ambition. Likewise, when it becomes normal for men to share equally in care-giving, boys will begin making different choices.</p>
+<figure class='code'><figcaption><span>For example, find() using a database query </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="nx">Posts</span><span class="p">.</span><span class="nx">find</span><span class="p">()</span>
+</span><span class='line'><span class="nx">LocalCollection</span><span class="p">.</span><span class="nx">Cursor</span> <span class="p">{</span><span class="nx">collection</span><span class="o">:</span> <span class="nx">LocalCollection</span><span class="p">,</span> <span class="nx">sorter</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">_selectorId</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">,</span> <span class="nx">matcher</span><span class="o">:</span> <span class="nx">Minimongo</span><span class="p">.</span><span class="nx">Matcher</span><span class="p">,</span> <span class="nx">skip</span><span class="o">:</span> <span class="kc">undefined</span><span class="err">…</span><span class="p">}</span>
+</span><span class='line'>      <span class="nx">_selectorId</span><span class="o">:</span> <span class="kc">undefined</span>
+</span><span class='line'>      <span class="nx">_transform</span><span class="o">:</span> <span class="kc">null</span>
+</span><span class='line'>      <span class="nx">collection</span><span class="o">:</span> <span class="nx">LocalCollection</span>
+</span><span class='line'>      <span class="nx">cursor_pos</span><span class="o">:</span> <span class="mi">0</span>
+</span><span class='line'>      <span class="nx">db_objects</span><span class="o">:</span> <span class="kc">null</span>
+</span><span class='line'>      <span class="nx">fields</span><span class="o">:</span> <span class="kc">undefined</span>
+</span><span class='line'>      <span class="nx">limit</span><span class="o">:</span> <span class="kc">undefined</span>
+</span><span class='line'>      <span class="nx">matcher</span><span class="o">:</span> <span class="nx">Minimongo</span><span class="p">.</span><span class="nx">Matcher</span>
+</span><span class='line'>      <span class="nx">reactive</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'>      <span class="nx">skip</span><span class="o">:</span> <span class="kc">undefined</span>
+</span><span class='line'>      <span class="nx">sorter</span><span class="o">:</span> <span class="kc">null</span>
+</span><span class='line'>      <span class="nx">__proto__</span><span class="o">:</span> <span class="nb">Object</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p><a href="http://www.amazon.com/Lean-In-Women-Work-Will/dp/0385349947/ref=sr_1_1?ie=UTF8&amp;qid=1395756488&amp;sr=8-1&amp;keywords=lean+in">Lean In: Women, Work, and the Will to Lead</a> by Sheryl Sandberg</p>
+
+<p>Cursors are not query snapshots. They are query snapshot containers &mdash; the contents of which are updated by changes to the underlying data. To interact with the data contained in a cursor, we can use fetch() to transform the cursor into an array.</p>
+
+<figure class='code'><figcaption><span>A cursor becomes an array with find().fetch() </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="nx">Posts</span><span class="p">.</span><span class="nx">find</span><span class="p">().</span><span class="nx">fetch</span><span class="p">()</span>
+</span><span class='line'><span class="p">[</span>
+</span><span class='line'>    <span class="nb">Object</span>
+</span><span class='line'>    <span class="nx">_id</span><span class="o">:</span> <span class="s2">&quot;z4z36DFCaGr8Ptuqd&quot;</span>
+</span><span class='line'>    <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;The Way We Live Now&quot;</span>
+</span><span class='line'>    <span class="nx">author</span><span class="o">:</span> <span class="s2">&quot;Anthony Trollope&quot;</span>
+</span><span class='line'>    <span class="nx">__proto__</span><span class="o">:</span> <span class="nb">Object</span>
+</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Meteor can iterate over a cursor without first converting it to an array, but in order to interact with the data directly, you must first use fetch(), map(), or forEach(). For more cursor fun, checkout the <a href="http://docs.meteor.com/#reactivity">Meteor docs</a>.</p>
+
+<p>Awesome.</p>
 </div>
 
 
@@ -140,12 +201,12 @@ Sandberg shares a story about a kindergarten class where the students were asked
   
 
 
-<time datetime="2014-03-23T00:00:00-07:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2014</time>
+<time datetime="2014-03-31T00:00:00-07:00" pubdate data-updated="true">Mar 31<span>st</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/read/'>read</a>
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/meteor/'>meteor</a>
   
 </span>
 
@@ -154,7 +215,7 @@ Sandberg shares a story about a kindergarten class where the students were asked
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/the-ambition-gap-lean-in/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/the-ambition-gap-lean-in/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/meteor-fetch/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/meteor-fetch/" >Tweet</a>
   
   
   
@@ -165,10 +226,8 @@ Sandberg shares a story about a kindergarten class where the students were asked
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/line-spline/" title="Previous Post: line, spline">&laquo; line, spline</a>
+        <a class="basic-alignment left" href="/blog/2014/situations-matter/" title="Previous Post: situations matter">&laquo; situations matter</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/situations-matter/" title="Next Post: situations matter">situations matter &raquo;</a>
       
     </p>
   </footer>
@@ -285,8 +344,8 @@ Sandberg shares a story about a kindergarten class where the students were asked
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/the-ambition-gap-lean-in/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2014/the-ambition-gap-lean-in/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/meteor-fetch/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2014/meteor-fetch/';
         var disqus_script = 'embed.js';
       
     (function () {
