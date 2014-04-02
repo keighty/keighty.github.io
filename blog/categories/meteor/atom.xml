@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Meteor | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/meteor/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-04-01T07:39:20-07:00</updated>
+  <updated>2014-04-02T07:19:18-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -18,9 +18,9 @@
     <link href="http://www.katieleonard.ca/blog/2014/meteor-fetch/"/>
     <updated>2014-03-31T00:00:00-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2014/meteor-fetch</id>
-    <content type="html"><![CDATA[<p>From <a href="http://book.discovermeteor.com/">Discover Meteor</a>: in Meteor, find() returns a cursor, which is a reactive data source.</p>
+    <content type="html"><![CDATA[<p>From <a href="http://book.discovermeteor.com/">Discover Meteor</a>: find() returns a cursor, which is a reactive data source.</p>
 
-<p>Data from reactive data sources will be updated automatically to track changes in the data used to generate it. <!--more-->Cursors are derived from specific sources:</p>
+<p>Data from reactive sources will be updated automatically to track changes in the data used to generate it. <!--more-->Cursors are derived from specific sources:</p>
 
 <ul>
 <li>Session variables</li>
