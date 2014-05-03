@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="From Discover Meteor: find() returns a cursor, which is a reactive data source. Data from reactive sources will be updated automatically to track &hellip;">
+  <meta name="description" content="Back in March I wrote about letting my computer&rsquo;s battery die in the middle of a meteor project, with the consequence being that I could not &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,85 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/mongo-trouble-reset/">Mongo Trouble? Reset!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-03T00:00:00-07:00" pubdate data-updated="true">May 3<span>rd</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Back in March I wrote about letting my computer&rsquo;s battery die in the middle of a meteor project, with the consequence being that I could not connect to the underlying mongo database:</p>
+
+<figure class='code'><figcaption><span>What&#8217;s wrong, meteor? </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor
+</span><span class='line'><span class="o">[[[[[</span> ~/project/in/progress <span class="o">]]]]]</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">=</span>&gt; Started proxy.
+</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
+</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
+</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
+</span><span class='line'>Can<span class="err">&#39;</span>t start Mongo server.
+</span><span class='line'>MongoDB had an unspecified uncaught exception.
+</span><span class='line'>This can be caused by MongoDB being unable to write to a <span class="nb">local </span>database.
+</span><span class='line'>Check that you have permissions to write to .meteor/local. MongoDB does
+</span><span class='line'>not support filesystems like NFS that <span class="k">do </span>not allow file locking.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After much spelunking in stackoverflow and documentation, I discovered the magic of this command:</p>
+
+<figure class='code'><figcaption><span>Magic mongo reset spell %</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u mongodb mongdo --repair --dbpath /var/lib/mongodb
+</span><span class='line'><span class="nv">$ </span>sudo service mongodb start
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Repairing and restarting the mongo service seemed to do the trick, and I continued on my merry meteor way. Well, I did it again &mdash; I let my battery die in the middle of a meteor project, and with feelings of smug satisfaction, I plumbed my blog archive for the answer. Only this time the magic antidote didn&rsquo;t work</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/mongo-trouble-reset/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -303,45 +382,6 @@ var svg = d3.select("#graph-here").append("svg");
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/multiple-remotes/">Multiple Remotes</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-19T00:00:00-07:00" pubdate data-updated="true">Mar 19<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Somehow I had worked out in my head that there could be only one remote. Origin. Turns out you can set and push to a (presumably) infinite number of remote repositories </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/multiple-remotes/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -364,6 +404,10 @@ var svg = d3.select("#graph-here").append("svg");
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/mongo-trouble-reset/">Mongo Trouble? Reset!</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/meteor-fetch/">Meteor, Fetch!</a>
       </li>
     
@@ -377,10 +421,6 @@ var svg = d3.select("#graph-here").append("svg");
     
       <li class="post">
         <a href="/blog/2014/line-spline/">Line, Spline</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/multiple-remotes/">Multiple Remotes</a>
       </li>
     
   </ul>

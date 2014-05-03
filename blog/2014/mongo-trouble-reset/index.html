@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Open-source Setup: - keighty</title>
+  <title>Mongo Trouble? Reset! - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="git checkout the Ego. In the interests of giving back to the software community, I have been looking for an active open-source project to contribute &hellip;">
+  <meta name="description" content="Back in March I wrote about letting my computer&rsquo;s battery die in the middle of a meteor project, with the consequence being that I could not &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/opensource-setup-git-checkout-the-ego">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/mongo-trouble-reset">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">Open-source Setup:</h1>
+      <h1 class="entry-title">Mongo Trouble? Reset!</h1>
     
     
       <p class="meta">
@@ -98,22 +98,57 @@
   
 
 
-<time datetime="2014-01-18T11:18:29-08:00" pubdate data-updated="true">Jan 18<span>th</span>, 2014</time>
+<time datetime="2014-05-03T00:00:00-07:00" pubdate data-updated="true">May 3<span>rd</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h2><code>git checkout</code> the Ego.</h2>
+<div class="entry-content"><p>Back in March I wrote about letting my computer&rsquo;s battery die in the middle of a meteor project, with the consequence being that I could not connect to the underlying mongo database:</p>
 
-<p>In the interests of giving back to the software community, I have been looking for an active open-source project to contribute to. I am working to gain mastery of ruby on rails, so naturally I gravitate towards projects of that ilk. Unfortunately, I have gained just enough knowledge to be a little smug, so when I found a project I wanted to work on I scrolled immediately to the README and started scanning.<!--more--> The first block of text was headed by:</p>
+<figure class='code'><figcaption><span>What&#8217;s wrong, meteor? </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor
+</span><span class='line'><span class="o">[[[[[</span> ~/project/in/progress <span class="o">]]]]]</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">=</span>&gt; Started proxy.
+</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
+</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
+</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
+</span><span class='line'>Can<span class="err">&#39;</span>t start Mongo server.
+</span><span class='line'>MongoDB had an unspecified uncaught exception.
+</span><span class='line'>This can be caused by MongoDB being unable to write to a <span class="nb">local </span>database.
+</span><span class='line'>Check that you have permissions to write to .meteor/local. MongoDB does
+</span><span class='line'>not support filesystems like NFS that <span class="k">do </span>not allow file locking.
+</span></code></pre></td></tr></table></div></figure>
 
-<h3>Start here if this is your first ruby on rails project&hellip;</h3>
 
-<p>&hellip;with a link to a blog post. I kept scanning for information that would be relevant to ME. This was not my first ruby on rails project. I have my elaborate dev environment set up just the way I like it, thank you very much, and I can reproduce your project with a flick of my config file, I am sure (chuckles condescendingly). This is a snippet of the proceeding workflow:</p>
+<p>After much spelunking in stackoverflow and documentation, I discovered the magic of this command:</p>
 
-<figure class='code'><figcaption><span>Workflow of the egotistical programmer.</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>Magic mongo reset spell %</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u mongodb mongdo --repair --dbpath /var/lib/mongodb
+</span><span class='line'><span class="nv">$ </span>sudo service mongodb start
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Repairing and restarting the mongo service seemed to do the trick, and I continued on my merry meteor way. Well, I did it again &mdash; I let my battery die in the middle of a meteor project, and with feelings of smug satisfaction, I plumbed my blog archive for the answer. Only this time the magic antidote didn&rsquo;t work<!--more-->:</p>
+
+<figure class='code'><figcaption><span>This log has been redacted to protect the ignorant </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -140,81 +175,62 @@
 <span class='line-number'>25</span>
 <span class='line-number'>26</span>
 <span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone repo
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>repo/
-</span><span class='line'><span class="nv">$ </span>bundle install
-</span><span class='line'>Errors: need to update your rubygems
-</span><span class='line'><span class="nv">$ </span>gem update --system
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:setup
-</span><span class='line'>Errors: need postgres installed <span class="o">(</span>no inkling in the README<span class="o">)</span>
-</span><span class='line'><span class="nv">$ </span>brew install postgres
-</span><span class='line'>... follow half of the required instructions
-</span><span class='line'>Errors
-</span><span class='line'>Frustration because you don<span class="err">&#39;</span>t know how to follow instructions
-</span><span class='line'><span class="nv">$ </span>brew info postgres
-</span><span class='line'>...
-</span><span class='line'><span class="s2">&quot;ooooohhhhhhhh... I missed a step&quot;</span>
-</span><span class='line'><span class="nv">$ </span>follow instructions this <span class="nb">time</span>
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:setup
-</span><span class='line'>Errors: need redis installed
-</span><span class='line'><span class="nv">$ </span>brew install redis
-</span><span class='line'><span class="nv">$ </span>follow instructions because I have learned my lesson
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:setup
-</span><span class='line'>Errors: redis config file missing information
-</span><span class='line'>Frustration because redis config file was removed 100 commits ago
-</span><span class='line'>...
-</span><span class='line'>Determine that first pull request
-</span><span class='line'>will be an amendment to setup documentation
-</span><span class='line'>Rebuild config file and add host name
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:setup
-</span><span class='line'>Errors: required seeds file was removed 100 commits ago
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:migrate
-</span><span class='line'><span class="nv">$ </span>SUCCESS!!!
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake spec
-</span><span class='line'>Errors: run db:test:prepare
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:test:prepare
-</span><span class='line'>Errors
-</span><span class='line'>Frustration
-</span><span class='line'><span class="nv">$ RAILS_ENV</span><span class="o">=</span><span class="nb">test </span>bundle <span class="nb">exec </span>rake db:migrate
-</span><span class='line'><span class="nv">$ </span>SUCCESS!!
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake spec
-</span><span class='line'>Errors... sigh.. more errors
-</span><span class='line'><span class="nv">$ </span>limp away <span class="k">for </span>lunch, live to contribute another day
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo -u mongodb mongod --repair --dbpath /var/lib/mongodb/
+</span><span class='line'>[sudo] password for keighty:
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] finished checking dbs
+</span><span class='line'>Sat May  3 09:52:04.793 dbexit:
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: going to close listening sockets...
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: going to flush diaglog...
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: going to close sockets...
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: waiting for fs preallocator...
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: closing all files...
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] closeAllFiles() finished
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: removing fs lock...
+</span><span class='line'>Sat May  3 09:52:04.794 dbexit: really exiting now
+</span><span class='line'>
+</span><span class='line'>$ sudo service mongodb start
+</span><span class='line'>mongodb start/running, process 2415
+</span><span class='line'>$ meteor
+</span><span class='line'>[[[[[ ~/project/in/progress ]]]]]
+</span><span class='line'>
+</span><span class='line'>=> Started proxy.
+</span><span class='line'>Unexpected mongo exit code 100. Restarting.
+</span><span class='line'>Unexpected mongo exit code 100. Restarting.
+</span><span class='line'>Unexpected mongo exit code 100. Restarting.
+</span><span class='line'>Can't start Mongo server.
+</span><span class='line'>MongoDB had an unspecified uncaught exception.
+</span><span class='line'>This can be caused by MongoDB being unable to write to a local database.
+</span><span class='line'>Check that you have permissions to write to .meteor/local. MongoDB does
+</span><span class='line'>not support filesystems like NFS that do not allow file locking.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>C&#8217;mon &mdash; It worked the last time! I tried it again with the same result. I tried <code>chown</code>-ing the local db. I tried <code>chown</code>-ing the database in <code>/var/lib/mongodb</code>. After each attempted solution the mongobd service would start, but meteor hiccuped on writing to the database. So I tried something radical. Something that wasn&rsquo;t in any of the manuals, or any of the <a href="http://stackoverflow.com/questions/5798549/why-cant-i-start-the-mongodb">responses to similar questions</a> on stackoverflow:</p>
+
+<figure class='code'><figcaption><span>Really? That was all? </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor reset
+</span><span class='line'>Project reset.
+</span><span class='line'><span class="nv">$ </span>meteor
+</span><span class='line'><span class="o">[[[[[</span> ~/project/in/progress <span class="o">]]]]]</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">=</span>&gt; Started proxy.
+</span><span class='line'><span class="o">=</span>&gt; Started MongoDB.
+</span><span class='line'><span class="o">=</span>&gt; Started your app.
+</span><span class='line'>
+</span><span class='line'><span class="o">=</span>&gt; App running at: http://localhost:3000/
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Getting a new project setup and functional is not an easy chore, and I was quite chastened when I swallowed my pride and checked out the blog post for first timers, which boiled down to:</p>
-
-<ol>
-<li>Install <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a></li>
-<li>Install <a href="http://www.vagrantup.com/">Vagrant</a></li>
-<li><code>git clone repo</code></li>
-<li><code>cd repo</code></li>
-<li><code>vagrant up</code></li>
-<li><code>vagrant ssh</code></li>
-<li><code>cd /vagrant</code></li>
-<li><code>bundle install</code></li>
-<li><code>bundle exec rake db:migrate</code></li>
-<li><code>bundle exec rails s</code></li>
-</ol>
-
-
-<p>I could have been contributing hours ago, when I still had momentum! Perhaps my first pull request should still be to modify the README. I would rephrase the heading to read &ldquo;For all developers: get started right here&rdquo;, and then remove every other instruction that followed.</p>
-
-<p>Perhaps I should go get started&hellip;</p>
+<p>Turns out that if you hard shut-down your computer while your meteor project&rsquo;s mongo instance is running, it remains in a locked mode. Since it was only a development database I took a chance that dropping it would cure my ills. Voila! Meteor and mongodb are friends again.</p>
 
 <p>Awesome.</p>
 </div>
@@ -239,12 +255,12 @@
   
 
 
-<time datetime="2014-01-18T11:18:29-08:00" pubdate data-updated="true">Jan 18<span>th</span>, 2014</time>
+<time datetime="2014-05-03T00:00:00-07:00" pubdate data-updated="true">May 3<span>rd</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/opensource/'>opensource</a>
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/meteor/'>meteor</a>, <a class='category' href='/blog/categories/ubuntu-wrestling/'>ubuntu wrestling</a>
   
 </span>
 
@@ -253,7 +269,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/opensource-setup-git-checkout-the-ego/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/opensource-setup-git-checkout-the-ego/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/mongo-trouble-reset/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/mongo-trouble-reset/" >Tweet</a>
   
   
   
@@ -264,10 +280,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/meteor-user/" title="Previous Post: Meteor user">&laquo; Meteor user</a>
+        <a class="basic-alignment left" href="/blog/2014/meteor-fetch/" title="Previous Post: meteor, fetch!">&laquo; meteor, fetch!</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/embrace-hrt-for-collabrative-nirvana/" title="Next Post: embrace HRT for collabrative nirvana">embrace HRT for collabrative nirvana &raquo;</a>
       
     </p>
   </footer>
@@ -384,8 +398,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/opensource-setup-git-checkout-the-ego/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2014/opensource-setup-git-checkout-the-ego/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/mongo-trouble-reset/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2014/mongo-trouble-reset/';
         var disqus_script = 'embed.js';
       
     (function () {

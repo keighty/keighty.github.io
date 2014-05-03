@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-04-02T07:19:18-07:00</updated>
+  <updated>2014-05-03T12:38:44-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,142 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mongo Trouble? Reset!]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/mongo-trouble-reset/"/>
+    <updated>2014-05-03T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/mongo-trouble-reset</id>
+    <content type="html"><![CDATA[<p>Back in March I wrote about letting my computer&rsquo;s battery die in the middle of a meteor project, with the consequence being that I could not connect to the underlying mongo database:</p>
+
+<figure class='code'><figcaption><span>What&#8217;s wrong, meteor? </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor
+</span><span class='line'><span class="o">[[[[[</span> ~/project/in/progress <span class="o">]]]]]</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">=</span>&gt; Started proxy.
+</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
+</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
+</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
+</span><span class='line'>Can<span class="err">&#39;</span>t start Mongo server.
+</span><span class='line'>MongoDB had an unspecified uncaught exception.
+</span><span class='line'>This can be caused by MongoDB being unable to write to a <span class="nb">local </span>database.
+</span><span class='line'>Check that you have permissions to write to .meteor/local. MongoDB does
+</span><span class='line'>not support filesystems like NFS that <span class="k">do </span>not allow file locking.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After much spelunking in stackoverflow and documentation, I discovered the magic of this command:</p>
+
+<figure class='code'><figcaption><span>Magic mongo reset spell %</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u mongodb mongdo --repair --dbpath /var/lib/mongodb
+</span><span class='line'><span class="nv">$ </span>sudo service mongodb start
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Repairing and restarting the mongo service seemed to do the trick, and I continued on my merry meteor way. Well, I did it again &mdash; I let my battery die in the middle of a meteor project, and with feelings of smug satisfaction, I plumbed my blog archive for the answer. Only this time the magic antidote didn&rsquo;t work<!--more-->:</p>
+
+<figure class='code'><figcaption><span>This log has been redacted to protect the ignorant </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo -u mongodb mongod --repair --dbpath /var/lib/mongodb/
+</span><span class='line'>[sudo] password for keighty:
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] finished checking dbs
+</span><span class='line'>Sat May  3 09:52:04.793 dbexit:
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: going to close listening sockets...
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: going to flush diaglog...
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: going to close sockets...
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: waiting for fs preallocator...
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: closing all files...
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] closeAllFiles() finished
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: removing fs lock...
+</span><span class='line'>Sat May  3 09:52:04.794 dbexit: really exiting now
+</span><span class='line'>
+</span><span class='line'>$ sudo service mongodb start
+</span><span class='line'>mongodb start/running, process 2415
+</span><span class='line'>$ meteor
+</span><span class='line'>[[[[[ ~/project/in/progress ]]]]]
+</span><span class='line'>
+</span><span class='line'>=> Started proxy.
+</span><span class='line'>Unexpected mongo exit code 100. Restarting.
+</span><span class='line'>Unexpected mongo exit code 100. Restarting.
+</span><span class='line'>Unexpected mongo exit code 100. Restarting.
+</span><span class='line'>Can't start Mongo server.
+</span><span class='line'>MongoDB had an unspecified uncaught exception.
+</span><span class='line'>This can be caused by MongoDB being unable to write to a local database.
+</span><span class='line'>Check that you have permissions to write to .meteor/local. MongoDB does
+</span><span class='line'>not support filesystems like NFS that do not allow file locking.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>C&#8217;mon &mdash; It worked the last time! I tried it again with the same result. I tried <code>chown</code>-ing the local db. I tried <code>chown</code>-ing the database in <code>/var/lib/mongodb</code>. After each attempted solution the mongobd service would start, but meteor hiccuped on writing to the database. So I tried something radical. Something that wasn&rsquo;t in any of the manuals, or any of the <a href="http://stackoverflow.com/questions/5798549/why-cant-i-start-the-mongodb">responses to similar questions</a> on stackoverflow:</p>
+
+<figure class='code'><figcaption><span>Really? That was all? </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor reset
+</span><span class='line'>Project reset.
+</span><span class='line'><span class="nv">$ </span>meteor
+</span><span class='line'><span class="o">[[[[[</span> ~/project/in/progress <span class="o">]]]]]</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">=</span>&gt; Started proxy.
+</span><span class='line'><span class="o">=</span>&gt; Started MongoDB.
+</span><span class='line'><span class="o">=</span>&gt; Started your app.
+</span><span class='line'>
+</span><span class='line'><span class="o">=</span>&gt; App running at: http://localhost:3000/
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Turns out that if you hard shut-down your computer while your meteor project&rsquo;s mongo instance is running, it remains in a locked mode. Since it was only a development database I took a chance that dropping it would cure my ills. Voila! Meteor and mongodb are friends again.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Meteor, Fetch!]]></title>
@@ -1212,63 +1348,6 @@ importData();
 <li><strong>Ease up</strong>: Not everything can or should be visualized. Be deliberate and add to information, don&rsquo;t obfuscate with unnecessary visualizations.</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Implied Functions Applied]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/implied-functions-applied/"/>
-    <updated>2014-02-26T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/implied-functions-applied</id>
-    <content type="html"><![CDATA[<p>When binding a primitive datum to a node in a D3 visualization, the callback function can be implicitly called on the datum without the typical verbosity<!--more-->:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">data</span><span class="p">([</span><span class="mi">32</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">293</span><span class="p">])</span>
-</span><span class='line'>  <span class="p">.</span><span class="nx">enter</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span> <span class="nb">String</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In line 5, String() is performed on the data element, as is Math.sqrt in line 6, with the same result as:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">data</span><span class="p">([</span><span class="mi">32</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">293</span><span class="p">])</span>
-</span><span class='line'>  <span class="p">.</span><span class="nx">enter</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="nb">String</span><span class="p">(</span><span class="nx">d</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">})</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">d</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>&hellip; but better.</p>
-
-<p>Awesome.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://mbostock.github.io/d3/tutorial/circle.html">Three Little Circles D3 Tutorial</a></p>
 ]]></content>
   </entry>
   
