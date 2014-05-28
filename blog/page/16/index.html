@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Show-off With GitHub and Docco - keighty</title>
+  <title>keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="">
+  <meta name="description" content="This week @PDXcodeschool we jumped into TDD using minitest/autorun. I have
+used RSpec in the past, and loved the way it let me manage the logic of my &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2013/show-off-with-github">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/page/16">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -77,12 +78,15 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article class="hentry" role="article">
+      <div class="blog-index">
   
+  
+  
+    <article>
+      
   <header>
     
-      <h1 class="entry-title">Show-off With GitHub and Docco</h1>
+      <h1 class="entry-title"><a href="/blog/2013/TDD-is-the-way-to-be/">I Admit It, I Love TDD</a></h1>
     
     
       <p class="meta">
@@ -98,133 +102,36 @@
   
 
 
-<time datetime="2013-08-06T22:29:03-07:00" pubdate data-updated="true">Aug 6<span>th</span>, 2013</time>
+<time datetime="2013-06-14T00:00:00-07:00" pubdate data-updated="true">Jun 14<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I was experimenting with some documentation styles today and discovered two bits of gold: gh-pages and docco<!--more-->:</p>
+  <div class="entry-content"><p>This week @PDXcodeschool we jumped into TDD using minitest/autorun. I have
+used RSpec in the past, and loved the way it let me manage the logic of my project.
+I love that ruby has a built in framework &mdash; so easy to use!</p>
 
-<p>Creating a site for your project using GitHub is a 3 step process:
-1. create a new orphan branch called gh-pages
-2. remove all the contents
-3. fill the branch with your boastful new site</p>
-
-<div>
-  <pre><code class='bash'>$ cd repository
-
-$ git checkout --orphan gh-pages
-# Creates a branch, without any parents
-# Switched to a new branch &#39;gh-pages&#39;
-
-$ git rm -rf .
-# Remove all files from the old working tree</code></pre>
 </div>
-
-
-<p>From here you can use the <a href="https://help.github.com/articles/creating-pages-with-the-automatic-generator">GitHub Automatic Page generator</a> to throw up a theme and some standard content, you can roll out a <a href="http://jekyllbootstrap.com/">jekyll bootstrap</a> platform with blogging integration, or you can simply:</p>
-
-<div>
-  <pre><code class='bash'>$ echo &quot;Hello gh-pages!&quot; &gt; index.html
-$ git add index.html
-$ git commit -a -m &quot;First pages commit&quot;
-$ git push origin gh-pages</code></pre>
-</div>
-
-
-<p>Add and commit your content to your gh-pages branch, and GitHub will generate what needs to be generated in order to serve your website.</p>
-
-<p>Your pages are hosted for free by GitHub. If you have already configured a personal site using <a href="https://help.github.com/articles/user-organization-and-project-pages">User Pages</a>, your project pages will hang off the end of your domain like this : username.github.io/repo_name</p>
-
-<h3><a href="http://jashkenas.github.io/docco/">Docco</a></h3>
-
-<blockquote><p>Docco is a quick-and-dirty documentation generator, written in Literate CoffeeScript. It produces an HTML document that displays your comments intermingled with your code. All prose is passed through Markdown, and code is passed through Highlight.js syntax highlighting.</p></blockquote>
-
-<p>Docco works with  Python, Ruby, JavaScript, Java, and many other languages, with no configuration &mdash; just plug and play!</p>
-
-<p>Install Docco with npm:</p>
-
-<div>
-  <pre><code class='bash'>sudo npm install -g docco</code></pre>
-</div>
-
-
-<p>Run it against your code:</p>
-
-<div>
-  <pre><code class='javascript'>docco lib/*.ruby</code></pre>
-</div>
-
-
-<p>Docco will create a docs/ folder in your project and will generate an html file for each ruby file in the lib directory. This is where beautifully commented code really pays off, but docco does not format multi-line code the same way. Check out my <a href="http://www.katieleonard.ca/PCSnotes/docs/benchmark.html">benchmark.rb</a> for an example of how each comment style is treated by docco.</p>
-
-<p>TADA</p>
-</div>
-
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
-
-      
-
-
-
-
-
-
-
-
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/TDD-is-the-way-to-be/">Read on &rarr;</a>
+    </footer>
   
 
 
-<time datetime="2013-08-06T22:29:03-07:00" pubdate data-updated="true">Aug 6<span>th</span>, 2013</time>
-      
-
-<span class="categories">
+    </article>
   
-    <a class='category' href='/blog/categories/web/'>web</a>
-  
-</span>
-
-
-    </p>
+  <div class="pagination">
     
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2013/show-off-with-github/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2013/show-off-with-github/" >Tweet</a>
-  
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
-</div>
-
+    <a href="/blog/archives">Blog Archives</a>
     
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2013/state-of-the-quickunion/" title="Previous Post: State of the QuickUnion">&laquo; State of the QuickUnion</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2013/canadian-flair/" title="Next Post: Canadian Flair">Canadian Flair &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a class="next" href="/blog/page/15/">Newer &rarr;</a>
+    
+  </div>
 </div>
-  </section>
-
-</div>
-
 <aside class="sidebar">
   
     <section>
@@ -264,7 +171,7 @@ $ git push origin gh-pages</code></pre>
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating...</li>
+    <li class="loading">Status updating&#8230;</li>
   </ul>
   
   <script type="text/javascript">
@@ -292,7 +199,7 @@ $ git push origin gh-pages</code></pre>
 <section>
   <div>
     <h1>Aboot me</h1>
-    <p>I have loved programming since my first "Hello World!", and have been seeking source code enlightenment through Java, Ruby, Rails, and JavaScript. I am also a recent immigrant to Portland, Oregon - perhaps you can tell from my Canadian accent?</p>
+    <p>I have loved programming since my first &#8220;Hello World!&#8221;, and have been seeking source code enlightenment through Java, Ruby, Rails, and JavaScript. I am also a recent immigrant to Portland, Oregon - perhaps you can tell from my Canadian accent?</p>
   </div>
 </section>
 
@@ -312,7 +219,6 @@ $ git push origin gh-pages</code></pre>
   
 </aside>
 
-
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -327,10 +233,7 @@ $ git push origin gh-pages</code></pre>
       var disqus_shortname = 'keightyleonard';
       
         
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2013/show-off-with-github/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2013/show-off-with-github/';
-        var disqus_script = 'embed.js';
+        var disqus_script = 'count.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

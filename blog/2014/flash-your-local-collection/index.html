@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Meteor User - keighty</title>
+  <title>Flash Your Local Collection - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="&ldquo;Getting Started with Meteor.js JavaScript Framework&rdquo; by Isaac Strack is a great introduction to a powerful tool. User accounts in three &hellip;">
+  <meta name="description" content="Rails allows you to pass messages to the user between actions (&ldquo;This ActionDispatch::Flash will self-destruct&rdquo;), and because Rails, all &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/meteor-user">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/flash-your-local-collection">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">Meteor User</h1>
+      <h1 class="entry-title">Flash Your Local Collection</h1>
     
     
       <p class="meta">
@@ -98,23 +98,53 @@
   
 
 
-<time datetime="2014-01-14T19:38:16-08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2014</time>
+<time datetime="2014-05-26T00:00:00-07:00" pubdate data-updated="true">May 26<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><a href="http://www.packtpub.com/getting-started-with-meteor-javascript-framework/book">&ldquo;Getting Started with Meteor.js JavaScript Framework&rdquo;</a> by Isaac Strack is a great introduction to a powerful tool.</p>
+<div class="entry-content"><p>Rails allows you to pass messages to the user between actions (&ldquo;This <a href="http://api.rubyonrails.org/classes/ActionDispatch/Flash.html">ActionDispatch::Flash</a> will self-destruct&rdquo;), and because Rails, all the message generation happens server side:</p>
 
-<!--more-->
+<figure class='code'><figcaption><span>flashy_controller.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">show</span>
+</span><span class='line'>  <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;You dropped your packet.&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<h3>User accounts in three easy steps</h3>
+<p>Meteor is mostly a client-side application framework, and you can implement a similar message system, which will never touch the server, by defining a collection that is local to the browser.<!--more--></p>
 
-<p>Meteor rolls its own user accounts system, and getting it running on your application is a three step process:</p>
+<h3>1. Create a local collection</h3>
 
-<figure class='code'><figcaption><span>1) command line: Add the relevant packages</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>/client/errors.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Errors</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Meteor</span><span class="p">.</span><span class="nx">Collection</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Passing <code>null</code> into the Collection declaration tells Meteor that the collection should not be extended to the server &mdash; it creates an &ldquo;unmanaged (unsynchronized) local collection&rdquo; (<a href="http://docs.meteor.com/#meteor_collection">docs</a>)</p>
+
+<h3>2. Throw an error whenever you need to</h3>
+
+<figure class='code'><figcaption><span>/missionCritical.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>if(error){
+</span><span class='line'>  Errors.insert({message: error.reason});
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>3. Create a template for displaying the error</h3>
+
+<figure class='code'><figcaption><span>/client/errors.html </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -122,58 +152,53 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor add accounts-base
-</span><span class='line'>accounts-base: A user account system
-</span><span class='line'><span class="nv">$ </span>meteor add accounts-password
-</span><span class='line'>accounts-password: Password support <span class="k">for </span>accounts
-</span><span class='line'><span class="nv">$ </span>meteor add email
-</span><span class='line'>email: Send email messages
-</span><span class='line'><span class="nv">$ </span>meteor add accounts-ui
-</span><span class='line'>accounts-ui: Simple templates to add login widgets to an app
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&lt;</span><span class="nx">template</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;errors&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;errors&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="p">{{</span><span class="err">#</span><span class="nx">each</span> <span class="nx">errors</span><span class="p">}}</span>
+</span><span class='line'>      <span class="p">{{</span><span class="o">&gt;</span> <span class="nx">error</span><span class="p">}}</span>
+</span><span class='line'>    <span class="p">{{</span><span class="err">/each}}</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="err">/div&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/template&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">template</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;alert alert-error&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;button&quot;</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;close&quot;</span> <span class="nx">data</span><span class="o">-</span><span class="nx">dismiss</span><span class="o">=</span><span class="s2">&quot;alert&quot;</span><span class="o">&gt;&amp;</span><span class="nx">times</span><span class="p">;</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+</span><span class='line'>    <span class="p">{{</span><span class="nx">message</span><span class="p">}}</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="err">/div&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/template&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
+<h3>4. Create a helper method for serving the errors to the template</h3>
 
-
-<figure class='code'><figcaption><span>2) html: Add a div to hold the login button</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>/client/errors.js continued again </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;float:right; margin-right:20px;&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  {{loginButtons align=&quot;right&quot;}}
-</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">errors</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">Errors</span><span class="p">.</span><span class="nx">find</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>Every template that contains the handlebars <code>{{&gt; errors}}</code> will now display whatever errors have been saved to the session collection.</p>
 
+<p>Awesome.</p>
 
-<figure class='code'><figcaption><span>3) client javascript: Add an Accounts config</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Accounts</span><span class="p">.</span><span class="nx">ui</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">passwordSignupFields</span><span class="o">:</span> <span class="s1">&#39;USERNAME_AND_OPTIONAL_EMAIL&#39;</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
+<h3>Resources</h3>
 
-
-<h2>The catch</h2>
-
-<p>While the server side and client side code looks similar they are definitely not interchangeable. Server code run on the client side will likely fail silently, but client code run on the server will crash the app. One place where I got tripped up was accessing the userId:</p>
-
-<h3>Server side <code>this.userId</code></h3>
-
-<p><span class='pullquote-right' data-pullquote='Use this.userId inside the server publish function'>
-In Meteor server side javascript the context is clear: <code>this</code> is called in the context of a Meteor object, and you can therefore make inquiries about its properties. Use this.userId inside the server publish function to access the id of the current user (or null if no user is logged in &mdash; from the <a href="http://docs.meteor.com/#publish_userId">docs</a>).
-</span></p>
-
-<h3>Client side: <code>Meteor.userId()</code></h3>
-
-<p><span class='pullquote-right' data-pullquote='Use Meteor.userId() anywhere BUT in the server publish function'>
-In the Meteor client side, <code>this</code> has a different context: the <code>window</code> object. The window object has a userId property that can be set at Document.ready(), but in the case that a user logs out and another user logs in to that same window without a page refresh, <code>window.userId</code> will retain the id of the first user. Use Meteor.userId() anywhere BUT in the server publish function to get the current user id (or null if no user is logged in &mdash; from the <a href="http://docs.meteor.com/#accounts_api">docs</a>).
-</span></p>
-
-<p>Thanks to this <a href="http://stackoverflow.com/a/20781135">stackoverflow</a> response, the Meteor <a href="http://docs.meteor.com/">docs</a>, and packtpub&rsquo;s awesome <a href="http://www.packtpub.com/getting-started-with-meteor-javascript-framework/book">support page</a> for helping me get reacquainted with javascript contexts.</p>
-
-<p>Awesome</p>
+<p><a href="https://www.discovermeteor.com/">discovermeteor.com</a>
+<a href="http://docs.meteor.com">Meteor docs</a></p>
 </div>
 
 
@@ -196,12 +221,12 @@ In the Meteor client side, <code>this</code> has a different context: the <code>
   
 
 
-<time datetime="2014-01-14T19:38:16-08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2014</time>
+<time datetime="2014-05-26T00:00:00-07:00" pubdate data-updated="true">May 26<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/javascript/'>javascript</a>
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/meteor/'>meteor</a>
   
 </span>
 
@@ -210,7 +235,7 @@ In the Meteor client side, <code>this</code> has a different context: the <code>
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/meteor-user/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/meteor-user/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/flash-your-local-collection/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/flash-your-local-collection/" >Tweet</a>
   
   
   
@@ -221,10 +246,8 @@ In the Meteor client side, <code>this</code> has a different context: the <code>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/get-clean/" title="Previous Post: get clean">&laquo; get clean</a>
+        <a class="basic-alignment left" href="/blog/2014/mongo-trouble-reset/" title="Previous Post: mongo trouble? reset!">&laquo; mongo trouble? reset!</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/opensource-setup-git-checkout-the-ego/" title="Next Post: open-source setup:">open-source setup: &raquo;</a>
       
     </p>
   </footer>
@@ -341,8 +364,8 @@ In the Meteor client side, <code>this</code> has a different context: the <code>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/meteor-user/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2014/meteor-user/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/flash-your-local-collection/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2014/flash-your-local-collection/';
         var disqus_script = 'embed.js';
       
     (function () {

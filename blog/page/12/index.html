@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="For my last month at code school, I have decided to learn what it takes to develop a new programming language. Having been teased for my Canadian &hellip;">
+  <meta name="description" content="A Lexer is a ruby class with a single method: tokenize(). Its purpose is to label each chunk of code with a particular token. Strings are labeled as &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,61 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/flex-your-lexer/">Flex Your Lexer</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-15T22:29:03-07:00" pubdate data-updated="true">Aug 15<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A Lexer is a ruby class with a single method: tokenize(). Its purpose is to label each chunk of code with a particular token. Strings are labeled as strings, numbers as numbers, and class names as constants. For example,</p>
+
+<div>
+  <pre><code class='ruby'>Lexer.new.tokenize(&quot;string&quot;)
+# =&gt;[[:STRING, &quot;string&quot;]]
+Lexer.new.tokenize(&quot;True&quot;)
+# =&gt;[[:CONSTANT, &quot;True&quot;]]
+Lexer.new.tokenize(&quot;a Car&quot;)
+# =&gt;[[:A, &#39;a&#39;], [:CONSTANT, &#39;Car&#39;]])
+Lexer.new.tokenize(&quot;+&quot;)
+# =&gt;[[&quot;+&quot;, &quot;+&quot;]]</code></pre>
+</div>
+
+
+<p>&ldquo;Lexing&rdquo; is accomplished using regular expressions. The lexer treats the text string of your code like a shish kabob &ndash; it slides recognizable chunks off the skewer one at a time and categorizes them (onion, pepper, method definition, etc).</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/flex-your-lexer/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -258,47 +313,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/procuring-provisions/">Procuring Provisions</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-27T22:29:03-07:00" pubdate data-updated="true">Jul 27<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I was trying to add a database to my JSGames app &mdash; it is a basic sinatra app with a few goodies already in place &mdash; and I was having some difficulty deploying it to Heroku. Rails (for the most part) automagically creates and maintains its database, and as long as I remember to move any references to sqlite3 into the development and test environments, I have never had trouble provisioning one on Heroku either. Rolling a web application from scratch with sinatra, however, requires a little more savvy.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/procuring-provisions/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/13/">&larr; Older</a>
@@ -323,6 +337,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/flash-your-local-collection/">Flash Your Local Collection</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/mongo-trouble-reset/">Mongo Trouble? Reset!</a>
       </li>
     
@@ -336,10 +354,6 @@
     
       <li class="post">
         <a href="/blog/2014/the-ambition-gap-lean-in/">The Ambition Gap - Leaning In</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/line-spline/">Line, Spline</a>
       </li>
     
   </ul>
