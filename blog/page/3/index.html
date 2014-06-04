@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Git, the superhero of version control, allows you to review all the commands that have modified the HEAD tag in a git repo: git reflog The output for &hellip;">
+  <meta name="description" content="The Why From Object Constancy by Mike Bostock: Animated transitions are pretty, but they also serve a purpose: they make it easier to follow the data &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,72 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/the-value-of-transition/">The Value of Slow Transitions</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-08T00:00:00-08:00" pubdate data-updated="true">Mar 8<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>The Why</h3>
+
+<p>From <a href="http://bost.ocks.org/mike/constancy/">Object Constancy</a> by Mike Bostock:</p>
+
+<blockquote><p>Animated transitions are pretty, but they also serve a purpose: they make it easier to follow the data. This is known as <strong>object constancy</strong>: a graphical element that represents a particular data point&hellip; can be tracked visually through the transition. This lessens the cognitive burden by using <strong>preattentive processing</strong> of motion rather than sequential scanning of labels.</p></blockquote>
+
+<p>(The emphasis is mine)</p>
+
+<h3>The How</h3>
+
+<p>Object constancy is achieved through object identity: the data is bound to it&rsquo;s object by a shared unique identifier. This allows D3 to reuse the object when the data set is updated. Object identity is achieved by passing a key function to the data() method at the time of data binding:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var data = [ // &lt;-A
+</span><span class='line'>        {id: 0, value: "foo"},
+</span><span class='line'>        {id: 1, value: "bar"},
+</span><span class='line'>        {id: 2, value: "foo"},
+</span><span class='line'>        {id: 3, value: "baz"},
+</span><span class='line'>        {id: 4, value: "bar"}
+</span><span class='line'>    ];
+</span><span class='line'>d3.selectAll("svg:g")
+</span><span class='line'>    .data(data, function(d){return d.id;});</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -269,53 +335,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/a-technique-for-producing-ideas/">A Technique for Producing Ideas</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-04T00:00:00-08:00" pubdate data-updated="true">Mar 4<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://www.amazon.com/gp/product/B001C34HUS/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B001C34HUS&amp;linkCode=as2&amp;tag=bridgeforpoke-20">A Technique for Producing Ideas</a> by James Webb Young (1965)</p>
-
-<p>Young proposes that all ideas are the result of five identifiable stages of rumination, whether they are followed consciously or not:</p>
-
-<ol>
-<li>Gather information, and not just what is specific to your problem domain. Novelty comes from mashing seemingly unrelated concepts together.</li>
-<li>Review the information &mdash; collate your information in some fashion and go over it. A lot.</li>
-<li>Do something else. Get distracted from whatever problem you are trying to solve.</li>
-<li>&ldquo;Eureka! I have it!&rdquo;</li>
-<li>Refine your idea &mdash; first drafts are never perfect, so keep polishing.</li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -340,6 +359,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/helpers-calling-helpers/">Helpers Calling Helpers</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/flash-your-local-collection/">Flash Your Local Collection</a>
       </li>
     
@@ -353,10 +376,6 @@
     
       <li class="post">
         <a href="/blog/2014/situations-matter/">Situations Matter</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/the-ambition-gap-lean-in/">The Ambition Gap - Leaning In</a>
       </li>
     
   </ul>

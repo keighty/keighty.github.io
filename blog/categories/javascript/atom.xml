@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-05-27T18:50:24-07:00</updated>
+  <updated>2014-06-03T22:22:06-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,237 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Helpers Calling Helpers]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/helpers-calling-helpers/"/>
+    <updated>2014-06-03T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/helpers-calling-helpers</id>
+    <content type="html"><![CDATA[<p>Whittling away at the Discover Meteor tutorial for creating a social news sharing site, I was implementing a Comments collection and related accoutrements (templates, helpers, forms, etc.) when I uncovered a need to call one helper method from another<!--more-->.</p>
+
+<p>I was using this handy method to return the number of comments made on a particular post:
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Helpful helpers </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">commentsCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Template helper magic sauce </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">submitted</span> <span class="nx">by</span> <span class="p">{{</span><span class="nx">postAuthor</span><span class="p">}},</span> <span class="kd">with</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">a</span> <span class="nx">href</span><span class="o">=</span><span class="s2">&quot;{{pathFor &#39;postPage&#39;}}&quot;</span><span class="o">&gt;</span><span class="p">{{</span><span class="nx">commentsCount</span><span class="p">}}</span> <span class="nx">comments</span><span class="o">&lt;</span><span class="err">/a&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Which returned a very ordinary:</p>
+
+<blockquote><p>submitted by meImAnAwesomeUser, with 1 comments</p></blockquote>
+
+<p>1 <strong>comments</strong>?! That makes no sense.. I didn&rsquo;t minor in English so I could let that travesty fly. I made a new helper method:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>This WORKS! </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">commentsCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">},</span>
+</span><span class='line'>  <span class="nx">commentsNote</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">()</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s2">&quot;comment&quot;</span> <span class="o">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>UGH! What is that on line 6? Possibly the ugliest ternary statement I have written today (probably). Is that code duplication I smell? Won&rsquo;t reusing <code>commentsCount</code> remove the redundancy?</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Starting to DRY the meteor </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">commentsCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">},</span>
+</span><span class='line'>  <span class="nx">commentsNote</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="nx">commentsCount</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s2">&quot;comment&quot;</span> <span class="o">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Only.. that doesn&rsquo;t work:</p>
+
+<pre><code>Exception from Deps recompute function: ReferenceError: commentsCount is not defined
+at Object.Template.postPageItem.helpers.commentsNote (http://localhost:3000/client/views/posts/post_page_item.js?160ec9a926881c795377a47c15affc4f553c4d88:9:12)
+</code></pre>
+
+<p>But it is RIGHT ABOVE! I can see it! It is in the same file! I tried all permutations of <code>commentsCount()</code>, <code>this.commentsCount</code>, <code>self.commentsCount</code>, <code>this.self.commentsCount()</code>, and they all threw either similar errors or <code>undefined</code>. Calling the prototype method directly turns out to work just fine:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>THIS is not THAT and also doesn&rsquo;t work </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">commentsCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">},</span>
+</span><span class='line'>  <span class="nx">commentsNote</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">commentsCount</span><span class="p">()</span>
+</span><span class='line'><span class="k">return</span> <span class="nx">count</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s2">&quot;comment&quot;</span> <span class="o">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Except that when <code>commentsCount</code> is called on line 6, <code>this</code> is no longer the lovely Post item provided by the template. No, <code>this</code> becomes the context of the <code>commentsNote</code> function, and therefore calling <code>this._id</code> will return <code>undefined</code>. The closure issue can be worked around with a little argument passing:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Is DRY so much better? </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">commentsCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="kd">var</span> <span class="nx">count_id</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">id</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">?</span> <span class="nx">id</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">;</span>
+</span><span class='line'><span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="nx">count_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">},</span>
+</span><span class='line'>  <span class="nx">commentsNote</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">commentsCount</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">)</span>
+</span><span class='line'><span class="k">return</span> <span class="nx">count</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s2">&quot;comment&quot;</span> <span class="o">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Wow. Passing in the id works, but now I have to check the context to determine the appropriate id. That is the most unreadable-but-reused code I have written today (probably), and I learned some valuable lessons on this frantic search for DRY:</p>
+
+<ul>
+<li><code>self</code>, whether called from a helper or the console, will always be <code>window</code></li>
+<li><code>this</code> called from a Template helper refers to the item of the collection that is passed in to the template</li>
+<li>because helper methods are closures, <code>this</code> in the calling method is different from <code>this</code> in the called method</li>
+<li>don&rsquo;t dry out your code to the point of unreadability</li>
+</ul>
+
+
+<p>In the end, cleaning up the ugly ternary makes the code reuse more reasonable.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>This is just fine </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">commentsCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">},</span>
+</span><span class='line'>  <span class="nx">commentsNote</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
+</span><span class='line'><span class="k">return</span> <span class="nx">count</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s2">&quot;comment&quot;</span> <span class="o">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Flash Your Local Collection]]></title>
@@ -564,59 +795,6 @@ importData();
 </script>
 </div>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Easing Does It]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/easing-does-it/"/>
-    <updated>2014-03-12T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/easing-does-it</id>
-    <content type="html"><![CDATA[<p>With the possible exception of UFOs, things don&rsquo;t usually switch from being stationary to moving at maximum velocity without an intervening period of acceleration or deceleration. Similarly, it can be difficult to track elements on a web page that move from one position to another with no warning, or faster than the human eye can perceive. Enter easing functions: <!--more--></p>
-
-<blockquote><p>&ldquo;<strong>Easing functions</strong> specify the rate of change of a parameter over time.&rdquo; &mdash;Robert Penner</p></blockquote>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Easy easing <a href="https://gist.github.com/keighty/9508948">https://gist.github.com/keighty/9508948</a> Gist </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">enter</span><span class="p">()</span>
-</span><span class='line'>  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">circle</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;)</span>
-</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">cx</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span><span class="nx">scaleX</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">cy</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span><span class="nx">scaleY</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">r</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span> <span class="mi">0</span><span class="p">);</span>
-</span><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">ease</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">cubic</span><span class="o">-</span><span class="k">in</span><span class="o">-</span><span class="nx">out</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;).</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">cx</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span><span class="nx">getX</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">cy</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span><span class="nx">getY</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">r</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span> <span class="nx">getR</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">fill</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span> <span class="nx">getColor</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>The transition will act on the selection in the following ways:</p>
-
-<ul>
-<li>it will move the element from its starting x position of 0 to the x position defined by <code>getX()</code></li>
-<li>it will move the element from its starting y position of 0 to the y position defined by <code>getY()</code></li>
-<li>it will increase the element&rsquo;s radius from 0 to the radius returned from <code>getR()</code></li>
-<li>it will gradually change the element&rsquo;s color using an ordinal color scale, from black to the color returned from <code>getColor()</code></li>
-<li>all of this movement will be performed with a &ldquo;cubic-in-out&rdquo; easing function</li>
-</ul>
-
-
-<p>The cubic-in-out easing function is the standard D3 easing function. The element will increase velocity by a power of 3 until halfway down the path it is destined to trace. It will then decrease velocity by a power of 3 until it reaches its final location. There are many different types of easing functions. Check out the resources for more information, and ask your doctor which easing function is right for you!</p>
-
-<h3>Resources</h3>
-
-<p>Robert Penner&rsquo;s <a href="http://www.robertpenner.com/easing/">Easing Functions</a></p>
-
-<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
 ]]></content>
   </entry>
   
