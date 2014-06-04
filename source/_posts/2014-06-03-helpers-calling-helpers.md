@@ -4,7 +4,6 @@ title: "helpers calling helpers"
 date: 2014-06-03
 comments: true
 categories: [meteor, javascript]
-published: false
 ---
 
 Whittling away at the Discover Meteor tutorial for creating a social news sharing site, I was implementing a Comments collection and related accoutrements (templates, helpers, forms, etc.) when I uncovered a need to call one helper method from another<!--more-->.
