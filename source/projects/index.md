@@ -5,8 +5,8 @@ sharing: true
 footer: true
 ---
 
-<h2><a href="https://github.com/keighty/virtual_playbill"><i class="fa fa-github"></i></a> Virtual Playbill</h2>
-Since moving to Portland, my partner and I have been seeing more theater than we can keep track of, so I built a [meteor](https://www.meteor.com/) application to help us [track our collection](http://virtualplaybill.meteor.com/) of ticket stubs.
+<h2>Virtual Playbill</h2>
+Since moving to Portland, my partner and I have been seeing more theater than we can keep track of, so I built a [meteor](https://www.meteor.com/) application to help us [track our collection of ticket stubs](http://virtualplaybill.net/).
 
 <h2><a href="http://github.com/keighty/learningGrid"><i class="fa fa-github"></i></a> Learning Grid</h2>
 Using [Meteor](https://www.meteor.com/) to track my [learning goals](http://learninggrid.meteor.com/) is easy! As I go, I can move a javascript MVVM from "Learning Zone" to "Comfort Zone", and manage my future projects along the way.
