@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>ARGF All You Want - keighty</title>
+  <title>jQuery-UI and Meteor - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="">
+  <meta name="description" content="I have been working on Virtual Playbill for the last few weeks using meteor, bootstrap, and a number of other UI packages. I wanted to use a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2013/argf-all-you-want">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/jquery-ui-and-meteor">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">ARGF All You Want</h1>
+      <h1 class="entry-title">jQuery-UI and Meteor</h1>
     
     
       <p class="meta">
@@ -98,83 +98,36 @@
   
 
 
-<time datetime="2013-09-05T22:29:03-07:00" pubdate data-updated="true">Sep 5<span>th</span>, 2013</time>
+<time datetime="2014-06-16T00:00:00-07:00" pubdate data-updated="true">Jun 16<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Many of the fun, junior code challenges I have encountered deal a lot with input/output of data, and I found a great ruby feature that provides flexibility at the command line.</p>
+<div class="entry-content"><p>I have been working on <a href="virtualplaybill.net">Virtual Playbill</a> for the last few weeks using meteor, bootstrap, and a number of other UI packages. I wanted to use a datepicker as a form field, but getting jQuery-ui working was not a straightforward package download as many other features are. There are currently 5 packages available for installation on <a href="https://atmospherejs.com/package/jquery-ui?q=jquery-ui">Atmosphere</a> (the meteor package manager), and I attempted several of them before finding the combination that worked<!--more-->:</p>
 
-<!--more-->
+<h3>1. Install the jQuery-ui package from <a href="https://atmospherejs.com/package/jquery-ui">Atmosphere</a></h3>
 
-
-<h3>Data Input</h3>
-
-<p>There are a lot of ways to treat data at the command line, but the one I was most familiar with is passing in a filename as an argument:</p>
-
-<div>
-  <pre><code class='bash'>$ ruby example_script.rb file1.csv file2.csv ...
-$ ruby example_script.rb file1.csv | more
-$ ruby example_script.rb file1.csv &gt; output.txt</code></pre>
-</div>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mrt add jquery-ui</span></code></pre></td></tr></table></div></figure>
 
 
-<h3>Filename Input</h3>
+<h3>2. Download jQuery-ui</h3>
 
-<p>Using ARGV, we can access the list of filenames provided at the command line. ARGV is an array containing all the information that follows the command. For example:</p>
+<p>For me, the meteorite package did not properly install the css or images I needed to get the datepicker working, so I downloaded <a href="http://jqueryui.com/">jquery-ui</a>, swiped the css file (un-minified), and added it to my <code>client/stylesheets</code> folder.</p>
 
-<div>
-  <pre><code class='bash'>$ example_command apple banana orange
-# ARGV = [&quot;apple&quot;, &quot;banana&quot;, &quot;orange&quot;]</code></pre>
-</div>
+<h3>3. Add jQuery-ui images</h3>
 
+<p>The css styled the datepicker calendar perfectly, except for the previous month and next month buttons. jQuery-ui comes with a few standard icons, so I placed the jQuery-ui images folder in <code>/public</code>, since static files must be kept in a public folder for meteor to acknowledge them.</p>
 
-<p>One can process each filename in ARGV using regular array methods:</p>
+<h3>4. Relocate the images</h3>
 
-<div>
-  <pre><code class='ruby'>ARGV.each do |arg|
-  process_string(File.read(arg))
-end</code></pre>
-</div>
+<p>The jQuery-ui css file tries to locate the images in its parent folder, but as I mentioned, static assets = public folder. The advantage of the public folder is that all assets can be referenced with a leading slash: <code>/images</code>. I scanned the un-minified version of the css and changed the image url locations from <code>images/...</code> to <code>/images/...</code></p>
 
+<p>Voila! A beautiful, functional datepicker!</p>
 
-<p>File.read(arg) reads the file into a &ldquo;\n&rdquo; delimited string, which can be processed further. If there are no arguments, ARGV is an empty array.</p>
-
-<h3>Piped Input</h3>
-
-<p>Say that we want to enter data directly into a program rather than use a fixed filename at the command line &mdash; a useful technique for when we want data to flow out of one process and into another:</p>
-
-<div>
-  <pre><code class='bash'>$ cat file1.csv | ruby example_script.rb
-$ cat *.csv | ruby example_script.rb
-$ ruby example_script.rb &lt; file1.csv</code></pre>
-</div>
-
-
-<p>Using the pipe, &ldquo;|&rdquo; or &ldquo;&lt;&rdquo;, we can push a string of data from one process into another, but what happens to our program when we try to do this?</p>
-
-<div>
-  <pre><code class='bash'>$ example.csv | ruby example_script.rb
-TypeError: can`t convert nil into String</code></pre>
-</div>
-
-
-<p>We get a TypeError! Recall that command line arguments are stored in ARGV, but we are not providing any command line arguments. ARGV is an empty array, and we are attempting to open a file from ARGV[0] = nil. Shame on us! How do we access data that is piped in as well as data that is appended to the command line? Do we have to check for the source of the data before we can treat it? Turns out, we DON&rsquo;T.</p>
-
-<h3>The ARGF Solution</h3>
-
-<p>Ruby has a nifty interface for handling data input, regardless of whether it arrives as a command line argument or from another data source. We can replace the code we wrote earlier with a single line:</p>
-
-<div>
-  <pre><code class='ruby'>process_string(ARGF.read)</code></pre>
-</div>
-
-
-<p>If ARGV is not empty, ARGF will assume it is an array of filenames and will treat them accordingly. If ARGV is empty, it will read from $stdin to get the data passed in via the pipe. One caveat is that you can&rsquo;t read from both ARGV and the pipe: if ARGV != [  ], $stdin is ignored.</p>
-
-<p>Awesome.</p>
+<p><img src="/images/post_datepicker.png" /></p>
 </div>
 
 
@@ -197,12 +150,12 @@ TypeError: can`t convert nil into String</code></pre>
   
 
 
-<time datetime="2013-09-05T22:29:03-07:00" pubdate data-updated="true">Sep 5<span>th</span>, 2013</time>
+<time datetime="2014-06-16T00:00:00-07:00" pubdate data-updated="true">Jun 16<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ruby/'>ruby</a>
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/meteor/'>meteor</a>
   
 </span>
 
@@ -211,7 +164,7 @@ TypeError: can`t convert nil into String</code></pre>
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2013/argf-all-you-want/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2013/argf-all-you-want/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/jquery-ui-and-meteor/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/jquery-ui-and-meteor/" >Tweet</a>
   
   
   
@@ -220,10 +173,8 @@ TypeError: can`t convert nil into String</code></pre>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/hammer-out-tasks-with-thor/" title="Previous Post: Hammer-out Tasks with Thor">&laquo; Hammer-out Tasks with Thor</a>
+        <a class="basic-alignment left" href="/blog/2014/helpers-calling-helpers/" title="Previous Post: helpers calling helpers">&laquo; helpers calling helpers</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/thor-sets-up-a-project/" title="Next Post: Thor Sets Up A Project">Thor Sets Up A Project &raquo;</a>
       
     </p>
   </footer>
@@ -358,8 +309,8 @@ TypeError: can`t convert nil into String</code></pre>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2013/argf-all-you-want/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2013/argf-all-you-want/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/jquery-ui-and-meteor/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2014/jquery-ui-and-meteor/';
         var disqus_script = 'embed.js';
       
     (function () {

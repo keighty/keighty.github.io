@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Meteor | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/meteor/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-06-15T11:07:06-07:00</updated>
+  <updated>2014-06-16T08:25:54-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,37 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[jQuery-UI and Meteor]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/jquery-ui-and-meteor/"/>
+    <updated>2014-06-16T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/jquery-ui-and-meteor</id>
+    <content type="html"><![CDATA[<p>I have been working on <a href="virtualplaybill.net">Virtual Playbill</a> for the last few weeks using meteor, bootstrap, and a number of other UI packages. I wanted to use a datepicker as a form field, but getting jQuery-ui working was not a straightforward package download as many other features are. There are currently 5 packages available for installation on <a href="https://atmospherejs.com/package/jquery-ui?q=jquery-ui">Atmosphere</a> (the meteor package manager), and I attempted several of them before finding the combination that worked<!--more-->:</p>
+
+<h3>1. Install the jQuery-ui package from <a href="https://atmospherejs.com/package/jquery-ui">Atmosphere</a></h3>
+
+<p><code>
+mrt add jquery-ui
+</code></p>
+
+<h3>2. Download jQuery-ui</h3>
+
+<p>For me, the meteorite package did not properly install the css or images I needed to get the datepicker working, so I downloaded <a href="http://jqueryui.com/">jquery-ui</a>, swiped the css file (un-minified), and added it to my <code>client/stylesheets</code> folder.</p>
+
+<h3>3. Add jQuery-ui images</h3>
+
+<p>The css styled the datepicker calendar perfectly, except for the previous month and next month buttons. jQuery-ui comes with a few standard icons, so I placed the jQuery-ui images folder in <code>/public</code>, since static files must be kept in a public folder for meteor to acknowledge them.</p>
+
+<h3>4. Relocate the images</h3>
+
+<p>The jQuery-ui css file tries to locate the images in its parent folder, but as I mentioned, static assets = public folder. The advantage of the public folder is that all assets can be referenced with a leading slash: <code>/images</code>. I scanned the un-minified version of the css and changed the image url locations from <code>images/...</code> to <code>/images/...</code></p>
+
+<p>Voila! A beautiful, functional datepicker!</p>
+
+<p><img src="/images/post_datepicker.png" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Helpers Calling Helpers]]></title>
