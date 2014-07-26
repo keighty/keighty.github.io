@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-06-16T08:25:54-07:00</updated>
+  <updated>2014-07-26T11:49:27-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,114 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Stringify Cyclic Structures With Censors]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/stringify-cyclic-structures-with-censors/"/>
+    <updated>2014-07-23T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/stringify-cyclic-structures-with-censors</id>
+    <content type="html"><![CDATA[<p>Troubleshooting a d3 data visualization sometimes requires visual inspection of the underlying JSON data structure. You can convert linear data structures to a JSON string using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify"><code>JSON.stringify</code></a><!--more-->:</p>
+
+<p>
+```javascript JSON.stringify</p>
+
+<blockquote><p>x = {}
+JSON.stringify(x)
+&ldquo;{}&rdquo;
+x.y = [&ldquo;1&rdquo;, &ldquo;2&rdquo;, &ldquo;3&rdquo;]
+JSON.stringify(x)
+&ldquo;{"y&rdquo;:[&ldquo;1&rdquo;,&ldquo;2&rdquo;,&ldquo;3&rdquo;]}&ldquo;
+x.z = {a: ["b&rdquo;, &ldquo;c&rdquo;]}
+JSON.stringify(x)
+&ldquo;{"y&rdquo;:[&ldquo;1&rdquo;,&ldquo;2&rdquo;,&ldquo;3&rdquo;],&ldquo;z&rdquo;:{&ldquo;a&rdquo;:[&ldquo;b&rdquo;,&ldquo;c&rdquo;]}}&ldquo;
+```
+</p></blockquote>
+
+<p>Data structures that contain both upstream and downstream links between objects are cyclic structures. From the docs:</p>
+
+<blockquote><p>JSON does not support cyclic structures.  Attempting to convert such an object into JSON format will result in a TypeError exception.</p></blockquote>
+
+<p>
+```javascript</p>
+
+<blockquote><p>x = {}
+  y = {}
+  x.children = [y]
+  y.parent = x
+Object {children: [Object]}</p>
+
+<p>JSON.stringify(x)
+TypeError: Converting circular structure to JSON
+```
+</p></blockquote>
+
+<p>How can I look at a tree, or double-linked list data structure that is rife with circular links? JSON.stringify() takes a second argument called a censor in the docs. The censor is the programmatic court of appeal for whenever a cyclic structure is encountered:</p>
+
+<p>
+```javascript
+function censor(key, value) {
+  if (typeof value === &ldquo;object&rdquo;) {</p>
+
+<pre><code>return undefined;
+</code></pre>
+
+<p>  }
+  return value;
+}
+```
+</p>
+
+<p>Of course, this approach will eliminate most of the tree structure by removing all objects from the JSON. Certainly we can return something more creative than <code>undefined</code>&hellip;</p>
+
+<p>
+```javascript
+function censor(key, value) {
+  if (value &amp;&amp; typeof value === &ldquo;object&rdquo; &amp;&amp; value.parent) {</p>
+
+<pre><code>value.parent = value.parent.name;
+</code></pre>
+
+<p>  }
+  return value;
+}
+```
+</p>
+
+<p>In this censor, we replace the parent object with the parent&rsquo;s name, and JSON.stringify has no complaints:</p>
+
+<p>
+```javascript</p>
+
+<blockquote><p>function censor(key, value) {
+  if (value &amp;&amp; typeof value === &ldquo;object&rdquo; &amp;&amp; value.parent) {</p>
+
+<pre><code>value.parent = value.parent.name;
+</code></pre>
+
+<p>  }
+  return value;
+}</p>
+
+<p>x = {name: &ldquo;Theodore&rdquo;}
+Object {name: &ldquo;Theodore&rdquo;}
+y = {name: &ldquo;Alvin&rdquo;}
+Object {name: &ldquo;Alvin&rdquo;}
+x.children = [y]
+[Object]
+y.parent = x
+Object {name: &ldquo;Theodore&rdquo;, children: Array[1]}</p>
+
+<p>JSON.stringify(x)
+TypeError: Converting circular structure to JSON</p>
+
+<p>JSON.stringify(x, censor)
+&ldquo;{"name&rdquo;:&ldquo;Theodore&rdquo;,&ldquo;children&rdquo;:[{&ldquo;name&rdquo;:&ldquo;Alvin&rdquo;,&ldquo;parent&rdquo;:&ldquo;Theodore&rdquo;}]}&ldquo;
+```
+</p></blockquote>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[jQuery-UI and Meteor]]></title>
@@ -514,100 +622,6 @@ at Object.Template.postPageItem.helpers.commentsNote (http://localhost:3000/clie
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Turns out that if you hard shut-down your computer while your meteor project&rsquo;s mongo instance is running, it remains in a locked mode. Since it was only a development database I took a chance that dropping it would cure my ills. Voila! Meteor and mongodb are friends again.</p>
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Meteor, Fetch!]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/meteor-fetch/"/>
-    <updated>2014-03-31T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/meteor-fetch</id>
-    <content type="html"><![CDATA[<p>From <a href="http://book.discovermeteor.com/">Discover Meteor</a>: find() returns a cursor, which is a reactive data source.</p>
-
-<p>Data from reactive sources will be updated automatically to track changes in the data used to generate it. <!--more-->Cursors are derived from specific sources:</p>
-
-<ul>
-<li>Session variables</li>
-<li>Database queries on Collections</li>
-<li>Meteor.status</li>
-<li>The ready() method on a subscription handle</li>
-<li>Meteor.user</li>
-<li>Meteor.userId</li>
-<li>Meteor.loggingIn</li>
-</ul>
-
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>For example, find() using a database query </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="nx">Posts</span><span class="p">.</span><span class="nx">find</span><span class="p">()</span>
-</span><span class='line'><span class="nx">LocalCollection</span><span class="p">.</span><span class="nx">Cursor</span> <span class="p">{</span><span class="nx">collection</span><span class="o">:</span> <span class="nx">LocalCollection</span><span class="p">,</span> <span class="nx">sorter</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">_selectorId</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">,</span> <span class="nx">matcher</span><span class="o">:</span> <span class="nx">Minimongo</span><span class="p">.</span><span class="nx">Matcher</span><span class="p">,</span> <span class="nx">skip</span><span class="o">:</span> <span class="kc">undefined</span><span class="err">…</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span>  <span class="nx">_selectorId</span><span class="o">:</span> <span class="kc">undefined</span>
-</span><span class='line'>  <span class="nx">_transform</span><span class="o">:</span> <span class="kc">null</span>
-</span><span class='line'>  <span class="nx">collection</span><span class="o">:</span> <span class="nx">LocalCollection</span>
-</span><span class='line'>  <span class="nx">cursor_pos</span><span class="o">:</span> <span class="mi">0</span>
-</span><span class='line'>  <span class="nx">db_objects</span><span class="o">:</span> <span class="kc">null</span>
-</span><span class='line'>  <span class="nx">fields</span><span class="o">:</span> <span class="kc">undefined</span>
-</span><span class='line'>  <span class="nx">limit</span><span class="o">:</span> <span class="kc">undefined</span>
-</span><span class='line'>  <span class="nx">matcher</span><span class="o">:</span> <span class="nx">Minimongo</span><span class="p">.</span><span class="nx">Matcher</span>
-</span><span class='line'>  <span class="nx">reactive</span><span class="o">:</span> <span class="kc">true</span>
-</span><span class='line'>  <span class="nx">skip</span><span class="o">:</span> <span class="kc">undefined</span>
-</span><span class='line'>  <span class="nx">sorter</span><span class="o">:</span> <span class="kc">null</span>
-</span><span class='line'>  <span class="nx">__proto__</span><span class="o">:</span> <span class="nb">Object</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Cursors are not query snapshots. They are query snapshot containers &mdash; the contents of which are updated by changes to the underlying data. To interact with the data contained in a cursor, we can use fetch() to transform the cursor into an array.</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>A cursor becomes an array with find().fetch() </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="nx">Posts</span><span class="p">.</span><span class="nx">find</span><span class="p">().</span><span class="nx">fetch</span><span class="p">()</span>
-</span><span class='line'><span class="p">[</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nb">Object</span>
-</span><span class='line'><span class="nx">_id</span><span class="o">:</span> <span class="s2">&quot;z4z36DFCaGr8Ptuqd&quot;</span>
-</span><span class='line'><span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;The Way We Live Now&quot;</span>
-</span><span class='line'><span class="nx">author</span><span class="o">:</span> <span class="s2">&quot;Anthony Trollope&quot;</span>
-</span><span class='line'><span class="nx">__proto__</span><span class="o">:</span> <span class="nb">Object</span>
-</span><span class='line'><span class="p">...</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Meteor can iterate over a cursor without first converting it to an array, but in order to interact with the data directly, you must first use fetch(), map(), or forEach(). For more cursor fun, checkout the <a href="http://docs.meteor.com/#reactivity">Meteor docs</a>.</p>
 
 <p>Awesome.</p>
 ]]></content>

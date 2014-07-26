@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-06-16T08:25:54-07:00</updated>
+  <updated>2014-07-26T11:49:27-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,142 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Stringify Cyclic Structures With Censors]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/stringify-cyclic-structures-with-censors/"/>
+    <updated>2014-07-23T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/stringify-cyclic-structures-with-censors</id>
+    <content type="html"><![CDATA[<p>Troubleshooting a d3 data visualization sometimes requires visual inspection of the underlying JSON data structure. You can convert linear data structures to a JSON string using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify"><code>JSON.stringify</code></a><!--more-->:</p>
+
+<figure class='code'><figcaption><span>JSON.stringify</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">x</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
+</span><span class='line'><span class="s2">&quot;{}&quot;</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">x</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">]</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
+</span><span class='line'><span class="s2">&quot;{&quot;</span><span class="nx">y</span><span class="s2">&quot;:[&quot;</span><span class="mi">1</span><span class="s2">&quot;,&quot;</span><span class="mi">2</span><span class="s2">&quot;,&quot;</span><span class="mi">3</span><span class="s2">&quot;]}&quot;</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">x</span><span class="p">.</span><span class="nx">z</span> <span class="o">=</span> <span class="p">{</span><span class="nx">a</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">]}</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
+</span><span class='line'><span class="s2">&quot;{&quot;</span><span class="nx">y</span><span class="s2">&quot;:[&quot;</span><span class="mi">1</span><span class="s2">&quot;,&quot;</span><span class="mi">2</span><span class="s2">&quot;,&quot;</span><span class="mi">3</span><span class="s2">&quot;],&quot;</span><span class="nx">z</span><span class="s2">&quot;:{&quot;</span><span class="nx">a</span><span class="s2">&quot;:[&quot;</span><span class="nx">b</span><span class="s2">&quot;,&quot;</span><span class="nx">c</span><span class="s2">&quot;]}}&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Data structures that contain both upstream and downstream links between objects are cyclic structures. From the docs:</p>
+
+<blockquote><p>JSON does not support cyclic structures.  Attempting to convert such an object into JSON format will result in a TypeError exception.</p></blockquote>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">x</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'>  <span class="nx">y</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'>  <span class="nx">x</span><span class="p">.</span><span class="nx">children</span> <span class="o">=</span> <span class="p">[</span><span class="nx">y</span><span class="p">]</span>
+</span><span class='line'>  <span class="nx">y</span><span class="p">.</span><span class="nx">parent</span> <span class="o">=</span> <span class="nx">x</span>
+</span><span class='line'><span class="nb">Object</span> <span class="p">{</span><span class="nx">children</span><span class="o">:</span> <span class="p">[</span><span class="nb">Object</span><span class="p">]}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
+</span><span class='line'><span class="nx">TypeError</span><span class="o">:</span> <span class="nx">Converting</span> <span class="nx">circular</span> <span class="nx">structure</span> <span class="nx">to</span> <span class="nx">JSON</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>How can I look at a tree, or double-linked list data structure that is rife with circular links? JSON.stringify() takes a second argument called a censor in the docs. The censor is the programmatic court of appeal for whenever a cyclic structure is encountered:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">censor</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kc">undefined</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Of course, this approach will eliminate most of the tree structure by removing all objects from the JSON. Certainly we can return something more creative than <code>undefined</code>&hellip;</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">censor</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">value</span><span class="p">.</span><span class="nx">parent</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">value</span><span class="p">.</span><span class="nx">parent</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this censor, we replace the parent object with the parent&rsquo;s name, and JSON.stringify has no complaints:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">function</span> <span class="nx">censor</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">value</span><span class="p">.</span><span class="nx">parent</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">value</span><span class="p">.</span><span class="nx">parent</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">x</span> <span class="o">=</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Theodore&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="nb">Object</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Theodore&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">y</span> <span class="o">=</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Alvin&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="nb">Object</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Alvin&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">x</span><span class="p">.</span><span class="nx">children</span> <span class="o">=</span> <span class="p">[</span><span class="nx">y</span><span class="p">]</span>
+</span><span class='line'><span class="p">[</span><span class="nb">Object</span><span class="p">]</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">y</span><span class="p">.</span><span class="nx">parent</span> <span class="o">=</span> <span class="nx">x</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nb">Object</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Theodore&quot;</span><span class="p">,</span> <span class="nx">children</span><span class="o">:</span> <span class="nb">Array</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
+</span><span class='line'><span class="nx">TypeError</span><span class="o">:</span> <span class="nx">Converting</span> <span class="nx">circular</span> <span class="nx">structure</span> <span class="nx">to</span> <span class="nx">JSON</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">censor</span><span class="p">)</span>
+</span><span class='line'><span class="s2">&quot;{&quot;</span><span class="nx">name</span><span class="s2">&quot;:&quot;</span><span class="nx">Theodore</span><span class="s2">&quot;,&quot;</span><span class="nx">children</span><span class="s2">&quot;:[{&quot;</span><span class="nx">name</span><span class="s2">&quot;:&quot;</span><span class="nx">Alvin</span><span class="s2">&quot;,&quot;</span><span class="nx">parent</span><span class="s2">&quot;:&quot;</span><span class="nx">Theodore</span><span class="s2">&quot;}]}&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[jQuery-UI and Meteor]]></title>
@@ -1552,31 +1688,6 @@ importData();
 <h3>Resources</h3>
 
 <p><a href="http://tech.bluesmoon.info/2008/04/strftime-in-javascript.html">Javascript strftime</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[String Conversion in Javascript]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/to-i-in-javascript/"/>
-    <updated>2014-02-27T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/to-i-in-javascript</id>
-    <content type="html"><![CDATA[<p>Almost every day, javascript blows my mind. Today I discovered that you can convert a string to a number simply by prepending a +:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; typeof(+"this is a string")
-</span><span class='line'>"number"
-</span><span class='line'>&gt; typeof(+"100")
-</span><span class='line'>"number"
-</span><span class='line'>&gt; +"100" + 50
-</span><span class='line'>150</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   
