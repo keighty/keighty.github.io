@@ -5,19 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Javascript Dates - keighty</title>
+  <title>'In' Operator Avoids False Falsies - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Javascript Date objects have zero indexed months but not dates. 1
-2
-3
-4
-5
-6
-&gt; (new Date(2014, 0, 1)).strftime("%b %d, %Y")
-"Jan 1, 2014"
-&gt; (new &hellip;">
+  <meta name="description" content="I have encountered more than my share of javascript errors because I have made assumptions about the object I am working with, such as assuming that &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -26,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/javascript-dates">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/in-operator-avoid-false-falsies">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -90,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">Javascript Dates</h1>
+      <h1 class="entry-title">'In' Operator Avoids False Falsies</h1>
     
     
       <p class="meta">
@@ -106,37 +98,77 @@
   
 
 
-<time datetime="2014-03-01T00:00:00-08:00" pubdate data-updated="true">Mar 1<span>st</span>, 2014</time>
+<time datetime="2014-08-05T00:00:00-07:00" pubdate data-updated="true">Aug 5<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Javascript Date objects have zero indexed months but not dates.</p>
+<div class="entry-content"><p>I have encountered more than my share of javascript errors because I have made assumptions about the object I am working with, such as assuming that an object contains a property, and that I can call methods on that property:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span class='line'><span class="nx">TypeError</span><span class="o">:</span> <span class="nx">Cannot</span> <span class="nx">read</span> <span class="nx">property</span> <span class="s1">&#39;0&#39;</span> <span class="nx">of</span> <span class="kc">undefined</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This line contains four assumptions, and therefore four places it can fail:</p>
+
+<ol>
+<li><code>myObject</code> exists</li>
+<li><code>myObject</code> contains a property called <code>data</code></li>
+<li><code>data</code> is an array</li>
+<li><code>data</code> is non-empty</li>
+</ol>
+
+
+<p>Presuming that if <code>myObject</code> does not exist means you have bigger problems, it is easy to fall into the trap of checking for the existence of a property by gating a conditional with it:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="k">if</span><span class="p">(</span><span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">//do something important with the data</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This technique will work in development, but the voice of experience tells us that it will not work in production. The reason it will not work is that javascript has more falsy values than most languages. Falsy values include the number zero, empty strings, null, undefined, NaN, and of course, the boolean false. So, if it is possible <code>myObject.data</code> to contain derived information, you have signed up to troubleshoot some unexpected behaviour.</p>
+
+<p>Fortunately, javascript has provided a failsafe way to check the existence of a property, regardless of the data it contains. The <code>in</code> operator checks if the key exists in the object&rsquo;s hash table, and doesn&rsquo;t care if it is a prototype or singleton property.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; (new Date(2014, 0, 1)).strftime("%b %d, %Y")
-</span><span class='line'>"Jan 1, 2014"
-</span><span class='line'>&gt; (new Date(2013, 11, 31)).strftime("%b %d, %Y")
-</span><span class='line'>"Dec 31, 2013"
-</span><span class='line'>&gt; (new Date(2014, 0, 0)).strftime("%b %d, %Y")
-</span><span class='line'>"Dec 31, 2013"</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">myObject</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'><span class="kc">undefined</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;data&#39;</span> <span class="k">in</span> <span class="nx">myObject</span>
+</span><span class='line'><span class="kc">false</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span><span class='line'><span class="s2">&quot;&quot;</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;data&#39;</span> <span class="k">in</span> <span class="nx">myObject</span>
+</span><span class='line'><span class="kc">true</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span> <span class="o">==</span> <span class="kc">true</span>
+</span><span class='line'><span class="kc">false</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Wat?</p>
-
-<!--more-->
-
+<p><code>('data' in myObject)</code> returns false if the property is undefined. If the property is defined, it returns true even if data contains a falsy value.</p>
 
 <h3>Resources</h3>
 
-<p><a href="http://tech.bluesmoon.info/2008/04/strftime-in-javascript.html">Javascript strftime</a></p>
+<p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
 </div>
 
 
@@ -159,12 +191,12 @@
   
 
 
-<time datetime="2014-03-01T00:00:00-08:00" pubdate data-updated="true">Mar 1<span>st</span>, 2014</time>
+<time datetime="2014-08-05T00:00:00-07:00" pubdate data-updated="true">Aug 5<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/i-didnt-know-that/'>I didn't know that</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>
   
 </span>
 
@@ -173,7 +205,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/javascript-dates/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/javascript-dates/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/in-operator-avoid-false-falsies/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/in-operator-avoid-false-falsies/" >Tweet</a>
   
   
   
@@ -182,10 +214,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/to-i-in-javascript/" title="Previous Post: string conversion in javascript">&laquo; string conversion in javascript</a>
+        <a class="basic-alignment left" href="/blog/2014/stringify-cyclic-structures-with-censors/" title="Previous Post: stringify cyclic structures with censors">&laquo; stringify cyclic structures with censors</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/d3-scaling/" title="Next Post: scaling d3">scaling d3 &raquo;</a>
       
     </p>
   </footer>
@@ -320,8 +350,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/javascript-dates/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2014/javascript-dates/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/in-operator-avoid-false-falsies/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2014/in-operator-avoid-false-falsies/';
         var disqus_script = 'embed.js';
       
     (function () {

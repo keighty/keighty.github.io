@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-07-26T11:49:27-07:00</updated>
+  <updated>2014-08-06T08:32:59-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,70 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA['In' Operator Avoids False Falsies]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/in-operator-avoid-false-falsies/"/>
+    <updated>2014-08-05T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/in-operator-avoid-false-falsies</id>
+    <content type="html"><![CDATA[<p>I have encountered more than my share of javascript errors because I have made assumptions about the object I am working with, such as assuming that an object contains a property, and that I can call methods on that property:</p>
+
+<p>
+```javascript</p>
+
+<blockquote><p>myObject.data[0]
+TypeError: Cannot read property &lsquo;0&rsquo; of undefined
+```
+</p></blockquote>
+
+<p>This line contains four assumptions, and therefore four places it can fail:</p>
+
+<ol>
+<li><code>myObject</code> exists</li>
+<li><code>myObject</code> contains a property called <code>data</code></li>
+<li><code>data</code> is an array</li>
+<li><code>data</code> is non-empty</li>
+</ol>
+
+
+<p>Presuming that if <code>myObject</code> does not exist means you have bigger problems, it is easy to fall into the trap of checking for the existence of a property by gating a conditional with it:</p>
+
+<p>
+<code>javascript
+if(myObject.data) {
+  //do something important with the data
+}
+</code>
+</p>
+
+<p>This technique will work in development, but the voice of experience tells us that it will not work in production. The reason it will not work is that javascript has more falsy values than most languages. Falsy values include the number zero, empty strings, null, undefined, NaN, and of course, the boolean false. So, if it is possible <code>myObject.data</code> to contain derived information, you have signed up to troubleshoot some unexpected behaviour.</p>
+
+<p>Fortunately, javascript has provided a failsafe way to check the existence of a property, regardless of the data it contains. The <code>in</code> operator checks if the key exists in the object&rsquo;s hash table, and doesn&rsquo;t care if it is a prototype or singleton property.</p>
+
+<p>
+```javascript</p>
+
+<blockquote><p>var myObject = {}
+undefined
+&lsquo;data&rsquo; in myObject
+false</p>
+
+<p>myObject.data = &lsquo;&rsquo;
+&ldquo;&rdquo;
+&lsquo;data&rsquo; in myObject
+true
+myObject.data == true
+false
+```
+</p></blockquote>
+
+<p><code>('data' in myObject)</code> returns false if the property is undefined. If the property is defined, it returns true even if data contains a falsy value.</p>
+
+<h3>Resources</h3>
+
+<p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Stringify Cyclic Structures With Censors]]></title>
@@ -494,136 +558,6 @@ at Object.Template.postPageItem.helpers.commentsNote (http://localhost:3000/clie
 
 <p><a href="https://www.discovermeteor.com/">discovermeteor.com</a>
 <a href="http://docs.meteor.com">Meteor docs</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mongo Trouble? Reset!]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/mongo-trouble-reset/"/>
-    <updated>2014-05-03T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/mongo-trouble-reset</id>
-    <content type="html"><![CDATA[<p>Back in March I wrote about letting my computer&rsquo;s battery die in the middle of a meteor project, with the consequence being that I could not connect to the underlying mongo database:
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>What&rsquo;s wrong, meteor? </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor
-</span><span class='line'><span class="o">[[[[[</span> ~/project/in/progress <span class="o">]]]]]</span>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;<span class="o">=</span>&gt; Started proxy.
-</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
-</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
-</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
-</span><span class='line'>Can&amp;rsquo;t start Mongo server.
-</span><span class='line'>MongoDB had an unspecified uncaught exception.
-</span><span class='line'>This can be caused by MongoDB being unable to write to a <span class="nb">local </span>database.
-</span><span class='line'>Check that you have permissions to write to .meteor/local. MongoDB does
-</span><span class='line'>not support filesystems like NFS that <span class="k">do </span>not allow file locking.
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>After much spelunking in stackoverflow and documentation, I discovered the magic of this command:
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Magic mongo reset spell %</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u mongodb mongdo &amp;mdash;repair &amp;mdash;dbpath /var/lib/mongodb
-</span><span class='line'><span class="nv">$ </span>sudo service mongodb start
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Repairing and restarting the mongo service seemed to do the trick, and I continued on my merry meteor way. Well, I did it again &mdash; I let my battery die in the middle of a meteor project, and with feelings of smug satisfaction, I plumbed my blog archive for the answer. Only this time the magic antidote didn&rsquo;t work<!--more-->:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>This log has been redacted to protect the ignorant </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo -u mongodb mongod &mdash;repair &mdash;dbpath /var/lib/mongodb/
-</span><span class='line'>[sudo] password for keighty:
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] finished checking dbs
-</span><span class='line'>Sat May  3 09:52:04.793 dbexit:
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: going to close listening sockets&hellip;
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: going to flush diaglog&hellip;
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: going to close sockets&hellip;
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: waiting for fs preallocator&hellip;
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: closing all files&hellip;
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] closeAllFiles() finished
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: removing fs lock&hellip;
-</span><span class='line'>Sat May  3 09:52:04.794 dbexit: really exiting now&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p>$ sudo service mongodb start
-</span><span class='line'>mongodb start/running, process 2415
-</span><span class='line'>$ meteor
-</span><span class='line'>[[[[[ ~/project/in/progress ]]]]]&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p>=> Started proxy.
-</span><span class='line'>Unexpected mongo exit code 100. Restarting.
-</span><span class='line'>Unexpected mongo exit code 100. Restarting.
-</span><span class='line'>Unexpected mongo exit code 100. Restarting.
-</span><span class='line'>Can&rsquo;t start Mongo server.
-</span><span class='line'>MongoDB had an unspecified uncaught exception.
-</span><span class='line'>This can be caused by MongoDB being unable to write to a local database.
-</span><span class='line'>Check that you have permissions to write to .meteor/local. MongoDB does
-</span><span class='line'>not support filesystems like NFS that do not allow file locking.</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>C'mon &mdash; It worked the last time! I tried it again with the same result. I tried <code>chown</code>-ing the local db. I tried <code>chown</code>-ing the database in <code>/var/lib/mongodb</code>. After each attempted solution the mongobd service would start, but meteor hiccuped on writing to the database. So I tried something radical. Something that wasn&rsquo;t in any of the manuals, or any of the <a href="http://stackoverflow.com/questions/5798549/why-cant-i-start-the-mongodb">responses to similar questions</a> on stackoverflow:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Really? That was all? </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor reset
-</span><span class='line'>Project reset.
-</span><span class='line'><span class="nv">$ </span>meteor
-</span><span class='line'><span class="o">[[[[[</span> ~/project/in/progress <span class="o">]]]]]</span>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;<span class="o">=</span>&gt; Started proxy.
-</span><span class='line'><span class="o">=</span>&gt; Started MongoDB.
-</span><span class='line'><span class="o">=</span>&gt; Started your app.&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;<span class="o">=</span>&gt; App running at: &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;http://localhost:3000/&quot;</span>&gt;http://localhost:3000/&lt;/a&gt;
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Turns out that if you hard shut-down your computer while your meteor project&rsquo;s mongo instance is running, it remains in a locked mode. Since it was only a development database I took a chance that dropping it would cure my ills. Voila! Meteor and mongodb are friends again.</p>
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   
