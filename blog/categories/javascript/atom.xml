@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-08-06T08:32:59-07:00</updated>
+  <updated>2014-08-09T10:00:37-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,90 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Javascript Getters and Setters]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/javascript-getters-and-setters/"/>
+    <updated>2014-08-09T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/javascript-getters-and-setters</id>
+    <content type="html"><![CDATA[<p>Getters and setters make sense in java, and I just learned that there is an equivalent pattern in javascript:</p>
+
+<p>
+```javascript</p>
+
+<blockquote><p>var favouriteBook = {
+  _title: &ldquo;Catch-22&rdquo;,
+  get title() {</p>
+
+<pre><code>console.log("Getting title", this._title);
+</code></pre>
+
+<p>  },
+  set title(value) {</p>
+
+<pre><code>this._title = value;
+console.log("Setting title", this._title);
+</code></pre>
+
+<p>  }
+}
+favouriteBook.title
+ Getting title Catch-22</p>
+
+<p>favouriteBook.title = &ldquo;Slaughterhouse 5&rdquo;
+ Setting title Slaughterhouse 5</p>
+
+<p>favouriteBook.title
+ Getting title Slaughterhouse 5
+```
+</p></blockquote>
+
+<p>The <code>get</code> and <code>set</code> key words are reserved for accessing or mutating a data property (instance variable). Of course, one can get and set data properties directly:</p>
+
+<p>
+```javascript</p>
+
+<blockquote><p>favouriteBook.title
+&ldquo;Catch-22&rdquo;</p>
+
+<p>favouriteBook.title = &ldquo;Slaughterhouse 5&rdquo;
+favouriteBook.title
+&ldquo;Slaughterhouse 5&rdquo;
+```
+</p></blockquote>
+
+<p>The advantage of using a getter and setter is that if a setter is defined without a getter, one can change the value of the data property, but can never read it. If a getter is defined without a setter, then the variable can be read but not be changed:</p>
+
+<p>
+```javascript</p>
+
+<blockquote><p>var favouriteBook = {
+  _title: &ldquo;Catch-22&rdquo;,
+  get title() {</p>
+
+<pre><code>console.log("Getting title", this._title);
+</code></pre>
+
+<p>  }
+}</p>
+
+<p>favouriteBook.title
+Getting title Catch-22</p>
+
+<p>favouriteBook.title = &ldquo;Slaughterhouse 5&rdquo;</p>
+
+<p>favouriteBook.title
+Getting title Catch-22
+```
+</p></blockquote>
+
+<p>The setter function will fail silently, which makes troubleshooting difficult but ensures that the property remains undisturbed.</p>
+
+<h3>Resources</h3>
+
+<p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA['In' Operator Avoids False Falsies]]></title>
@@ -444,120 +528,6 @@ at Object.Template.postPageItem.helpers.commentsNote (http://localhost:3000/clie
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Flash Your Local Collection]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/flash-your-local-collection/"/>
-    <updated>2014-05-26T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/flash-your-local-collection</id>
-    <content type="html"><![CDATA[<p>Rails allows you to pass messages to the user between actions (&ldquo;This <a href="http://api.rubyonrails.org/classes/ActionDispatch/Flash.html">ActionDispatch::Flash</a> will self-destruct&rdquo;), and because Rails, all the message generation happens server side:
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>flashy_controller.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">show</span>
-</span><span class='line'>  <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="no">You</span> <span class="n">dropped</span> <span class="n">your</span> <span class="n">packet</span><span class="o">.</span><span class="n">&amp;rdquo</span><span class="p">;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Meteor is mostly a client-side application framework, and you can implement a similar message system, which will never touch the server, by defining a collection that is local to the browser.<!--more--></p>
-
-<h3>1. Create a local collection</h3>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>/client/errors.js </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Errors</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Meteor</span><span class="p">.</span><span class="nx">Collection</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Passing <code>null</code> into the Collection declaration tells Meteor that the collection should not be extended to the server &mdash; it creates an &ldquo;unmanaged (unsynchronized) local collection&rdquo; (<a href="http://docs.meteor.com/#meteor_collection">docs</a>)</p>
-
-<h3>2. Throw an error whenever you need to</h3>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>/missionCritical.js </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>if(error){
-</span><span class='line'>  Errors.insert({message: error.reason});
-</span><span class='line'>}
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<h3>3. Create a template for displaying the error</h3>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>/client/errors.html </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&lt;</span><span class="nx">template</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;errors&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;errors&quot;</span><span class="o">&gt;&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="p">{{</span><span class="err">#</span><span class="nx">each</span> <span class="nx">errors</span><span class="p">}}</span>
-</span><span class='line'>  <span class="p">{{</span><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="nx">error</span><span class="p">}}</span>
-</span><span class='line'><span class="p">{{</span><span class="err">/each}}</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="o">&lt;</span><span class="err">/div&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/template&gt;&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;&lt;</span><span class="nx">template</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;alert alert-error&quot;</span><span class="o">&gt;&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;&amp;</span><span class="nx">lt</span><span class="p">;</span><span class="nx">button</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;button&quot;</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;close&quot;</span> <span class="nx">data</span><span class="o">-</span><span class="nx">dismiss</span><span class="o">=</span><span class="s2">&quot;alert&quot;</span><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span><span class="nx">times</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">lt</span><span class="p">;</span><span class="err">/button&amp;gt;</span>
-</span><span class='line'><span class="p">{{</span><span class="nx">message</span><span class="p">}}</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="o">&lt;</span><span class="err">/div&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/template&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<h3>4. Create a helper method for serving the errors to the template</h3>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>/client/errors.js continued again </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&amp;</span><span class="nx">hellip</span><span class="p">;</span>
-</span><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">errors</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="nx">Errors</span><span class="p">.</span><span class="nx">find</span><span class="p">();</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Every template that contains the handlebars <code> {{&gt; errors}} </code> will now display whatever errors have been saved to the session collection.</p>
-
-<p>Awesome.</p>
-
-<h3>Resources</h3>
-
-<p><a href="https://www.discovermeteor.com/">discovermeteor.com</a>
-<a href="http://docs.meteor.com">Meteor docs</a></p>
 ]]></content>
   </entry>
   
