@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-08-09T10:00:37-07:00</updated>
+  <updated>2014-08-09T15:04:51-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -114,6 +114,123 @@
 <h3>Resources</h3>
 
 <p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Constructors and Prototypes]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/constructors-and-prototypes/"/>
+    <updated>2014-08-07T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/constructors-and-prototypes</id>
+    <content type="html"><![CDATA[<p>Object-oriented programming (OOP) can be thought of as describing the properties and behaviour of a noun in a blueprint, which is used to create instances of an object. The blueprint is defined as a Constructor &mdash; a function that identifies a class of objects and begins with a capital letter. New objects are created by calling a Constructor with the keyword <code>new</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">function</span> <span class="nx">Book</span><span class="p">(</span><span class="nx">title</span><span class="p">,</span> <span class="nx">author</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">title</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="nx">author</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">listing</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">title</span><span class="p">,</span> <span class="s2">&quot;by&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">author</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">));</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">book1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span> <span class="s2">&quot;Joseph Heller&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">title</span>
+</span><span class='line'><span class="s2">&quot;Catch-22&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">author</span>
+</span><span class='line'><span class="s2">&quot;Joseph Heller&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">listing</span><span class="p">()</span>
+</span><span class='line'><span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span> <span class="nx">by</span> <span class="nx">Joseph</span> <span class="nx">Heller</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The Book constructor specifies two properties, <code>title</code> and <code>author</code>, and one method, <code>listing</code>. Defining a method in a constructor ensures that all instances of the Object have the same method, but it also results in duplication of the method in the memory stack for every instance of the Object. If I made 1000 instances of Book, there would be 1000 instances of the listing method, even though it is only defined once, and is the same for every object.</p>
+
+<h4>Memory stack of objects with instance methods:</h4>
+
+<p><img src="http://www.katieleonard.ca/images/post_constructor_memory_stack.png"></p>
+
+
+<p>Enter Prototypes.</p>
+
+<p>A Prototype is a property that is shared by all instances of an object. When the constructor for an object is called for the first time, all the object&rsquo;s properties are loaded onto the memory stack as well as the object&rsquo;s Prototype. All subsequent instances of that object include a pointer to the same Prototype, and they pass in a pointer to themselves as <code>this</code> whenever they call a method from the Prototype.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">Book</span><span class="p">(</span><span class="nx">title</span><span class="p">,</span> <span class="nx">author</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">title</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="nx">author</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Book</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">listing</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">title</span><span class="p">,</span> <span class="s2">&quot;by&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">author</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">));</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">book1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span> <span class="s2">&quot;Joseph Heller&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">book2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;Slaughterhouse 5&quot;</span><span class="p">,</span> <span class="s2">&quot;Kurt Vonnegut&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">listing</span><span class="p">()</span>
+</span><span class='line'><span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span> <span class="nx">by</span> <span class="nx">Joseph</span> <span class="nx">Heller</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">book2</span><span class="p">.</span><span class="nx">listing</span><span class="p">()</span>
+</span><span class='line'><span class="nx">Slaughterhouse</span> <span class="mi">5</span> <span class="nx">by</span> <span class="nx">Kurt</span> <span class="nx">Vonnegut</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s2">&quot;listing&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="kc">false</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;listing&#39;</span> <span class="k">in</span> <span class="nx">book1</span>
+</span><span class='line'><span class="kc">true</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Memory stack of object with prototypes:</h4>
+
+<p><img src="http://www.katieleonard.ca/images/post_prototype_memory_stack.png"></p>
+
+
+<p>Reduced memory consumption is one advantage of keeping a reference to a prototype instead of a complete copy. Another advantage is that if additions are made to the Prototype, the changes will be extended to all instances.</p>
+
+<p>Awesome.</p>
 ]]></content>
   </entry>
   
@@ -1670,26 +1787,6 @@ importData();
 <p><img src="http://www.katieleonard.ca/images/post_d3_rollupdata_image.png"></p>
 
 <p>D3 is so awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A Technique for Producing Ideas]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/a-technique-for-producing-ideas/"/>
-    <updated>2014-03-04T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/a-technique-for-producing-ideas</id>
-    <content type="html"><![CDATA[<p><a href="http://www.amazon.com/gp/product/B001C34HUS/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B001C34HUS&amp;linkCode=as2&amp;tag=bridgeforpoke-20">A Technique for Producing Ideas</a> by James Webb Young (1965)</p>
-
-<p>Young proposes that all ideas are the result of five identifiable stages of rumination, whether they are followed consciously or not:</p>
-
-<ol>
-<li>Gather information, and not just what is specific to your problem domain. Novelty comes from mashing seemingly unrelated concepts together.</li>
-<li>Review the information &mdash; collate your information in some fashion and go over it. A lot.</li>
-<li>Do something else. Get distracted from whatever problem you are trying to solve.</li>
-<li>&ldquo;Eureka! I have it!&rdquo;</li>
-<li>Refine your idea &mdash; first drafts are never perfect, so keep polishing.</li>
-</ol>
-
 ]]></content>
   </entry>
   
