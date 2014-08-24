@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Meteor | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/meteor/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-08-24T10:05:42-07:00</updated>
+  <updated>2014-08-24T11:54:16-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,91 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Backup Meteor? Yes We Can]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/backup-meteor-yes-we-can/"/>
+    <updated>2014-08-24T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/backup-meteor-yes-we-can</id>
+    <content type="html"><![CDATA[<p>Retrieving a data dump from your meteor production database and copying it to local development is a three-step, time sensitive process.</p>
+
+<h3>1. Retrieve your production url</h3>
+
+<p>Passing a <code>-url</code> flag to the <code>meteor mongo</code> command will return a long string of goodies:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Dude, where&rsquo;s my data? </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ meteor mongo &mdash;url my_app.meteor.com&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>mongodb://client-12345678:9abcdef1-234-5678-9abc-def123456789@singularsensation-db-a3.meteor.io:12345/my_app_meteor_net</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>This string contains all the information you require to access your production data:</p>
+
+<ul>
+<li>your client id (from // to :)</li>
+<li>a server password (from : to @)</li>
+<li>a server name and port number (from @ to /)</li>
+<li>the datastore identification (from / to the end)</li>
+</ul>
+
+
+<p>
+<code>bash
+mongodb://&lt;CLIENT_ID&gt;:&lt;PASSWORD_HASH&gt;@&lt;SERVER_NAME:PORT&gt;/&lt;YOUR_DATA_STORE&gt;
+</code>
+</p>
+
+<p>Retrieving your data is time-sensitive because the password hash will expire after 60 seconds.</p>
+
+<h3>2. Retrieve your data using mongodump</h3>
+
+<p>
+```bash
+$ mongodump -u CLIENT_ID -h SERVER_NAME:PORT -d YOUR_DATA_STORE -p PASSWORD_HASH</p>
+
+<p>connected to: &lt;SERVER_NAME:PORT>
+Sun Aug 24 10:50:32.342 DATABASE: YOUR_DATA_STORE  to   dump/YOUR_DATA_STORE
+Sun Aug 24 10:50:32.989   YOUR_DATA_STORE.system.indexes to dump/YOUR_DATA_STORE/system.indexes.bson
+Sun Aug 24 10:50:34.368      14 objects
+Sun Aug 24 10:50:34.369   YOUR_DATA_STORE.system.users to dump/YOUR_DATA_STORE/system.users.bson
+Sun Aug 24 10:50:34.559      2 objects
+&hellip; and on and on
+```
+</p>
+
+<p>Mongodb copies your data from production into a new folder called &ldquo;dump&rdquo; in your present working directory.</p>
+
+<h3>3. Use mongorestore to copy the data from the dump into your local datastore</h3>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ mongorestore &mdash;host 127.0.0.1 &mdash;port 3001 &mdash;db meteor &mdash;drop dump/YOUR_DATA_STORE/&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>connected to: 127.0.0.1:3001
+</span><span class='line'>Sun Aug 24 11:36:54.693 dump/YOUR_DATA_STORE/users.bson
+</span><span class='line'>Sun Aug 24 11:36:54.693   going into namespace [meteor.users]
+</span><span class='line'>Sun Aug 24 11:36:54.693    dropping
+</span><span class='line'>2 objects found
+</span><span class='line'>Sun Aug 24 11:36:55.834   Creating index: { name: &ldquo;&lt;em>id&lt;/em>&rdquo;, key: { _id: 1 }, ns: &ldquo;meteor.users&rdquo; }
+</span><span class='line'>Sun Aug 24 11:36:55.993   Creating index: { name: &ldquo;username_1&rdquo;, key: { username: 1 }, unique: true, ns: &ldquo;meteor.users&rdquo;, sparse: 1 }
+</span><span class='line'>&hellip; and on and on</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Awesome.</p>
+
+<p>Resources:
+<a href="http://stackoverflow.com/a/12447710">stackoverflow</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[jQuery-UI and Meteor]]></title>
@@ -514,100 +599,6 @@ at Object.Template.postPageItem.helpers.commentsNote (http://localhost:3000/clie
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Turns out that if you hard shut-down your computer while your meteor project&rsquo;s mongo instance is running, it remains in a locked mode. Since it was only a development database I took a chance that dropping it would cure my ills. Voila! Meteor and mongodb are friends again.</p>
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Meteor, Fetch!]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/meteor-fetch/"/>
-    <updated>2014-03-31T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/meteor-fetch</id>
-    <content type="html"><![CDATA[<p>From <a href="http://book.discovermeteor.com/">Discover Meteor</a>: find() returns a cursor, which is a reactive data source.</p>
-
-<p>Data from reactive sources will be updated automatically to track changes in the data used to generate it. <!--more-->Cursors are derived from specific sources:</p>
-
-<ul>
-<li>Session variables</li>
-<li>Database queries on Collections</li>
-<li>Meteor.status</li>
-<li>The ready() method on a subscription handle</li>
-<li>Meteor.user</li>
-<li>Meteor.userId</li>
-<li>Meteor.loggingIn</li>
-</ul>
-
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>For example, find() using a database query </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="nx">Posts</span><span class="p">.</span><span class="nx">find</span><span class="p">()</span>
-</span><span class='line'><span class="nx">LocalCollection</span><span class="p">.</span><span class="nx">Cursor</span> <span class="p">{</span><span class="nx">collection</span><span class="o">:</span> <span class="nx">LocalCollection</span><span class="p">,</span> <span class="nx">sorter</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">_selectorId</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">,</span> <span class="nx">matcher</span><span class="o">:</span> <span class="nx">Minimongo</span><span class="p">.</span><span class="nx">Matcher</span><span class="p">,</span> <span class="nx">skip</span><span class="o">:</span> <span class="kc">undefined</span><span class="err">…</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span>  <span class="nx">_selectorId</span><span class="o">:</span> <span class="kc">undefined</span>
-</span><span class='line'>  <span class="nx">_transform</span><span class="o">:</span> <span class="kc">null</span>
-</span><span class='line'>  <span class="nx">collection</span><span class="o">:</span> <span class="nx">LocalCollection</span>
-</span><span class='line'>  <span class="nx">cursor_pos</span><span class="o">:</span> <span class="mi">0</span>
-</span><span class='line'>  <span class="nx">db_objects</span><span class="o">:</span> <span class="kc">null</span>
-</span><span class='line'>  <span class="nx">fields</span><span class="o">:</span> <span class="kc">undefined</span>
-</span><span class='line'>  <span class="nx">limit</span><span class="o">:</span> <span class="kc">undefined</span>
-</span><span class='line'>  <span class="nx">matcher</span><span class="o">:</span> <span class="nx">Minimongo</span><span class="p">.</span><span class="nx">Matcher</span>
-</span><span class='line'>  <span class="nx">reactive</span><span class="o">:</span> <span class="kc">true</span>
-</span><span class='line'>  <span class="nx">skip</span><span class="o">:</span> <span class="kc">undefined</span>
-</span><span class='line'>  <span class="nx">sorter</span><span class="o">:</span> <span class="kc">null</span>
-</span><span class='line'>  <span class="nx">__proto__</span><span class="o">:</span> <span class="nb">Object</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Cursors are not query snapshots. They are query snapshot containers &mdash; the contents of which are updated by changes to the underlying data. To interact with the data contained in a cursor, we can use fetch() to transform the cursor into an array.</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>A cursor becomes an array with find().fetch() </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="nx">Posts</span><span class="p">.</span><span class="nx">find</span><span class="p">().</span><span class="nx">fetch</span><span class="p">()</span>
-</span><span class='line'><span class="p">[</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nb">Object</span>
-</span><span class='line'><span class="nx">_id</span><span class="o">:</span> <span class="s2">&quot;z4z36DFCaGr8Ptuqd&quot;</span>
-</span><span class='line'><span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;The Way We Live Now&quot;</span>
-</span><span class='line'><span class="nx">author</span><span class="o">:</span> <span class="s2">&quot;Anthony Trollope&quot;</span>
-</span><span class='line'><span class="nx">__proto__</span><span class="o">:</span> <span class="nb">Object</span>
-</span><span class='line'><span class="p">...</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Meteor can iterate over a cursor without first converting it to an array, but in order to interact with the data directly, you must first use fetch(), map(), or forEach(). For more cursor fun, checkout the <a href="http://docs.meteor.com/#reactivity">Meteor docs</a>.</p>
 
 <p>Awesome.</p>
 ]]></content>

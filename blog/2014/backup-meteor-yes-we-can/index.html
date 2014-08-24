@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: I Didn't Know That - keighty</title>
+  <title>Backup Meteor? Yes We Can - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Category: I didn't know that">
+  <meta name="description" content="Retrieving a data dump from your meteor production database and copying it to local development is a three-step, time sensitive process. 1. Retrieve &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.cablog/categories/i-didnt-know-that">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/backup-meteor-yes-we-can">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -78,106 +78,175 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: I Didn't Know That</h1>
+    
+      <h1 class="entry-title">Backup Meteor? Yes We Can</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-24T00:00:00-07:00" pubdate data-updated="true">Aug 24<span>th</span>, 2014</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>Retrieving a data dump from your meteor production database and copying it to local development is a three-step, time sensitive process.</p>
 
-  
-  <h2>2014</h2>
+<h3>1. Retrieve your production url</h3>
 
-<article>
-  
-<h1><a href="/blog/2014/multiple-remotes/">Multiple Remotes</a></h1>
-<time datetime="2014-03-19T00:00:00-07:00" pubdate><span class='month'>Mar</span> <span class='day'>19</span> <span class='year'>2014</span></time>
+<p>Passing a <code>-url</code> flag to the <code>meteor mongo</code> command will return a long string of goodies:</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/i-didnt-know-that/'>I didn't know that</a>, <a class='category' href='/blog/categories/git/'>git</a></span>
-</footer>
-
-
-</article>
+<figure class='code'><figcaption><span>Dude, where&#8217;s my data? </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ meteor mongo --url my_app.meteor.com
+</span><span class='line'>
+</span><span class='line'>mongodb://client-12345678:9abcdef1-234-5678-9abc-def123456789@singularsensation-db-a3.meteor.io:12345/my_app_meteor_net</span></code></pre></td></tr></table></div></figure>
 
 
+<p>This string contains all the information you require to access your production data:</p>
 
-<article>
-  
-<h1><a href="/blog/2014/javascript-dates/">Javascript Dates</a></h1>
-<time datetime="2014-03-01T00:00:00-08:00" pubdate><span class='month'>Mar</span> <span class='day'>01</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/i-didnt-know-that/'>I didn't know that</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a></span>
-</footer>
-
-
-</article>
+<ul>
+<li>your client id (from // to :)</li>
+<li>a server password (from : to @)</li>
+<li>a server name and port number (from @ to /)</li>
+<li>the datastore identification (from / to the end)</li>
+</ul>
 
 
-
-<article>
-  
-<h1><a href="/blog/2014/to-i-in-javascript/">String Conversion in Javascript</a></h1>
-<time datetime="2014-02-27T00:00:00-08:00" pubdate><span class='month'>Feb</span> <span class='day'>27</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/i-didnt-know-that/'>I didn't know that</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a></span>
-</footer>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mongodb://&lt;CLIENT_ID&gt;:&lt;PASSWORD_HASH&gt;@&lt;SERVER_NAME:PORT&gt;/&lt;YOUR_DATA_STORE&gt;
+</span></code></pre></td></tr></table></div></figure>
 
 
-</article>
+<p>Retrieving your data is time-sensitive because the password hash will expire after 60 seconds.</p>
+
+<h3>2. Retrieve your data using mongodump</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mongodump -u CLIENT_ID -h SERVER_NAME:PORT -d YOUR_DATA_STORE -p PASSWORD_HASH
+</span><span class='line'>
+</span><span class='line'>connected to: &lt;SERVER_NAME:PORT&gt;
+</span><span class='line'>Sun Aug 24 10:50:32.342 DATABASE: YOUR_DATA_STORE  to   dump/YOUR_DATA_STORE
+</span><span class='line'>Sun Aug 24 10:50:32.989   YOUR_DATA_STORE.system.indexes to dump/YOUR_DATA_STORE/system.indexes.bson
+</span><span class='line'>Sun Aug 24 10:50:34.368      14 objects
+</span><span class='line'>Sun Aug 24 10:50:34.369   YOUR_DATA_STORE.system.users to dump/YOUR_DATA_STORE/system.users.bson
+</span><span class='line'>Sun Aug 24 10:50:34.559      2 objects
+</span><span class='line'>... and on and on
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Mongodb copies your data from production into a new folder called &ldquo;dump&rdquo; in your present working directory.</p>
 
-<article>
-  
-<h1><a href="/blog/2014/implied-functions-applied/">Implied Functions Applied</a></h1>
-<time datetime="2014-02-26T00:00:00-08:00" pubdate><span class='month'>Feb</span> <span class='day'>26</span> <span class='year'>2014</span></time>
+<h3>3. Use mongorestore to copy the data from the dump into your local datastore</h3>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/i-didnt-know-that/'>I didn't know that</a>, <a class='category' href='/blog/categories/d3/'>d3</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2014/global-abatement/">Global Abatement</a></h1>
-<time datetime="2014-02-07T00:00:00-08:00" pubdate><span class='month'>Feb</span> <span class='day'>07</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/i-didnt-know-that/'>I didn't know that</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a></span>
-</footer>
-
-
-</article>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ mongorestore --host 127.0.0.1 --port 3001 --db meteor --drop dump/YOUR_DATA_STORE/
+</span><span class='line'>
+</span><span class='line'>connected to: 127.0.0.1:3001
+</span><span class='line'>Sun Aug 24 11:36:54.693 dump/YOUR_DATA_STORE/users.bson
+</span><span class='line'>Sun Aug 24 11:36:54.693   going into namespace [meteor.users]
+</span><span class='line'>Sun Aug 24 11:36:54.693    dropping
+</span><span class='line'>2 objects found
+</span><span class='line'>Sun Aug 24 11:36:55.834   Creating index: { name: "_id_", key: { _id: 1 }, ns: "meteor.users" }
+</span><span class='line'>Sun Aug 24 11:36:55.993   Creating index: { name: "username_1", key: { username: 1 }, unique: true, ns: "meteor.users", sparse: 1 }
+</span><span class='line'>... and on and on</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Awesome.</p>
 
-<article>
-  
-<h1><a href="/blog/2014/a-number-is-a-double-is-a-float/">A Number Is a Double Is a Float</a></h1>
-<time datetime="2014-02-02T19:56:17-08:00" pubdate><span class='month'>Feb</span> <span class='day'>02</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/i-didnt-know-that/'>I didn't know that</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a></span>
-</footer>
-
-
-</article>
-
+<p>Resources:
+<a href="http://stackoverflow.com/a/12447710">stackoverflow</a></p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-24T00:00:00-07:00" pubdate data-updated="true">Aug 24<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/meteor/'>meteor</a>, <a class='category' href='/blog/categories/mongo/'>mongo</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/backup-meteor-yes-we-can/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/backup-meteor-yes-we-can/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/formatting-numbers-the-easy-way/" title="Previous Post: formatting numbers the easy way">&laquo; formatting numbers the easy way</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -301,7 +370,10 @@
       var disqus_shortname = 'keightyleonard';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/backup-meteor-yes-we-can/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2014/backup-meteor-yes-we-can/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
