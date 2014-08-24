@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-08-09T15:04:51-07:00</updated>
+  <updated>2014-08-24T10:05:42-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,134 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Formatting Numbers the Easy Way]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/formatting-numbers-the-easy-way/"/>
+    <updated>2014-08-23T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/formatting-numbers-the-easy-way</id>
+    <content type="html"><![CDATA[<p>D3 has an awesome number formatting function that I discovered only after hacking my own. My first approach was to use string and array manipulation to convert 1234567890 to 1,234,567,890:</p>
+
+<p>
+`&ldquo;javascript
+function numberSmoothing(value) {
+  // split the number into a character array and reverse it
+  reversedNumber = (value).toString().split(&rdquo;).reverse();</p>
+
+<p>  // [&ldquo;0&rdquo;, &ldquo;9&rdquo;, &ldquo;8&rdquo;, &ldquo;7&rdquo;, &ldquo;6&rdquo;, &ldquo;5&rdquo;, &ldquo;4&rdquo;, &ldquo;3&rdquo;, &ldquo;2&rdquo;, &ldquo;1&rdquo;]</p>
+
+<p>  // push the numbers onto another array in groups of 3 and add a comma
+  chunkedNumber = [];
+  while(reversedNumber.length > 3) {</p>
+
+<pre><code>var numberChunk = reversedNumber.splice(3);
+chunkedNumber.push(reversedNumber.join('') + ',');
+reversedNumber = numberChunk;
+</code></pre>
+
+<p>  }</p>
+
+<p>  // push the remaining digits onto the array
+  chunkedNumber.push(reversedNumber.join(&lsquo;&rsquo;));</p>
+
+<p>  // [&ldquo;098,&rdquo;, &ldquo;765,&rdquo;, &ldquo;432,&rdquo;, &ldquo;1&rdquo;]</p>
+
+<p>  // reverse each of the strings in the array and rejoin them
+  for(var j = 0; j &lt; chunkedNumber.length; j++){</p>
+
+<pre><code>chunkedNumber[j] = chunkedNumber[j].split('').reverse().join('');
+</code></pre>
+
+<p>  }</p>
+
+<p>  // [&ldquo;,890&rdquo;, &ldquo;,567&rdquo;, &ldquo;,234&rdquo;, &ldquo;1&rdquo;]</p>
+
+<p>  return chunkedNumber.reverse().join(&lsquo;&rsquo;);
+}</p>
+
+<blockquote><p>numberSmoothing(1234567890)
+&ldquo;1,234,567,890&rdquo;</p></blockquote>
+
+<p>```
+</p>
+
+<p>While it was a fun mental exercise to implement number formatting, I stumbled across this handy d3 function after I was already done:</p>
+
+<p>
+```</p>
+
+<blockquote><p>var format = d3.format(&ldquo;,&rdquo;);
+format(1234567890);
+&ldquo;1,234,567,890&rdquo;
+```
+</p></blockquote>
+
+<p>As it turns out, any way one might want to format a number has <a href="https://github.com/mbostock/d3/wiki/Formatting#d3_format">already been implemented in d3</a>. It is similar to the mini-formatting language from python:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[​[fill]align][sign][symbol][0][width][,][.precision][type]</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>
+```javascript
+// add commas for the thousands separator</p>
+
+<blockquote><p>var format = d3.format(&lsquo;,&rsquo;)
+format(1234567890)
+&ldquo;1,234,567,890&rdquo;</p></blockquote>
+
+<p>// add a sign for positive and negative numbers</p>
+
+<blockquote><p>var format = d3.format(&lsquo;+,&rsquo;)
+format(1234567890)
+&ldquo;+1,234,567,890&rdquo;</p>
+
+<p>format(-1234567890)
+&ldquo;-1,234,567,890&rdquo;</p></blockquote>
+
+<p>// add a currency sign</p>
+
+<blockquote><p>var format = d3.format(&lsquo;+$,&rsquo;)
+format(1234567890)
+&ldquo;+$1,234,567,890&rdquo;</p></blockquote>
+
+<p>// as a percentage</p>
+
+<blockquote><p>var format = d3.format(&lsquo;p&rsquo;)
+format(1/6)
+&ldquo;16.666666666666664%&rdquo;</p></blockquote>
+
+<p>// as a rounded percentage</p>
+
+<blockquote><p>var format = d3.format(&lsquo;%&rsquo;)
+format(1/6)
+&ldquo;17%&rdquo;</p></blockquote>
+
+<p>// as a percent rounded to a single sig fig</p>
+
+<blockquote><p>var format = d3.format(&lsquo;.1%&rsquo;)
+format(1/6)
+&ldquo;16.7%&rdquo;</p></blockquote>
+
+<p>// as a rounded value</p>
+
+<blockquote><p>var format = d3.format(&lsquo;.2r&rsquo;)
+format(123.456)
+&ldquo;120&rdquo;</p>
+
+<p>format(123456789.66)
+&ldquo;120000000&rdquo;</p></blockquote>
+
+<p>// as a rounded, comma separated value</p>
+
+<blockquote><p>var format = d3.format(&lsquo;,.2r&rsquo;)
+format(123456789.66)
+&ldquo;120,000,000&rdquo;
+```
+</p></blockquote>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Javascript Getters and Setters]]></title>
@@ -353,37 +481,6 @@ TypeError: Converting circular structure to JSON</p>
 </p></blockquote>
 
 <p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[jQuery-UI and Meteor]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/jquery-ui-and-meteor/"/>
-    <updated>2014-06-16T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/jquery-ui-and-meteor</id>
-    <content type="html"><![CDATA[<p>I have been working on <a href="virtualplaybill.net">Virtual Playbill</a> for the last few weeks using meteor, bootstrap, and a number of other UI packages. I wanted to use a datepicker as a form field, but getting jQuery-ui working was not a straightforward package download as many other features are. There are currently 5 packages available for installation on <a href="https://atmospherejs.com/package/jquery-ui?q=jquery-ui">Atmosphere</a> (the meteor package manager), and I attempted several of them before finding the combination that worked<!--more-->:</p>
-
-<h3>1. Install the jQuery-ui package from <a href="https://atmospherejs.com/package/jquery-ui">Atmosphere</a></h3>
-
-<p><code>
-mrt add jquery-ui
-</code></p>
-
-<h3>2. Download jQuery-ui</h3>
-
-<p>For me, the meteorite package did not properly install the css or images I needed to get the datepicker working, so I downloaded <a href="http://jqueryui.com/">jquery-ui</a>, swiped the css file (un-minified), and added it to my <code>client/stylesheets</code> folder.</p>
-
-<h3>3. Add jQuery-ui images</h3>
-
-<p>The css styled the datepicker calendar perfectly, except for the previous month and next month buttons. jQuery-ui comes with a few standard icons, so I placed the jQuery-ui images folder in <code>/public</code>, since static files must be kept in a public folder for meteor to acknowledge them.</p>
-
-<h3>4. Relocate the images</h3>
-
-<p>The jQuery-ui css file tries to locate the images in its parent folder, but as I mentioned, static assets = public folder. The advantage of the public folder is that all assets can be referenced with a leading slash: <code>/images</code>. I scanned the un-minified version of the css and changed the image url locations from <code>images/...</code> to <code>/images/...</code></p>
-
-<p>Voila! A beautiful, functional datepicker!</p>
-
-<p><img src="/images/post_datepicker.png" /></p>
 ]]></content>
   </entry>
   
