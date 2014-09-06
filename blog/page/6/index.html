@@ -9,13 +9,15 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Almost every day, javascript blows my mind. Today I discovered that you can convert a string to a number simply by prepending a +: 1
+  <meta name="description" content="Javascript Date objects have zero indexed months but not dates. 1
 2
 3
 4
 5
 6
-&gt; &hellip;">
+&gt; (new Date(2014, 0, 1)).strftime("%b %d, %Y")
+"Jan 1, 2014"
+&gt; (new &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,6 +87,63 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/javascript-dates/">Javascript Dates</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-01T00:00:00-08:00" pubdate data-updated="true">Mar 1<span>st</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Javascript Date objects have zero indexed months but not dates.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; (new Date(2014, 0, 1)).strftime("%b %d, %Y")
+</span><span class='line'>"Jan 1, 2014"
+</span><span class='line'>&gt; (new Date(2013, 11, 31)).strftime("%b %d, %Y")
+</span><span class='line'>"Dec 31, 2013"
+</span><span class='line'>&gt; (new Date(2014, 0, 0)).strftime("%b %d, %Y")
+</span><span class='line'>"Dec 31, 2013"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Wat?</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/javascript-dates/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -287,45 +346,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/implied-functions-applied/">Implied Functions Applied</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-26T00:00:00-08:00" pubdate data-updated="true">Feb 26<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>When binding a primitive datum to a node in a D3 visualization, the callback function can be implicitly called on the datum without the typical verbosity</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/implied-functions-applied/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -350,6 +370,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/managing-modules/">Gaining Closure Through Modules</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/backup-meteor-yes-we-can/">Backup Meteor? Yes We Can</a>
       </li>
     
@@ -363,10 +387,6 @@
     
       <li class="post">
         <a href="/blog/2014/constructors-and-prototypes/">Constructors and Prototypes</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/in-operator-avoid-false-falsies/">&#8216;In&#8217; Operator Avoids False Falsies</a>
       </li>
     
   </ul>

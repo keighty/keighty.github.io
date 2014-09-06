@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-08-24T11:54:16-07:00</updated>
+  <updated>2014-09-06T10:28:35-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,100 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Gaining Closure Through Modules]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/managing-modules/"/>
+    <updated>2014-09-06T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/managing-modules</id>
+    <content type="html"><![CDATA[<p>If you have more than one javascript running on a page, you have likely experienced the hell of trying to debug a problem caused by naming collisions. Developing the scripts in isolation, it makes sense to assign widgetA.name dynamically using jQuery, but then why does the title of widgetGraphB disappear? Avoid the pain of unintended consequences by namespacing your scripts. <!--more--></p>
+
+<p>Closures occur when you pass functions to variables to call at a later date. The javascript engine does all the work of compiling the script and loading the contents into the memory stack, but until the function is called the stack just sits there, sealed like a time capsule.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Closure in the wild </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">timeCapsule</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">year</span> <span class="o">=</span> <span class="mi">1999</span><span class="p">;</span>
+</span><span class='line'>  <span class="kd">function</span> <span class="nx">party</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;We&#39;re gonna party like it&#39;s &quot;</span> <span class="o">+</span> <span class="nx">year</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="k">return</span> <span class="nx">party</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kd">var</span> <span class="nx">year</span> <span class="o">=</span> <span class="mi">2099</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">tonight</span> <span class="o">=</span> <span class="nx">timeCapsule</span><span class="p">();</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">tonight</span><span class="p">();</span> <span class="c1">// We&amp;rsquo;re gonna party like it&amp;rsquo;s 1999</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The <code>party()</code> function has a closure over <code>timeCapsule()</code>, which means all the variables and functions within timeCapsule remain unmolested by any assignments made outside of their scope.</p>
+
+<h3>Modules use closure to encapsulate scope.</h3>
+
+<p>Breaking your monolithic javascript into modules is a great way to separate concerns and create closures.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>myModule.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">myModuleFunction</span><span class="p">()</span> <span class="p">{</span> <span class="err">/&lt;em&gt; Do work1 &lt;/em&gt;/ }</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">mySecondModuleFuntion</span><span class="p">()</span> <span class="p">{</span> <span class="err">/&lt;em&gt; Do work2 &lt;/em&gt;/ }&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">exports</span><span class="p">.</span><span class="nx">myModuleFunction</span> <span class="o">=</span> <span class="nx">myModuleFunction</span><span class="p">;</span>
+</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">mySecondModuleFunction</span> <span class="o">=</span> <span class="nx">mySecondModuleFunction</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Using the module </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">myModule</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">myModule</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;);</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">myModule</span><span class="p">.</span><span class="nx">myModuleFunction</span><span class="p">();</span> <span class="c1">// performs work1</span>
+</span><span class='line'><span class="nx">myModule</span><span class="p">.</span><span class="nx">mySecondModuleFunction</span><span class="p">();</span> <span class="c1">// performs work2</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Using modules will prevent naming conflicts on functions and variables:</p>
+
+<p>
+```javascript
+var module1 = require(&ldquo;myModuleName&rdquo;);</p>
+
+<p>myModuleFunction() {
+  console.log(&ldquo;All work and no play makes module1 a dull script;&rdquo;);
+}</p>
+
+<p>module1.myModuleFunction(); // performs work1
+myModuleFunction(); // outputs snarky phrase</p>
+
+<p>```
+</p>
+
+<p>Voila &mdash; no conflicts.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Formatting Numbers the Easy Way]]></title>
@@ -373,114 +467,6 @@ false
 <h3>Resources</h3>
 
 <p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Stringify Cyclic Structures With Censors]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/stringify-cyclic-structures-with-censors/"/>
-    <updated>2014-07-23T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/stringify-cyclic-structures-with-censors</id>
-    <content type="html"><![CDATA[<p>Troubleshooting a d3 data visualization sometimes requires visual inspection of the underlying JSON data structure. You can convert linear data structures to a JSON string using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify"><code>JSON.stringify</code></a><!--more-->:</p>
-
-<p>
-```javascript JSON.stringify</p>
-
-<blockquote><p>x = {}
-JSON.stringify(x)
-&ldquo;{}&rdquo;
-x.y = [&ldquo;1&rdquo;, &ldquo;2&rdquo;, &ldquo;3&rdquo;]
-JSON.stringify(x)
-&ldquo;{"y&rdquo;:[&ldquo;1&rdquo;,&ldquo;2&rdquo;,&ldquo;3&rdquo;]}&ldquo;
-x.z = {a: ["b&rdquo;, &ldquo;c&rdquo;]}
-JSON.stringify(x)
-&ldquo;{"y&rdquo;:[&ldquo;1&rdquo;,&ldquo;2&rdquo;,&ldquo;3&rdquo;],&ldquo;z&rdquo;:{&ldquo;a&rdquo;:[&ldquo;b&rdquo;,&ldquo;c&rdquo;]}}&ldquo;
-```
-</p></blockquote>
-
-<p>Data structures that contain both upstream and downstream links between objects are cyclic structures. From the docs:</p>
-
-<blockquote><p>JSON does not support cyclic structures.  Attempting to convert such an object into JSON format will result in a TypeError exception.</p></blockquote>
-
-<p>
-```javascript</p>
-
-<blockquote><p>x = {}
-  y = {}
-  x.children = [y]
-  y.parent = x
-Object {children: [Object]}</p>
-
-<p>JSON.stringify(x)
-TypeError: Converting circular structure to JSON
-```
-</p></blockquote>
-
-<p>How can I look at a tree, or double-linked list data structure that is rife with circular links? JSON.stringify() takes a second argument called a censor in the docs. The censor is the programmatic court of appeal for whenever a cyclic structure is encountered:</p>
-
-<p>
-```javascript
-function censor(key, value) {
-  if (typeof value === &ldquo;object&rdquo;) {</p>
-
-<pre><code>return undefined;
-</code></pre>
-
-<p>  }
-  return value;
-}
-```
-</p>
-
-<p>Of course, this approach will eliminate most of the tree structure by removing all objects from the JSON. Certainly we can return something more creative than <code>undefined</code>&hellip;</p>
-
-<p>
-```javascript
-function censor(key, value) {
-  if (value &amp;&amp; typeof value === &ldquo;object&rdquo; &amp;&amp; value.parent) {</p>
-
-<pre><code>value.parent = value.parent.name;
-</code></pre>
-
-<p>  }
-  return value;
-}
-```
-</p>
-
-<p>In this censor, we replace the parent object with the parent&rsquo;s name, and JSON.stringify has no complaints:</p>
-
-<p>
-```javascript</p>
-
-<blockquote><p>function censor(key, value) {
-  if (value &amp;&amp; typeof value === &ldquo;object&rdquo; &amp;&amp; value.parent) {</p>
-
-<pre><code>value.parent = value.parent.name;
-</code></pre>
-
-<p>  }
-  return value;
-}</p>
-
-<p>x = {name: &ldquo;Theodore&rdquo;}
-Object {name: &ldquo;Theodore&rdquo;}
-y = {name: &ldquo;Alvin&rdquo;}
-Object {name: &ldquo;Alvin&rdquo;}
-x.children = [y]
-[Object]
-y.parent = x
-Object {name: &ldquo;Theodore&rdquo;, children: Array[1]}</p>
-
-<p>JSON.stringify(x)
-TypeError: Converting circular structure to JSON</p>
-
-<p>JSON.stringify(x, censor)
-&ldquo;{"name&rdquo;:&ldquo;Theodore&rdquo;,&ldquo;children&rdquo;:[{&ldquo;name&rdquo;:&ldquo;Alvin&rdquo;,&ldquo;parent&rdquo;:&ldquo;Theodore&rdquo;}]}&ldquo;
-```
-</p></blockquote>
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   
