@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Read - keighty</title>
+  <title>Giving the Cold Shoulder With Git - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Category: read">
+  <meta name="description" content="Some files become unnecessary to track using version control, but still belong in the repository. Compiled assets, for example may require a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.cablog/categories/read">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/giving-the-cold-shoulder-with-git">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -78,134 +78,118 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Read</h1>
+    
+      <h1 class="entry-title">Giving the Cold Shoulder With Git</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-08T00:00:00-07:00" pubdate data-updated="true">Sep 8<span>th</span>, 2014</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>Some files become unnecessary to track using version control, but still belong in the repository. Compiled assets, for example may require a placeholder for a functional deploy, but don&rsquo;t need to be checked in every time a change is made.</p>
 
-  
-  <h2>2014</h2>
+<p>Adding the file to your gitignore is not enough to stop tracking file changes. You must also clear the file from your git cache:</p>
 
-<article>
-  
-<h1><a href="/blog/2014/situations-matter/">Situations Matter</a></h1>
-<time datetime="2014-03-28T00:00:00-07:00" pubdate><span class='month'>Mar</span> <span class='day'>28</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/read/'>read</a></span>
-</footer>
-
-
-</article>
+<figure class='code'><figcaption><span>gitignore, this time with spite </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git rm --cached <span class="o">[</span>filename<span class="o">]</span>
+</span><span class='line'><span class="nv">$ </span>git add .
+</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;I really mean to ignore this file.&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>To untrack everything that has been added to the .gitignore:</p>
 
-<article>
-  
-<h1><a href="/blog/2014/the-ambition-gap-lean-in/">The Ambition Gap - Leaning In</a></h1>
-<time datetime="2014-03-23T00:00:00-07:00" pubdate><span class='month'>Mar</span> <span class='day'>23</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/read/'>read</a></span>
-</footer>
-
-
-</article>
+<figure class='code'><figcaption><span>For realz </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git rm -r --cached .
+</span><span class='line'><span class="nv">$ </span>git commit -a -m <span class="s2">&quot;I mean it!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<h3>Resources</h3>
 
-<article>
-  
-<h1><a href="/blog/2014/the-value-of-transition/">The Value of Slow Transitions</a></h1>
-<time datetime="2014-03-08T00:00:00-08:00" pubdate><span class='month'>Mar</span> <span class='day'>08</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/d3/'>d3</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/read/'>read</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2014/a-technique-for-producing-ideas/">A Technique for Producing Ideas</a></h1>
-<time datetime="2014-03-04T00:00:00-08:00" pubdate><span class='month'>Mar</span> <span class='day'>04</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/read/'>read</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2014/programming-and-linguistics/">The Neuroscience of Programming</a></h1>
-<time datetime="2014-02-27T00:00:00-08:00" pubdate><span class='month'>Feb</span> <span class='day'>27</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/read/'>read</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2014/how-to-live-on-24-hours-a-day/">How to Live on 24 Hours a Day</a></h1>
-<time datetime="2014-02-17T00:00:00-08:00" pubdate><span class='month'>Feb</span> <span class='day'>17</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/read/'>read</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2014/the-passionate-programmer/">The Passionate Programmer</a></h1>
-<time datetime="2014-02-10T00:00:00-08:00" pubdate><span class='month'>Feb</span> <span class='day'>10</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/read/'>read</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2014/slack/">Slack</a></h1>
-<time datetime="2014-02-03T08:06:13-08:00" pubdate><span class='month'>Feb</span> <span class='day'>03</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/read/'>read</a></span>
-</footer>
-
-
-</article>
-
+<p><a href="http://stackoverflow.com/a/1139797">Here&rsquo;s where I found this gem</a>,
+ <a href="http://git-scm.com/docs/gitignore">and here are the docs where I verified it</a>.</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-08T00:00:00-07:00" pubdate data-updated="true">Sep 8<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/git/'>git</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/giving-the-cold-shoulder-with-git/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/giving-the-cold-shoulder-with-git/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/managing-modules/" title="Previous Post: gaining closure through modules">&laquo; gaining closure through modules</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -329,7 +313,10 @@
       var disqus_shortname = 'keightyleonard';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/giving-the-cold-shoulder-with-git/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2014/giving-the-cold-shoulder-with-git/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

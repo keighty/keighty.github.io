@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="I have encountered more than my share of javascript errors because I have made assumptions about the object I am working with, such as assuming that &hellip;">
+  <meta name="description" content="Object-oriented programming (OOP) can be thought of as describing the properties and behaviour of a noun in a blueprint, which is used to create &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,150 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/constructors-and-prototypes/">Constructors and Prototypes</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-07T00:00:00-07:00" pubdate data-updated="true">Aug 7<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Object-oriented programming (OOP) can be thought of as describing the properties and behaviour of a noun in a blueprint, which is used to create instances of an object. The blueprint is defined as a Constructor &mdash; a function that identifies a class of objects and begins with a capital letter. New objects are created by calling a Constructor with the keyword <code>new</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">function</span> <span class="nx">Book</span><span class="p">(</span><span class="nx">title</span><span class="p">,</span> <span class="nx">author</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">title</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="nx">author</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">listing</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">title</span><span class="p">,</span> <span class="s2">&quot;by&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">author</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">));</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">book1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span> <span class="s2">&quot;Joseph Heller&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">title</span>
+</span><span class='line'><span class="s2">&quot;Catch-22&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">author</span>
+</span><span class='line'><span class="s2">&quot;Joseph Heller&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">listing</span><span class="p">()</span>
+</span><span class='line'><span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span> <span class="nx">by</span> <span class="nx">Joseph</span> <span class="nx">Heller</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The Book constructor specifies two properties, <code>title</code> and <code>author</code>, and one method, <code>listing</code>. Defining a method in a constructor ensures that all instances of the Object have the same method, but it also results in duplication of the method in the memory stack for every instance of the Object. If I made 1000 instances of Book, there would be 1000 instances of the listing method, even though it is only defined once, and is the same for every object.</p>
+
+<h4>Memory stack of objects with instance methods:</h4>
+
+<p><img src="/images/post_constructor_memory_stack.png"></p>
+
+
+<p>Enter Prototypes.</p>
+
+<p>A Prototype is a property that is shared by all instances of an object. When the constructor for an object is called for the first time, all the object&rsquo;s properties are loaded onto the memory stack as well as the object&rsquo;s Prototype. All subsequent instances of that object include a pointer to the same Prototype, and they pass in a pointer to themselves as <code>this</code> whenever they call a method from the Prototype.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">Book</span><span class="p">(</span><span class="nx">title</span><span class="p">,</span> <span class="nx">author</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">title</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="nx">author</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Book</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">listing</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">title</span><span class="p">,</span> <span class="s2">&quot;by&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">author</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">));</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">book1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span> <span class="s2">&quot;Joseph Heller&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">book2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;Slaughterhouse 5&quot;</span><span class="p">,</span> <span class="s2">&quot;Kurt Vonnegut&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">listing</span><span class="p">()</span>
+</span><span class='line'><span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span> <span class="nx">by</span> <span class="nx">Joseph</span> <span class="nx">Heller</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">book2</span><span class="p">.</span><span class="nx">listing</span><span class="p">()</span>
+</span><span class='line'><span class="nx">Slaughterhouse</span> <span class="mi">5</span> <span class="nx">by</span> <span class="nx">Kurt</span> <span class="nx">Vonnegut</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s2">&quot;listing&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="kc">false</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;listing&#39;</span> <span class="k">in</span> <span class="nx">book1</span>
+</span><span class='line'><span class="kc">true</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Memory stack of object with prototypes:</h4>
+
+<p><img src="/images/post_prototype_memory_stack.png"></p>
+
+
+<p>Reduced memory consumption is one advantage of keeping a reference to a prototype instead of a complete copy. Another advantage is that if additions are made to the Prototype, the changes will be extended to all instances.</p>
+
+<p>Awesome.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -296,57 +440,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/flash-your-local-collection/">Flash Your Local Collection</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-26T00:00:00-07:00" pubdate data-updated="true">May 26<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Rails allows you to pass messages to the user between actions (&ldquo;This <a href="http://api.rubyonrails.org/classes/ActionDispatch/Flash.html">ActionDispatch::Flash</a> will self-destruct&rdquo;), and because Rails, all the message generation happens server side:</p>
-
-<figure class='code'><figcaption><span>flashy_controller.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">show</span>
-</span><span class='line'>  <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;You dropped your packet.&quot;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Meteor is mostly a client-side application framework, and you can implement a similar message system, which will never touch the server, by defining a collection that is local to the browser.</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/flash-your-local-collection/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -371,6 +464,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/giving-the-cold-shoulder-with-git/">Giving the Cold Shoulder With Git</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/managing-modules/">Gaining Closure Through Modules</a>
       </li>
     
@@ -384,10 +481,6 @@
     
       <li class="post">
         <a href="/blog/2014/javascript-getters-and-setters/">Javascript Getters and Setters</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/constructors-and-prototypes/">Constructors and Prototypes</a>
       </li>
     
   </ul>
