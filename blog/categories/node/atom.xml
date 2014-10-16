@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Node | keighty]]></title>
+  <link href="http://www.katieleonard.ca/blog/categories/node/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2014-10-15T22:17:26-07:00</updated>
+  <id>http://www.katieleonard.ca/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Sort All the Things With Mongo and node.js]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/sort_things_with_mongoose/"/>
+    <updated>2014-10-09T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/sort_things_with_mongoose</id>
+    <content type="html"><![CDATA[<p>Sorting shouldn&rsquo;t be difficult, but through my experience learning meteor I discovered that if mongo likes sort commands one way:</p>
+
+<p><code>db.posts.find().sort({submitted: -1})</code></p>
+
+<p>meteor would like them a different way:</p>
+
+<p><code>Posts.find({}, {sort: {submitted : -1}}</code></p>
+
+<p>I am adapting one of my meteor projects to use mongo and node.js, connected through mongoose, and fitting in the callback required for node sent me to the google. After a few stackoverflow searches I turned up a several options:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Option 1 (spoiler.. it didn&rsquo;t work) </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Post.find({}, {sort:[[&lsquo;submitted&rsquo;,-1]]}, function(err, doc) {
+</span><span class='line'>  response.send(doc);
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>This option returned a object containing only the entry ids, not the full documents:</p>
+
+<p>
+<code>
+0: {_id:2tcte4Srd8QMSqrKt}
+1: {_id:5c3FdWphiYiMQzukw}
+2: {_id:62vAt5ewucKm542DH}
+3: {_id:AWNYsxBgFnv9Z4NSA}
+...
+</code>
+</p>
+
+<p>Another option suggested that converting the result to an Array would complete the query:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Option2 (spoiler.. also didn&rsquo;t work) </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Post.find({},{sort: [[&lsquo;submitted&rsquo;,-1]]}).toArray(function(e, results){
+</span><span class='line'>  response.send(results);
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>This option resulted in <code>TypeError: Object #&lt;Query&gt; has no method 'toArray'</code>.</p>
+
+<p>Rather than continuing to search for a snippet to steal, I turned to the source, and it turns out that querying mongo from mongoose is simpler than either of these strategies.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Option3 &mdash; just right </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Post.find()
+</span><span class='line'>  .sort(&ldquo;-submitted&rdquo;)
+</span><span class='line'>  .exec(function(err, doc) {&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>response.send(doc);
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>  });</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Success! Why? Because while mongo itself returns a cursor object which can be transformed into documents using <code>toArray()</code>, or <code>fetch()</code> in the case of meteor, mongoose returns a <a href="http://mongoosejs.com/docs/queries.html">Query</a> object, which will return the full documents once it is passed a callback.</p>
+
+<p>A Query object can be built using <a href="https://github.com/LearnBoost/mongoose/blob/master/lib/query.js#L211-L216">method chaining</a> &mdash;
+ each method (find | where | limit | select | sort) returns a new Query object, which allows you to build in stages:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Post
+</span><span class='line'>.find({ title: /the/ }) // query
+</span><span class='line'>.where(&lsquo;cost&rsquo;).gt(17).lt(66)  // query
+</span><span class='line'>.where(&lsquo;location&rsquo;).in([&lsquo;Schnitz&rsquo;, &lsquo;Armory&rsquo;])  // query
+</span><span class='line'>.limit(10)  // query
+</span><span class='line'>.sort(&lsquo;-ticketDate&rsquo;)  // query
+</span><span class='line'>.select(&lsquo;title company&rsquo;)  // query
+</span><span class='line'>.exec(callback);  // EXECUTE THE QUERY</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Another fun bit of javascript/mongoose magic, is that you can indicate <a href="https://github.com/LearnBoost/mongoose/blob/master/lib/query.js#L1295-L1297">sorting in descending order</a> by prefacing the sort string with a &ldquo;&ndash;&rdquo; :</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Post
+</span><span class='line'>.find({ title: /the/ }) // query
+</span><span class='line'>.sort(&lsquo;-ticketDate&rsquo;)  // DESC!
+</span><span class='line'>.exec(callback);  // EXECUTE THE QUERY</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Awesome.</p>
+
+<h3>Resources</h3>
+
+<p><a href="http://docs.mongodb.org/manual/reference/operator/meta/orderby/">mongo docs</a></p>
+
+<p><a href="http://stackoverflow.com/a/20859457">stackoverflow</a></p>
+]]></content>
+  </entry>
+  
+</feed>
