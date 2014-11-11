@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="I am working with a data dump from a meteor project, and while retrieving and displaying the existing collection was no problem at all, I was stuck &hellip;">
+  <meta name="description" content="Last year, I was wrapping up a stint at code school, and I picked up the challenge of building a programming language. It was a very large stretch- &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,94 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/compilers-an-intro/">Compilers &#8211; an Intro</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-08T00:00:00-08:00" pubdate data-updated="true">Nov 8<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Last year, I was wrapping up a stint at code school, and I picked up the challenge of <a href="http://katieleonard.ca/blog/2013/canadian-flair/">building a programming language</a>. It was a very large stretch-goal, and I didn&rsquo;t complete the project, but I learned a lot about how languages are designed and built. Recently, my mentor highlighted a <a href="http://online.stanford.edu/course/compilers-0">Compilers course offered through Stanford Online</a>, and suggested that it may be time to level-up my understanding of languages once again. Since I did not reach the compiler phase for <code>eh?</code>, perhaps this is an opportunity to do so.</p>
+
+<h3>Review of compilers</h3>
+
+<p>A compiler is different from an interpreter. An interpreter takes both the data and the program and produces output. A compiler takes only the program and produces an executable. Fun fact: I learned just recently that javascript is actually a &ldquo;compiled&rdquo; language &mdash; the javascript engine uses just-in-time compilation as it is executed.</p>
+
+<p>The grandfather of all compiled languages was FORTRAN, which was developed to translate formulas into a machine-readable language. Like many software projects, the initial completion date was wildly optimistic &mdash; it took 7 years longer than their original estimate &mdash; but they developed a 5-stage pattern of processing that all later compilers would follow.</p>
+
+<h3>1. Lexical analysis</h3>
+
+<p>This first step is about word and symbol recognition: breaking a stream of characters into recognizable chunks. For example a method definition:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Ruby
+</span><span class='line'>def my_method; end
+</span><span class='line'>
+</span><span class='line'>// Java
+</span><span class='line'>public static void main() { }
+</span><span class='line'>
+</span><span class='line'># eh
+</span><span class='line'>can curl; eh?</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Recognizing white space, punctuation, and words is the first step in translating characters into actions that can be performed. The words that are recognized are usually converted into &ldquo;tokens&rdquo;, for passing in to the next stage of processing, which is why this step is occasionally called Tokenizing.</p>
+
+<h3>2. Parsing</h3>
+
+<p>After the character stream has been tokenized, doing pattern recognition on the sequence of tokens is called parsing. Returning briefly to the example of a method definition, <code>def my_method; end</code>, the lexer would recognize <code>def</code> as a key word and <code>my_method</code> as a variable, but they are grouped together by the parser as the beginning of a method block.</p>
+
+<h3>3. Semantic analysis</h3>
+
+<p>Compilers can only do a very limited amount of semantic analysis, usually limited to catching inconsistencies (such as redeclaring a variable) and ambiguities (such as type mismatches). &ldquo;A panda bear walks into a bar and eats, shoots and leaves&rdquo;, can be tokenized into component parts (verbs, nouns, articles), as well as into phrases (subject, predicate), but determining the exact meaning of the predicate requires deeper understanding of the subject. Machines do not perform well with ambiguous grammar, and developing an unambiguous language syntax is a difficult task.</p>
+
+<h3>4. Optimization</h3>
+
+<p>Optimization is where most modern language compilers spend the majority of their resources, modifying programs so that they reduce the demand for resources like memory allocation, or garbage collection. For example, the java compiler will &ldquo;unroll&rdquo; all the for loops so that they run more efficiently. Another strategy is <a href="http://en.wikipedia.org/wiki/Optimizing_compiler">peephole</a> optimization, where the compiler checks out adjacent code to see if any assignments could be reduced or replaced by simple math.</p>
+
+<p><code>x = y * 2</code> might be reduced to <code>x = y + y</code>.</p>
+
+<p><code>z = 0; x = y * z</code> might be reduced to <code>x = 0</code>, but there is a gotcha hidden there &mdash; <code>y * 0 = 0</code> is only true for integers. It results in <code>NaN</code> for floating point numbers.</p>
+
+<h3>5. Code generation</h3>
+
+<p>Code generation is the final translation of the program into an executable. The written language has been cut into tokens and parsed into phrases. It has been examined for ambiguities and inconsistencies, and optimized wherever possible. The instructions for the program are arranged neatly and must now be evaluated and scheduled. The final product is an executable program that can be run against any data of interest.</p>
+
+<p>This 5 stage pattern is followed by almost all compilers. Where they vary is in their proportions. FORTRAN spent a balanced amount of time in each of the 5 phases, while modern compilers have a much longer optimization phase than lexing or parsing.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -490,126 +578,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/backup-meteor-yes-we-can/">Backup Meteor? Yes We Can</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-24T00:00:00-07:00" pubdate data-updated="true">Aug 24<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Retrieving a data dump from your meteor production database and copying it to local development is a three-step, time sensitive process.</p>
-
-<h3>1. Retrieve your production url</h3>
-
-<p>Passing a <code>-url</code> flag to the <code>meteor mongo</code> command will return a long string of goodies:</p>
-
-<figure class='code'><figcaption><span>Dude, where&#8217;s my data? </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ meteor mongo --url my_app.meteor.com
-</span><span class='line'>
-</span><span class='line'>mongodb://client-12345678:9abcdef1-234-5678-9abc-def123456789@singularsensation-db-a3.meteor.io:12345/my_app_meteor_net</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This string contains all the information you require to access your production data:</p>
-
-<ul>
-<li>your client id (from // to :)</li>
-<li>a server password (from : to @)</li>
-<li>a server name and port number (from @ to /)</li>
-<li>the datastore identification (from / to the end)</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>mongodb://&lt;CLIENT_ID&gt;:&lt;PASSWORD_HASH&gt;@&lt;SERVER_NAME:PORT&gt;/&lt;YOUR_DATA_STORE&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Retrieving your data is time-sensitive because the password hash will expire after 60 seconds.</p>
-
-<h3>2. Retrieve your data using mongodump</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mongodump -u CLIENT_ID -h SERVER_NAME:PORT -d YOUR_DATA_STORE -p PASSWORD_HASH
-</span><span class='line'>
-</span><span class='line'>connected to: &lt;SERVER_NAME:PORT&gt;
-</span><span class='line'>Sun Aug 24 10:50:32.342 DATABASE: YOUR_DATA_STORE  to   dump/YOUR_DATA_STORE
-</span><span class='line'>Sun Aug 24 10:50:32.989   YOUR_DATA_STORE.system.indexes to dump/YOUR_DATA_STORE/system.indexes.bson
-</span><span class='line'>Sun Aug 24 10:50:34.368      14 objects
-</span><span class='line'>Sun Aug 24 10:50:34.369   YOUR_DATA_STORE.system.users to dump/YOUR_DATA_STORE/system.users.bson
-</span><span class='line'>Sun Aug 24 10:50:34.559      2 objects
-</span><span class='line'>... and on and on
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Mongodb copies your data from production into a new folder called &ldquo;dump&rdquo; in your present working directory.</p>
-
-<h3>3. Use mongorestore to copy the data from the dump into your local datastore</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ mongorestore --host 127.0.0.1 --port 3001 --db meteor --drop dump/YOUR_DATA_STORE/
-</span><span class='line'>
-</span><span class='line'>connected to: 127.0.0.1:3001
-</span><span class='line'>Sun Aug 24 11:36:54.693 dump/YOUR_DATA_STORE/users.bson
-</span><span class='line'>Sun Aug 24 11:36:54.693   going into namespace [meteor.users]
-</span><span class='line'>Sun Aug 24 11:36:54.693    dropping
-</span><span class='line'>2 objects found
-</span><span class='line'>Sun Aug 24 11:36:55.834   Creating index: { name: "_id_", key: { _id: 1 }, ns: "meteor.users" }
-</span><span class='line'>Sun Aug 24 11:36:55.993   Creating index: { name: "username_1", key: { username: 1 }, unique: true, ns: "meteor.users", sparse: 1 }
-</span><span class='line'>... and on and on</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
-
-<p>Resources:
-<a href="http://stackoverflow.com/a/12447710">stackoverflow</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -632,6 +600,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/compilers-an-intro/">Compilers &#8211; an Intro</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/make-meteor-minimongo-ids-play-nice/">Meteor-managed Ids Won&#8217;t Play Nicely With Others</a>
       </li>
     
@@ -645,10 +617,6 @@
     
       <li class="post">
         <a href="/blog/2014/managing-modules/">Gaining Closure Through Modules</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/backup-meteor-yes-we-can/">Backup Meteor? Yes We Can</a>
       </li>
     
   </ul>
