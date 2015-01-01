@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-11-11T08:37:07-08:00</updated>
+  <updated>2015-01-01T11:52:29-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -14,76 +14,15 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Compilers -- an Intro]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/compilers-an-intro/"/>
-    <updated>2014-11-08T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/compilers-an-intro</id>
-    <content type="html"><![CDATA[<p>Last year, I was wrapping up a stint at code school, and I picked up the challenge of <a href="http://katieleonard.ca/blog/2013/canadian-flair/">building a programming language</a>. It was a very large stretch-goal, and I didn&rsquo;t complete the project, but I learned a lot about how languages are designed and built. Recently, my mentor highlighted a <a href="http://online.stanford.edu/course/compilers-0">Compilers course offered through Stanford Online</a>, and suggested that it may be time to level-up my understanding of languages once again. Since I did not reach the compiler phase for <code>eh?</code>, perhaps this is an opportunity to do so.</p>
+    <title type="html"><![CDATA[Method Lookup in Ruby]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/method-lookup-in-ruby/"/>
+    <updated>2014-12-28T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/method-lookup-in-ruby</id>
+    <content type="html"><![CDATA[<p>I have once more been working my way through Sandi Metz&#8217; <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">Practical Object-oriented Design in Ruby</a> (POODR) for a few weeks, and developed a mental block about method lookup.</p>
 
-<h3>Review of compilers</h3>
+<p>In Chapter 6 (Acquiring behaviour through inheritance), she describes how to extract a superclass from a group of related classes that share some behaviour by pulling methods up the inheritance chain instead of driving specializations down. This approach ensures a clean abstraction, leaving no specialized behaviour in the superclass. Where I got stuck was in the call chain that enforces the common interface:</p>
 
-<p>A compiler is different from an interpreter. An interpreter takes both the data and the program and produces output. A compiler takes only the program and produces an executable. Fun fact: I learned just recently that javascript is actually a &ldquo;compiled&rdquo; language &mdash; the javascript engine uses just-in-time compilation as it is executed.</p>
-
-<p>The grandfather of all compiled languages was FORTRAN, which was developed to translate formulas into a machine-readable language. Like many software projects, the initial completion date was wildly optimistic &mdash; it took 7 years longer than their original estimate &mdash; but they developed a 5-stage pattern of processing that all later compilers would follow.</p>
-
-<h3>1. Lexical analysis</h3>
-
-<p>This first step is about word and symbol recognition: breaking a stream of characters into recognizable chunks. For example a method definition:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># Ruby
-</span><span class='line'>def my_method; end
-</span><span class='line'>
-</span><span class='line'>// Java
-</span><span class='line'>public static void main() { }
-</span><span class='line'>
-</span><span class='line'># eh
-</span><span class='line'>can curl; eh?</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Recognizing white space, punctuation, and words is the first step in translating characters into actions that can be performed. The words that are recognized are usually converted into &ldquo;tokens&rdquo;, for passing in to the next stage of processing, which is why this step is occasionally called Tokenizing.</p>
-
-<h3>2. Parsing</h3>
-
-<p>After the character stream has been tokenized, doing pattern recognition on the sequence of tokens is called parsing. Returning briefly to the example of a method definition, <code>def my_method; end</code>, the lexer would recognize <code>def</code> as a key word and <code>my_method</code> as a variable, but they are grouped together by the parser as the beginning of a method block.</p>
-
-<h3>3. Semantic analysis</h3>
-
-<p>Compilers can only do a very limited amount of semantic analysis, usually limited to catching inconsistencies (such as redeclaring a variable) and ambiguities (such as type mismatches). &ldquo;A panda bear walks into a bar and eats, shoots and leaves&rdquo;, can be tokenized into component parts (verbs, nouns, articles), as well as into phrases (subject, predicate), but determining the exact meaning of the predicate requires deeper understanding of the subject. Machines do not perform well with ambiguous grammar, and developing an unambiguous language syntax is a difficult task.</p>
-
-<h3>4. Optimization</h3>
-
-<p>Optimization is where most modern language compilers spend the majority of their resources, modifying programs so that they reduce the demand for resources like memory allocation, or garbage collection. For example, the java compiler will &ldquo;unroll&rdquo; all the for loops so that they run more efficiently. Another strategy is <a href="http://en.wikipedia.org/wiki/Optimizing_compiler">peephole</a> optimization, where the compiler checks out adjacent code to see if any assignments could be reduced or replaced by simple math.</p>
-
-<p><code>x = y * 2</code> might be reduced to <code>x = y + y</code>.</p>
-
-<p><code>z = 0; x = y * z</code> might be reduced to <code>x = 0</code>, but there is a gotcha hidden there &mdash; <code>y * 0 = 0</code> is only true for integers. It results in <code>NaN</code> for floating point numbers.</p>
-
-<h3>5. Code generation</h3>
-
-<p>Code generation is the final translation of the program into an executable. The written language has been cut into tokens and parsed into phrases. It has been examined for ambiguities and inconsistencies, and optimized wherever possible. The instructions for the program are arranged neatly and must now be evaluated and scheduled. The final product is an executable program that can be run against any data of interest.</p>
-
-<p>This 5 stage pattern is followed by almost all compilers. Where they vary is in their proportions. FORTRAN spent a balanced amount of time in each of the 5 phases, while modern compilers have a much longer optimization phase than lexing or parsing.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Meteor-managed Ids Won't Play Nicely With Others]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/make-meteor-minimongo-ids-play-nice/"/>
-    <updated>2014-10-18T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/make-meteor-minimongo-ids-play-nice</id>
-    <content type="html"><![CDATA[<p>I am working with a data dump from a meteor project, and while retrieving and displaying the existing collection was no problem at all, I was stuck on saving new documents to mongo.</p>
-
-<p>My schema was pretty straightforward and taken directly from an existing document:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -97,911 +36,62 @@
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>var postSchema = mongoose.Schema({
-</span><span class='line'>  "title" : String,
-</span><span class='line'>  "company" : String,
-</span><span class='line'>  "author" : String,
-</span><span class='line'>  "music" : String,
-</span><span class='line'>  "choreographer" : String,
-</span><span class='line'>  "showDate" : String,
-</span><span class='line'>  "image": String,
-</span><span class='line'>  "userId" : String,
-</span><span class='line'>  "postAuthor" : String,
-</span><span class='line'>  "submitted" : Number,
-</span><span class='line'>  "commentsCount" : Number,
-</span><span class='line'>  "_id":  String
-</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>    <span class="n">baz</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">baz</span>
+</span><span class='line'>    <span class="k">raise</span> <span class="no">NotImplementedError</span><span class="o">.</span><span class="n">new</span> <span class="s2">&quot;You can&#39;t call #baz here!&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Bar</span> <span class="o">&lt;</span> <span class="no">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>    <span class="k">super</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">baz</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Hello, baz&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="no">Bar</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="s2">&quot;Hello, baz&quot;</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;Bar:0x007fc4f903ab90&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>The problem was that last field: <code>_id</code>. If I included it in the schema then I would have the objectId available on the front end but would get an error trying to insert a new document: <code>[Error: document must have an _id before saving]</code>. If I removed <code>_id</code> from the schema I could save documents just fine but could not pass through the objectIds of already existing documents. I have learned that mongo is very flexible when it comes to assigning ids before insertion into the database.</p>
-
-<p>Mongo objects created through a meteor application are given meteor-friendly objectIds, the uniqueness of which is monitored and maintained by a meteor wrapper class. The design decision to go with ids as strings seems to be <a href="https://groups.google.com/forum/#!topic/meteor-talk/f-ljBdZOwPk">motivated by meteor&rsquo;s latency compensation feature</a> &mdash; creating documents on the client-side and then later syncing them with the server requires that they are assigned objectIds before they ever reach mongo. Mongo will accept a manually entered id, trusting that there is an entity somewhere that is managing uniqueness.</p>
-
-<p>Here was my problem: the documents created by meteor had String ids assigned by meteor. If I included <code>_id</code> in my schema, mongo would assume that I was managing id assignment manually, and wouldn&rsquo;t save the object until I did. If I did not include <code>_id</code> in my schema, mongo would assume it was responsible, and would assign a unique id accordingly.</p>
-
-<p>To make the documents created by meteor play nice with the new stack, I had to update each document&rsquo;s <code>_id</code> with one created by mongo. Unfortunately, mongo won&rsquo;t allow modification of <code>_id</code> directly, so the only choice was to recreate and insert each entry, then delete the original:</p>
+<p>I could not understand why, the <code>NotImplementedError</code> wasn&rsquo;t raised when a new <code>Bar</code> was created. This is how I imagined the call stack should work:</p>
 
 <ol>
-<li>Retrieve a document: <code>doc = db.posts.findOne()</code></li>
-<li>Save the title: <code>title = doc.title</code></li>
-<li>Save the document&rsquo;s string id: <code>id = doc._id</code></li>
-<li>Reassign the document id: <code>doc._id = ObjectId()</code></li>
-<li>Save the updated document: <code>db.posts.insert(doc)</code></li>
-<li>Remove the original document: <code>db.posts.remove({_id: id})</code></li>
-<li>Verify that the post exists with the new id: <code>db.posts.findOne({"title": title})</code></li>
+<li><code>Bar.new</code> calls <code>Bar#initialize</code></li>
+<li><code>Bar</code> calls <code>super</code> (<code>Foo#initialize</code>)</li>
+<li><code>Foo</code> calls <code>baz</code> (<code>Foo#baz</code>)</li>
+<li>raises <code>NotImplementedError</code></li>
 </ol>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; doc = db.posts.findOne()
-</span><span class='line'>{
-</span><span class='line'>  "title" : "La Cage aux Folles",
-</span><span class='line'>  "company" : "Pixie Dust Productions",
-</span><span class='line'>  "author" : "Harvey Fierstein",
-</span><span class='line'>  "music" : "Jerry Herman",
-</span><span class='line'>  "showDate" : ISODate("2014-09-21T07:00:00Z"),
-</span><span class='line'>  "dateSubmitted" : 1411346259065,
-</span><span class='line'>  "_id" : "EjzopWQa3mw5LB979"
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>&gt; title = doc.title
-</span><span class='line'>La Cage aux Folles
-</span><span class='line'>
-</span><span class='line'>&gt; id = doc._id
-</span><span class='line'>EjzopWQa3mw5LB979
-</span><span class='line'>
-</span><span class='line'>&gt; doc._id = ObjectId()
-</span><span class='line'>ObjectId("5442af27cc37fe6f03648fdd")
-</span><span class='line'>
-</span><span class='line'>&gt; db.posts.insert(doc)
-</span><span class='line'>
-</span><span class='line'>&gt; db.posts.remove({_id: id})
-</span><span class='line'>
-</span><span class='line'>&gt; db.posts.findOne({"title": title})
-</span><span class='line'>{
-</span><span class='line'>  "_id" : ObjectId("5442af27cc37fe6f03648fdd"),
-</span><span class='line'>  "title" : "La Cage aux Folles",
-</span><span class='line'>  "company" : "Pixie Dust Productions",
-</span><span class='line'>  "author" : "Harvey Fierstein",
-</span><span class='line'>  "music" : "Jerry Herman",
-</span><span class='line'>  "showDate" : ISODate("2014-09-21T07:00:00Z"),
-</span><span class='line'>  "dateSubmitted" : 1411346259065,
-</span><span class='line'>  "commentsCount" : 1
-</span><span class='line'>}
-</span><span class='line'>&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here is a handy script for changing the entire collection at once:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>db.posts.find().forEach(function(doc){ var doc = db.posts.findOne(); var title = doc.title; var id = doc._id; doc._id = ObjectId(); db.posts.insert(doc); db.posts.remove({_id: id}); })</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Sort All the Things With Mongo and node.js]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/sort_things_with_mongoose/"/>
-    <updated>2014-10-09T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/sort_things_with_mongoose</id>
-    <content type="html"><![CDATA[<p>Sorting shouldn&rsquo;t be difficult, but through my experience learning meteor I discovered that if mongo likes sort commands one way:</p>
-
-<p><code>db.posts.find().sort({submitted: -1})</code></p>
-
-<p>meteor would like them a different way:</p>
-
-<p><code>Posts.find({}, {sort: {submitted : -1}}</code></p>
-
-<p>I am adapting one of my meteor projects to use mongo and node.js, connected through mongoose, and fitting in the callback required for node sent me to the google. After a few stackoverflow searches I turned up a several options:</p>
-
-<figure class='code'><figcaption><span>Option 1 (spoiler.. it didn&#8217;t work) </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Post.find({}, {sort:[['submitted',-1]]}, function(err, doc) {
-</span><span class='line'>  response.send(doc);
-</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This option returned a object containing only the entry ids, not the full documents:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>0: {_id:2tcte4Srd8QMSqrKt}
-</span><span class='line'>1: {_id:5c3FdWphiYiMQzukw}
-</span><span class='line'>2: {_id:62vAt5ewucKm542DH}
-</span><span class='line'>3: {_id:AWNYsxBgFnv9Z4NSA}
-</span><span class='line'>...</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Another option suggested that converting the result to an Array would complete the query:</p>
-
-<figure class='code'><figcaption><span>Option2 (spoiler.. also didn&#8217;t work) </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Post.find({},{sort: [['submitted',-1]]}).toArray(function(e, results){
-</span><span class='line'>  response.send(results);
-</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This option resulted in <code>TypeError: Object #&lt;Query&gt; has no method 'toArray'</code>.</p>
-
-<p>Rather than continuing to search for a snippet to steal, I turned to the source, and it turns out that querying mongo from mongoose is simpler than either of these strategies.</p>
-
-<figure class='code'><figcaption><span>Option3 &#8211; just right </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Post.find()
-</span><span class='line'>  .sort("-submitted")
-</span><span class='line'>  .exec(function(err, doc) {
-</span><span class='line'>    response.send(doc);
-</span><span class='line'>  });</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Success! Why? Because while mongo itself returns a cursor object which can be transformed into documents using <code>toArray()</code>, or <code>fetch()</code> in the case of meteor, mongoose returns a <a href="http://mongoosejs.com/docs/queries.html">Query</a> object, which will return the full documents once it is passed a callback.</p>
-
-<p>A Query object can be built using <a href="https://github.com/LearnBoost/mongoose/blob/master/lib/query.js#L211-L216">method chaining</a> &mdash;
- each method (find | where | limit | select | sort) returns a new Query object, which allows you to build in stages:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Post
-</span><span class='line'>.find({ title: /the/ }) // query
-</span><span class='line'>.where('cost').gt(17).lt(66)  // query
-</span><span class='line'>.where('location').in(['Schnitz', 'Armory'])  // query
-</span><span class='line'>.limit(10)  // query
-</span><span class='line'>.sort('-ticketDate')  // query
-</span><span class='line'>.select('title company')  // query
-</span><span class='line'>.exec(callback);  // EXECUTE THE QUERY</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Another fun bit of javascript/mongoose magic, is that you can indicate <a href="https://github.com/LearnBoost/mongoose/blob/master/lib/query.js#L1295-L1297">sorting in descending order</a> by prefacing the sort string with a &ldquo;&ndash;&rdquo; :</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Post
-</span><span class='line'>.find({ title: /the/ }) // query
-</span><span class='line'>.sort('-ticketDate')  // DESC!
-</span><span class='line'>.exec(callback);  // EXECUTE THE QUERY</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://docs.mongodb.org/manual/reference/operator/meta/orderby/">mongo docs</a></p>
-
-<p><a href="http://stackoverflow.com/a/20859457">stackoverflow</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Giving the Cold Shoulder With Git]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/giving-the-cold-shoulder-with-git/"/>
-    <updated>2014-09-08T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/giving-the-cold-shoulder-with-git</id>
-    <content type="html"><![CDATA[<p>Some files become unnecessary to track using version control, but still belong in the repository. Compiled assets, for example may require a placeholder for a functional deploy, but don&rsquo;t need to be checked in every time a change is made.</p>
-
-<p>Adding the file to your gitignore is not enough to stop tracking file changes. You must also clear the file from your git cache:</p>
-
-<figure class='code'><figcaption><span>gitignore, this time with spite </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git rm --cached <span class="o">[</span>filename<span class="o">]</span>
-</span><span class='line'><span class="nv">$ </span>git add .
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;I really mean to ignore this file.&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To untrack everything that has been added to the .gitignore:</p>
-
-<figure class='code'><figcaption><span>For realz </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git rm -r --cached .
-</span><span class='line'><span class="nv">$ </span>git commit -a -m <span class="s2">&quot;I mean it!&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Resources</h3>
-
-<p><a href="http://stackoverflow.com/a/1139797">Here&rsquo;s where I found this gem</a>,
- <a href="http://git-scm.com/docs/gitignore">and here are the docs where I verified it</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Gaining Closure Through Modules]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/managing-modules/"/>
-    <updated>2014-09-06T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/managing-modules</id>
-    <content type="html"><![CDATA[<p>If you have more than one javascript running on a page, you have likely experienced the hell of trying to debug a problem caused by naming collisions. Developing the scripts in isolation, it makes sense to assign widgetA.name dynamically using jQuery, but then why does the title of widgetGraphB disappear? Avoid the pain of unintended consequences by namespacing your scripts. <!--more--></p>
-
-<p>Closures occur when you pass functions to variables to call at a later date. The javascript engine does all the work of compiling the script and loading the contents into the memory stack, but until the function is called the stack just sits there, sealed like a time capsule.</p>
-
-<figure class='code'><figcaption><span>Closure in the wild </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">timeCapsule</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">year</span> <span class="o">=</span> <span class="mi">1999</span><span class="p">;</span>
-</span><span class='line'>  <span class="kd">function</span> <span class="nx">party</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;We&#39;re gonna party like it&#39;s &quot;</span> <span class="o">+</span> <span class="nx">year</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">party</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">year</span> <span class="o">=</span> <span class="mi">2099</span><span class="p">;</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">tonight</span> <span class="o">=</span> <span class="nx">timeCapsule</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">tonight</span><span class="p">();</span> <span class="c1">// We&#39;re gonna party like it&#39;s 1999</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The <code>party()</code> function has a closure over <code>timeCapsule()</code>, which means all the variables and functions within timeCapsule remain unmolested by any assignments made outside of their scope.</p>
-
-<h3>Modules use closure to encapsulate scope.</h3>
-
-<p>Breaking your monolithic javascript into modules is a great way to separate concerns and create closures.</p>
-
-<figure class='code'><figcaption><span>myModule.js </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">myModuleFunction</span><span class="p">()</span> <span class="p">{</span> <span class="cm">/* Do work1 */</span> <span class="p">}</span>
-</span><span class='line'><span class="kd">function</span> <span class="nx">mySecondModuleFuntion</span><span class="p">()</span> <span class="p">{</span> <span class="cm">/* Do work2 */</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">myModuleFunction</span> <span class="o">=</span> <span class="nx">myModuleFunction</span><span class="p">;</span>
-</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">mySecondModuleFunction</span> <span class="o">=</span> <span class="nx">mySecondModuleFunction</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>Using the module </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">myModule</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;myModule&quot;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">myModule</span><span class="p">.</span><span class="nx">myModuleFunction</span><span class="p">();</span> <span class="c1">// performs work1</span>
-</span><span class='line'><span class="nx">myModule</span><span class="p">.</span><span class="nx">mySecondModuleFunction</span><span class="p">();</span> <span class="c1">// performs work2</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Using modules will prevent naming conflicts on functions and variables:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">module1</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;myModuleName&quot;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">myModuleFunction</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;All work and no play makes module1 a dull script;&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">module1</span><span class="p">.</span><span class="nx">myModuleFunction</span><span class="p">();</span> <span class="c1">// performs work1</span>
-</span><span class='line'><span class="nx">myModuleFunction</span><span class="p">();</span> <span class="c1">// outputs snarky phrase</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Voila &mdash; no conflicts.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Backup Meteor? Yes We Can]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/backup-meteor-yes-we-can/"/>
-    <updated>2014-08-24T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/backup-meteor-yes-we-can</id>
-    <content type="html"><![CDATA[<p>Retrieving a data dump from your meteor production database and copying it to local development is a three-step, time sensitive process.</p>
-
-<h3>1. Retrieve your production url</h3>
-
-<p>Passing a <code>-url</code> flag to the <code>meteor mongo</code> command will return a long string of goodies:</p>
-
-<figure class='code'><figcaption><span>Dude, where&#8217;s my data? </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ meteor mongo --url my_app.meteor.com
-</span><span class='line'>
-</span><span class='line'>mongodb://client-12345678:9abcdef1-234-5678-9abc-def123456789@singularsensation-db-a3.meteor.io:12345/my_app_meteor_net</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This string contains all the information you require to access your production data:</p>
-
-<ul>
-<li>your client id (from // to :)</li>
-<li>a server password (from : to @)</li>
-<li>a server name and port number (from @ to /)</li>
-<li>the datastore identification (from / to the end)</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>mongodb://&lt;CLIENT_ID&gt;:&lt;PASSWORD_HASH&gt;@&lt;SERVER_NAME:PORT&gt;/&lt;YOUR_DATA_STORE&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Retrieving your data is time-sensitive because the password hash will expire after 60 seconds.</p>
-
-<h3>2. Retrieve your data using mongodump</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mongodump -u CLIENT_ID -h SERVER_NAME:PORT -d YOUR_DATA_STORE -p PASSWORD_HASH
-</span><span class='line'>
-</span><span class='line'>connected to: &lt;SERVER_NAME:PORT&gt;
-</span><span class='line'>Sun Aug 24 10:50:32.342 DATABASE: YOUR_DATA_STORE  to   dump/YOUR_DATA_STORE
-</span><span class='line'>Sun Aug 24 10:50:32.989   YOUR_DATA_STORE.system.indexes to dump/YOUR_DATA_STORE/system.indexes.bson
-</span><span class='line'>Sun Aug 24 10:50:34.368      14 objects
-</span><span class='line'>Sun Aug 24 10:50:34.369   YOUR_DATA_STORE.system.users to dump/YOUR_DATA_STORE/system.users.bson
-</span><span class='line'>Sun Aug 24 10:50:34.559      2 objects
-</span><span class='line'>... and on and on
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Mongodb copies your data from production into a new folder called &ldquo;dump&rdquo; in your present working directory.</p>
-
-<h3>3. Use mongorestore to copy the data from the dump into your local datastore</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ mongorestore --host 127.0.0.1 --port 3001 --db meteor --drop dump/YOUR_DATA_STORE/
-</span><span class='line'>
-</span><span class='line'>connected to: 127.0.0.1:3001
-</span><span class='line'>Sun Aug 24 11:36:54.693 dump/YOUR_DATA_STORE/users.bson
-</span><span class='line'>Sun Aug 24 11:36:54.693   going into namespace [meteor.users]
-</span><span class='line'>Sun Aug 24 11:36:54.693    dropping
-</span><span class='line'>2 objects found
-</span><span class='line'>Sun Aug 24 11:36:55.834   Creating index: { name: "_id_", key: { _id: 1 }, ns: "meteor.users" }
-</span><span class='line'>Sun Aug 24 11:36:55.993   Creating index: { name: "username_1", key: { username: 1 }, unique: true, ns: "meteor.users", sparse: 1 }
-</span><span class='line'>... and on and on</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
-
-<p>Resources:
-<a href="http://stackoverflow.com/a/12447710">stackoverflow</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Formatting Numbers the Easy Way]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/formatting-numbers-the-easy-way/"/>
-    <updated>2014-08-23T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/formatting-numbers-the-easy-way</id>
-    <content type="html"><![CDATA[<p>D3 has an awesome number formatting function that I discovered only after hacking my own. My first approach was to use string and array manipulation to convert 1234567890 to 1,234,567,890:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">numberSmoothing</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="c1">// split the number into a character array and reverse it</span>
-</span><span class='line'>  <span class="nx">reversedNumber</span> <span class="o">=</span> <span class="p">(</span><span class="nx">value</span><span class="p">).</span><span class="nx">toString</span><span class="p">().</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">reverse</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// [&quot;0&quot;, &quot;9&quot;, &quot;8&quot;, &quot;7&quot;, &quot;6&quot;, &quot;5&quot;, &quot;4&quot;, &quot;3&quot;, &quot;2&quot;, &quot;1&quot;]</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// push the numbers onto another array in groups of 3 and add a comma</span>
-</span><span class='line'>  <span class="nx">chunkedNumber</span> <span class="o">=</span> <span class="p">[];</span>
-</span><span class='line'>  <span class="k">while</span><span class="p">(</span><span class="nx">reversedNumber</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">numberChunk</span> <span class="o">=</span> <span class="nx">reversedNumber</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">chunkedNumber</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">reversedNumber</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">reversedNumber</span> <span class="o">=</span> <span class="nx">numberChunk</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// push the remaining digits onto the array</span>
-</span><span class='line'>  <span class="nx">chunkedNumber</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">reversedNumber</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">));</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// [&quot;098,&quot;, &quot;765,&quot;, &quot;432,&quot;, &quot;1&quot;]</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// reverse each of the strings in the array and rejoin them</span>
-</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">chunkedNumber</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">){</span>
-</span><span class='line'>    <span class="nx">chunkedNumber</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nx">chunkedNumber</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">reverse</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// [&quot;,890&quot;, &quot;,567&quot;, &quot;,234&quot;, &quot;1&quot;]</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">chunkedNumber</span><span class="p">.</span><span class="nx">reverse</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">numberSmoothing</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;1,234,567,890&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>While it was a fun mental exercise to implement number formatting, I stumbled across this handy d3 function after I was already done:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">);</span>
-</span><span class='line'><span class="s2">&quot;1,234,567,890&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As it turns out, any way one might want to format a number has <a href="https://github.com/mbostock/d3/wiki/Formatting#d3_format">already been implemented in d3</a>. It is similar to the mini-formatting language from python:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[​[fill]align][sign][symbol][0][width][,][.precision][type]</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// add commas for the thousands separator</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="nx">format</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;1,234,567,890&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// add a sign for positive and negative numbers</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;+,&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;+1,234,567,890&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="o">-</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;-1,234,567,890&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// add a currency sign</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;+$,&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="nx">format</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;+$1,234,567,890&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a percentage</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="nx">format</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;16.666666666666664%&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a rounded percentage</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;17%&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a percent rounded to a single sig fig</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;.1%&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;16.7%&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a rounded value</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;.2r&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mf">123.456</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;120&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span><span class="nx">format</span><span class="p">(</span><span class="mf">123456789.66</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;120000000&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a rounded, comma separated value</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;,.2r&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mf">123456789.66</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;120,000,000&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Javascript Getters and Setters]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/javascript-getters-and-setters/"/>
-    <updated>2014-08-09T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/javascript-getters-and-setters</id>
-    <content type="html"><![CDATA[<p>Getters and setters make sense in java, and I just learned that there is an equivalent pattern in javascript:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">favouriteBook</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">_title</span><span class="o">:</span> <span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">get</span> <span class="nx">title</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Getting title&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_title</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">},</span>
-</span><span class='line'>  <span class="nx">set</span> <span class="nx">title</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">_title</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Setting title&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_title</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'> <span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Slaughterhouse 5&quot;</span>
-</span><span class='line'> <span class="nx">Setting</span> <span class="nx">title</span> <span class="nx">Slaughterhouse</span> <span class="mi">5</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'> <span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Slaughterhouse</span> <span class="mi">5</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The <code>get</code> and <code>set</code> key words are reserved for accessing or mutating a data property (instance variable). Of course, one can get and set data properties directly:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'><span class="s2">&quot;Catch-22&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Slaughterhouse 5&quot;</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'><span class="s2">&quot;Slaughterhouse 5&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The advantage of using a getter and setter is that if a setter is defined without a getter, one can change the value of the data property, but can never read it. If a getter is defined without a setter, then the variable can be read but not be changed:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">favouriteBook</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">_title</span><span class="o">:</span> <span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">get</span> <span class="nx">title</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Getting title&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_title</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'><span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Slaughterhouse 5&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'><span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The setter function will fail silently, which makes troubleshooting difficult but ensures that the property remains undisturbed.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Constructors and Prototypes]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/constructors-and-prototypes/"/>
-    <updated>2014-08-07T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/constructors-and-prototypes</id>
-    <content type="html"><![CDATA[<p>Object-oriented programming (OOP) can be thought of as describing the properties and behaviour of a noun in a blueprint, which is used to create instances of an object. The blueprint is defined as a Constructor &mdash; a function that identifies a class of objects and begins with a capital letter. New objects are created by calling a Constructor with the keyword <code>new</code>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">function</span> <span class="nx">Book</span><span class="p">(</span><span class="nx">title</span><span class="p">,</span> <span class="nx">author</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">title</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="nx">author</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">listing</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">title</span><span class="p">,</span> <span class="s2">&quot;by&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">author</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">));</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">book1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span> <span class="s2">&quot;Joseph Heller&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'><span class="s2">&quot;Catch-22&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">author</span>
-</span><span class='line'><span class="s2">&quot;Joseph Heller&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">listing</span><span class="p">()</span>
-</span><span class='line'><span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span> <span class="nx">by</span> <span class="nx">Joseph</span> <span class="nx">Heller</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The Book constructor specifies two properties, <code>title</code> and <code>author</code>, and one method, <code>listing</code>. Defining a method in a constructor ensures that all instances of the Object have the same method, but it also results in duplication of the method in the memory stack for every instance of the Object. If I made 1000 instances of Book, there would be 1000 instances of the listing method, even though it is only defined once, and is the same for every object.</p>
-
-<h4>Memory stack of objects with instance methods:</h4>
-
-<p><img src="http://www.katieleonard.ca/images/post_constructor_memory_stack.png"></p>
-
-
-<p>Enter Prototypes.</p>
-
-<p>A Prototype is a property that is shared by all instances of an object. When the constructor for an object is called for the first time, all the object&rsquo;s properties are loaded onto the memory stack as well as the object&rsquo;s Prototype. All subsequent instances of that object include a pointer to the same Prototype, and they pass in a pointer to themselves as <code>this</code> whenever they call a method from the Prototype.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">Book</span><span class="p">(</span><span class="nx">title</span><span class="p">,</span> <span class="nx">author</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">title</span><span class="p">;</span>
-</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="nx">author</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">Book</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">listing</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">title</span><span class="p">,</span> <span class="s2">&quot;by&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">author</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">));</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">book1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span> <span class="s2">&quot;Joseph Heller&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">book2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;Slaughterhouse 5&quot;</span><span class="p">,</span> <span class="s2">&quot;Kurt Vonnegut&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">listing</span><span class="p">()</span>
-</span><span class='line'><span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span> <span class="nx">by</span> <span class="nx">Joseph</span> <span class="nx">Heller</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book2</span><span class="p">.</span><span class="nx">listing</span><span class="p">()</span>
-</span><span class='line'><span class="nx">Slaughterhouse</span> <span class="mi">5</span> <span class="nx">by</span> <span class="nx">Kurt</span> <span class="nx">Vonnegut</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s2">&quot;listing&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="kc">false</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;listing&#39;</span> <span class="k">in</span> <span class="nx">book1</span>
-</span><span class='line'><span class="kc">true</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Memory stack of object with prototypes:</h4>
-
-<p><img src="http://www.katieleonard.ca/images/post_prototype_memory_stack.png"></p>
-
-
-<p>Reduced memory consumption is one advantage of keeping a reference to a prototype instead of a complete copy. Another advantage is that if additions are made to the Prototype, the changes will be extended to all instances.</p>
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA['In' Operator Avoids False Falsies]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/in-operator-avoid-false-falsies/"/>
-    <updated>2014-08-05T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/in-operator-avoid-false-falsies</id>
-    <content type="html"><![CDATA[<p>I have encountered more than my share of javascript errors because I have made assumptions about the object I am working with, such as assuming that an object contains a property, and that I can call methods on that property:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</span><span class='line'><span class="nx">TypeError</span><span class="o">:</span> <span class="nx">Cannot</span> <span class="nx">read</span> <span class="nx">property</span> <span class="s1">&#39;0&#39;</span> <span class="nx">of</span> <span class="kc">undefined</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This line contains four assumptions, and therefore four places it can fail:</p>
+<p>This is how the call stack actually works</p>
 
 <ol>
-<li><code>myObject</code> exists</li>
-<li><code>myObject</code> contains a property called <code>data</code></li>
-<li><code>data</code> is an array</li>
-<li><code>data</code> is non-empty</li>
+<li><code>x = Bar.new</code> calls <code>Bar#initialize</code></li>
+<li><code>x</code> receives a call to <code>super</code> (<code>Foo#initalize</code>)</li>
+<li><code>x</code> receives a call to <code>baz</code> (<code>Bar#baz</code>)</li>
+<li>says &ldquo;Hello, baz&rdquo;</li>
 </ol>
 
 
-<p>Presuming that if <code>myObject</code> does not exist means you have bigger problems, it is easy to fall into the trap of checking for the existence of a property by gating a conditional with it:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="k">if</span><span class="p">(</span><span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="c1">//do something important with the data</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This technique will work in development, but the voice of experience tells us that it will not work in production. The reason it will not work is that javascript has more falsy values than most languages. Falsy values include the number zero, empty strings, null, undefined, NaN, and of course, the boolean false. So, if it is possible <code>myObject.data</code> to contain derived information, you have signed up to troubleshoot some unexpected behaviour.</p>
-
-<p>Fortunately, javascript has provided a failsafe way to check the existence of a property, regardless of the data it contains. The <code>in</code> operator checks if the key exists in the object&rsquo;s hash table, and doesn&rsquo;t care if it is a prototype or singleton property.</p>
+<p>The call never comes from the context of <code>Foo</code> &mdash; the receiver is always <code>x</code>, the instance of <code>Bar</code>. Classical inheritance dictates that an object can only look to itself or further up the inheritance chain for valid method definitions, not down. <code>x</code> is reaching up to call <code>super</code> but checks itself for an answer to the question <code>#baz</code>. <code>Foo#baz</code> would only ever be called if we made a new <code>Foo</code> directly:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -1010,196 +100,21 @@
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">myObject</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class='line'><span class="kc">undefined</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;data&#39;</span> <span class="k">in</span> <span class="nx">myObject</span>
-</span><span class='line'><span class="kc">false</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'><span class="s2">&quot;&quot;</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;data&#39;</span> <span class="k">in</span> <span class="nx">myObject</span>
-</span><span class='line'><span class="kc">true</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span> <span class="o">==</span> <span class="kc">true</span>
-</span><span class='line'><span class="kc">false</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="no">Foo</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="ss">NotImplementedError</span><span class="p">:</span> <span class="no">You</span> <span class="n">can</span><span class="s1">&#39;t call #baz here!</span>
+</span><span class='line'><span class="s1">        from (irb):7:in `baz&#39;</span>
+</span><span class='line'>        <span class="n">from</span> <span class="p">(</span><span class="n">irb</span><span class="p">):</span><span class="mi">3</span><span class="ss">:in</span> <span class="sb">`initialize&#39;</span>
+</span><span class='line'><span class="sb">        from (irb):27:in `</span><span class="kp">new</span><span class="s1">&#39;</span>
+</span><span class='line'><span class="s1">        from (irb):27</span>
+</span><span class='line'><span class="s1">        from /usr/local/var/rbenv/versions/2.1.5/bin/irb:11:in `&lt;main&gt;&#39;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><code>('data' in myObject)</code> returns false if the property is undefined. If the property is defined, it returns true even if data contains a falsy value.</p>
+<h3>How ruby resolves a message (classical inheritance)</h3>
 
-<h3>Resources</h3>
+<p>The search for a method begins in the class of the receiving object &mdash; in the example above, Bar is always the receiving object. If the class does not implement the message, the search proceeds up the superclass chain. If none of the superclasses contain the method definition, ruby makes a second attempt to resolve the message by sending <code>method_missing(:method_name)</code> to the original object. The search restarts from the bottom, but this time for a <code>method_missing</code> handler rather than <code>:method_name</code>.</p>
 
-<p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Stringify Cyclic Structures With Censors]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/stringify-cyclic-structures-with-censors/"/>
-    <updated>2014-07-23T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/stringify-cyclic-structures-with-censors</id>
-    <content type="html"><![CDATA[<p>Troubleshooting a d3 data visualization sometimes requires visual inspection of the underlying JSON data structure. You can convert linear data structures to a JSON string using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify"><code>JSON.stringify</code></a><!--more-->:</p>
-
-<figure class='code'><figcaption><span>JSON.stringify</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">x</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;{}&quot;</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">x</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">]</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;{&quot;</span><span class="nx">y</span><span class="s2">&quot;:[&quot;</span><span class="mi">1</span><span class="s2">&quot;,&quot;</span><span class="mi">2</span><span class="s2">&quot;,&quot;</span><span class="mi">3</span><span class="s2">&quot;]}&quot;</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">x</span><span class="p">.</span><span class="nx">z</span> <span class="o">=</span> <span class="p">{</span><span class="nx">a</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">]}</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;{&quot;</span><span class="nx">y</span><span class="s2">&quot;:[&quot;</span><span class="mi">1</span><span class="s2">&quot;,&quot;</span><span class="mi">2</span><span class="s2">&quot;,&quot;</span><span class="mi">3</span><span class="s2">&quot;],&quot;</span><span class="nx">z</span><span class="s2">&quot;:{&quot;</span><span class="nx">a</span><span class="s2">&quot;:[&quot;</span><span class="nx">b</span><span class="s2">&quot;,&quot;</span><span class="nx">c</span><span class="s2">&quot;]}}&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Data structures that contain both upstream and downstream links between objects are cyclic structures. From the docs:</p>
-
-<blockquote><p>JSON does not support cyclic structures.  Attempting to convert such an object into JSON format will result in a TypeError exception.</p></blockquote>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">x</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class='line'>  <span class="nx">y</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class='line'>  <span class="nx">x</span><span class="p">.</span><span class="nx">children</span> <span class="o">=</span> <span class="p">[</span><span class="nx">y</span><span class="p">]</span>
-</span><span class='line'>  <span class="nx">y</span><span class="p">.</span><span class="nx">parent</span> <span class="o">=</span> <span class="nx">x</span>
-</span><span class='line'><span class="nb">Object</span> <span class="p">{</span><span class="nx">children</span><span class="o">:</span> <span class="p">[</span><span class="nb">Object</span><span class="p">]}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
-</span><span class='line'><span class="nx">TypeError</span><span class="o">:</span> <span class="nx">Converting</span> <span class="nx">circular</span> <span class="nx">structure</span> <span class="nx">to</span> <span class="nx">JSON</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>How can I look at a tree, or double-linked list data structure that is rife with circular links? JSON.stringify() takes a second argument called a censor in the docs. The censor is the programmatic court of appeal for whenever a cyclic structure is encountered:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">censor</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="kc">undefined</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Of course, this approach will eliminate most of the tree structure by removing all objects from the JSON. Certainly we can return something more creative than <code>undefined</code>&hellip;</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">censor</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">value</span><span class="p">.</span><span class="nx">parent</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">value</span><span class="p">.</span><span class="nx">parent</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In this censor, we replace the parent object with the parent&rsquo;s name, and JSON.stringify has no complaints:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">function</span> <span class="nx">censor</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">value</span><span class="p">.</span><span class="nx">parent</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">value</span><span class="p">.</span><span class="nx">parent</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">x</span> <span class="o">=</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Theodore&quot;</span><span class="p">}</span>
-</span><span class='line'><span class="nb">Object</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Theodore&quot;</span><span class="p">}</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">y</span> <span class="o">=</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Alvin&quot;</span><span class="p">}</span>
-</span><span class='line'><span class="nb">Object</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Alvin&quot;</span><span class="p">}</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">x</span><span class="p">.</span><span class="nx">children</span> <span class="o">=</span> <span class="p">[</span><span class="nx">y</span><span class="p">]</span>
-</span><span class='line'><span class="p">[</span><span class="nb">Object</span><span class="p">]</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">y</span><span class="p">.</span><span class="nx">parent</span> <span class="o">=</span> <span class="nx">x</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nb">Object</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Theodore&quot;</span><span class="p">,</span> <span class="nx">children</span><span class="o">:</span> <span class="nb">Array</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
-</span><span class='line'><span class="nx">TypeError</span><span class="o">:</span> <span class="nx">Converting</span> <span class="nx">circular</span> <span class="nx">structure</span> <span class="nx">to</span> <span class="nx">JSON</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">censor</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;{&quot;</span><span class="nx">name</span><span class="s2">&quot;:&quot;</span><span class="nx">Theodore</span><span class="s2">&quot;,&quot;</span><span class="nx">children</span><span class="s2">&quot;:[{&quot;</span><span class="nx">name</span><span class="s2">&quot;:&quot;</span><span class="nx">Alvin</span><span class="s2">&quot;,&quot;</span><span class="nx">parent</span><span class="s2">&quot;:&quot;</span><span class="nx">Theodore</span><span class="s2">&quot;}]}&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[jQuery-UI and Meteor]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/jquery-ui-and-meteor/"/>
-    <updated>2014-06-16T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/jquery-ui-and-meteor</id>
-    <content type="html"><![CDATA[<p>I have been working on <a href="virtualplaybill.net">Virtual Playbill</a> for the last few weeks using meteor, bootstrap, and a number of other UI packages. I wanted to use a datepicker as a form field, but getting jQuery-ui working was not a straightforward package download as many other features are. There are currently 5 packages available for installation on <a href="https://atmospherejs.com/package/jquery-ui?q=jquery-ui">Atmosphere</a> (the meteor package manager), and I attempted several of them before finding the combination that worked<!--more-->:</p>
-
-<h3>1. Install the jQuery-ui package from <a href="https://atmospherejs.com/package/jquery-ui">Atmosphere</a></h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>mrt add jquery-ui</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>2. Download jQuery-ui</h3>
-
-<p>For me, the meteorite package did not properly install the css or images I needed to get the datepicker working, so I downloaded <a href="http://jqueryui.com/">jquery-ui</a>, swiped the css file (un-minified), and added it to my <code>client/stylesheets</code> folder.</p>
-
-<h3>3. Add jQuery-ui images</h3>
-
-<p>The css styled the datepicker calendar perfectly, except for the previous month and next month buttons. jQuery-ui comes with a few standard icons, so I placed the jQuery-ui images folder in <code>/public</code>, since static files must be kept in a public folder for meteor to acknowledge them.</p>
-
-<h3>4. Relocate the images</h3>
-
-<p>The jQuery-ui css file tries to locate the images in its parent folder, but as I mentioned, static assets = public folder. The advantage of the public folder is that all assets can be referenced with a leading slash: <code>/images</code>. I scanned the un-minified version of the css and changed the image url locations from <code>images/...</code> to <code>/images/...</code></p>
-
-<p>Voila! A beautiful, functional datepicker!</p>
-
-<p><img src="http://www.katieleonard.ca/images/post_datepicker.png" /></p>
+<p>Occasionally refreshing the ruby basics is super-rewarding.</p>
 ]]></content>
   </entry>
   
@@ -1933,6 +848,809 @@ var svg = d3.select("#graph-here").append("svg");
 
 
 <p>Git is so awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Delay Chained Transitions]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/delay-chained-transitions/"/>
+    <updated>2014-03-15T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/delay-chained-transitions</id>
+    <content type="html"><![CDATA[<p>Changing an element using multiple, chained transitions requires a little troubleshooting. You would think that just chaining them one after another would suffice:</p>
+
+<figure class='code'><figcaption><span>Chained Transitions </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">doubleR</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But D3 does not wait for one transition to be complete before it begins the next one. Adding a delay will accomplish the desired transition chaining:</p>
+
+<figure class='code'><figcaption><span>ACTUAL Chained Transitions</span><a href='https://gist.github.com/keighty/9508948'>Gist </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">delay</span><span class="p">(</span><span class="mi">1700</span><span class="p">).</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">doubleR</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<div id="showme">
+<style>
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+}
+</style>
+<script src="http://mbostock.github.com/d3/d3.v2.min.js"></script>
+<script>
+
+var width = 500,
+    height = 500,
+    margin = 50,
+    data,
+    dataFromCsv;
+
+var scaleX=d3.scale.linear().domain([0,10]).range([margin,width-margin]);
+var scaleY=d3.scale.linear().domain([0,10]).range([height-margin,margin]);
+
+var svg=d3.select("#showme").append("svg")
+      .attr("width",width)
+      .attr("height",height);
+
+function drawAxes() {
+  var xAxis = d3.svg.axis()
+    .scale(scaleX)
+    .orient("bottom")
+    .ticks(5)
+    .tickSubdivide(1)
+    .tickPadding(10)
+    .tickFormat(function(d) { return d + " ticks"});
+
+  var yAxis = d3.svg.axis()
+    .scale(scaleY)
+    .orient("left");
+
+  svg.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(0," + (height - margin) + ")")
+    .call(xAxis);
+  svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "middle")
+    .attr("x", width/2)
+    .attr("y", height)
+    .text("X-value");
+
+  svg.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(" + margin + ",0)")
+    .call(yAxis);
+  svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "middle")
+    .attr("x", -height/2)
+    .attr("y", 6)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Y-value");
+}
+
+dataFromCsv = [{ "Color": "#9467bd", "X": 1, "Y": 8, "Quantity": 91 },
+{ "Color": "#1f77b4", "X": 9, "Y": 1, "Quantity": 32 },
+{ "Color": "#1f77b4", "X": 3, "Y": 1, "Quantity": 67 },
+{ "Color": "#bcbd22", "X": 5, "Y": 5, "Quantity": 63 },
+{ "Color": "#9467bd", "X": 6, "Y": 6, "Quantity": 57 },
+{ "Color": "#2ca02c", "X": 5, "Y": 10, "Quantity": 65 },
+{ "Color": "#d62728", "X": 8, "Y": 2, "Quantity": 36 },
+{ "Color": "#9467bd", "X": 2, "Y": 8, "Quantity": 82 },
+{ "Color": "#bcbd22", "X": 4, "Y": 7, "Quantity": 69 },
+{ "Color": "#9467bd", "X": 5, "Y": 3, "Quantity": 88 },
+{ "Color": "#d62728", "X": 1, "Y": 5, "Quantity": 29 },
+{ "Color": "#1f77b4", "X": 10, "Y": 7, "Quantity": 60 },
+{ "Color": "#2ca02c", "X": 8, "Y": 5, "Quantity": 56 },
+{ "Color": "#bcbd22", "X": 1, "Y": 6, "Quantity": 31 },
+{ "Color": "#bcbd22", "X": 6, "Y": 5, "Quantity": 57 },
+{ "Color": "#d62728", "X": 9, "Y": 6, "Quantity": 85 },
+{ "Color": "indigo", "X": 9, "Y": 10, "Quantity": 70 },
+{ "Color": "indigo", "X": 9, "Y": 10, "Quantity": 31 },
+{ "Color": "#1f77b4", "X": 2, "Y": 4, "Quantity": 26 },
+{ "Color": "#bcbd22", "X": 10, "Y": 5, "Quantity": 61 },
+{ "Color": "#2ca02c", "X": 4, "Y": 2, "Quantity": 64 },
+{ "Color": "#1f77b4", "X": 8, "Y": 9, "Quantity": 71 }];
+function importData() {
+  data = d3.nest()
+          .key(function(d) { return d.Color; })
+          .rollup(aggregateData)
+          .entries(dataFromCsv);
+  // drawElements();
+  setInterval( drawElements, 4000 );
+}
+
+/***********************
+  Draw circles, bind data, and move elements to final location
+***********************/
+function drawElements() {
+  var selection = svg.selectAll("circle").data(data);
+
+  selection.enter()
+    .append("circle")
+    .attr("cx",scaleX(0))
+    .attr("cy",scaleY(0))
+    .attr("r", 0)
+
+  selection.transition().duration(1500)
+      .attr("cx",getX)
+      .attr("cy",getY)
+      .attr("r", getR)
+      .style("fill", getColor)
+    .transition().delay(1500+200).duration(1500)
+      .attr("r", doubleR);
+}
+
+/***********************
+  Helper functions
+***********************/
+function getX(d)     { return scaleX(d.values.X); }
+function getY(d)     { return scaleY(d.values.Y); }
+function getR(d)     { return d.values.Quantity / 10; }
+function doubleR(d)     { return d.values.Quantity / 5; }
+function getColor(d) { return d.key; }
+// Use D3 built in array functions to aggregate data
+function aggregateData(d) {
+  return {
+    "X"       : d3.mean(d, function(e) { return +e.X; }),
+    "Y"       : d3.median(d, function(e) { return +e.Y; }),
+    "Quantity": d3.max(d, function(e) { return +e.Quantity; })
+  };
+}
+
+drawAxes();
+importData();
+</script>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Easing Does It]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/easing-does-it/"/>
+    <updated>2014-03-12T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/easing-does-it</id>
+    <content type="html"><![CDATA[<p>With the possible exception of UFOs, things don&rsquo;t usually switch from being stationary to moving at maximum velocity without an intervening period of acceleration or deceleration. Similarly, it can be difficult to track elements on a web page that move from one position to another with no warning, or faster than the human eye can perceive. Enter easing functions: <!--more--></p>
+
+<blockquote><p>&ldquo;<strong>Easing functions</strong> specify the rate of change of a parameter over time.&rdquo; &mdash;Robert Penner</p></blockquote>
+
+<figure class='code'><figcaption><span>Easy easing</span><a href='https://gist.github.com/keighty/9508948'>Gist </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">enter</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">scaleX</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">scaleY</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">ease</span><span class="p">(</span><span class="s2">&quot;cubic-in-out&quot;</span><span class="p">).</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The transition will act on the selection in the following ways:</p>
+
+<ul>
+<li>it will move the element from its starting x position of 0 to the x position defined by <code>getX()</code></li>
+<li>it will move the element from its starting y position of 0 to the y position defined by <code>getY()</code></li>
+<li>it will increase the element&rsquo;s radius from 0 to the radius returned from <code>getR()</code></li>
+<li>it will gradually change the element&rsquo;s color using an ordinal color scale, from black to the color returned from <code>getColor()</code></li>
+<li>all of this movement will be performed with a &ldquo;cubic-in-out&rdquo; easing function</li>
+</ul>
+
+
+<p>The cubic-in-out easing function is the standard D3 easing function. The element will increase velocity by a power of 3 until halfway down the path it is destined to trace. It will then decrease velocity by a power of 3 until it reaches its final location. There are many different types of easing functions. Check out the resources for more information, and ask your doctor which easing function is right for you!</p>
+
+<h3>Resources</h3>
+
+<p>Robert Penner&rsquo;s <a href="http://www.robertpenner.com/easing/">Easing Functions</a></p>
+
+<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The Value of Slow Transitions]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/the-value-of-transition/"/>
+    <updated>2014-03-08T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/the-value-of-transition</id>
+    <content type="html"><![CDATA[<h3>The Why</h3>
+
+<p>From <a href="http://bost.ocks.org/mike/constancy/">Object Constancy</a> by Mike Bostock:</p>
+
+<blockquote><p>Animated transitions are pretty, but they also serve a purpose: they make it easier to follow the data. This is known as <strong>object constancy</strong>: a graphical element that represents a particular data point&hellip; can be tracked visually through the transition. This lessens the cognitive burden by using <strong>preattentive processing</strong> of motion rather than sequential scanning of labels.</p></blockquote>
+
+<p>(The emphasis is mine)</p>
+
+<h3>The How</h3>
+
+<p>Object constancy is achieved through object identity: the data is bound to it&rsquo;s object by a shared unique identifier. This allows D3 to reuse the object when the data set is updated. Object identity is achieved by passing a key function to the data() method at the time of data binding:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var data = [ // &lt;-A
+</span><span class='line'>        {id: 0, value: "foo"},
+</span><span class='line'>        {id: 1, value: "bar"},
+</span><span class='line'>        {id: 2, value: "foo"},
+</span><span class='line'>        {id: 3, value: "baz"},
+</span><span class='line'>        {id: 4, value: "bar"}
+</span><span class='line'>    ];
+</span><span class='line'>d3.selectAll("svg:g")
+</span><span class='line'>    .data(data, function(d){return d.id;});</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Git, What Have I Done?]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/git-what-have-i-done/"/>
+    <updated>2014-03-08T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/git-what-have-i-done</id>
+    <content type="html"><![CDATA[<p>Git, the superhero of version control, allows you to review all the commands that have modified the HEAD tag in a git repo: <code>git reflog</code></p>
+
+<p>The output for one of my demo apps:</p>
+
+<figure class='code'><figcaption><span>Git, you&#8217;re my hero </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>5075d26 HEAD@<span class="o">{</span>0<span class="o">}</span>: checkout: moving from master to kleonard/add_skyline_background
+</span><span class='line'>531c396 HEAD@<span class="o">{</span>1<span class="o">}</span>: pull: fast forward
+</span><span class='line'>435f6de HEAD@<span class="o">{</span>2<span class="o">}</span>: commit: Adds logic <span class="k">for </span>running and testing
+</span><span class='line'>043e35a HEAD@<span class="o">{</span>3<span class="o">}</span>: commit: Adds logic to process input
+</span><span class='line'>5155ba4 HEAD@<span class="o">{</span>4<span class="o">}</span>: commit: Adds input file
+</span><span class='line'>a629871 HEAD@<span class="o">{</span>5<span class="o">}</span>: rebase finished: returning to refs/heads/kleonard/create_input_files
+</span><span class='line'>a010021 HEAD@<span class="o">{</span>6<span class="o">}</span>: rebase: Add input file
+</span><span class='line'>b7cd86a HEAD@<span class="o">{</span>7<span class="o">}</span>: commit: Initial commit arbitrage
+</span><span class='line'>5ed00ea HEAD@<span class="o">{</span>8<span class="o">}</span>: commit: Adds launcher
+</span><span class='line'>7b2d720 HEAD@<span class="o">{</span>9<span class="o">}</span>: commit: Adds logic to find smallest number of moves
+</span><span class='line'>9c0dfce HEAD@<span class="o">{</span>10<span class="o">}</span>: commit: Adds implementation <span class="k">for </span>bin creation
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Hmmm&hellip; looks like my commit messages need a little work&hellip; Still, it is a great tool for catching up on the changes to a repo (especially if you haven&rsquo;t touched it in a while), finding out where the bulk of the work is happening, or just reminding yourself what you did yesterday.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Transition With Style]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/transition-with-style/"/>
+    <updated>2014-03-06T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/transition-with-style</id>
+    <content type="html"><![CDATA[<p>Making things zoom across the page is what I used to think javascript was all about, but it wasn&rsquo;t until I started learning d3 that I found out how to make it happen.</p>
+
+<!--more-->
+
+
+
+
+<figure class='code'><figcaption><span>Simple Transition </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">duration</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">body</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;background-color&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;margin&quot;</span><span class="p">,</span> <span class="s2">&quot;40px&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span> <span class="s2">&quot;200px&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">,</span> <span class="s2">&quot;200px&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;border&quot;</span><span class="p">,</span> <span class="s2">&quot;black solid thin&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">transition</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">duration</span><span class="p">(</span><span class="nx">duration</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;background-color&quot;</span><span class="p">,</span> <span class="s2">&quot;black&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;margin-left&quot;</span><span class="p">,</span> <span class="s2">&quot;600px&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span> <span class="s2">&quot;100px&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">,</span> <span class="s2">&quot;100px&quot;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>D3 is smart enough to select an appropriate scale for the property in transition. If a transitioning element is not given an explicit starting point, D3 will use the computed style. If the end value is missing, the property will be treated as a constant. In the example above, the border stays the same, as do the top and bottom margins. The only properties that change are the ones specified below the transition().</p>
+
+<p>Awesome.</p>
+
+<h3>Resources</h3>
+
+<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Fun With Ticks]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/scales-and-ticks/"/>
+    <updated>2014-03-05T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/scales-and-ticks</id>
+    <content type="html"><![CDATA[<p>D3 has an awesome tick library, which makes it easy to customize an axis. I have not found any evidence of a built in function to customize tick rendering depending on if it is a major or a minor tick. One way to get around that is to render two axes, and only label one<!--more-->:</p>
+
+<figure class='code'><figcaption><span>axes ticks </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">scaleX</span><span class="o">=</span><span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">().</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">]).</span><span class="nx">range</span><span class="p">([</span><span class="nx">margin</span><span class="p">,</span><span class="nx">width</span><span class="o">-</span><span class="nx">margin</span><span class="p">]);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">svg</span><span class="o">=</span><span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;svg&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span><span class="nx">width</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">,</span><span class="nx">height</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">xAxis</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">svg</span><span class="p">.</span><span class="nx">axis</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">scale</span><span class="p">(</span><span class="nx">scaleX</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">orient</span><span class="p">(</span><span class="s2">&quot;bottom&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">ticks</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">tickSubdivide</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">tickPadding</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">tickFormat</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span> <span class="o">+</span> <span class="s2">&quot; ticks&quot;</span><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">x2Axis</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">svg</span><span class="p">.</span><span class="nx">axis</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">scale</span><span class="p">(</span><span class="nx">scaleX</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">orient</span><span class="p">(</span><span class="s2">&quot;bottom&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">ticks</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">tickSize</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">tickFormat</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">svg</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;g&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;axis&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;transform&quot;</span><span class="p">,</span> <span class="s2">&quot;translate(0,&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="nx">margin</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">xAxis</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">svg</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;g&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;axis&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;transform&quot;</span><span class="p">,</span> <span class="s2">&quot;translate(0,&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="nx">margin</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">x2Axis</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>TADA</h3>
+
+<p><img src="http://www.katieleonard.ca/images/post_d3_scale_major_ticks.png"></p>
+
+<h3>More fun with ticks</h3>
+
+<ul>
+<li><strong>orient()</strong>: set which side of the axis will be ticked and labeled</li>
+<li><strong>ticks()</strong>: set the number of major ticks</li>
+<li><strong>tickSubdivide()</strong>: set the number of minor ticks</li>
+<li><strong>tickPadding()</strong>: set the distance between the ticks and their label</li>
+<li><strong>tickFormat()</strong>: set the units to appear after the label on the major ticks</li>
+<li><strong>tickSize()</strong>: specify one arg for inner ticks, another argument for outer ticks, or use outerTickSize() or innerTickSize() to specify one or the other. Outer ticks are at the ends of the scales.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[D3 Nests and Rollups]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/d3-nests-and-rollups/"/>
+    <updated>2014-03-04T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/d3-nests-and-rollups</id>
+    <content type="html"><![CDATA[<p>D3 provides powerful functions for manipulating raw data sets, including csv(), nest(), and rollup().</p>
+
+<!--more-->
+
+
+<p>I generated a hundred rows of test_data.csv using <a href="http://www.generatedata.com/#about">generatedata.com</a>:</p>
+
+<figure class='code'><figcaption><span>test_data.csv</span><a href='https://gist.github.com/keighty/9348444#file-test_data-csv'>Gist </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Colors,X,Y,Quantity
+</span><span class='line'>violet,1,8,91
+</span><span class='line'>blue,9,1,32
+</span><span class='line'>blue,3,1,67
+</span><span class='line'>yellow,5,5,63
+</span><span class='line'>violet,6,6,57
+</span><span class='line'>green,5,10,65
+</span><span class='line'>red,8,2,36
+</span><span class='line'>...
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The basic properties are a Color (one of blue, yellow, violet, green, and red), an X-value (between 1 and 10), a Y-value (also between 1 and 10), and a Quantity value (between 1 and 100).</p>
+
+<h3>csv()</h3>
+
+<p>You can import a raw, comma-delimited data file, and bind the data directly to an svg.</p>
+
+<figure class='code'><figcaption><span>csv()</span><a href='https://gist.github.com/keighty/9348444'>Gist </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">d3</span><span class="p">.</span><span class="nx">csv</span><span class="p">(</span><span class="s2">&quot;test_data.csv&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">csv</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="nx">csv</span><span class="p">).</span><span class="nx">enter</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">);</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://www.katieleonard.ca/images/post_d3_csv_data.png"></p>
+
+<h3>nest() and rollup()</h3>
+
+<p>You can also aggregate data on any property &mdash; just tell D3 which one, and use any of D3&rsquo;s handy utility functions (mean, median, sum, min/max, quantile, etc) to return the aggregate data you want to display. For example, I want to plot the average data for each color. I tell my D3 selection to nest the data on the color key. Then I tell the rollup function to take the average for each property of the data. Pass the new data to the svg instead of the csv, and voila</p>
+
+<figure class='code'><figcaption><span>nest() and rollup()</span><a href='https://gist.github.com/keighty/9348540'>Gist </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">d3</span><span class="p">.</span><span class="nx">csv</span><span class="p">(</span><span class="s2">&quot;test_data.csv&quot;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">csv</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">data</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">nest</span><span class="p">()</span>
+</span><span class='line'>          <span class="p">.</span><span class="nx">key</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">Colors</span><span class="p">;</span> <span class="p">})</span>
+</span><span class='line'>          <span class="p">.</span><span class="nx">rollup</span><span class="p">(</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>              <span class="s2">&quot;X&quot;</span><span class="o">:</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">mean</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">+</span><span class="nx">e</span><span class="p">.</span><span class="nx">X</span><span class="p">;</span> <span class="p">}),</span>
+</span><span class='line'>              <span class="s2">&quot;Y&quot;</span><span class="o">:</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">mean</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">+</span><span class="nx">e</span><span class="p">.</span><span class="nx">Y</span><span class="p">;</span> <span class="p">}),</span>
+</span><span class='line'>              <span class="s2">&quot;Quantity&quot;</span><span class="o">:</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">mean</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">+</span><span class="nx">e</span><span class="p">.</span><span class="nx">Quantity</span><span class="p">;</span> <span class="p">})</span>
+</span><span class='line'>            <span class="p">};</span>
+</span><span class='line'>          <span class="p">})</span>
+</span><span class='line'>          <span class="p">.</span><span class="nx">entries</span><span class="p">(</span><span class="nx">csv</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="nx">data</span><span class="p">).</span><span class="nx">enter</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://www.katieleonard.ca/images/post_d3_rollupdata_image.png"></p>
+
+<p>D3 is so awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Technique for Producing Ideas]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/a-technique-for-producing-ideas/"/>
+    <updated>2014-03-04T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/a-technique-for-producing-ideas</id>
+    <content type="html"><![CDATA[<p><a href="http://www.amazon.com/gp/product/B001C34HUS/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B001C34HUS&amp;linkCode=as2&amp;tag=bridgeforpoke-20">A Technique for Producing Ideas</a> by James Webb Young (1965)</p>
+
+<p>Young proposes that all ideas are the result of five identifiable stages of rumination, whether they are followed consciously or not:</p>
+
+<ol>
+<li>Gather information, and not just what is specific to your problem domain. Novelty comes from mashing seemingly unrelated concepts together.</li>
+<li>Review the information &mdash; collate your information in some fashion and go over it. A lot.</li>
+<li>Do something else. Get distracted from whatever problem you are trying to solve.</li>
+<li>&ldquo;Eureka! I have it!&rdquo;</li>
+<li>Refine your idea &mdash; first drafts are never perfect, so keep polishing.</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Scaling D3]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/d3-scaling/"/>
+    <updated>2014-03-03T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/d3-scaling</id>
+    <content type="html"><![CDATA[<p>Add scales to a d3 plot in three easy steps:</p>
+
+<h3>1. Define the scale</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Image dimensions</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">width</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">height</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">margin</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">scaleX</span><span class="o">=</span><span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">().</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">]).</span><span class="nx">range</span><span class="p">([</span><span class="nx">margin</span><span class="p">,</span> <span class="nx">width</span><span class="o">-</span><span class="nx">margin</span><span class="p">]);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">scaleY</span><span class="o">=</span><span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">().</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">]).</span><span class="nx">range</span><span class="p">([</span><span class="nx">height</span><span class="o">-</span><span class="nx">margin</span><span class="p">,</span> <span class="nx">margin</span><span class="p">]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>2. Draw the scale</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Image container</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">svg</span><span class="o">=</span><span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;svg&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span><span class="nx">width</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">,</span><span class="nx">height</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Axis definition</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">xAxis</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">svg</span><span class="p">.</span><span class="nx">axis</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">scale</span><span class="p">(</span><span class="nx">scaleX</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">orient</span><span class="p">(</span><span class="s2">&quot;bottom&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">yAxis</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">svg</span><span class="p">.</span><span class="nx">axis</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">scale</span><span class="p">(</span><span class="nx">scaleY</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">orient</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Axis graphics</span>
+</span><span class='line'><span class="nx">svg</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;g&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;axis&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;transform&quot;</span><span class="p">,</span> <span class="s2">&quot;translate(0,&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="nx">height</span> <span class="o">-</span> <span class="nx">margin</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">xAxis</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">svg</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;g&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;axis&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;transform&quot;</span><span class="p">,</span> <span class="s2">&quot;translate(&quot;</span> <span class="o">+</span> <span class="nx">margin</span> <span class="o">+</span> <span class="s2">&quot;,0)&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">yAxis</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>3. Apply the scale to your data</h3>
+
+<figure class='code'><figcaption><span>Apply the scale.</span><a href='https://gist.github.com/keighty/9327604'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">d3</span><span class="p">.</span><span class="nx">csv</span><span class="p">(</span><span class="s2">&quot;test_data.csv&quot;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">csv</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="nx">csv</span><span class="p">).</span><span class="nx">enter</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Apply scale to the x value</span>
+</span><span class='line'>  <span class="kd">function</span> <span class="nx">getX</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">scaleX</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">X</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">//Apply scale to the y value</span>
+</span><span class='line'>  <span class="kd">function</span> <span class="nx">getY</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">scaleY</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">Y</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">function</span> <span class="nx">getR</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">Quantity</span> <span class="o">/</span> <span class="mi">10</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">function</span> <span class="nx">getColor</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">Colors</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Javascript Dates]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/javascript-dates/"/>
+    <updated>2014-03-01T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/javascript-dates</id>
+    <content type="html"><![CDATA[<p>Javascript Date objects have zero indexed months but not dates.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; (new Date(2014, 0, 1)).strftime("%b %d, %Y")
+</span><span class='line'>"Jan 1, 2014"
+</span><span class='line'>&gt; (new Date(2013, 11, 31)).strftime("%b %d, %Y")
+</span><span class='line'>"Dec 31, 2013"
+</span><span class='line'>&gt; (new Date(2014, 0, 0)).strftime("%b %d, %Y")
+</span><span class='line'>"Dec 31, 2013"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Wat?</p>
+
+<!--more-->
+
+
+<h3>Resources</h3>
+
+<p><a href="http://tech.bluesmoon.info/2008/04/strftime-in-javascript.html">Javascript strftime</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[String Conversion in Javascript]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/to-i-in-javascript/"/>
+    <updated>2014-02-27T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/to-i-in-javascript</id>
+    <content type="html"><![CDATA[<p>Almost every day, javascript blows my mind. Today I discovered that you can convert a string to a number simply by prepending a +:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; typeof(+"this is a string")
+</span><span class='line'>"number"
+</span><span class='line'>&gt; typeof(+"100")
+</span><span class='line'>"number"
+</span><span class='line'>&gt; +"100" + 50
+</span><span class='line'>150</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Awesome.</p>
 ]]></content>
   </entry>
   

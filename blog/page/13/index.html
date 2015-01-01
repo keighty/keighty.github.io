@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="I am between computers at the moment, and I really really miss my OSX development environment. Dependency installation is so smooth and painless on &hellip;">
+  <meta name="description" content="In my last look at the UnionFind algorithm I made a quick-find implementation &mdash; finding if two elements were connected was fast but connecting &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,7 +85,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/rails-depends-on-javascript/">Rails, You Can Depend on Javascript</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/state-of-the-quickunion/">State of the QuickUnion</a></h1>
     
     
       <p class="meta">
@@ -101,199 +101,194 @@
   
 
 
-<time datetime="2013-09-16T22:29:03-07:00" pubdate data-updated="true">Sep 16<span>th</span>, 2013</time>
+<time datetime="2013-08-04T22:29:03-07:00" pubdate data-updated="true">Aug 4<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>I am between computers at the moment, and I really really miss my OSX development environment. Dependency installation is so smooth and painless on mac, that I had quite forgotten the complications of setting up a complete environment in linux. For instance</p>
+  <div class="entry-content"><p>In my last look at the UnionFind algorithm I made a quick-find implementation &mdash; finding if two elements were connected was fast but connecting two elements was slow. The union operation is a good candidate for optimization.</p>
 
-<h3>Rails requires a javascript runtime environment</h3>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/state-of-the-quickunion/">Read on &rarr;</a>
+    </footer>
+  
 
-<p>I am running an Ubuntu 9.4 remix on my little Atom Netbook. Getting rails up and running anew is a lesson in returning to fundamentals.</p>
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/state-of-the-unionfind/">State of the UnionFind</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-30T22:29:03-07:00" pubdate data-updated="true">Jul 30<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was scraping the rust off my data-structures synapses last week, and found that there was still some functionality underneath. UnionFind is one of those sneaky algorithms that crops up in non-linear arrangements of data, such as computer or social networks. Specifically, it keeps track of sets of connected elements. The API consists of a union(p, q), which connects the two elements p and q, and a find(p, q), which determines if p is in the same set as q.</p>
+
+<p>I learned about this algorithm through <a href="https://www.coursera.org/">Coursera</a>, and their class <a href="https://www.coursera.org/course/algs4partI">Algorithms Part 1</a> with Kevin Wayne and Robert Sedgewick. The focus of this course was not only on implementation of algorithms, but also optimization.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/state-of-the-unionfind/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/procuring-provisions/">Procuring Provisions</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-27T22:29:03-07:00" pubdate data-updated="true">Jul 27<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was trying to add a database to my JSGames app &mdash; it is a basic sinatra app with a few goodies already in place &mdash; and I was having some difficulty deploying it to Heroku. Rails (for the most part) automagically creates and maintains its database, and as long as I remember to move any references to sqlite3 into the development and test environments, I have never had trouble provisioning one on Heroku either. Rolling a web application from scratch with sinatra, however, requires a little more savvy.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/procuring-provisions/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/git-picking/">Git-Picking</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-24T22:29:03-07:00" pubdate data-updated="true">Jul 24<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>or, How to mine for cherries with Git</h4>
+
+<p>When I work on an experimental feature in a project branch, I have often found that I will have a mixture of commits I would like to keep, and commits that I wish had never happened.
+Using the principle of only committing atomic changes, and enjoying the fruits of your detailed-commit-message labour, there is a way to extract the gold from the ore, so to speak.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/git-picking/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/sinatra-in-a-console/">Sinatra in a Console</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-22T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Sinatra does not have a default console like rails does. If you are writing in a rails environment and need to test out a helper method, or want to check on the state of a record in the database, dropping down into the rails console is as easy as typing:</p>
 
 <div>
-  <pre><code class='bash'>$ gem install rails
-$ rails new testapp -T
-$ rails generate rspec:install
-...
-Could not find a JavaScript runtime. See https://github.com/sstephenson/execjs for a list of available runtimes</code></pre>
+  <pre><code class='bash'>$ rails c</code></pre>
 </div>
 
 
-
-
-</div>
+<p>How can we achieve the same ability in Sinatra?</div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2013/rails-depends-on-javascript/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/ruby-execution/">Ruby Execution</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-10T22:29:03-07:00" pubdate data-updated="true">Sep 10<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have started including an executable in my project setup. Many of the code challenges I have been practicing lately have included file I/O, and while TDD and code exercising with RSpec is still my main process, developing a stand-alone fully-functional project requires something more.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/ruby-execution/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-08T22:29:03-07:00" pubdate data-updated="true">Sep 8<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>A few weeks ago I posted about <a href="http://www.katieleonard.ca/automation/2013/08/30/hammer-out-tasks-with-thor/">using Thor to generate system-wide notes files with a standard format</a>. Since then, I have been doing a lot of smaller code challenges, and I wanted to set up a Thor task for generating a standard project file tree.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/thor-sets-up-a-project/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/argf-all-you-want/">ARGF All You Want</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-05T22:29:03-07:00" pubdate data-updated="true">Sep 5<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Many of the fun, junior code challenges I have encountered deal a lot with input/output of data, and I found a great ruby feature that provides flexibility at the command line.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/argf-all-you-want/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/hammer-out-tasks-with-thor/">Hammer-out Tasks With Thor</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-30T22:29:03-07:00" pubdate data-updated="true">Aug 30<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>A few months ago I gave a small lightning talk to my code school class about automating tasks using <a href="http://rake.rubyforge.org/">Rake</a>. Before I learned ruby I used bash scripts to accomplish similar things, but was often bogged down in learning the syntax of string-processing essentials like awk or sed. I wished for the simplicity of Ruby, and thought that Rake was the bees-knees. After my talk, <a href="chuckvose.com">Chuck</a>, my PCS mentor, put together a repo of <a href="http://whatisthor.com/">Thor</a> tasks that accomplished the same tasks but could be installed system wide.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/hammer-out-tasks-with-thor/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2013/sinatra-in-a-console/">Read on &rarr;</a>
     </footer>
   
 
@@ -324,34 +319,27 @@ Could not find a JavaScript runtime. See https://github.com/sstephenson/execjs f
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/compilers-an-intro/">Compilers &#8211; an Intro</a>
+        <a href="/blog/2014/method-lookup-in-ruby/">Method Lookup in Ruby</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/make-meteor-minimongo-ids-play-nice/">Meteor-managed Ids Won&#8217;t Play Nicely With Others</a>
+        <a href="/blog/2014/helpers-calling-helpers/">Helpers Calling Helpers</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/sort_things_with_mongoose/">Sort All the Things With Mongo and node.js</a>
+        <a href="/blog/2014/flash-your-local-collection/">Flash Your Local Collection</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/giving-the-cold-shoulder-with-git/">Giving the Cold Shoulder With Git</a>
+        <a href="/blog/2014/mongo-trouble-reset/">Mongo Trouble? Reset!</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/managing-modules/">Gaining Closure Through Modules</a>
+        <a href="/blog/2014/meteor-fetch/">Meteor, Fetch!</a>
       </li>
     
   </ul>
 </section>
-<section>
-  <div>
-    <h1>Aboot me</h1>
-    <p>Hailing from the Great White North, I am now happily installed in the Great NorthWest. Currently entrenched in D3, angular, meteor, and node.js, I am seeking source code enlightenment through curly braces.</p>
-  </div>
-</section>
-
 
 <section>
   <h1>GitHub Repos</h1>
@@ -379,6 +367,13 @@ Could not find a JavaScript runtime. See https://github.com/sstephenson/execjs f
     });
   </script>
   <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+  <div>
+    <h1>Aboot me</h1>
+    <p>I have loved programming since my first &#8220;Hello World!&#8221;, and have been seeking source code enlightenment through Java, Ruby, Rails, and JavaScript. I am also a recent immigrant to Portland, Oregon - perhaps you can tell from my Canadian accent?</p>
+  </div>
 </section>
 
 
@@ -418,7 +413,7 @@ Could not find a JavaScript runtime. See https://github.com/sstephenson/execjs f
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - katie leonard -
+  Copyright &copy; 2015 - katie leonard -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

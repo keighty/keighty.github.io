@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Changing an element using multiple, chained transitions requires a little troubleshooting. You would think that just chaining them one after another &hellip;">
+  <meta name="description" content="Scientists Begin Looking at Programmers&#8217; Brains: The Neuroscience of Programming from The Huffington Post. A new study provides new evidence &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,7 +85,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/delay-chained-transitions/">Delay Chained Transitions</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/programming-and-linguistics/">The Neuroscience of Programming</a></h1>
     
     
       <p class="meta">
@@ -101,196 +101,23 @@
   
 
 
-<time datetime="2014-03-15T00:00:00-07:00" pubdate data-updated="true">Mar 15<span>th</span>, 2014</time>
+<time datetime="2014-02-27T00:00:00-08:00" pubdate data-updated="true">Feb 27<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>Changing an element using multiple, chained transitions requires a little troubleshooting. You would think that just chaining them one after another would suffice:</p>
+  <div class="entry-content"><h3><a href="http://www.huffingtonpost.com/chris-parnin/scientists-begin-looking-_b_4829981.html">Scientists Begin Looking at Programmers&#8217; Brains: The Neuroscience of Programming</a> from The Huffington Post.</h3>
 
-<figure class='code'><figcaption><span>Chained Transitions </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">doubleR</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
+<blockquote><p>A new study provides new evidence that programmers are using language regions of the brain when understanding code and found little activation in other regions of the brain devoted to mathematical thinking.</p></blockquote>
+
+<ul>
+<li>Each programming language you learn requires expressing abstract concepts with a different syntax &mdash; and in the case of punctuation (~>, =>, :, {}, [], etc) an augmented alphabet. How is a programming language NOT like linguistics?</li>
+</ul>
 
 
-<p>But D3 does not wait for one transition to be complete before it begins the next one. Adding a delay will accomplish the desired transition chaining:</p>
-
-<figure class='code'><figcaption><span>ACTUAL Chained Transitions</span><a href='https://gist.github.com/keighty/9508948'>Gist </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">delay</span><span class="p">(</span><span class="mi">1700</span><span class="p">).</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">doubleR</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<div id="showme">
-<style>
-.axis path,
-.axis line {
-    fill: none;
-    stroke: black;
-    shape-rendering: crispEdges;
-}
-
-.axis text {
-    font-family: sans-serif;
-    font-size: 11px;
-}
-</style>
-<script src="http://mbostock.github.com/d3/d3.v2.min.js"></script>
-<script>
-
-var width = 500,
-    height = 500,
-    margin = 50,
-    data,
-    dataFromCsv;
-
-var scaleX=d3.scale.linear().domain([0,10]).range([margin,width-margin]);
-var scaleY=d3.scale.linear().domain([0,10]).range([height-margin,margin]);
-
-var svg=d3.select("#showme").append("svg")
-      .attr("width",width)
-      .attr("height",height);
-
-function drawAxes() {
-  var xAxis = d3.svg.axis()
-    .scale(scaleX)
-    .orient("bottom")
-    .ticks(5)
-    .tickSubdivide(1)
-    .tickPadding(10)
-    .tickFormat(function(d) { return d + " ticks"});
-
-  var yAxis = d3.svg.axis()
-    .scale(scaleY)
-    .orient("left");
-
-  svg.append("g")
-    .attr("class", "axis")
-    .attr("transform", "translate(0," + (height - margin) + ")")
-    .call(xAxis);
-  svg.append("text")
-    .attr("class", "x label")
-    .attr("text-anchor", "middle")
-    .attr("x", width/2)
-    .attr("y", height)
-    .text("X-value");
-
-  svg.append("g")
-    .attr("class", "axis")
-    .attr("transform", "translate(" + margin + ",0)")
-    .call(yAxis);
-  svg.append("text")
-    .attr("class", "y label")
-    .attr("text-anchor", "middle")
-    .attr("x", -height/2)
-    .attr("y", 6)
-    .attr("dy", ".75em")
-    .attr("transform", "rotate(-90)")
-    .text("Y-value");
-}
-
-dataFromCsv = [{ "Color": "#9467bd", "X": 1, "Y": 8, "Quantity": 91 },
-{ "Color": "#1f77b4", "X": 9, "Y": 1, "Quantity": 32 },
-{ "Color": "#1f77b4", "X": 3, "Y": 1, "Quantity": 67 },
-{ "Color": "#bcbd22", "X": 5, "Y": 5, "Quantity": 63 },
-{ "Color": "#9467bd", "X": 6, "Y": 6, "Quantity": 57 },
-{ "Color": "#2ca02c", "X": 5, "Y": 10, "Quantity": 65 },
-{ "Color": "#d62728", "X": 8, "Y": 2, "Quantity": 36 },
-{ "Color": "#9467bd", "X": 2, "Y": 8, "Quantity": 82 },
-{ "Color": "#bcbd22", "X": 4, "Y": 7, "Quantity": 69 },
-{ "Color": "#9467bd", "X": 5, "Y": 3, "Quantity": 88 },
-{ "Color": "#d62728", "X": 1, "Y": 5, "Quantity": 29 },
-{ "Color": "#1f77b4", "X": 10, "Y": 7, "Quantity": 60 },
-{ "Color": "#2ca02c", "X": 8, "Y": 5, "Quantity": 56 },
-{ "Color": "#bcbd22", "X": 1, "Y": 6, "Quantity": 31 },
-{ "Color": "#bcbd22", "X": 6, "Y": 5, "Quantity": 57 },
-{ "Color": "#d62728", "X": 9, "Y": 6, "Quantity": 85 },
-{ "Color": "indigo", "X": 9, "Y": 10, "Quantity": 70 },
-{ "Color": "indigo", "X": 9, "Y": 10, "Quantity": 31 },
-{ "Color": "#1f77b4", "X": 2, "Y": 4, "Quantity": 26 },
-{ "Color": "#bcbd22", "X": 10, "Y": 5, "Quantity": 61 },
-{ "Color": "#2ca02c", "X": 4, "Y": 2, "Quantity": 64 },
-{ "Color": "#1f77b4", "X": 8, "Y": 9, "Quantity": 71 }];
-function importData() {
-  data = d3.nest()
-          .key(function(d) { return d.Color; })
-          .rollup(aggregateData)
-          .entries(dataFromCsv);
-  // drawElements();
-  setInterval( drawElements, 4000 );
-}
-
-/***********************
-  Draw circles, bind data, and move elements to final location
-***********************/
-function drawElements() {
-  var selection = svg.selectAll("circle").data(data);
-
-  selection.enter()
-    .append("circle")
-    .attr("cx",scaleX(0))
-    .attr("cy",scaleY(0))
-    .attr("r", 0)
-
-  selection.transition().duration(1500)
-      .attr("cx",getX)
-      .attr("cy",getY)
-      .attr("r", getR)
-      .style("fill", getColor)
-    .transition().delay(1500+200).duration(1500)
-      .attr("r", doubleR);
-}
-
-/***********************
-  Helper functions
-***********************/
-function getX(d)     { return scaleX(d.values.X); }
-function getY(d)     { return scaleY(d.values.Y); }
-function getR(d)     { return d.values.Quantity / 10; }
-function doubleR(d)     { return d.values.Quantity / 5; }
-function getColor(d) { return d.key; }
-// Use D3 built in array functions to aggregate data
-function aggregateData(d) {
-  return {
-    "X"       : d3.mean(d, function(e) { return +e.X; }),
-    "Y"       : d3.median(d, function(e) { return +e.Y; }),
-    "Quantity": d3.max(d, function(e) { return +e.Quantity; })
-  };
-}
-
-drawAxes();
-importData();
-</script>
-</div>
-
+<blockquote><p>Besides a mathematical inclination, an exceptionally good mastery of one&rsquo;s native tongue is the most vital asset of a competent programmer. &mdash;Djikstra</p></blockquote>
 </div>
   
   
@@ -303,7 +130,7 @@ importData();
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/easing-does-it/">Easing Does It</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/binding-functions-as-data/">Binding Functions as Data</a></h1>
     
     
       <p class="meta">
@@ -319,18 +146,83 @@ importData();
   
 
 
-<time datetime="2014-03-12T00:00:00-07:00" pubdate data-updated="true">Mar 12<span>th</span>, 2014</time>
+<time datetime="2014-02-27T00:00:00-08:00" pubdate data-updated="true">Feb 27<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>With the possible exception of UFOs, things don&rsquo;t usually switch from being stationary to moving at maximum velocity without an intervening period of acceleration or deceleration. Similarly, it can be difficult to track elements on a web page that move from one position to another with no warning, or faster than the human eye can perceive. Enter easing functions: </div>
+  <div class="entry-content"><p>Primitives and object literals are not the only things you can bind to a D3 visualization. After all, aren&rsquo;t javascript functions objects as well?</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">next</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">15</span> <span class="o">+</span> <span class="nx">x</span><span class="o">*</span><span class="nx">x</span> <span class="p">};</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">newData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">next</span><span class="p">);</span> <span class="k">return</span> <span class="nx">data</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">selection</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;#container&quot;</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">newData</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'>                  <span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;#span&quot;</span><span class="p">)</span>
+</span><span class='line'>                    <span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span> <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you provide a function to the data function, D3 will simply invoke the function and use the returned value as a parameter of the data function.</p>
+
+<h3>Resources</h3>
+
+<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/why-visualize/">Visualize With Purpose</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-26T00:00:00-08:00" pubdate data-updated="true">Feb 26<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Information visualization (insight, understanding, and discovery) and information art (aesthetics) differ in their context, audience, and goals. In my exploration of D3 I came across an <a href="http://www.visualcomplexity.com/vc/blog/?p=644">Information Visualization Manifesto</a> by Manuel Lima, and this is what I have learned</div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2014/easing-does-it/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2014/why-visualize/">Read on &rarr;</a>
     </footer>
   
 
@@ -342,7 +234,7 @@ importData();
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/the-value-of-transition/">The Value of Slow Transitions</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/implied-functions-applied/">Implied Functions Applied</a></h1>
     
     
       <p class="meta">
@@ -358,154 +250,57 @@ importData();
   
 
 
-<time datetime="2014-03-08T00:00:00-08:00" pubdate data-updated="true">Mar 8<span>th</span>, 2014</time>
+<time datetime="2014-02-26T00:00:00-08:00" pubdate data-updated="true">Feb 26<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><h3>The Why</h3>
-
-<p>From <a href="http://bost.ocks.org/mike/constancy/">Object Constancy</a> by Mike Bostock:</p>
-
-<blockquote><p>Animated transitions are pretty, but they also serve a purpose: they make it easier to follow the data. This is known as <strong>object constancy</strong>: a graphical element that represents a particular data point&hellip; can be tracked visually through the transition. This lessens the cognitive burden by using <strong>preattentive processing</strong> of motion rather than sequential scanning of labels.</p></blockquote>
-
-<p>(The emphasis is mine)</p>
-
-<h3>The How</h3>
-
-<p>Object constancy is achieved through object identity: the data is bound to it&rsquo;s object by a shared unique identifier. This allows D3 to reuse the object when the data set is updated. Object identity is achieved by passing a key function to the data() method at the time of data binding:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>var data = [ // &lt;-A
-</span><span class='line'>        {id: 0, value: "foo"},
-</span><span class='line'>        {id: 1, value: "bar"},
-</span><span class='line'>        {id: 2, value: "foo"},
-</span><span class='line'>        {id: 3, value: "baz"},
-</span><span class='line'>        {id: 4, value: "bar"}
-</span><span class='line'>    ];
-</span><span class='line'>d3.selectAll("svg:g")
-</span><span class='line'>    .data(data, function(d){return d.id;});</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/git-what-have-i-done/">Git, What Have I Done?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-08T00:00:00-08:00" pubdate data-updated="true">Mar 8<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Git, the superhero of version control, allows you to review all the commands that have modified the HEAD tag in a git repo: <code>git reflog</code></p>
-
-<p>The output for one of my demo apps:</p>
-
-<figure class='code'><figcaption><span>Git, you&#8217;re my hero </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>5075d26 HEAD@<span class="o">{</span>0<span class="o">}</span>: checkout: moving from master to kleonard/add_skyline_background
-</span><span class='line'>531c396 HEAD@<span class="o">{</span>1<span class="o">}</span>: pull: fast forward
-</span><span class='line'>435f6de HEAD@<span class="o">{</span>2<span class="o">}</span>: commit: Adds logic <span class="k">for </span>running and testing
-</span><span class='line'>043e35a HEAD@<span class="o">{</span>3<span class="o">}</span>: commit: Adds logic to process input
-</span><span class='line'>5155ba4 HEAD@<span class="o">{</span>4<span class="o">}</span>: commit: Adds input file
-</span><span class='line'>a629871 HEAD@<span class="o">{</span>5<span class="o">}</span>: rebase finished: returning to refs/heads/kleonard/create_input_files
-</span><span class='line'>a010021 HEAD@<span class="o">{</span>6<span class="o">}</span>: rebase: Add input file
-</span><span class='line'>b7cd86a HEAD@<span class="o">{</span>7<span class="o">}</span>: commit: Initial commit arbitrage
-</span><span class='line'>5ed00ea HEAD@<span class="o">{</span>8<span class="o">}</span>: commit: Adds launcher
-</span><span class='line'>7b2d720 HEAD@<span class="o">{</span>9<span class="o">}</span>: commit: Adds logic to find smallest number of moves
-</span><span class='line'>9c0dfce HEAD@<span class="o">{</span>10<span class="o">}</span>: commit: Adds implementation <span class="k">for </span>bin creation
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Hmmm&hellip; looks like my commit messages need a little work&hellip; Still, it is a great tool for catching up on the changes to a repo (especially if you haven&rsquo;t touched it in a while), finding out where the bulk of the work is happening, or just reminding yourself what you did yesterday.</p>
-
-<p>Awesome.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/transition-with-style/">Transition With Style</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-06T00:00:00-08:00" pubdate data-updated="true">Mar 6<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Making things zoom across the page is what I used to think javascript was all about, but it wasn&rsquo;t until I started learning d3 that I found out how to make it happen.</p>
-
-</div>
+  <div class="entry-content"><p>When binding a primitive datum to a node in a D3 visualization, the callback function can be implicitly called on the datum without the typical verbosity</div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2014/transition-with-style/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2014/implied-functions-applied/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/enter-update-exit/">Enter Update Exit</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-25T00:00:00-08:00" pubdate data-updated="true">Feb 25<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>D3 is a data visualization tool that uses method chaining to produce big pictures with little code. The selection library performs a full Outer Join between the data (D) and the visual elements (V), and the enter-update-exit pattern performs work on subsets of this join</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/enter-update-exit/">Read on &rarr;</a>
     </footer>
   
 
@@ -536,34 +331,27 @@ importData();
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/compilers-an-intro/">Compilers &#8211; an Intro</a>
+        <a href="/blog/2014/method-lookup-in-ruby/">Method Lookup in Ruby</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/make-meteor-minimongo-ids-play-nice/">Meteor-managed Ids Won&#8217;t Play Nicely With Others</a>
+        <a href="/blog/2014/helpers-calling-helpers/">Helpers Calling Helpers</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/sort_things_with_mongoose/">Sort All the Things With Mongo and node.js</a>
+        <a href="/blog/2014/flash-your-local-collection/">Flash Your Local Collection</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/giving-the-cold-shoulder-with-git/">Giving the Cold Shoulder With Git</a>
+        <a href="/blog/2014/mongo-trouble-reset/">Mongo Trouble? Reset!</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/managing-modules/">Gaining Closure Through Modules</a>
+        <a href="/blog/2014/meteor-fetch/">Meteor, Fetch!</a>
       </li>
     
   </ul>
 </section>
-<section>
-  <div>
-    <h1>Aboot me</h1>
-    <p>Hailing from the Great White North, I am now happily installed in the Great NorthWest. Currently entrenched in D3, angular, meteor, and node.js, I am seeking source code enlightenment through curly braces.</p>
-  </div>
-</section>
-
 
 <section>
   <h1>GitHub Repos</h1>
@@ -591,6 +379,13 @@ importData();
     });
   </script>
   <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+  <div>
+    <h1>Aboot me</h1>
+    <p>I have loved programming since my first &#8220;Hello World!&#8221;, and have been seeking source code enlightenment through Java, Ruby, Rails, and JavaScript. I am also a recent immigrant to Portland, Oregon - perhaps you can tell from my Canadian accent?</p>
+  </div>
 </section>
 
 
@@ -630,7 +425,7 @@ importData();
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - katie leonard -
+  Copyright &copy; 2015 - katie leonard -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

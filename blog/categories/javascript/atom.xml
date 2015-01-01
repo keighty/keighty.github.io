@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2014-11-11T08:37:07-08:00</updated>
+  <updated>2015-01-01T11:52:29-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -14,15 +14,153 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Gaining Closure Through Modules]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/managing-modules/"/>
-    <updated>2014-09-06T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/managing-modules</id>
-    <content type="html"><![CDATA[<p>If you have more than one javascript running on a page, you have likely experienced the hell of trying to debug a problem caused by naming collisions. Developing the scripts in isolation, it makes sense to assign widgetA.name dynamically using jQuery, but then why does the title of widgetGraphB disappear? Avoid the pain of unintended consequences by namespacing your scripts. <!--more--></p>
+    <title type="html"><![CDATA[Helpers Calling Helpers]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/helpers-calling-helpers/"/>
+    <updated>2014-06-03T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/helpers-calling-helpers</id>
+    <content type="html"><![CDATA[<p>Whittling away at the Discover Meteor tutorial for creating a social news sharing site, I was implementing a Comments collection and related accoutrements (templates, helpers, forms, etc.) when I uncovered a need to call one helper method from another<!--more-->.</p>
 
-<p>Closures occur when you pass functions to variables to call at a later date. The javascript engine does all the work of compiling the script and loading the contents into the memory stack, but until the function is called the stack just sits there, sealed like a time capsule.</p>
+<p>I was using this handy method to return the number of comments made on a particular post:
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Helpful helpers </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">commentsCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Closure in the wild </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Template helper magic sauce </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">submitted</span> <span class="nx">by</span> <span class="p">{{</span><span class="nx">postAuthor</span><span class="p">}},</span> <span class="kd">with</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">a</span> <span class="nx">href</span><span class="o">=</span><span class="s2">&quot;{{pathFor &#39;postPage&#39;}}&quot;</span><span class="o">&gt;</span><span class="p">{{</span><span class="nx">commentsCount</span><span class="p">}}</span> <span class="nx">comments</span><span class="o">&lt;</span><span class="err">/a&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Which returned a very ordinary:</p>
+
+<blockquote><p>submitted by meImAnAwesomeUser, with 1 comments</p></blockquote>
+
+<p>1 <strong>comments</strong>?! That makes no sense.. I didn&rsquo;t minor in English so I could let that travesty fly. I made a new helper method:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>This WORKS! </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">commentsCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">},</span>
+</span><span class='line'>  <span class="nx">commentsNote</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">()</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s2">&quot;comment&quot;</span> <span class="o">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>UGH! What is that on line 6? Possibly the ugliest ternary statement I have written today (probably). Is that code duplication I smell? Won&rsquo;t reusing <code>commentsCount</code> remove the redundancy?</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Starting to DRY the meteor </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">commentsCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">},</span>
+</span><span class='line'>  <span class="nx">commentsNote</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="nx">commentsCount</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s2">&quot;comment&quot;</span> <span class="o">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Only.. that doesn&rsquo;t work:</p>
+
+<pre><code>Exception from Deps recompute function: ReferenceError: commentsCount is not defined
+at Object.Template.postPageItem.helpers.commentsNote (http://localhost:3000/client/views/posts/post_page_item.js?160ec9a926881c795377a47c15affc4f553c4d88:9:12)
+</code></pre>
+
+<p>But it is RIGHT ABOVE! I can see it! It is in the same file! I tried all permutations of <code>commentsCount()</code>, <code>this.commentsCount</code>, <code>self.commentsCount</code>, <code>this.self.commentsCount()</code>, and they all threw either similar errors or <code>undefined</code>. Calling the prototype method directly turns out to work just fine:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>THIS is not THAT and also doesn&rsquo;t work </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">commentsCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">},</span>
+</span><span class='line'>  <span class="nx">commentsNote</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">commentsCount</span><span class="p">()</span>
+</span><span class='line'><span class="k">return</span> <span class="nx">count</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s2">&quot;comment&quot;</span> <span class="o">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Except that when <code>commentsCount</code> is called on line 6, <code>this</code> is no longer the lovely Post item provided by the template. No, <code>this</code> becomes the context of the <code>commentsNote</code> function, and therefore calling <code>this._id</code> will return <code>undefined</code>. The closure issue can be worked around with a little argument passing:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Is DRY so much better? </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -39,434 +177,624 @@
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">timeCapsule</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">year</span> <span class="o">=</span> <span class="mi">1999</span><span class="p">;</span>
-</span><span class='line'>  <span class="kd">function</span> <span class="nx">party</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">commentsCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;We&#39;re gonna party like it&#39;s &quot;</span> <span class="o">+</span> <span class="nx">year</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="kd">var</span> <span class="nx">count_id</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">id</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">?</span> <span class="nx">id</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">;</span>
+</span><span class='line'><span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="nx">count_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
 </span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">},</span>
+</span><span class='line'>  <span class="nx">commentsNote</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="k">return</span> <span class="nx">party</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">commentsCount</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">)</span>
+</span><span class='line'><span class="k">return</span> <span class="nx">count</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s2">&quot;comment&quot;</span> <span class="o">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kd">var</span> <span class="nx">year</span> <span class="o">=</span> <span class="mi">2099</span><span class="p">;</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">tonight</span> <span class="o">=</span> <span class="nx">timeCapsule</span><span class="p">();</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">tonight</span><span class="p">();</span> <span class="c1">// We&amp;rsquo;re gonna party like it&amp;rsquo;s 1999</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>The <code>party()</code> function has a closure over <code>timeCapsule()</code>, which means all the variables and functions within timeCapsule remain unmolested by any assignments made outside of their scope.</p>
+<p>Wow. Passing in the id works, but now I have to check the context to determine the appropriate id. That is the most unreadable-but-reused code I have written today (probably), and I learned some valuable lessons on this frantic search for DRY:</p>
 
-<h3>Modules use closure to encapsulate scope.</h3>
+<ul>
+<li><code>self</code>, whether called from a helper or the console, will always be <code>window</code></li>
+<li><code>this</code> called from a Template helper refers to the item of the collection that is passed in to the template</li>
+<li>because helper methods are closures, <code>this</code> in the calling method is different from <code>this</code> in the called method</li>
+<li>don&rsquo;t dry out your code to the point of unreadability</li>
+</ul>
 
-<p>Breaking your monolithic javascript into modules is a great way to separate concerns and create closures.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>myModule.js </span></figcaption>
+<p>In the end, cleaning up the ugly ternary makes the code reuse more reasonable.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>This is just fine </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">myModuleFunction</span><span class="p">()</span> <span class="p">{</span> <span class="err">/&lt;em&gt; Do work1 &lt;/em&gt;/ }</span>
-</span><span class='line'><span class="kd">function</span> <span class="nx">mySecondModuleFuntion</span><span class="p">()</span> <span class="p">{</span> <span class="err">/&lt;em&gt; Do work2 &lt;/em&gt;/ }&lt;/p&gt;</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">commentsCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">exports</span><span class="p">.</span><span class="nx">myModuleFunction</span> <span class="o">=</span> <span class="nx">myModuleFunction</span><span class="p">;</span>
-</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">mySecondModuleFunction</span> <span class="o">=</span> <span class="nx">mySecondModuleFunction</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">},</span>
+</span><span class='line'>  <span class="nx">commentsNote</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
+</span><span class='line'><span class="k">return</span> <span class="nx">count</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s2">&quot;comment&quot;</span> <span class="o">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Using the module </span></figcaption>
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Flash Your Local Collection]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/flash-your-local-collection/"/>
+    <updated>2014-05-26T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/flash-your-local-collection</id>
+    <content type="html"><![CDATA[<p>Rails allows you to pass messages to the user between actions (&ldquo;This <a href="http://api.rubyonrails.org/classes/ActionDispatch/Flash.html">ActionDispatch::Flash</a> will self-destruct&rdquo;), and because Rails, all the message generation happens server side:
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>flashy_controller.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">show</span>
+</span><span class='line'>  <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="no">You</span> <span class="n">dropped</span> <span class="n">your</span> <span class="n">packet</span><span class="o">.</span><span class="n">&amp;rdquo</span><span class="p">;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Meteor is mostly a client-side application framework, and you can implement a similar message system, which will never touch the server, by defining a collection that is local to the browser.<!--more--></p>
+
+<h3>1. Create a local collection</h3>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>/client/errors.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Errors</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Meteor</span><span class="p">.</span><span class="nx">Collection</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Passing <code>null</code> into the Collection declaration tells Meteor that the collection should not be extended to the server &mdash; it creates an &ldquo;unmanaged (unsynchronized) local collection&rdquo; (<a href="http://docs.meteor.com/#meteor_collection">docs</a>)</p>
+
+<h3>2. Throw an error whenever you need to</h3>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>/missionCritical.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>if(error){
+</span><span class='line'>  Errors.insert({message: error.reason});
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>3. Create a template for displaying the error</h3>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>/client/errors.html </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">myModule</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">myModule</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;);</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&lt;</span><span class="nx">template</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;errors&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;errors&quot;</span><span class="o">&gt;&lt;</span><span class="err">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">myModule</span><span class="p">.</span><span class="nx">myModuleFunction</span><span class="p">();</span> <span class="c1">// performs work1</span>
-</span><span class='line'><span class="nx">myModule</span><span class="p">.</span><span class="nx">mySecondModuleFunction</span><span class="p">();</span> <span class="c1">// performs work2</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="p">{{</span><span class="err">#</span><span class="nx">each</span> <span class="nx">errors</span><span class="p">}}</span>
+</span><span class='line'>  <span class="p">{{</span><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="nx">error</span><span class="p">}}</span>
+</span><span class='line'><span class="p">{{</span><span class="err">/each}}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="o">&lt;</span><span class="err">/div&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/template&gt;&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;&lt;</span><span class="nx">template</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;alert alert-error&quot;</span><span class="o">&gt;&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;&amp;</span><span class="nx">lt</span><span class="p">;</span><span class="nx">button</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;button&quot;</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;close&quot;</span> <span class="nx">data</span><span class="o">-</span><span class="nx">dismiss</span><span class="o">=</span><span class="s2">&quot;alert&quot;</span><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span><span class="nx">times</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">lt</span><span class="p">;</span><span class="err">/button&amp;gt;</span>
+</span><span class='line'><span class="p">{{</span><span class="nx">message</span><span class="p">}}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="o">&lt;</span><span class="err">/div&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/template&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>Using modules will prevent naming conflicts on functions and variables:</p>
+<h3>4. Create a helper method for serving the errors to the template</h3>
 
-<p>
-```javascript
-var module1 = require(&ldquo;myModuleName&rdquo;);</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>/client/errors.js continued again </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&amp;</span><span class="nx">hellip</span><span class="p">;</span>
+</span><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">errors</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="nx">Errors</span><span class="p">.</span><span class="nx">find</span><span class="p">();</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>myModuleFunction() {
-  console.log(&ldquo;All work and no play makes module1 a dull script;&rdquo;);
-}</p>
+<p>Every template that contains the handlebars <code> {{&gt; errors}} </code> will now display whatever errors have been saved to the session collection.</p>
 
-<p>module1.myModuleFunction(); // performs work1
-myModuleFunction(); // outputs snarky phrase</p>
+<p>Awesome.</p>
 
-<p>```
-</p>
+<h3>Resources</h3>
 
-<p>Voila &mdash; no conflicts.</p>
+<p><a href="https://www.discovermeteor.com/">discovermeteor.com</a>
+<a href="http://docs.meteor.com">Meteor docs</a></p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Formatting Numbers the Easy Way]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/formatting-numbers-the-easy-way/"/>
-    <updated>2014-08-23T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/formatting-numbers-the-easy-way</id>
-    <content type="html"><![CDATA[<p>D3 has an awesome number formatting function that I discovered only after hacking my own. My first approach was to use string and array manipulation to convert 1234567890 to 1,234,567,890:</p>
+    <title type="html"><![CDATA[Mongo Trouble? Reset!]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/mongo-trouble-reset/"/>
+    <updated>2014-05-03T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/mongo-trouble-reset</id>
+    <content type="html"><![CDATA[<p>Back in March I wrote about letting my computer&rsquo;s battery die in the middle of a meteor project, with the consequence being that I could not connect to the underlying mongo database:
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>What&rsquo;s wrong, meteor? </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor
+</span><span class='line'><span class="o">[[[[[</span> ~/project/in/progress <span class="o">]]]]]</span>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;<span class="o">=</span>&gt; Started proxy.
+</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
+</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
+</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
+</span><span class='line'>Can&amp;rsquo;t start Mongo server.
+</span><span class='line'>MongoDB had an unspecified uncaught exception.
+</span><span class='line'>This can be caused by MongoDB being unable to write to a <span class="nb">local </span>database.
+</span><span class='line'>Check that you have permissions to write to .meteor/local. MongoDB does
+</span><span class='line'>not support filesystems like NFS that <span class="k">do </span>not allow file locking.
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>
-`&ldquo;javascript
-function numberSmoothing(value) {
-  // split the number into a character array and reverse it
-  reversedNumber = (value).toString().split(&rdquo;).reverse();</p>
+<p>After much spelunking in stackoverflow and documentation, I discovered the magic of this command:
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Magic mongo reset spell %</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u mongodb mongdo &amp;mdash;repair &amp;mdash;dbpath /var/lib/mongodb
+</span><span class='line'><span class="nv">$ </span>sudo service mongodb start
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>  // [&ldquo;0&rdquo;, &ldquo;9&rdquo;, &ldquo;8&rdquo;, &ldquo;7&rdquo;, &ldquo;6&rdquo;, &ldquo;5&rdquo;, &ldquo;4&rdquo;, &ldquo;3&rdquo;, &ldquo;2&rdquo;, &ldquo;1&rdquo;]</p>
+<p>Repairing and restarting the mongo service seemed to do the trick, and I continued on my merry meteor way. Well, I did it again &mdash; I let my battery die in the middle of a meteor project, and with feelings of smug satisfaction, I plumbed my blog archive for the answer. Only this time the magic antidote didn&rsquo;t work<!--more-->:</p>
 
-<p>  // push the numbers onto another array in groups of 3 and add a comma
-  chunkedNumber = [];
-  while(reversedNumber.length > 3) {</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>This log has been redacted to protect the ignorant </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo -u mongodb mongod &mdash;repair &mdash;dbpath /var/lib/mongodb/
+</span><span class='line'>[sudo] password for keighty:
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] finished checking dbs
+</span><span class='line'>Sat May  3 09:52:04.793 dbexit:
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: going to close listening sockets&hellip;
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: going to flush diaglog&hellip;
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: going to close sockets&hellip;
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: waiting for fs preallocator&hellip;
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: closing all files&hellip;
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] closeAllFiles() finished
+</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: removing fs lock&hellip;
+</span><span class='line'>Sat May  3 09:52:04.794 dbexit: really exiting now&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>$ sudo service mongodb start
+</span><span class='line'>mongodb start/running, process 2415
+</span><span class='line'>$ meteor
+</span><span class='line'>[[[[[ ~/project/in/progress ]]]]]&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>=> Started proxy.
+</span><span class='line'>Unexpected mongo exit code 100. Restarting.
+</span><span class='line'>Unexpected mongo exit code 100. Restarting.
+</span><span class='line'>Unexpected mongo exit code 100. Restarting.
+</span><span class='line'>Can&rsquo;t start Mongo server.
+</span><span class='line'>MongoDB had an unspecified uncaught exception.
+</span><span class='line'>This can be caused by MongoDB being unable to write to a local database.
+</span><span class='line'>Check that you have permissions to write to .meteor/local. MongoDB does
+</span><span class='line'>not support filesystems like NFS that do not allow file locking.</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<pre><code>var numberChunk = reversedNumber.splice(3);
-chunkedNumber.push(reversedNumber.join('') + ',');
-reversedNumber = numberChunk;
-</code></pre>
+<p>C'mon &mdash; It worked the last time! I tried it again with the same result. I tried <code>chown</code>-ing the local db. I tried <code>chown</code>-ing the database in <code>/var/lib/mongodb</code>. After each attempted solution the mongobd service would start, but meteor hiccuped on writing to the database. So I tried something radical. Something that wasn&rsquo;t in any of the manuals, or any of the <a href="http://stackoverflow.com/questions/5798549/why-cant-i-start-the-mongodb">responses to similar questions</a> on stackoverflow:</p>
 
-<p>  }</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Really? That was all? </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor reset
+</span><span class='line'>Project reset.
+</span><span class='line'><span class="nv">$ </span>meteor
+</span><span class='line'><span class="o">[[[[[</span> ~/project/in/progress <span class="o">]]]]]</span>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;<span class="o">=</span>&gt; Started proxy.
+</span><span class='line'><span class="o">=</span>&gt; Started MongoDB.
+</span><span class='line'><span class="o">=</span>&gt; Started your app.&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;<span class="o">=</span>&gt; App running at: &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;http://localhost:3000/&quot;</span>&gt;http://localhost:3000/&lt;/a&gt;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>  // push the remaining digits onto the array
-  chunkedNumber.push(reversedNumber.join(&lsquo;&rsquo;));</p>
-
-<p>  // [&ldquo;098,&rdquo;, &ldquo;765,&rdquo;, &ldquo;432,&rdquo;, &ldquo;1&rdquo;]</p>
-
-<p>  // reverse each of the strings in the array and rejoin them
-  for(var j = 0; j &lt; chunkedNumber.length; j++){</p>
-
-<pre><code>chunkedNumber[j] = chunkedNumber[j].split('').reverse().join('');
-</code></pre>
-
-<p>  }</p>
-
-<p>  // [&ldquo;,890&rdquo;, &ldquo;,567&rdquo;, &ldquo;,234&rdquo;, &ldquo;1&rdquo;]</p>
-
-<p>  return chunkedNumber.reverse().join(&lsquo;&rsquo;);
-}</p>
-
-<blockquote><p>numberSmoothing(1234567890)
-&ldquo;1,234,567,890&rdquo;</p></blockquote>
-
-<p>```
-</p>
-
-<p>While it was a fun mental exercise to implement number formatting, I stumbled across this handy d3 function after I was already done:</p>
-
-<p>
-```</p>
-
-<blockquote><p>var format = d3.format(&ldquo;,&rdquo;);
-format(1234567890);
-&ldquo;1,234,567,890&rdquo;
-```
-</p></blockquote>
-
-<p>As it turns out, any way one might want to format a number has <a href="https://github.com/mbostock/d3/wiki/Formatting#d3_format">already been implemented in d3</a>. It is similar to the mini-formatting language from python:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[​[fill]align][sign][symbol][0][width][,][.precision][type]</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>
-```javascript
-// add commas for the thousands separator</p>
-
-<blockquote><p>var format = d3.format(&lsquo;,&rsquo;)
-format(1234567890)
-&ldquo;1,234,567,890&rdquo;</p></blockquote>
-
-<p>// add a sign for positive and negative numbers</p>
-
-<blockquote><p>var format = d3.format(&lsquo;+,&rsquo;)
-format(1234567890)
-&ldquo;+1,234,567,890&rdquo;</p>
-
-<p>format(-1234567890)
-&ldquo;-1,234,567,890&rdquo;</p></blockquote>
-
-<p>// add a currency sign</p>
-
-<blockquote><p>var format = d3.format(&lsquo;+$,&rsquo;)
-format(1234567890)
-&ldquo;+$1,234,567,890&rdquo;</p></blockquote>
-
-<p>// as a percentage</p>
-
-<blockquote><p>var format = d3.format(&lsquo;p&rsquo;)
-format(1/6)
-&ldquo;16.666666666666664%&rdquo;</p></blockquote>
-
-<p>// as a rounded percentage</p>
-
-<blockquote><p>var format = d3.format(&lsquo;%&rsquo;)
-format(1/6)
-&ldquo;17%&rdquo;</p></blockquote>
-
-<p>// as a percent rounded to a single sig fig</p>
-
-<blockquote><p>var format = d3.format(&lsquo;.1%&rsquo;)
-format(1/6)
-&ldquo;16.7%&rdquo;</p></blockquote>
-
-<p>// as a rounded value</p>
-
-<blockquote><p>var format = d3.format(&lsquo;.2r&rsquo;)
-format(123.456)
-&ldquo;120&rdquo;</p>
-
-<p>format(123456789.66)
-&ldquo;120000000&rdquo;</p></blockquote>
-
-<p>// as a rounded, comma separated value</p>
-
-<blockquote><p>var format = d3.format(&lsquo;,.2r&rsquo;)
-format(123456789.66)
-&ldquo;120,000,000&rdquo;
-```
-</p></blockquote>
+<p>Turns out that if you hard shut-down your computer while your meteor project&rsquo;s mongo instance is running, it remains in a locked mode. Since it was only a development database I took a chance that dropping it would cure my ills. Voila! Meteor and mongodb are friends again.</p>
 
 <p>Awesome.</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Javascript Getters and Setters]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/javascript-getters-and-setters/"/>
-    <updated>2014-08-09T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/javascript-getters-and-setters</id>
-    <content type="html"><![CDATA[<p>Getters and setters make sense in java, and I just learned that there is an equivalent pattern in javascript:</p>
+    <title type="html"><![CDATA[Meteor, Fetch!]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/meteor-fetch/"/>
+    <updated>2014-03-31T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/meteor-fetch</id>
+    <content type="html"><![CDATA[<p>From <a href="http://book.discovermeteor.com/">Discover Meteor</a>: find() returns a cursor, which is a reactive data source.</p>
 
-<p>
-```javascript</p>
+<p>Data from reactive sources will be updated automatically to track changes in the data used to generate it. <!--more-->Cursors are derived from specific sources:</p>
 
-<blockquote><p>var favouriteBook = {
-  _title: &ldquo;Catch-22&rdquo;,
-  get title() {</p>
-
-<pre><code>console.log("Getting title", this._title);
-</code></pre>
-
-<p>  },
-  set title(value) {</p>
-
-<pre><code>this._title = value;
-console.log("Setting title", this._title);
-</code></pre>
-
-<p>  }
-}
-favouriteBook.title
- Getting title Catch-22</p>
-
-<p>favouriteBook.title = &ldquo;Slaughterhouse 5&rdquo;
- Setting title Slaughterhouse 5</p>
-
-<p>favouriteBook.title
- Getting title Slaughterhouse 5
-```
-</p></blockquote>
-
-<p>The <code>get</code> and <code>set</code> key words are reserved for accessing or mutating a data property (instance variable). Of course, one can get and set data properties directly:</p>
-
-<p>
-```javascript</p>
-
-<blockquote><p>favouriteBook.title
-&ldquo;Catch-22&rdquo;</p>
-
-<p>favouriteBook.title = &ldquo;Slaughterhouse 5&rdquo;
-favouriteBook.title
-&ldquo;Slaughterhouse 5&rdquo;
-```
-</p></blockquote>
-
-<p>The advantage of using a getter and setter is that if a setter is defined without a getter, one can change the value of the data property, but can never read it. If a getter is defined without a setter, then the variable can be read but not be changed:</p>
-
-<p>
-```javascript</p>
-
-<blockquote><p>var favouriteBook = {
-  _title: &ldquo;Catch-22&rdquo;,
-  get title() {</p>
-
-<pre><code>console.log("Getting title", this._title);
-</code></pre>
-
-<p>  }
-}</p>
-
-<p>favouriteBook.title
-Getting title Catch-22</p>
-
-<p>favouriteBook.title = &ldquo;Slaughterhouse 5&rdquo;</p>
-
-<p>favouriteBook.title
-Getting title Catch-22
-```
-</p></blockquote>
-
-<p>The setter function will fail silently, which makes troubleshooting difficult but ensures that the property remains undisturbed.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Constructors and Prototypes]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/constructors-and-prototypes/"/>
-    <updated>2014-08-07T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/constructors-and-prototypes</id>
-    <content type="html"><![CDATA[<p>Object-oriented programming (OOP) can be thought of as describing the properties and behaviour of a noun in a blueprint, which is used to create instances of an object. The blueprint is defined as a Constructor &mdash; a function that identifies a class of objects and begins with a capital letter. New objects are created by calling a Constructor with the keyword <code>new</code>.</p>
-
-<p>
-```javascript</p>
-
-<blockquote><p>function Book(title, author) {</p>
-
-<pre><code>this.title = title;
-this.author = author;
-this.listing = function() {
-  console.log([this.title, "by", this.author].join(' '));
-}
-</code></pre>
-
-<p>  }</p>
-
-<p>var book1 = new Book(&ldquo;Catch-22&rdquo;, &ldquo;Joseph Heller&rdquo;)</p>
-
-<p>book1.title
-&ldquo;Catch-22&rdquo;</p>
-
-<p>book1.author
-&ldquo;Joseph Heller&rdquo;</p>
-
-<p>book1.listing()
-Catch-22 by Joseph Heller
-```
-</p></blockquote>
-
-<p>The Book constructor specifies two properties, <code>title</code> and <code>author</code>, and one method, <code>listing</code>. Defining a method in a constructor ensures that all instances of the Object have the same method, but it also results in duplication of the method in the memory stack for every instance of the Object. If I made 1000 instances of Book, there would be 1000 instances of the listing method, even though it is only defined once, and is the same for every object.</p>
-
-<h4>Memory stack of objects with instance methods:</h4>
-
-<p><img src="http://www.katieleonard.ca/images/post_constructor_memory_stack.png"></p>
+<ul>
+<li>Session variables</li>
+<li>Database queries on Collections</li>
+<li>Meteor.status</li>
+<li>The ready() method on a subscription handle</li>
+<li>Meteor.user</li>
+<li>Meteor.userId</li>
+<li>Meteor.loggingIn</li>
+</ul>
 
 
-<p>Enter Prototypes.</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>For example, find() using a database query </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="nx">Posts</span><span class="p">.</span><span class="nx">find</span><span class="p">()</span>
+</span><span class='line'><span class="nx">LocalCollection</span><span class="p">.</span><span class="nx">Cursor</span> <span class="p">{</span><span class="nx">collection</span><span class="o">:</span> <span class="nx">LocalCollection</span><span class="p">,</span> <span class="nx">sorter</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">_selectorId</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">,</span> <span class="nx">matcher</span><span class="o">:</span> <span class="nx">Minimongo</span><span class="p">.</span><span class="nx">Matcher</span><span class="p">,</span> <span class="nx">skip</span><span class="o">:</span> <span class="kc">undefined</span><span class="err">…</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span>  <span class="nx">_selectorId</span><span class="o">:</span> <span class="kc">undefined</span>
+</span><span class='line'>  <span class="nx">_transform</span><span class="o">:</span> <span class="kc">null</span>
+</span><span class='line'>  <span class="nx">collection</span><span class="o">:</span> <span class="nx">LocalCollection</span>
+</span><span class='line'>  <span class="nx">cursor_pos</span><span class="o">:</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="nx">db_objects</span><span class="o">:</span> <span class="kc">null</span>
+</span><span class='line'>  <span class="nx">fields</span><span class="o">:</span> <span class="kc">undefined</span>
+</span><span class='line'>  <span class="nx">limit</span><span class="o">:</span> <span class="kc">undefined</span>
+</span><span class='line'>  <span class="nx">matcher</span><span class="o">:</span> <span class="nx">Minimongo</span><span class="p">.</span><span class="nx">Matcher</span>
+</span><span class='line'>  <span class="nx">reactive</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'>  <span class="nx">skip</span><span class="o">:</span> <span class="kc">undefined</span>
+</span><span class='line'>  <span class="nx">sorter</span><span class="o">:</span> <span class="kc">null</span>
+</span><span class='line'>  <span class="nx">__proto__</span><span class="o">:</span> <span class="nb">Object</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>A Prototype is a property that is shared by all instances of an object. When the constructor for an object is called for the first time, all the object&rsquo;s properties are loaded onto the memory stack as well as the object&rsquo;s Prototype. All subsequent instances of that object include a pointer to the same Prototype, and they pass in a pointer to themselves as <code>this</code> whenever they call a method from the Prototype.</p>
+<p>Cursors are not query snapshots. They are query snapshot containers &mdash; the contents of which are updated by changes to the underlying data. To interact with the data contained in a cursor, we can use fetch() to transform the cursor into an array.</p>
 
-<p>
-```javascript
-function Book(title, author) {
-  this.title = title;
-  this.author = author;
-}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>A cursor becomes an array with find().fetch() </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="nx">Posts</span><span class="p">.</span><span class="nx">find</span><span class="p">().</span><span class="nx">fetch</span><span class="p">()</span>
+</span><span class='line'><span class="p">[</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nb">Object</span>
+</span><span class='line'><span class="nx">_id</span><span class="o">:</span> <span class="s2">&quot;z4z36DFCaGr8Ptuqd&quot;</span>
+</span><span class='line'><span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;The Way We Live Now&quot;</span>
+</span><span class='line'><span class="nx">author</span><span class="o">:</span> <span class="s2">&quot;Anthony Trollope&quot;</span>
+</span><span class='line'><span class="nx">__proto__</span><span class="o">:</span> <span class="nb">Object</span>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>Book.prototype = {
-  listing: function() {</p>
-
-<pre><code>console.log([this.title, "by", this.author].join(' '));
-</code></pre>
-
-<p>  }
-}</p>
-
-<blockquote><p>var book1 = new Book(&ldquo;Catch-22&rdquo;, &ldquo;Joseph Heller&rdquo;)
-var book2 = new Book(&ldquo;Slaughterhouse 5&rdquo;, &ldquo;Kurt Vonnegut&rdquo;)</p>
-
-<p>book1.listing()
-Catch-22 by Joseph Heller
-book2.listing()
-Slaughterhouse 5 by Kurt Vonnegut</p>
-
-<p>book1.hasOwnProperty(&ldquo;listing&rdquo;)
-false
-&lsquo;listing&rsquo; in book1
-true
-```
-</p></blockquote>
-
-<h4>Memory stack of object with prototypes:</h4>
-
-<p><img src="http://www.katieleonard.ca/images/post_prototype_memory_stack.png"></p>
-
-
-<p>Reduced memory consumption is one advantage of keeping a reference to a prototype instead of a complete copy. Another advantage is that if additions are made to the Prototype, the changes will be extended to all instances.</p>
+<p>Meteor can iterate over a cursor without first converting it to an array, but in order to interact with the data directly, you must first use fetch(), map(), or forEach(). For more cursor fun, checkout the <a href="http://docs.meteor.com/#reactivity">Meteor docs</a>.</p>
 
 <p>Awesome.</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA['In' Operator Avoids False Falsies]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/in-operator-avoid-false-falsies/"/>
-    <updated>2014-08-05T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/in-operator-avoid-false-falsies</id>
-    <content type="html"><![CDATA[<p>I have encountered more than my share of javascript errors because I have made assumptions about the object I am working with, such as assuming that an object contains a property, and that I can call methods on that property:</p>
+    <title type="html"><![CDATA[Delay Chained Transitions]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/delay-chained-transitions/"/>
+    <updated>2014-03-15T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/delay-chained-transitions</id>
+    <content type="html"><![CDATA[<p>Changing an element using multiple, chained transitions requires a little troubleshooting. You would think that just chaining them one after another would suffice:</p>
 
-<p>
-```javascript</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Chained Transitions </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">doubleR</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<blockquote><p>myObject.data[0]
-TypeError: Cannot read property &lsquo;0&rsquo; of undefined
-```
-</p></blockquote>
+<p>But D3 does not wait for one transition to be complete before it begins the next one. Adding a delay will accomplish the desired transition chaining:</p>
 
-<p>This line contains four assumptions, and therefore four places it can fail:</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>ACTUAL Chained Transitions <a href="https://gist.github.com/keighty/9508948">https://gist.github.com/keighty/9508948</a> Gist </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">delay</span><span class="p">(</span><span class="mi">1700</span><span class="p">).</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">doubleR</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<ol>
-<li><code>myObject</code> exists</li>
-<li><code>myObject</code> contains a property called <code>data</code></li>
-<li><code>data</code> is an array</li>
-<li><code>data</code> is non-empty</li>
-</ol>
-
-
-<p>Presuming that if <code>myObject</code> does not exist means you have bigger problems, it is easy to fall into the trap of checking for the existence of a property by gating a conditional with it:</p>
-
-<p>
-<code>javascript
-if(myObject.data) {
-  //do something important with the data
+<div id="showme">
+<style>
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
 }
-</code>
-</p>
 
-<p>This technique will work in development, but the voice of experience tells us that it will not work in production. The reason it will not work is that javascript has more falsy values than most languages. Falsy values include the number zero, empty strings, null, undefined, NaN, and of course, the boolean false. So, if it is possible <code>myObject.data</code> to contain derived information, you have signed up to troubleshoot some unexpected behaviour.</p>
+.axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+}
+</style>
+<script src="http://mbostock.github.com/d3/d3.v2.min.js"></script>
+<script>
 
-<p>Fortunately, javascript has provided a failsafe way to check the existence of a property, regardless of the data it contains. The <code>in</code> operator checks if the key exists in the object&rsquo;s hash table, and doesn&rsquo;t care if it is a prototype or singleton property.</p>
+var width = 500,
+    height = 500,
+    margin = 50,
+    data,
+    dataFromCsv;
 
-<p>
-```javascript</p>
+var scaleX=d3.scale.linear().domain([0,10]).range([margin,width-margin]);
+var scaleY=d3.scale.linear().domain([0,10]).range([height-margin,margin]);
 
-<blockquote><p>var myObject = {}
-undefined
-&lsquo;data&rsquo; in myObject
-false</p>
+var svg=d3.select("#showme").append("svg")
+      .attr("width",width)
+      .attr("height",height);
 
-<p>myObject.data = &lsquo;&rsquo;
-&ldquo;&rdquo;
-&lsquo;data&rsquo; in myObject
-true
-myObject.data == true
-false
-```
-</p></blockquote>
+function drawAxes() {
+  var xAxis = d3.svg.axis()
+    .scale(scaleX)
+    .orient("bottom")
+    .ticks(5)
+    .tickSubdivide(1)
+    .tickPadding(10)
+    .tickFormat(function(d) { return d + " ticks"});
 
-<p><code>('data' in myObject)</code> returns false if the property is undefined. If the property is defined, it returns true even if data contains a falsy value.</p>
+  var yAxis = d3.svg.axis()
+    .scale(scaleY)
+    .orient("left");
 
-<h3>Resources</h3>
+  svg.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(0," + (height - margin) + ")")
+    .call(xAxis);
+  svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "middle")
+    .attr("x", width/2)
+    .attr("y", height)
+    .text("X-value");
 
-<p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
+  svg.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(" + margin + ",0)")
+    .call(yAxis);
+  svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "middle")
+    .attr("x", -height/2)
+    .attr("y", 6)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Y-value");
+}
+
+dataFromCsv = [{ "Color": "#9467bd", "X": 1, "Y": 8, "Quantity": 91 },
+{ "Color": "#1f77b4", "X": 9, "Y": 1, "Quantity": 32 },
+{ "Color": "#1f77b4", "X": 3, "Y": 1, "Quantity": 67 },
+{ "Color": "#bcbd22", "X": 5, "Y": 5, "Quantity": 63 },
+{ "Color": "#9467bd", "X": 6, "Y": 6, "Quantity": 57 },
+{ "Color": "#2ca02c", "X": 5, "Y": 10, "Quantity": 65 },
+{ "Color": "#d62728", "X": 8, "Y": 2, "Quantity": 36 },
+{ "Color": "#9467bd", "X": 2, "Y": 8, "Quantity": 82 },
+{ "Color": "#bcbd22", "X": 4, "Y": 7, "Quantity": 69 },
+{ "Color": "#9467bd", "X": 5, "Y": 3, "Quantity": 88 },
+{ "Color": "#d62728", "X": 1, "Y": 5, "Quantity": 29 },
+{ "Color": "#1f77b4", "X": 10, "Y": 7, "Quantity": 60 },
+{ "Color": "#2ca02c", "X": 8, "Y": 5, "Quantity": 56 },
+{ "Color": "#bcbd22", "X": 1, "Y": 6, "Quantity": 31 },
+{ "Color": "#bcbd22", "X": 6, "Y": 5, "Quantity": 57 },
+{ "Color": "#d62728", "X": 9, "Y": 6, "Quantity": 85 },
+{ "Color": "indigo", "X": 9, "Y": 10, "Quantity": 70 },
+{ "Color": "indigo", "X": 9, "Y": 10, "Quantity": 31 },
+{ "Color": "#1f77b4", "X": 2, "Y": 4, "Quantity": 26 },
+{ "Color": "#bcbd22", "X": 10, "Y": 5, "Quantity": 61 },
+{ "Color": "#2ca02c", "X": 4, "Y": 2, "Quantity": 64 },
+{ "Color": "#1f77b4", "X": 8, "Y": 9, "Quantity": 71 }];
+function importData() {
+  data = d3.nest()
+          .key(function(d) { return d.Color; })
+          .rollup(aggregateData)
+          .entries(dataFromCsv);
+  // drawElements();
+  setInterval( drawElements, 4000 );
+}
+
+/***********************
+  Draw circles, bind data, and move elements to final location
+***********************/
+function drawElements() {
+  var selection = svg.selectAll("circle").data(data);
+
+  selection.enter()
+    .append("circle")
+    .attr("cx",scaleX(0))
+    .attr("cy",scaleY(0))
+    .attr("r", 0)
+
+  selection.transition().duration(1500)
+      .attr("cx",getX)
+      .attr("cy",getY)
+      .attr("r", getR)
+      .style("fill", getColor)
+    .transition().delay(1500+200).duration(1500)
+      .attr("r", doubleR);
+}
+
+/***********************
+  Helper functions
+***********************/
+function getX(d)     { return scaleX(d.values.X); }
+function getY(d)     { return scaleY(d.values.Y); }
+function getR(d)     { return d.values.Quantity / 10; }
+function doubleR(d)     { return d.values.Quantity / 5; }
+function getColor(d) { return d.key; }
+// Use D3 built in array functions to aggregate data
+function aggregateData(d) {
+  return {
+    "X"       : d3.mean(d, function(e) { return +e.X; }),
+    "Y"       : d3.median(d, function(e) { return +e.Y; }),
+    "Quantity": d3.max(d, function(e) { return +e.Quantity; })
+  };
+}
+
+drawAxes();
+importData();
+</script>
+</div>
+
 ]]></content>
   </entry>
   
