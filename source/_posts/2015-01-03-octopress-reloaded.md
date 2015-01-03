@@ -30,17 +30,42 @@ $ bundle exec rake preview
 
 Now I have no excuses to not blog more often... well, fewer excuses (thanks to [Daniel Doubrovkine](http://code.dblock.org/octopress-setting-up-a-blog-and-contributing-to-an-existing-one) for pointing me in the right direction).
 
-I briefly considered switching to a hosted blogging platform (tumblr or wordpress), so I conducted an informal survey (sample size taken from [Digital Ocean's 20 developers to follow](https://www.digitalocean.com/company/blog/20-developers-to-follow-in-2014/)) to see what choices leading developers were making:
-
-| platform    | users  |
-|:-----------:|:------:|
-| jekyll      | 6
-| octopress   | 3
-| none        | 3
-| tumblr      | 1
-| hand-rolled | 6
-| wordpress   | 1
-| **total**   | **20**
+I briefly considered switching to a hosted blogging platform (tumblr or wordpress), so I conducted an informal survey (sample size taken from [Digital Ocean's 20 developers to follow](https://www.digitalocean.com/company/blog/20-developers-to-follow-in-2014/)) to see what choices leading developers were making, and it looks like a jekyll based blog is still the most popular. What is yours?
 
 
-Looks like a jekyll based blog is still the popular choice for developers. What is yours?
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg .tg-s6z2{text-align:center}
+</style>
+<table class="tg">
+  <tr>
+    <th class="tg-031e">platform</th>
+    <th class="tg-031e">users</th>
+  </tr>
+  <tr>
+    <td class="tg-s6z2">jekyll</td>
+    <td class="tg-031e">6</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">octopress</td>
+    <td class="tg-031e">3</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">none</td>
+    <td class="tg-031e">3</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">tumblr</td>
+    <td class="tg-031e">1</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">hand-rolled</td>
+    <td class="tg-031e">6</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">wordpress</td>
+    <td class="tg-031e">1</td>
+  </tr>
+</table>
