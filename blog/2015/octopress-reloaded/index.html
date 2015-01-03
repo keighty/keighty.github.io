@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Python - keighty</title>
+  <title>Octopress Reloaded - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Category: python">
+  <meta name="description" content="I recently upgraded my home hardware from an Asus 10.1&#8221; netbook to a 15&#8221; MacBook Pro, and once I adjusted to being able to open more than &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.cablog/categories/python">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2015/octopress-reloaded">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -78,36 +78,161 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Python</h1>
+    
+      <h1 class="entry-title">Octopress Reloaded</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-03T00:00:00-08:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2015</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
+
+
+<div class="entry-content"><p>I recently upgraded my home hardware from an <a href="http://www.amazon.com/ASUS-1000HE-10-1-Inch-Black-Netbook/dp/B001QTXL82">Asus 10.1&#8221; netbook</a> to a <a href="https://www.apple.com/macbook-pro/">15&#8221; MacBook Pro</a>, and once I adjusted to being able to open more than one window at a time, I got down to the business of loading my files and projects on the new machine. Thanks to <a href="https://www.dropbox.com/">Dropbox</a> and <a href="https://github.com/">Github</a>, most of that work happens either behind the scenes or as needed. Recreating the right environment for each project is still ongoing, and the first challenge I encountered was reloading my blog &mdash; started about two years ago using <a href="http://octopress.org/">Octopress</a>.</p>
+
+<!--more-->
+
+
+<p>Octopress is an awesome framework built on <a href="http://jekyllrb.com/">jekyll</a>. The learning curve for getting started with jekyll was a little steep (liquid layouts, yaml, not to mention design and UX were all new to me then) , and Octopress delivers on its promise to make it easy: just clone, bundle, and blog. Part of what makes Octopress so awesome is the deploy strategy: static pages are generated from yaml and markdown sources (saved in the source branch), and the pages are checked in to your github or heroku repository (as the master branch).</p>
+
+<p>When you clone the repo, you get both branches, but you have to do a little setup to ensure that master is pulling from and pushing to the right place. Borrowing some code from the <a href="https://github.com/imathis/octopress/blob/master/Rakefile#L351-L358">setup rake task</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone git@github.com:username/username.github.com.git my_blog
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>my_blog
+</span><span class='line'><span class="nv">$ </span>git checkout <span class="nb">source</span>
+</span><span class='line'><span class="nv">$ </span>mkdir _deploy
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>_deploy
+</span><span class='line'><span class="nv">$ </span>git init
+</span><span class='line'><span class="nv">$ </span>git remote add origin git@github.com:username/username.github.com.git
+</span><span class='line'><span class="nv">$ </span>git pull origin master
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> ..
+</span><span class='line'><span class="nv">$ </span>bundle install
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake preview
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I have no excuses to not blog more often&hellip; well, fewer excuses (thanks to <a href="http://code.dblock.org/octopress-setting-up-a-blog-and-contributing-to-an-existing-one">Daniel Doubrovkine</a> for pointing me in the right direction).</p>
+
+<p>I briefly considered switching to a hosted blogging platform (tumblr or wordpress), so I conducted an informal survey (sample size taken from <a href="https://www.digitalocean.com/company/blog/20-developers-to-follow-in-2014/">Digital Ocean&rsquo;s 20 developers to follow</a>) to see what choices leading developers were making, and it looks like a jekyll based blog is still the most popular. What is yours?</p>
 
 
 
-  
-  <h2>2013</h2>
-
-<article>
-  
-<h1><a href="/blog/2013/blogging-with-jekyll-bootstrap/">Blogging With Jekyll Bootstrap</a></h1>
-<time datetime="2013-06-15T00:00:00-07:00" pubdate><span class='month'>Jun</span> <span class='day'>15</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/python/'>python</a></span>
-</footer>
-
-
-</article>
+<table class="tg">
+  <tr>
+    <th class="tg-031e">platform</th>
+    <th class="tg-031e">users</th>
+  </tr>
+  <tr>
+    <td class="tg-s6z2">jekyll</td>
+    <td class="tg-031e">6</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">octopress</td>
+    <td class="tg-031e">3</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">none</td>
+    <td class="tg-031e">3</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">tumblr</td>
+    <td class="tg-031e">1</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">hand-rolled</td>
+    <td class="tg-031e">6</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">wordpress</td>
+    <td class="tg-031e">1</td>
+  </tr>
+</table>
 
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-03T00:00:00-08:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/blog/'>blog</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2015/octopress-reloaded/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2015/octopress-reloaded/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/the-happiness-hypothesis/" title="Previous Post: the happiness hypothesis">&laquo; the happiness hypothesis</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -231,7 +356,10 @@
       var disqus_shortname = 'keightyleonard';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2015/octopress-reloaded/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2015/octopress-reloaded/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

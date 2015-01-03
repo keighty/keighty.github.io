@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Blog | keighty]]></title>
+  <link href="http://www.katieleonard.ca/blog/categories/blog/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2015-01-03T12:07:57-08:00</updated>
+  <id>http://www.katieleonard.ca/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress Reloaded]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/octopress-reloaded/"/>
+    <updated>2015-01-03T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/octopress-reloaded</id>
+    <content type="html"><![CDATA[<p>I recently upgraded my home hardware from an <a href="http://www.amazon.com/ASUS-1000HE-10-1-Inch-Black-Netbook/dp/B001QTXL82">Asus 10.1" netbook</a> to a <a href="https://www.apple.com/macbook-pro/">15" MacBook Pro</a>, and once I adjusted to being able to open more than one window at a time, I got down to the business of loading my files and projects on the new machine. Thanks to <a href="https://www.dropbox.com/">Dropbox</a> and <a href="https://github.com/">Github</a>, most of that work happens either behind the scenes or as needed. Recreating the right environment for each project is still ongoing, and the first challenge I encountered was reloading my blog &mdash; started about two years ago using <a href="http://octopress.org/">Octopress</a>.</p>
+
+<!--more-->
+
+
+<p>Octopress is an awesome framework built on <a href="http://jekyllrb.com/">jekyll</a>. The learning curve for getting started with jekyll was a little steep (liquid layouts, yaml, not to mention design and UX were all new to me then) , and Octopress delivers on its promise to make it easy: just clone, bundle, and blog. Part of what makes Octopress so awesome is the deploy strategy: static pages are generated from yaml and markdown sources (saved in the source branch), and the pages are checked in to your github or heroku repository (as the master branch).</p>
+
+<p>When you clone the repo, you get both branches, but you have to do a little setup to ensure that master is pulling from and pushing to the right place. Borrowing some code from the <a href="https://github.com/imathis/octopress/blob/master/Rakefile#L351-L358">setup rake task</a>:</p>
+
+<p><code>bash
+$ git clone git@github.com:username/username.github.com.git my_blog
+$ cd my_blog
+$ git checkout source
+$ mkdir _deploy
+$ cd _deploy
+$ git init
+$ git remote add origin git@github.com:username/username.github.com.git
+$ git pull origin master
+$ cd ..
+$ bundle install
+$ bundle exec rake preview
+</code></p>
+
+<p>Now I have no excuses to not blog more often&hellip; well, fewer excuses (thanks to <a href="http://code.dblock.org/octopress-setting-up-a-blog-and-contributing-to-an-existing-one">Daniel Doubrovkine</a> for pointing me in the right direction).</p>
+
+<p>I briefly considered switching to a hosted blogging platform (tumblr or wordpress), so I conducted an informal survey (sample size taken from <a href="https://www.digitalocean.com/company/blog/20-developers-to-follow-in-2014/">Digital Ocean&rsquo;s 20 developers to follow</a>) to see what choices leading developers were making, and it looks like a jekyll based blog is still the most popular. What is yours?</p>
+
+
+
+<table class="tg">
+  <tr>
+    <th class="tg-031e">platform</th>
+    <th class="tg-031e">users</th>
+  </tr>
+  <tr>
+    <td class="tg-s6z2">jekyll</td>
+    <td class="tg-031e">6</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">octopress</td>
+    <td class="tg-031e">3</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">none</td>
+    <td class="tg-031e">3</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">tumblr</td>
+    <td class="tg-031e">1</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">hand-rolled</td>
+    <td class="tg-031e">6</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">wordpress</td>
+    <td class="tg-031e">1</td>
+  </tr>
+</table>
+
+]]></content>
+  </entry>
+  
+</feed>

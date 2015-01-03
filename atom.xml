@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-03T12:05:27-08:00</updated>
+  <updated>2015-01-03T12:07:57-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,85 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress Reloaded]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/octopress-reloaded/"/>
+    <updated>2015-01-03T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/octopress-reloaded</id>
+    <content type="html"><![CDATA[<p>I recently upgraded my home hardware from an <a href="http://www.amazon.com/ASUS-1000HE-10-1-Inch-Black-Netbook/dp/B001QTXL82">Asus 10.1&#8221; netbook</a> to a <a href="https://www.apple.com/macbook-pro/">15&#8221; MacBook Pro</a>, and once I adjusted to being able to open more than one window at a time, I got down to the business of loading my files and projects on the new machine. Thanks to <a href="https://www.dropbox.com/">Dropbox</a> and <a href="https://github.com/">Github</a>, most of that work happens either behind the scenes or as needed. Recreating the right environment for each project is still ongoing, and the first challenge I encountered was reloading my blog &mdash; started about two years ago using <a href="http://octopress.org/">Octopress</a>.</p>
+
+<!--more-->
+
+
+<p>Octopress is an awesome framework built on <a href="http://jekyllrb.com/">jekyll</a>. The learning curve for getting started with jekyll was a little steep (liquid layouts, yaml, not to mention design and UX were all new to me then) , and Octopress delivers on its promise to make it easy: just clone, bundle, and blog. Part of what makes Octopress so awesome is the deploy strategy: static pages are generated from yaml and markdown sources (saved in the source branch), and the pages are checked in to your github or heroku repository (as the master branch).</p>
+
+<p>When you clone the repo, you get both branches, but you have to do a little setup to ensure that master is pulling from and pushing to the right place. Borrowing some code from the <a href="https://github.com/imathis/octopress/blob/master/Rakefile#L351-L358">setup rake task</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone git@github.com:username/username.github.com.git my_blog
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>my_blog
+</span><span class='line'><span class="nv">$ </span>git checkout <span class="nb">source</span>
+</span><span class='line'><span class="nv">$ </span>mkdir _deploy
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>_deploy
+</span><span class='line'><span class="nv">$ </span>git init
+</span><span class='line'><span class="nv">$ </span>git remote add origin git@github.com:username/username.github.com.git
+</span><span class='line'><span class="nv">$ </span>git pull origin master
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> ..
+</span><span class='line'><span class="nv">$ </span>bundle install
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake preview
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I have no excuses to not blog more often&hellip; well, fewer excuses (thanks to <a href="http://code.dblock.org/octopress-setting-up-a-blog-and-contributing-to-an-existing-one">Daniel Doubrovkine</a> for pointing me in the right direction).</p>
+
+<p>I briefly considered switching to a hosted blogging platform (tumblr or wordpress), so I conducted an informal survey (sample size taken from <a href="https://www.digitalocean.com/company/blog/20-developers-to-follow-in-2014/">Digital Ocean&rsquo;s 20 developers to follow</a>) to see what choices leading developers were making, and it looks like a jekyll based blog is still the most popular. What is yours?</p>
+
+
+
+<table class="tg">
+  <tr>
+    <th class="tg-031e">platform</th>
+    <th class="tg-031e">users</th>
+  </tr>
+  <tr>
+    <td class="tg-s6z2">jekyll</td>
+    <td class="tg-031e">6</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">octopress</td>
+    <td class="tg-031e">3</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">none</td>
+    <td class="tg-031e">3</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">tumblr</td>
+    <td class="tg-031e">1</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">hand-rolled</td>
+    <td class="tg-031e">6</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">wordpress</td>
+    <td class="tg-031e">1</td>
+  </tr>
+</table>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The Happiness Hypothesis]]></title>
@@ -1666,38 +1745,6 @@ importData();
 
 
 <p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Javascript Dates]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/javascript-dates/"/>
-    <updated>2014-03-01T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/javascript-dates</id>
-    <content type="html"><![CDATA[<p>Javascript Date objects have zero indexed months but not dates.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; (new Date(2014, 0, 1)).strftime("%b %d, %Y")
-</span><span class='line'>"Jan 1, 2014"
-</span><span class='line'>&gt; (new Date(2013, 11, 31)).strftime("%b %d, %Y")
-</span><span class='line'>"Dec 31, 2013"
-</span><span class='line'>&gt; (new Date(2014, 0, 0)).strftime("%b %d, %Y")
-</span><span class='line'>"Dec 31, 2013"</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Wat?</p>
-
-<!--more-->
-
-
-<h3>Resources</h3>
-
-<p><a href="http://tech.bluesmoon.info/2008/04/strftime-in-javascript.html">Javascript strftime</a></p>
 ]]></content>
   </entry>
   
