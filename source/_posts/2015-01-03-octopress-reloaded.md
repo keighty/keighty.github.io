@@ -4,7 +4,6 @@ title: "octopress reloaded"
 date: 2015-01-03
 comments: true
 categories: [blog]
-published: false
 ---
 
 I recently upgraded my home hardware from an [Asus 10.1" netbook](http://www.amazon.com/ASUS-1000HE-10-1-Inch-Black-Netbook/dp/B001QTXL82) to a [15" MacBook Pro](https://www.apple.com/macbook-pro/), and once I adjusted to being able to open more than one window at a time, I got down to the business of loading my files and projects on the new machine. Thanks to [Dropbox](https://www.dropbox.com/) and [Github](https://github.com/), most of that work happens either behind the scenes or as needed. Recreating the right environment for each project is still ongoing, and the first challenge I encountered was reloading my blog -- started about two years ago using [Octopress](http://octopress.org/).
