@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="I recently upgraded my home hardware from an Asus 10.1&#8221; netbook to a 15&#8221; MacBook Pro, and once I adjusted to being able to open more than &hellip;">
+  <meta name="description" content="Many developers embrace test-driven development (TDD) as an ideal but rarely put it into practice. I often find myself writing code that works and &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,47 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/the-senior-software-engineer/">TDD and the Senior Software Engineer</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-04T00:00:00-08:00" pubdate data-updated="true">Jan 4<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Many developers embrace test-driven development (TDD) as an ideal but rarely put it into practice. I often find myself writing code that works and then writing tests that exercise it to ensure that its behaviour doesn&rsquo;t break when changes are made. Writing tests first is a great way to organize your approach to solving a problem, and in <a href="http://www.amazon.com/Senior-Software-Engineer-Practices-Effective/dp/0990702804/ref=sr_1_1?ie=UTF8&amp;qid=1420403139&amp;sr=8-1&amp;keywords=on+being+a+senior+engineer"><strong>The Senior Software Engineer</strong></a>, David Copeland describes how TDD will help you grow your career as well.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/the-senior-software-engineer/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -335,57 +376,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/flash-your-local-collection/">Flash Your Local Collection</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-26T00:00:00-07:00" pubdate data-updated="true">May 26<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Rails allows you to pass messages to the user between actions (&ldquo;This <a href="http://api.rubyonrails.org/classes/ActionDispatch/Flash.html">ActionDispatch::Flash</a> will self-destruct&rdquo;), and because Rails, all the message generation happens server side:</p>
-
-<figure class='code'><figcaption><span>flashy_controller.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">show</span>
-</span><span class='line'>  <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;You dropped your packet.&quot;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Meteor is mostly a client-side application framework, and you can implement a similar message system, which will never touch the server, by defining a collection that is local to the browser.</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/flash-your-local-collection/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -408,6 +398,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/the-senior-software-engineer/">TDD and the Senior Software Engineer</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/octopress-reloaded/">Octopress Reloaded</a>
       </li>
     
@@ -421,10 +415,6 @@
     
       <li class="post">
         <a href="/blog/2014/helpers-calling-helpers/">Helpers Calling Helpers</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/flash-your-local-collection/">Flash Your Local Collection</a>
       </li>
     
   </ul>

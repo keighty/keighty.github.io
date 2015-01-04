@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Tdd | keighty]]></title>
+  <link href="http://www.katieleonard.ca/blog/categories/tdd/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2015-01-04T14:58:03-08:00</updated>
+  <id>http://www.katieleonard.ca/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[TDD and the Senior Software Engineer]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/the-senior-software-engineer/"/>
+    <updated>2015-01-04T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/the-senior-software-engineer</id>
+    <content type="html"><![CDATA[<p>Many developers embrace test-driven development (TDD) as an ideal but rarely put it into practice. I often find myself writing code that works and then writing tests that exercise it to ensure that its behaviour doesn&rsquo;t break when changes are made. Writing tests first is a great way to organize your approach to solving a problem, and in <a href="http://www.amazon.com/Senior-Software-Engineer-Practices-Effective/dp/0990702804/ref=sr_1_1?ie=UTF8&amp;qid=1420403139&amp;sr=8-1&amp;keywords=on+being+a+senior+engineer"><strong>The Senior Software Engineer</strong></a>, David Copeland describes how TDD will help you grow your career as well.</p>
+
+<!--more-->
+
+
+<p>A senior software engineer is efficient, and delivers a quality product in a timely fashion. Surround your pullquote like this {" text to be quoted "}</p>
+
+<p>Explicitly describing your plan in a test suite has another benefit that I had not considered before, and that is making you resilient to interruption. If your plan is not layed out on paper, you are maintaining it all in your head, and you have to hold on to a lot of context in your working memory. Surround your pullquote like this {" text to be quoted "}</p>
+
+<p>Time and context management are essential skills for becoming a senior software engineer, and I am going to try using test driven development to become more interruptable and more productive.</p>
+
+<!-- RESOURCES
+* http://act-r.psy.cmu.edu/wordpress/wp-content/uploads/2012/12/448preparing.to.resume.pdf
+* http://interruptions.net/literature/Fogarty-CHI05-p331-fogarty.pdf
+* http://contenthere.net/2012/10/what-it-takes-to-be-a-senior-engineer.html
+* http://www.amazon.com/Senior-Software-Engineer-Practices-Effective/dp/0990702804/ref=sr_1_1?ie=UTF8&qid=1420403139&sr=8-1&keywords=on+being+a+senior+engineer
+* [The Senior Software Engineer](http://www.amazon.com/Senior-Software-Engineer-Practices-Effective/dp/0990702804/ref=sr_1_1?ie=UTF8&qid=1420403139&sr=8-1&keywords=on+being+a+senior+engineer) by David Bryant Copeland
+
+OUTLINE
+Test-driven development can help you grow your career.
+1. test-driven development is an ideal that many strive for and few embrace.
+2. many developers embrace the ideas of test-driven development, but few practice it rigorously.
+3. writing tests is important to delivering quality, robust code, and is essential for writing code that you ever hope to change.
+4. did you know that test-driven development can help you grow your career as well?
+-->
+
+]]></content>
+  </entry>
+  
+</feed>
