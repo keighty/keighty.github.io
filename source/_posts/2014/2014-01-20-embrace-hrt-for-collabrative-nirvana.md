@@ -3,7 +3,7 @@ layout: post
 title: "embrace HRT for collabrative nirvana"
 date: 2014-01-20 07:07:15 -0800
 comments: true
-categories: reads
+categories: [read]
 ---
 
 [Team Geek: A Software Developer's Guide to Working Well with Others](http://www.amazon.com/gp/product/1449302440/ref=as_li_tf_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1449302440&linkCode=as2&tag=keighty-20) by Brian W. Fitzpatrick and Ben Collins-Sussman.
