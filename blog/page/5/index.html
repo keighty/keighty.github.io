@@ -9,15 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Add scales to a d3 plot in three easy steps: 1. Define the scale 1
-2
-3
-4
-5
-6
-7
-// Image dimensions
-var width = 500, height = 500, margin = 50; var &hellip;">
+  <meta name="description" content="A Technique for Producing Ideas by James Webb Young (1965) Young proposes that all ideas are the result of five identifiable stages of rumination, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -87,6 +79,53 @@ var width = 500, height = 500, margin = 50; var &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/a-technique-for-producing-ideas/">A Technique for Producing Ideas</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-04T00:00:00-08:00" pubdate data-updated="true">Mar 4<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.amazon.com/gp/product/B001C34HUS/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B001C34HUS&amp;linkCode=as2&amp;tag=bridgeforpoke-20">A Technique for Producing Ideas</a> by James Webb Young (1965)</p>
+
+<p>Young proposes that all ideas are the result of five identifiable stages of rumination, whether they are followed consciously or not:</p>
+
+<ol>
+<li>Gather information, and not just what is specific to your problem domain. Novelty comes from mashing seemingly unrelated concepts together.</li>
+<li>Review the information &mdash; collate your information in some fashion and go over it. A lot.</li>
+<li>Do something else. Get distracted from whatever problem you are trying to solve.</li>
+<li>&ldquo;Eureka! I have it!&rdquo;</li>
+<li>Refine your idea &mdash; first drafts are never perfect, so keep polishing.</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -411,71 +450,6 @@ var width = 500, height = 500, margin = 50; var &hellip;">
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/binding-functions-as-data/">Binding Functions as Data</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-27T00:00:00-08:00" pubdate data-updated="true">Feb 27<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Primitives and object literals are not the only things you can bind to a D3 visualization. After all, aren&rsquo;t javascript functions objects as well?</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">[];</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">next</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">15</span> <span class="o">+</span> <span class="nx">x</span><span class="o">*</span><span class="nx">x</span> <span class="p">};</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">newData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">next</span><span class="p">);</span> <span class="k">return</span> <span class="nx">data</span><span class="p">;</span> <span class="p">}</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">selection</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;#container&quot;</span><span class="p">)</span>
-</span><span class='line'>                  <span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">)</span>
-</span><span class='line'>                  <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">newData</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">...</span>
-</span><span class='line'>                  <span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;#span&quot;</span><span class="p">)</span>
-</span><span class='line'>                    <span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span> <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you provide a function to the data function, D3 will simply invoke the function and use the returned value as a parameter of the data function.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -500,6 +474,10 @@ var width = 500, height = 500, margin = 50; var &hellip;">
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails/">#dup vs #clone in Ruby and Rails</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/the-senior-software-engineer/">TDD and the Senior Software Engineer</a>
       </li>
     
@@ -513,10 +491,6 @@ var width = 500, height = 500, margin = 50; var &hellip;">
     
       <li class="post">
         <a href="/blog/2014/method-lookup-in-ruby/">Method Lookup in Ruby</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/helpers-calling-helpers/">Helpers Calling Helpers</a>
       </li>
     
   </ul>

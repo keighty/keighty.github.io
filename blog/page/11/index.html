@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Meteor is a framework that allows you to write web applications using only javascript. All the work is done on the client-side. Meteor embraces new &hellip;">
+  <meta name="description" content="I am building an application that uses several nested attributes: Users have many Goals (Goals belong_to Users), and Goals have many Hours (Hours &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,68 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-29T22:29:03-07:00" pubdate data-updated="true">Oct 29<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I am building an application that uses several nested attributes: Users have many Goals (Goals belong_to Users), and Goals have many Hours (Hours belong_to Goals).</p>
+
+<p>Using <a href="https://github.com/thoughtbot/factory_girl">FactoryGirl</a> to create a User is straightforward:</p>
+
+<div>
+  <pre><code class='ruby'>FactoryGirl.define do
+  factory :user do
+    sequence :name  { |n| &quot;person#{n}&quot; }
+    sequence :email { |n| &quot;person#{n}@example.com&quot; }
+  end
+end
+
+describe User do
+  before  { @user = FactoryGirl.create(:user) }
+  subject { @user }
+  it { should respond_to(:name) }
+  ...
+end</code></pre>
+</div>
+
+
+<p>How do I create Goals that are linked to the User?</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/factoring-in-nests/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -259,47 +321,6 @@ Could not find a JavaScript runtime. See https://github.com/sstephenson/execjs f
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-08T22:29:03-07:00" pubdate data-updated="true">Sep 8<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>A few weeks ago I posted about <a href="http://www.katieleonard.ca/automation/2013/08/30/hammer-out-tasks-with-thor/">using Thor to generate system-wide notes files with a standard format</a>. Since then, I have been doing a lot of smaller code challenges, and I wanted to set up a Thor task for generating a standard project file tree.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/thor-sets-up-a-project/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/12/">&larr; Older</a>
@@ -324,6 +345,10 @@ Could not find a JavaScript runtime. See https://github.com/sstephenson/execjs f
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails/">#dup vs #clone in Ruby and Rails</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/the-senior-software-engineer/">TDD and the Senior Software Engineer</a>
       </li>
     
@@ -337,10 +362,6 @@ Could not find a JavaScript runtime. See https://github.com/sstephenson/execjs f
     
       <li class="post">
         <a href="/blog/2014/method-lookup-in-ruby/">Method Lookup in Ruby</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/helpers-calling-helpers/">Helpers Calling Helpers</a>
       </li>
     
   </ul>

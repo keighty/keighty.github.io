@@ -325,16 +325,22 @@
         <lastmod>2015-01-04T14:57:24-08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://www.katieleonard.ca/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails/
+        </loc>
+        <lastmod>2015-01-10T11:37:11-08:00</lastmod>
+    </url>
+    <url>
         <loc>http://www.katieleonard.ca/404.html</loc>
         <lastmod>2014-11-22T09:35:06-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/archives/</loc>
-        <lastmod>2015-01-04T14:57:24-08:00</lastmod>
+        <lastmod>2015-01-10T11:37:11-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/</loc>
-        <lastmod>2015-01-04T14:57:24-08:00</lastmod>
+        <lastmod>2015-01-10T11:37:11-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/projects/</loc>
@@ -342,7 +348,7 @@
     </url>
     <url>
         <loc>http://www.katieleonard.ca/reads/</loc>
-        <lastmod>2015-01-04T14:57:24-08:00</lastmod>
+        <lastmod>2015-01-10T11:37:11-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/robots.txt</loc>
