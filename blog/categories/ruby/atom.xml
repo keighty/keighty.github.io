@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-10T14:24:51-08:00</updated>
+  <updated>2015-01-10T15:31:11-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,146 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[#dup vs #clone in Ruby and Rails]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails/"/>
-    <updated>2015-01-10T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails</id>
-    <content type="html"><![CDATA[<p>I was recently fixing a failing test and discovered that Ruby and Rails implement <code>#clone</code> and <code>#dup</code> in confusing and occasionally opposite ways.</p>
-
-<!--more-->
-
-
-<h3>In Rails <code>#clone</code> is a less complete copy of an object than <code>#dup</code></h3>
-
-<p>Rails versions have flip-flopped on how to implement <code>#clone</code> and <code>#dup</code>, and there is ambiguity in how Rails defines &ldquo;shallow&rdquo;. In Rails 4.0, <a href="https://github.com/rails/rails/blob/4-0-stable/activerecord/lib/active_record/core.rb#L217-L220"><code>#clone</code> is a shallow copy</a> of an ActiveRecord object. &ldquo;Shallow&rdquo; in this context means that the <code>clone</code> shares attributes with the <code>original</code>:</p>
-
-<blockquote><p>Identical to Ruby&rsquo;s clone method.  This is a &ldquo;shallow&rdquo; copy.  Be warned that your attributes are not copied. That means that modifying attributes of the clone will modify the original, since they will both point to the same attributes hash. If you need a copy of your attributes hash, please use the #dup method.</p></blockquote>
-
-<p>However, <a href="https://github.com/rails/rails/blob/4-0-stable/activerecord/lib/active_record/core.rb#L234-L240"><code>#dup</code> is also described as a shallow copy</a>. &ldquo;Shallow&rdquo; in this context means that while the dup does not share attributes with the original, it does share associations.</p>
-
-<blockquote><p>Duped objects have no id assigned and are treated as new records. Note that this is a &ldquo;shallow&rdquo; copy as it copies the object&rsquo;s attributes only, not its associations. The extent of a &ldquo;deep&rdquo; copy is application specific and is therefore left to the application to implement according to its need.</p></blockquote>
-
-<h4><code>clone</code> vs <code>dup</code> in Rails:</h4>
-
-<p>```bash
-pry> original = User.find(3)
-  User Load (0.7ms)  SELECT  &ldquo;users&rdquo;.* FROM &ldquo;users&rdquo; WHERE &ldquo;users&rdquo;.&ldquo;id&rdquo; = ? LIMIT 1  [[&ldquo;id&rdquo;, 3]]
-=> #<User id: 3, first_name: "katie", last_name: "leonard", email: nil, created_at: "2015-01-10 17:37:00", updated_at: "2015-01-10 17:37:00"></p>
-
-<p>pry> clone_copy = original.clone
-=> #<User id: 3, first_name: "katie", last_name: "leonard", email: nil, created_at: "2015-01-10 17:37:00", updated_at: "2015-01-10 17:37:00"></p>
-
-<p>pry> dup_copy = original.dup
-=> #<User id: nil, first_name: "katie", last_name: "leonard", email: nil, created_at: nil, updated_at: nil>
-```</p>
-
-<p>Note that the <code>clone_copy</code> is an exact copy of the original (same <code>user.id</code>) and the <code>dup_copy</code> is a new record (<code>user.id</code> = nil). Any changes made to the <code>clone_copy</code> will be changed in the <code>original</code>, but any changes to the <code>dup_copy</code> attributes will remain isolated.</p>
-
-<h3>In Ruby <code>#clone</code> is a more complete copy of an object than <code>#dup</code></h3>
-
-<p>With simple classes, <code>clone()</code> and <code>dup()</code> behave identically:</p>
-
-<p>```bash
-irb> class User
-irb>   attr_accessor :first_name, :last_name, :email
-irb>   def initialize(options={})
-irb>     @first_name = options[:first_name]
-irb>     @last_name  = options[:last_name]
-irb>     @email      = options[:email]
-irb>   end
-irb> end
-=> :initialize</p>
-
-<p>irb> original = User.new(first_name: &ldquo;katie&rdquo;, last_name: &ldquo;leonard&rdquo;)
-=> #&lt;User:0x007fd7e98e0aa8 @first_name=&ldquo;katie&rdquo;, @last_name=&ldquo;leonard&rdquo;, @email=nil></p>
-
-<p>irb> cloned_copy = original.clone
-=> #&lt;User:0x007fd7e98c87c8 @first_name=&ldquo;katie&rdquo;, @last_name=&ldquo;leonard&rdquo;, @email=nil></p>
-
-<p>irb> dup_copy = original.dup
-=> #&lt;User:0x007fd7e98b24a0 @first_name=&ldquo;katie&rdquo;, @last_name=&ldquo;leonard&rdquo;, @email=nil></p>
-
-<p>irb> cloned_copy.first_name = &ldquo;foo&rdquo;
-=> &ldquo;foo&rdquo;</p>
-
-<p>irb> original.first_name
-=> &ldquo;katie&rdquo;</p>
-
-<p>irb> dup_copy.first_name
-=> &ldquo;katie&rdquo;</p>
-
-<p>irb> dup_copy.first_name = &ldquo;bar&rdquo;
-=> &ldquo;bar&rdquo;</p>
-
-<p>irb> original.first_name
-=> &ldquo;katie&rdquo;
-<code>``
-</code>clone()<code>and</code>dup()` function the same way!</p>
-
-<p><code>clone()</code> from the <a href="http://ruby-doc.org/core-2.1.5/Object.html#method-i-clone">Ruby docs</a>:</p>
-
-<blockquote><p>Produces a shallow copy of obj — the instance variables of obj are copied, but not the objects they reference. Copies the frozen and tainted state of obj. See also the discussion under Object#dup.</p></blockquote>
-
-<p><code>dup()</code> from the <a href="http://ruby-doc.org/core-2.1.5/Object.html#method-i-dup">Ruby docs</a> looks suspiciously like the docs for <code>clone()</code>:</p>
-
-<blockquote><p>Produces a shallow copy of obj — the instance variables of obj are copied, but not the objects they reference. dup copies the tainted state of obj. This method may have class-specific behavior. If so, that behavior will be documented under the #initialize_copy method of the class.</p></blockquote>
-
-<p>This deserves further clarification:</p>
-
-<blockquote><p>In general, clone and dup may have different semantics in descendant classes. While clone is used to duplicate an object, including its internal state, dup typically uses the class of the descendant object to create the new instance. When using dup any modules that the object has been extended with will not be copied.</p></blockquote>
-
-<p>To paraphrase, <code>#dup</code> will act like <code>#clone</code>, but without the original&rsquo;s singleton class (ergo a &ldquo;shallower&rdquo; copy).</p>
-
-<p>```
-irb> class User
-irb> attr_accessor :first_name, :last_name, :email
-irb>   def initialize(options={})
-irb>     @first_name = options[:first_name]
-irb>     @last_name  = options[:last_name]
-irb>     @email      = options[:email]
-irb>   end
-irb> end
-=> :initialize</p>
-
-<p>irb> module Crunchy
-irb>   def bacon
-irb>     &ldquo;bacon&rdquo;
-irb>   end
-irb> end
-=> :bacon</p>
-
-<p>irb> a = User.new(first_name: &ldquo;katie&rdquo;, last_name: &ldquo;leonard&rdquo;)
-=> #&lt;User:0x007fd7e8882490 @first_name=&ldquo;katie&rdquo;, @last_name=&ldquo;leonard&rdquo;, @email=nil></p>
-
-<p>irb> a.extend(Crunchy)
-=> #&lt;User:0x007fd7e8882490 @first_name=&ldquo;katie&rdquo;, @last_name=&ldquo;leonard&rdquo;, @email=nil></p>
-
-<p>irb> a.bacon
-=> &ldquo;bacon&rdquo;</p>
-
-<p>irb> b = a.clone
-=> #&lt;User:0x007fd7e8843060 @first_name=&ldquo;katie&rdquo;, @last_name=&ldquo;leonard&rdquo;, @email=nil></p>
-
-<p>irb> b.bacon
-=> &ldquo;bacon&rdquo;</p>
-
-<p>irb> c = a.dup
-=> #&lt;User:0x007fd7e98f05c0 @first_name=&ldquo;katie&rdquo;, @last_name=&ldquo;leonard&rdquo;, @email=nil></p>
-
-<p>irb> c.bacon
-NoMethodError: undefined method `bacon' for #&lt;User:0x007fd7e98f05c0></p>
-
-<pre><code>    from (irb):101
-    from /usr/local/var/rbenv/versions/2.1.5/bin/irb:11:in `&lt;main&gt;'
-</code></pre>
-
-<p>```</p>
-
-<p>There are subtle differences between <code>#clone</code> and <code>#dup</code> in Ruby, and less subtle differences in Rails (depending on your version). Take care that the object you want is the object you get.</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Method Lookup in Ruby]]></title>
@@ -573,6 +433,90 @@ TypeError: can`t convert nil into String</code></pre>
 </p>
 
 <p>If ARGV is not empty, ARGF will assume it is an array of filenames and will treat them accordingly. If ARGV is empty, it will read from $stdin to get the data passed in via the pipe. One caveat is that you can&rsquo;t read from both ARGV and the pipe: if ARGV != [  ], $stdin is ignored.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hammer-out Tasks With Thor]]></title>
+    <link href="http://www.katieleonard.ca/blog/2013/hammer-out-tasks-with-thor/"/>
+    <updated>2013-08-30T22:29:03-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2013/hammer-out-tasks-with-thor</id>
+    <content type="html"><![CDATA[<p>A few months ago I gave a small lightning talk to my code school class about automating tasks using <a href="http://rake.rubyforge.org/">Rake</a>. Before I learned ruby I used bash scripts to accomplish similar things, but was often bogged down in learning the syntax of string-processing essentials like awk or sed. I wished for the simplicity of Ruby, and thought that Rake was the bees-knees. After my talk, <a href="chuckvose.com">Chuck</a>, my PCS mentor, put together a repo of <a href="http://whatisthor.com/">Thor</a> tasks that accomplished the same tasks but could be installed system wide.</p>
+
+<!--more-->
+
+
+<h3><a href="http://whatisthor.com/">Thor</a> is my new hero</h3>
+
+<p>Unlike Rake tasks, which are confined to the directory containing the Rakefile, Thor tasks can be installed on your system and called from anywhere. My note files are all formatted in a particular way. Before Thor, I used a rake task:</p>
+
+<p><div>
+  <pre><code class='bash'>$ cd notesDirWithRakefile
+$ rake post title=&amp;ldquo;new post title&amp;rdquo;
+$ Creating new post: &amp;ldquo;./130830_new_post_title&amp;rdquo;</code></pre>
+</div>
+</p>
+
+<p>The Rake task auto-formats the filename, replacing spaces with underscores, and prepends today&rsquo;s date so that they will sort in the order they are made. This worked great for when I wanted to keep notes in that one folder, but later I wanted to be able to keep notes on a particular project. I would either have to copy the Rakefile (two places to update if I made any changes), or create a symbolic link (which would break if I ever moved my Rakefile). Neither of these options seemed to be the most practical. Enter Thor:</p>
+
+<p>Creating the Thor task is as easy as pie:
+<div>
+  <pre><code class='ruby'>require &amp;lsquo;thor&amp;rsquo;&lt;/p&gt;
+
+&lt;p&gt;class Note &amp;lt; Thor
+  desc &amp;ldquo;create&amp;rdquo;, &amp;ldquo;creates a notes file in markdown&amp;rdquo;
+  def create(title=&amp;ldquo;new note&amp;rdquo;)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;slug = title.downcase.strip.gsub(&#39; &#39;, &#39;_&#39;).gsub(/[^\w-]/, &#39;&#39;)
+date = Time.parse(Time.now).strftime(&#39;%y%m%d&#39;)
+filename = File.join(&quot;./&quot;, &quot;#{date}_#{slug}.md&quot;)
+
+if File.exist?(filename)
+  abort(&quot;rake aborted!&quot;) if ask(&quot;#{filename} already exists. Do you want to overwrite?&quot;, [&#39;y&#39;, &#39;n&#39;]) == &#39;n&#39;
+end
+
+puts &quot;Creating new post: #{filename}&quot;
+open(filename, &#39;w&#39;) do |post|
+  post.puts &quot;# #{title.gsub(/-/,&#39; &#39;).capitalize}&quot;
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;  end
+end</code></pre>
+</div>
+</p>
+
+<p>Listing all Thor tasks is easy:
+<div>
+  <pre><code class='bash'>$ thor list&lt;/p&gt;
+
+&lt;h2&gt;note&lt;/h2&gt;
+
+&lt;p&gt;thor note:create  # creates a notes file in markdown</code></pre>
+</div>
+</p>
+
+<p>Installing a Thor task for system use is easy:
+<div>
+  <pre><code class='bash'>$ thor install notes.thor
+&amp;hellip;
+Do you wish to continue [y/N]? y
+Please specify a name for notes.thor in the system repository [notes.thor]: note
+Storing thor file in your system repository</code></pre>
+</div>
+</p>
+
+<p>Uninstalling a Thor task is easy:
+<div>
+  <pre><code class='bash'>$ thor uninstall note
+Uninstalling note.
+Done.</code></pre>
+</div>
+</p>
+
+<p>With my Thor notes task installed system-wide, I can create a note page in any directory, for any reason, without copying code.</p>
 
 <p>Awesome.</p>
 ]]></content>

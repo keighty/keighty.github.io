@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="1. Write a failing test describe &quot;Static About page&quot; do it &quot;should have the content &#39;About Us&#39;&quot; do visit &#39;/ &hellip;">
+  <meta name="description" content="In my last look at the UnionFind algorithm I made a quick-find implementation &mdash; finding if two elements were connected was fast but connecting &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,7 +85,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/red-green-refactor/">Red, Green, Refactor! A Workflow for Rails</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/state-of-the-quickunion/">State of the QuickUnion</a></h1>
     
     
       <p class="meta">
@@ -101,231 +101,194 @@
   
 
 
-<time datetime="2013-07-03T00:00:00-07:00" pubdate data-updated="true"></time>
+<time datetime="2013-08-04T22:29:03-07:00" pubdate data-updated="true">Aug 4<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><h3>1. Write a failing test</h3>
+  <div class="entry-content"><p>In my last look at the UnionFind algorithm I made a quick-find implementation &mdash; finding if two elements were connected was fast but connecting two elements was slow. The union operation is a good candidate for optimization.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/state-of-the-quickunion/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/state-of-the-unionfind/">State of the UnionFind</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-30T22:29:03-07:00" pubdate data-updated="true">Jul 30<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was scraping the rust off my data-structures synapses last week, and found that there was still some functionality underneath. UnionFind is one of those sneaky algorithms that crops up in non-linear arrangements of data, such as computer or social networks. Specifically, it keeps track of sets of connected elements. The API consists of a union(p, q), which connects the two elements p and q, and a find(p, q), which determines if p is in the same set as q.</p>
+
+<p>I learned about this algorithm through <a href="https://www.coursera.org/">Coursera</a>, and their class <a href="https://www.coursera.org/course/algs4partI">Algorithms Part 1</a> with Kevin Wayne and Robert Sedgewick. The focus of this course was not only on implementation of algorithms, but also optimization.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/state-of-the-unionfind/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/procuring-provisions/">Procuring Provisions</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-27T22:29:03-07:00" pubdate data-updated="true">Jul 27<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was trying to add a database to my JSGames app &mdash; it is a basic sinatra app with a few goodies already in place &mdash; and I was having some difficulty deploying it to Heroku. Rails (for the most part) automagically creates and maintains its database, and as long as I remember to move any references to sqlite3 into the development and test environments, I have never had trouble provisioning one on Heroku either. Rolling a web application from scratch with sinatra, however, requires a little more savvy.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/procuring-provisions/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/git-picking/">Git-Picking</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-24T22:29:03-07:00" pubdate data-updated="true">Jul 24<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>or, How to mine for cherries with Git</h4>
+
+<p>When I work on an experimental feature in a project branch, I have often found that I will have a mixture of commits I would like to keep, and commits that I wish had never happened.
+Using the principle of only committing atomic changes, and enjoying the fruits of your detailed-commit-message labour, there is a way to extract the gold from the ore, so to speak.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/git-picking/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/sinatra-in-a-console/">Sinatra in a Console</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-22T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Sinatra does not have a default console like rails does. If you are writing in a rails environment and need to test out a helper method, or want to check on the state of a record in the database, dropping down into the rails console is as easy as typing:</p>
 
 <div>
-  <pre><code class='ruby'>describe &quot;Static About page&quot; do
-  it &quot;should have the content &#39;About Us&#39;&quot; do
-    visit &#39;/static_pages/about&#39;
-    page.should have_content(&#39;About Us&#39;)
-  end
-end</code></pre>
+  <pre><code class='bash'>$ rails c</code></pre>
 </div>
 
 
-<p>Use the failures to drive development</div>
+<p>How can we achieve the same ability in Sinatra?</div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2013/red-green-refactor/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/no-indexhtml-no-cry/">No index.html, No Cry</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-29T00:00:00-07:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Following along with <a href="http://www.amazon.com/Ruby-Rails-Tutorial-Addison-Wesley-Professional/dp/0321832051">Rails tutorial</a> by Michael Hartl, I built a sample app with a simple database, linking users to microposts in a twitter-like manner. Everything worked well locally, but when it came time to deploy on heroku, I ran across some interesting stumbling blocks</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/no-indexhtml-no-cry/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/hoisting-with-javascript/">Hoisting With JavaScript</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-26T00:00:00-07:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I am really enjoying <a href="http://www.amazon.com/Test-Driven-JavaScript-Development-Developers-Library/dp/0321683919">Test-Driven Development</a> by Christian Johansen</p>
-
-<p>I picked up this little gem this morning as I was learning about functions and the various objects associated with them:</p>
-
-<p>You CANNOT use function declarations in conditionals. </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/hoisting-with-javascript/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/javascript-has-spies/">Javascript Has Spies</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-25T00:00:00-07:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>Spies vs Mocks vs Stubs?</h2>
-
-<p>We are covering testing frameworks at PCS this week,
- particularly Jasmine and Sinon.</p>
-
-<p>Jasmine has a similar structure to RSpec:</p>
-
-<div>
-  <pre><code class='java'>describe(&quot;Class to describe&quot;, function() {
-  it(&quot;should have some behavior&quot;. function() {
-    //assertions
-  });
-});</code></pre>
-</div>
-
-
-<p>Also similar to RSpec, Jasmine allows you to spy on behavior.</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/javascript-has-spies/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/jquery-objects-vs-strings/">jQuery Objects vs Strings</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-19T00:00:00-07:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>Object blocker!!</h2>
-
-<p>My pair was stuck for the longest time on the following code snip:</p>
-
-<div>
-  <pre><code class='javascript'>$(function(){
-  var new_square = &#39;$(&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;)&#39;;
-
-  $(&#39;body&#39;).on(&#39;click&#39;,&#39;.square&#39;, function(){
-    // var my_square = $(this);
-    $(this).toggleClass(&#39;blue&#39;);
-
-    b = $(new_square)
-      .insertAfter(this);
-    a = $(new_square)
-      .insertBefore(this);
-    b.toggleClass(&#39;blue&#39;);
-    a.toggleClass(&#39;blue&#39;);
-  });
-});</code></pre>
-</div>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/jquery-objects-vs-strings/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2013/sinatra-in-a-console/">Read on &rarr;</a>
     </footer>
   
 
@@ -356,14 +319,6 @@ end</code></pre>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails/">#dup vs #clone in Ruby and Rails</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/cleaning-the-campground/">Cleaning the Campground</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2015/the-senior-software-engineer/">TDD and the Senior Software Engineer</a>
       </li>
     
@@ -373,6 +328,14 @@ end</code></pre>
     
       <li class="post">
         <a href="/blog/2015/the-happiness-hypothesis/">The Happiness Hypothesis</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/method-lookup-in-ruby/">Method Lookup in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/compilers-an-intro/">Compilers &#8211; an Intro</a>
       </li>
     
   </ul>

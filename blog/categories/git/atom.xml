@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-10T14:24:51-08:00</updated>
+  <updated>2015-01-10T15:31:11-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,40 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Giving the Cold Shoulder With Git]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/giving-the-cold-shoulder-with-git/"/>
+    <updated>2014-09-08T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/giving-the-cold-shoulder-with-git</id>
+    <content type="html"><![CDATA[<p>Some files become unnecessary to track using version control, but still belong in the repository. Compiled assets, for example may require a placeholder for a functional deploy, but don&rsquo;t need to be checked in every time a change is made.</p>
+
+<p>Adding the file to your gitignore is not enough to stop tracking file changes. You must also clear the file from your git cache:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>gitignore, this time with spite </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git rm &amp;mdash;cached <span class="o">[</span>filename<span class="o">]</span>
+</span><span class='line'><span class="nv">$ </span>git add .
+</span><span class='line'><span class="nv">$ </span>git commit -m &amp;ldquo;I really mean to ignore this file.&amp;rdquo;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>To untrack everything that has been added to the .gitignore:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>For realz </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git rm -r &amp;mdash;cached .
+</span><span class='line'><span class="nv">$ </span>git commit -a -m &amp;ldquo;I mean it!&amp;rdquo;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Resources</h3>
+
+<p><a href="http://stackoverflow.com/a/1139797">Here&rsquo;s where I found this gem</a>,
+ <a href="http://git-scm.com/docs/gitignore">and here are the docs where I verified it</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Multiple Remotes]]></title>
@@ -284,95 +318,6 @@ Edit again (saying "no" discards!) [y/n]?
 <p>Aw nuts. <code>y</code> will let you amend your transgressions (did you remember to save? did you forget to leave a space in place of the &lsquo;&ndash;&rsquo;?), and <code>n</code> will abandon your changes and take you back to the drawing board, where you are free to transgress anew.</p>
 
 <p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Git Retrieve: A Drama]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/git-retrieve/"/>
-    <updated>2014-01-23T20:47:46-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/git-retrieve</id>
-    <content type="html"><![CDATA[<p>Have you ever deleted a file on impulse, only to wake up with remorse later? It doesn&rsquo;t matter if later is the next morning or the next week, thanks to git you have the power to reanimate gone-but-not-forgotten files. Nothing is <del>ever</del> EVER lost with git. So how do you retrieve a file that has been deleted in a previous commit?</p>
-
-<!--more-->
-
-
-<p><a href="http://stackoverflow.com/a/953573">stackoverflow</a> has a few suggestions, and I like this one the best:</p>
-
-<h3>Git Drama in Three Acts</h3>
-
-<p><code>bash Act 1 Scene 1: foo.bar Folly
-$ cd ~/very_important_project/
-$ touch readme.md index.html foo.bar
-$ git commit -am "These changes are AWESOME."
-[master (root-commit) 9155e0b] These changes are AWESOME.
- 0 files changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 foo.bar
- create mode 100644 index.html
- create mode 100644 readme.md
-</code>
-but wait! <code>foo.bar</code>?! that is just crazy talk?</p>
-
-<p><code>bash Act 1 Scene 2: Regret
-$ git rm foo.bar
-rm 'foo.bar'
-$ git add -u
-$ git commit -m "I have made a huge mistake."
-[master b045a52] I have made a huge mistake.
- 0 files changed, 0 insertions(+), 0 deletions(-)
- delete mode 100644 foo.bar
-</code></p>
-
-<p>Everything seems back to normal!</p>
-
-<p><code>bash Act 2 Scene 1: I have made good life-choices
-$ echo "#I rock and I am smug about it!" &gt; bar.rb
-$ git commit -am "This work is the BOMB."
-[master 3535f28] This work is the BOMB.
- 0 files changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 bar.rb
-$ cat foo.bar
-cat: foo.bar: No such file or directory you heartless creature!
-</code></p>
-
-<p>but wait! there is no bar without a foo! where is my foo.bar? How can I find it? I have to find the commit where it was deleted, but how? What if I list out the commits that include a deleted file?</p>
-
-<p>```bash Act 2 Scene 2: Regret
-$ git log &mdash;diff-filter=D &mdash;summary
-commit b045a528b4a0824f63562cad867b264983b32c7c
-Author: keighty <a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#x3a;&#107;&#101;&#105;&#x67;&#x68;&#116;&#121;&#46;&#108;&#x65;&#x6f;&#110;&#97;&#114;&#100;&#64;&#103;&#109;&#x61;&#105;&#108;&#x2e;&#x63;&#111;&#109;">&#107;&#101;&#105;&#103;&#x68;&#116;&#121;&#x2e;&#108;&#x65;&#111;&#110;&#x61;&#114;&#x64;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#x6d;</a>
-Date:   Wed Jan 22 20:46:16 2014 -0800</p>
-
-<pre><code>I have made a huge mistake.
-</code></pre>
-
-<p> delete mode 100644 foo.bar
-```</p>
-
-<p>There you are! in commit b045a528. The summary option shows the details, so you can see what files were deleted, when, and by whom. In some cases, there may be more than one change in a commit, so using <code>commitSHA~1 &lt;filename&gt;</code> will pluck the one precious deleted file from the commit and restore it to your working tree.</p>
-
-<p>```bash Act 3: foo.bar&rsquo;s Return
-$ git checkout b045a528~1 foo.bar
-$ git status</p>
-
-<h1>On branch master</h1>
-
-<h1>Changes to be committed:</h1>
-
-<h1>(use &ldquo;git reset HEAD <file>&hellip;&rdquo; to unstage)</h1>
-
-<p>#</p>
-
-<h1>new file:   foo.bar</h1>
-
-<p>#
-$ git commit -am &ldquo;Together at last, together forever.&rdquo;
-[master 8492eac] Together at last, together forever.
- 0 files changed, 0 insertions(+), 0 deletions(&ndash;)
- create mode 100644 foo.bar
-```</p>
-
-<p>EXEUNT.</p>
 ]]></content>
   </entry>
   

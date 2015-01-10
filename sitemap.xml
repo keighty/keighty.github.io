@@ -309,6 +309,54 @@
         <lastmod>2014-11-22T09:35:06-08:00</lastmod>
     </url>
     <url>
+        <loc>http://www.katieleonard.ca/blog/2014/jquery-ui-and-meteor/</loc>
+        <lastmod>2015-01-10T15:29:07-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.katieleonard.ca/blog/2014/stringify-cyclic-structures-with-censors/</loc>
+        <lastmod>2015-01-10T15:29:07-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.katieleonard.ca/blog/2014/in-operator-avoid-false-falsies/</loc>
+        <lastmod>2015-01-10T15:29:07-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.katieleonard.ca/blog/2014/constructors-and-prototypes/</loc>
+        <lastmod>2015-01-10T15:29:07-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.katieleonard.ca/blog/2014/javascript-getters-and-setters/</loc>
+        <lastmod>2015-01-10T15:29:07-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.katieleonard.ca/blog/2014/formatting-numbers-the-easy-way/</loc>
+        <lastmod>2015-01-10T15:29:07-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.katieleonard.ca/blog/2014/backup-meteor-yes-we-can/</loc>
+        <lastmod>2015-01-10T15:29:07-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.katieleonard.ca/blog/2014/managing-modules/</loc>
+        <lastmod>2015-01-10T15:29:07-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.katieleonard.ca/blog/2014/giving-the-cold-shoulder-with-git/</loc>
+        <lastmod>2015-01-10T15:29:07-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.katieleonard.ca/blog/2014/sort_things_with_mongoose/</loc>
+        <lastmod>2015-01-10T15:29:07-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.katieleonard.ca/blog/2014/make-meteor-minimongo-ids-play-nice/</loc>
+        <lastmod>2015-01-10T15:29:07-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.katieleonard.ca/blog/2014/compilers-an-intro/</loc>
+        <lastmod>2015-01-10T15:29:07-08:00</lastmod>
+    </url>
+    <url>
         <loc>http://www.katieleonard.ca/blog/2014/method-lookup-in-ruby/</loc>
         <lastmod>2015-01-01T11:51:00-08:00</lastmod>
     </url>
@@ -325,26 +373,16 @@
         <lastmod>2015-01-04T14:57:24-08:00</lastmod>
     </url>
     <url>
-        <loc>http://www.katieleonard.ca/blog/2015/cleaning-the-campground/</loc>
-        <lastmod>2015-01-10T14:20:48-08:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://www.katieleonard.ca/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails/
-        </loc>
-        <lastmod>2015-01-10T11:37:11-08:00</lastmod>
-    </url>
-    <url>
         <loc>http://www.katieleonard.ca/404.html</loc>
         <lastmod>2014-11-22T09:35:06-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/archives/</loc>
-        <lastmod>2015-01-10T14:20:48-08:00</lastmod>
+        <lastmod>2015-01-10T15:29:07-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/</loc>
-        <lastmod>2015-01-10T14:20:48-08:00</lastmod>
+        <lastmod>2015-01-10T15:29:07-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/projects/</loc>
@@ -352,7 +390,7 @@
     </url>
     <url>
         <loc>http://www.katieleonard.ca/reads/</loc>
-        <lastmod>2015-01-10T14:20:48-08:00</lastmod>
+        <lastmod>2015-01-10T15:29:07-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/robots.txt</loc>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Meteor | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/meteor/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-10T14:24:51-08:00</updated>
+  <updated>2015-01-10T15:31:11-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,231 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Meteor-managed Ids Won't Play Nicely With Others]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/make-meteor-minimongo-ids-play-nice/"/>
+    <updated>2014-10-18T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/make-meteor-minimongo-ids-play-nice</id>
+    <content type="html"><![CDATA[<p>I am working with a data dump from a meteor project, and while retrieving and displaying the existing collection was no problem at all, I was stuck on saving new documents to mongo.</p>
+
+<p>My schema was pretty straightforward and taken directly from an existing document:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var postSchema = mongoose.Schema({
+</span><span class='line'>  &ldquo;title&rdquo; : String,
+</span><span class='line'>  &ldquo;company&rdquo; : String,
+</span><span class='line'>  &ldquo;author&rdquo; : String,
+</span><span class='line'>  &ldquo;music&rdquo; : String,
+</span><span class='line'>  &ldquo;choreographer&rdquo; : String,
+</span><span class='line'>  &ldquo;showDate&rdquo; : String,
+</span><span class='line'>  &ldquo;image&rdquo;: String,
+</span><span class='line'>  &ldquo;userId&rdquo; : String,
+</span><span class='line'>  &ldquo;postAuthor&rdquo; : String,
+</span><span class='line'>  &ldquo;submitted&rdquo; : Number,
+</span><span class='line'>  &ldquo;commentsCount&rdquo; : Number,
+</span><span class='line'>  &ldquo;_id&rdquo;:  String
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The problem was that last field: <code>_id</code>. If I included it in the schema then I would have the objectId available on the front end but would get an error trying to insert a new document: <code>[Error: document must have an _id before saving]</code>. If I removed <code>_id</code> from the schema I could save documents just fine but could not pass through the objectIds of already existing documents. I have learned that mongo is very flexible when it comes to assigning ids before insertion into the database.</p>
+
+<p>Mongo objects created through a meteor application are given meteor-friendly objectIds, the uniqueness of which is monitored and maintained by a meteor wrapper class. The design decision to go with ids as strings seems to be <a href="https://groups.google.com/forum/#!topic/meteor-talk/f-ljBdZOwPk">motivated by meteor&rsquo;s latency compensation feature</a> &mdash; creating documents on the client-side and then later syncing them with the server requires that they are assigned objectIds before they ever reach mongo. Mongo will accept a manually entered id, trusting that there is an entity somewhere that is managing uniqueness.</p>
+
+<p>Here was my problem: the documents created by meteor had String ids assigned by meteor. If I included <code>_id</code> in my schema, mongo would assume that I was managing id assignment manually, and wouldn&rsquo;t save the object until I did. If I did not include <code>_id</code> in my schema, mongo would assume it was responsible, and would assign a unique id accordingly.</p>
+
+<p>To make the documents created by meteor play nice with the new stack, I had to update each document&rsquo;s <code>_id</code> with one created by mongo. Unfortunately, mongo won&rsquo;t allow modification of <code>_id</code> directly, so the only choice was to recreate and insert each entry, then delete the original:</p>
+
+<ol>
+<li>Retrieve a document: <code>doc = db.posts.findOne()</code></li>
+<li>Save the title: <code>title = doc.title</code></li>
+<li>Save the document&rsquo;s string id: <code>id = doc._id</code></li>
+<li>Reassign the document id: <code>doc._id = ObjectId()</code></li>
+<li>Save the updated document: <code>db.posts.insert(doc)</code></li>
+<li>Remove the original document: <code>db.posts.remove({_id: id})</code></li>
+<li>Verify that the post exists with the new id: <code>db.posts.findOne({"title": title})</code></li>
+</ol>
+
+
+<p>
+```</p>
+
+<blockquote><p>doc = db.posts.findOne()
+{
+  &ldquo;title&rdquo; : &ldquo;La Cage aux Folles&rdquo;,
+  &ldquo;company&rdquo; : &ldquo;Pixie Dust Productions&rdquo;,
+  &ldquo;author&rdquo; : &ldquo;Harvey Fierstein&rdquo;,
+  &ldquo;music&rdquo; : &ldquo;Jerry Herman&rdquo;,
+  &ldquo;showDate&rdquo; : ISODate(&ldquo;2014-09-21T07:00:00Z&rdquo;),
+  &ldquo;dateSubmitted&rdquo; : 1411346259065,
+  &ldquo;_id&rdquo; : &ldquo;EjzopWQa3mw5LB979&rdquo;
+}</p>
+
+<p>title = doc.title
+La Cage aux Folles</p>
+
+<p>id = doc._id
+EjzopWQa3mw5LB979</p>
+
+<p>doc._id = ObjectId()
+ObjectId(&ldquo;5442af27cc37fe6f03648fdd&rdquo;)</p>
+
+<p>db.posts.insert(doc)</p>
+
+<p>db.posts.remove({_id: id})</p>
+
+<p>db.posts.findOne({&ldquo;title&rdquo;: title})
+{
+  &ldquo;_id&rdquo; : ObjectId(&ldquo;5442af27cc37fe6f03648fdd&rdquo;),
+  &ldquo;title&rdquo; : &ldquo;La Cage aux Folles&rdquo;,
+  &ldquo;company&rdquo; : &ldquo;Pixie Dust Productions&rdquo;,
+  &ldquo;author&rdquo; : &ldquo;Harvey Fierstein&rdquo;,
+  &ldquo;music&rdquo; : &ldquo;Jerry Herman&rdquo;,
+  &ldquo;showDate&rdquo; : ISODate(&ldquo;2014-09-21T07:00:00Z&rdquo;),
+  &ldquo;dateSubmitted&rdquo; : 1411346259065,
+  &ldquo;commentsCount&rdquo; : 1
+}</p></blockquote>
+
+<p>```
+</p>
+
+<p>Here is a handy script for changing the entire collection at once:</p>
+
+<p><code>
+db.posts.find().forEach(function(doc){ var doc = db.posts.findOne(); var title = doc.title; var id = doc._id; doc._id = ObjectId(); db.posts.insert(doc); db.posts.remove({_id: id}); })
+</code></p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Backup Meteor? Yes We Can]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/backup-meteor-yes-we-can/"/>
+    <updated>2014-08-24T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/backup-meteor-yes-we-can</id>
+    <content type="html"><![CDATA[<p>Retrieving a data dump from your meteor production database and copying it to local development is a three-step, time sensitive process.</p>
+
+<h3>1. Retrieve your production url</h3>
+
+<p>Passing a <code>-url</code> flag to the <code>meteor mongo</code> command will return a long string of goodies:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Dude, where&rsquo;s my data? </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ meteor mongo &mdash;url my_app.meteor.com&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>mongodb://client-12345678:9abcdef1-234-5678-9abc-def123456789@singularsensation-db-a3.meteor.io:12345/my_app_meteor_net</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>This string contains all the information you require to access your production data:</p>
+
+<ul>
+<li>your client id (from // to :)</li>
+<li>a server password (from : to @)</li>
+<li>a server name and port number (from @ to /)</li>
+<li>the datastore identification (from / to the end)</li>
+</ul>
+
+
+<p>
+<code>bash
+mongodb://&lt;CLIENT_ID&gt;:&lt;PASSWORD_HASH&gt;@&lt;SERVER_NAME:PORT&gt;/&lt;YOUR_DATA_STORE&gt;
+</code>
+</p>
+
+<p>Retrieving your data is time-sensitive because the password hash will expire after 60 seconds.</p>
+
+<h3>2. Retrieve your data using mongodump</h3>
+
+<p>
+```bash
+$ mongodump -u CLIENT_ID -h SERVER_NAME:PORT -d YOUR_DATA_STORE -p PASSWORD_HASH</p>
+
+<p>connected to: &lt;SERVER_NAME:PORT>
+Sun Aug 24 10:50:32.342 DATABASE: YOUR_DATA_STORE  to   dump/YOUR_DATA_STORE
+Sun Aug 24 10:50:32.989   YOUR_DATA_STORE.system.indexes to dump/YOUR_DATA_STORE/system.indexes.bson
+Sun Aug 24 10:50:34.368      14 objects
+Sun Aug 24 10:50:34.369   YOUR_DATA_STORE.system.users to dump/YOUR_DATA_STORE/system.users.bson
+Sun Aug 24 10:50:34.559      2 objects
+&hellip; and on and on
+```
+</p>
+
+<p>Mongodb copies your data from production into a new folder called &ldquo;dump&rdquo; in your present working directory.</p>
+
+<h3>3. Use mongorestore to copy the data from the dump into your local datastore</h3>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ mongorestore &mdash;host 127.0.0.1 &mdash;port 3001 &mdash;db meteor &mdash;drop dump/YOUR_DATA_STORE/&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>connected to: 127.0.0.1:3001
+</span><span class='line'>Sun Aug 24 11:36:54.693 dump/YOUR_DATA_STORE/users.bson
+</span><span class='line'>Sun Aug 24 11:36:54.693   going into namespace [meteor.users]
+</span><span class='line'>Sun Aug 24 11:36:54.693    dropping
+</span><span class='line'>2 objects found
+</span><span class='line'>Sun Aug 24 11:36:55.834   Creating index: { name: &ldquo;&lt;em>id&lt;/em>&rdquo;, key: { _id: 1 }, ns: &ldquo;meteor.users&rdquo; }
+</span><span class='line'>Sun Aug 24 11:36:55.993   Creating index: { name: &ldquo;username_1&rdquo;, key: { username: 1 }, unique: true, ns: &ldquo;meteor.users&rdquo;, sparse: 1 }
+</span><span class='line'>&hellip; and on and on</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Awesome.</p>
+
+<p>Resources:
+<a href="http://stackoverflow.com/a/12447710">stackoverflow</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[jQuery-UI and Meteor]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/jquery-ui-and-meteor/"/>
+    <updated>2014-06-16T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/jquery-ui-and-meteor</id>
+    <content type="html"><![CDATA[<p>I have been working on <a href="virtualplaybill.net">Virtual Playbill</a> for the last few weeks using meteor, bootstrap, and a number of other UI packages. I wanted to use a datepicker as a form field, but getting jQuery-ui working was not a straightforward package download as many other features are. There are currently 5 packages available for installation on <a href="https://atmospherejs.com/package/jquery-ui?q=jquery-ui">Atmosphere</a> (the meteor package manager), and I attempted several of them before finding the combination that worked<!--more-->:</p>
+
+<h3>1. Install the jQuery-ui package from <a href="https://atmospherejs.com/package/jquery-ui">Atmosphere</a></h3>
+
+<p><code>
+mrt add jquery-ui
+</code></p>
+
+<h3>2. Download jQuery-ui</h3>
+
+<p>For me, the meteorite package did not properly install the css or images I needed to get the datepicker working, so I downloaded <a href="http://jqueryui.com/">jquery-ui</a>, swiped the css file (un-minified), and added it to my <code>client/stylesheets</code> folder.</p>
+
+<h3>3. Add jQuery-ui images</h3>
+
+<p>The css styled the datepicker calendar perfectly, except for the previous month and next month buttons. jQuery-ui comes with a few standard icons, so I placed the jQuery-ui images folder in <code>/public</code>, since static files must be kept in a public folder for meteor to acknowledge them.</p>
+
+<h3>4. Relocate the images</h3>
+
+<p>The jQuery-ui css file tries to locate the images in its parent folder, but as I mentioned, static assets = public folder. The advantage of the public folder is that all assets can be referenced with a leading slash: <code>/images</code>. I scanned the un-minified version of the css and changed the image url locations from <code>images/...</code> to <code>/images/...</code></p>
+
+<p>Voila! A beautiful, functional datepicker!</p>
+
+<p><img src="/images/post_datepicker.png" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Helpers Calling Helpers]]></title>
@@ -355,230 +580,6 @@ at Object.Template.postPageItem.helpers.commentsNote (http://localhost:3000/clie
 
 <p><a href="https://www.discovermeteor.com/">discovermeteor.com</a>
 <a href="http://docs.meteor.com">Meteor docs</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mongo Trouble? Reset!]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/mongo-trouble-reset/"/>
-    <updated>2014-05-03T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/mongo-trouble-reset</id>
-    <content type="html"><![CDATA[<p>Back in March I wrote about letting my computer&rsquo;s battery die in the middle of a meteor project, with the consequence being that I could not connect to the underlying mongo database:
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>What&rsquo;s wrong, meteor? </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor
-</span><span class='line'><span class="o">[[[[[</span> ~/project/in/progress <span class="o">]]]]]</span>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;<span class="o">=</span>&gt; Started proxy.
-</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
-</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
-</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
-</span><span class='line'>Can&amp;rsquo;t start Mongo server.
-</span><span class='line'>MongoDB had an unspecified uncaught exception.
-</span><span class='line'>This can be caused by MongoDB being unable to write to a <span class="nb">local </span>database.
-</span><span class='line'>Check that you have permissions to write to .meteor/local. MongoDB does
-</span><span class='line'>not support filesystems like NFS that <span class="k">do </span>not allow file locking.
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>After much spelunking in stackoverflow and documentation, I discovered the magic of this command:
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Magic mongo reset spell %</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u mongodb mongdo &amp;mdash;repair &amp;mdash;dbpath /var/lib/mongodb
-</span><span class='line'><span class="nv">$ </span>sudo service mongodb start
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Repairing and restarting the mongo service seemed to do the trick, and I continued on my merry meteor way. Well, I did it again &mdash; I let my battery die in the middle of a meteor project, and with feelings of smug satisfaction, I plumbed my blog archive for the answer. Only this time the magic antidote didn&rsquo;t work<!--more-->:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>This log has been redacted to protect the ignorant </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo -u mongodb mongod &mdash;repair &mdash;dbpath /var/lib/mongodb/
-</span><span class='line'>[sudo] password for keighty:
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] finished checking dbs
-</span><span class='line'>Sat May  3 09:52:04.793 dbexit:
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: going to close listening sockets&hellip;
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: going to flush diaglog&hellip;
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: going to close sockets&hellip;
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: waiting for fs preallocator&hellip;
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: closing all files&hellip;
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] closeAllFiles() finished
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: removing fs lock&hellip;
-</span><span class='line'>Sat May  3 09:52:04.794 dbexit: really exiting now&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p>$ sudo service mongodb start
-</span><span class='line'>mongodb start/running, process 2415
-</span><span class='line'>$ meteor
-</span><span class='line'>[[[[[ ~/project/in/progress ]]]]]&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;p>=> Started proxy.
-</span><span class='line'>Unexpected mongo exit code 100. Restarting.
-</span><span class='line'>Unexpected mongo exit code 100. Restarting.
-</span><span class='line'>Unexpected mongo exit code 100. Restarting.
-</span><span class='line'>Can&rsquo;t start Mongo server.
-</span><span class='line'>MongoDB had an unspecified uncaught exception.
-</span><span class='line'>This can be caused by MongoDB being unable to write to a local database.
-</span><span class='line'>Check that you have permissions to write to .meteor/local. MongoDB does
-</span><span class='line'>not support filesystems like NFS that do not allow file locking.</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>C'mon &mdash; It worked the last time! I tried it again with the same result. I tried <code>chown</code>-ing the local db. I tried <code>chown</code>-ing the database in <code>/var/lib/mongodb</code>. After each attempted solution the mongobd service would start, but meteor hiccuped on writing to the database. So I tried something radical. Something that wasn&rsquo;t in any of the manuals, or any of the <a href="http://stackoverflow.com/questions/5798549/why-cant-i-start-the-mongodb">responses to similar questions</a> on stackoverflow:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Really? That was all? </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor reset
-</span><span class='line'>Project reset.
-</span><span class='line'><span class="nv">$ </span>meteor
-</span><span class='line'><span class="o">[[[[[</span> ~/project/in/progress <span class="o">]]]]]</span>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;<span class="o">=</span>&gt; Started proxy.
-</span><span class='line'><span class="o">=</span>&gt; Started MongoDB.
-</span><span class='line'><span class="o">=</span>&gt; Started your app.&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;<span class="o">=</span>&gt; App running at: &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;http://localhost:3000/&quot;</span>&gt;http://localhost:3000/&lt;/a&gt;
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Turns out that if you hard shut-down your computer while your meteor project&rsquo;s mongo instance is running, it remains in a locked mode. Since it was only a development database I took a chance that dropping it would cure my ills. Voila! Meteor and mongodb are friends again.</p>
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Meteor, Fetch!]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/meteor-fetch/"/>
-    <updated>2014-03-31T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/meteor-fetch</id>
-    <content type="html"><![CDATA[<p>From <a href="http://book.discovermeteor.com/">Discover Meteor</a>: find() returns a cursor, which is a reactive data source.</p>
-
-<p>Data from reactive sources will be updated automatically to track changes in the data used to generate it. <!--more-->Cursors are derived from specific sources:</p>
-
-<ul>
-<li>Session variables</li>
-<li>Database queries on Collections</li>
-<li>Meteor.status</li>
-<li>The ready() method on a subscription handle</li>
-<li>Meteor.user</li>
-<li>Meteor.userId</li>
-<li>Meteor.loggingIn</li>
-</ul>
-
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>For example, find() using a database query </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="nx">Posts</span><span class="p">.</span><span class="nx">find</span><span class="p">()</span>
-</span><span class='line'><span class="nx">LocalCollection</span><span class="p">.</span><span class="nx">Cursor</span> <span class="p">{</span><span class="nx">collection</span><span class="o">:</span> <span class="nx">LocalCollection</span><span class="p">,</span> <span class="nx">sorter</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">_selectorId</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">,</span> <span class="nx">matcher</span><span class="o">:</span> <span class="nx">Minimongo</span><span class="p">.</span><span class="nx">Matcher</span><span class="p">,</span> <span class="nx">skip</span><span class="o">:</span> <span class="kc">undefined</span><span class="err">…</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span>  <span class="nx">_selectorId</span><span class="o">:</span> <span class="kc">undefined</span>
-</span><span class='line'>  <span class="nx">_transform</span><span class="o">:</span> <span class="kc">null</span>
-</span><span class='line'>  <span class="nx">collection</span><span class="o">:</span> <span class="nx">LocalCollection</span>
-</span><span class='line'>  <span class="nx">cursor_pos</span><span class="o">:</span> <span class="mi">0</span>
-</span><span class='line'>  <span class="nx">db_objects</span><span class="o">:</span> <span class="kc">null</span>
-</span><span class='line'>  <span class="nx">fields</span><span class="o">:</span> <span class="kc">undefined</span>
-</span><span class='line'>  <span class="nx">limit</span><span class="o">:</span> <span class="kc">undefined</span>
-</span><span class='line'>  <span class="nx">matcher</span><span class="o">:</span> <span class="nx">Minimongo</span><span class="p">.</span><span class="nx">Matcher</span>
-</span><span class='line'>  <span class="nx">reactive</span><span class="o">:</span> <span class="kc">true</span>
-</span><span class='line'>  <span class="nx">skip</span><span class="o">:</span> <span class="kc">undefined</span>
-</span><span class='line'>  <span class="nx">sorter</span><span class="o">:</span> <span class="kc">null</span>
-</span><span class='line'>  <span class="nx">__proto__</span><span class="o">:</span> <span class="nb">Object</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Cursors are not query snapshots. They are query snapshot containers &mdash; the contents of which are updated by changes to the underlying data. To interact with the data contained in a cursor, we can use fetch() to transform the cursor into an array.</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>A cursor becomes an array with find().fetch() </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="nx">Posts</span><span class="p">.</span><span class="nx">find</span><span class="p">().</span><span class="nx">fetch</span><span class="p">()</span>
-</span><span class='line'><span class="p">[</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nb">Object</span>
-</span><span class='line'><span class="nx">_id</span><span class="o">:</span> <span class="s2">&quot;z4z36DFCaGr8Ptuqd&quot;</span>
-</span><span class='line'><span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;The Way We Live Now&quot;</span>
-</span><span class='line'><span class="nx">author</span><span class="o">:</span> <span class="s2">&quot;Anthony Trollope&quot;</span>
-</span><span class='line'><span class="nx">__proto__</span><span class="o">:</span> <span class="nb">Object</span>
-</span><span class='line'><span class="p">...</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Meteor can iterate over a cursor without first converting it to an array, but in order to interact with the data directly, you must first use fetch(), map(), or forEach(). For more cursor fun, checkout the <a href="http://docs.meteor.com/#reactivity">Meteor docs</a>.</p>
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   

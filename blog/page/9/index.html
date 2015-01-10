@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Why use message queues? Message queues offer the benefits of high reliability at the cost of performance. This is particularly useful for web tasks &hellip;">
+  <meta name="description" content="D3 uses the W3C standard selector library, and selection modifiers work on both single and multiple element selections, and will automatically apply &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,7 +85,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/first-in-first-out/">First in, First Out</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/d3-is-selective/">D3 Is Selective</a></h1>
     
     
       <p class="meta">
@@ -101,22 +101,20 @@
   
 
 
-<time datetime="2014-02-05T11:14:30-08:00" pubdate data-updated="true">Feb 5<span>th</span>, 2014</time>
+<time datetime="2014-02-21T00:00:00-08:00" pubdate data-updated="true">Feb 21<span>st</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><h3>Why use message queues?</h3>
-
-<p>Message queues offer the benefits of high reliability at the cost of performance. This is particularly useful for web tasks that may take longer than the typical HTTP request. Requests are persisted, acknowledged, and confirmed asynchronously. They are not dropped or timed out, no matter how long they take to process.</p>
+  <div class="entry-content"><p>D3 uses the W3C standard selector library, and selection modifiers work on both single and multiple element selections, and will automatically apply the modifier iteratively over the entire collection, which makes your code simpler and easier to maintain.</p>
 
 </div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2014/first-in-first-out/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2014/d3-is-selective/">Read on &rarr;</a>
     </footer>
   
 
@@ -128,7 +126,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/afraid-of-commitment/">Afraid of Commitment</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/functional-arguing/">Functional Arguing</a></h1>
     
     
       <p class="meta">
@@ -144,20 +142,50 @@
   
 
 
-<time datetime="2014-02-04T08:04:27-08:00" pubdate data-updated="true">Feb 4<span>th</span>, 2014</time>
+<time datetime="2014-02-20T00:00:00-08:00" pubdate data-updated="true">Feb 20<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><h3>or, how to not fubar your git history</h3>
+  <div class="entry-content"><p>The <code>arguments</code> variable is a hidden parameter in javascript functions that contains all the arguments for the invocation in a pseudo-array (ie: it does not have array functions other than length and indexing).</p>
 
-<p>As with all the git lessons I have learned, this one started with a huge mistake. I had merged a commit to master that was breaking pages I didn&rsquo;t know existed. The sage developer sitting on my right shoulder told me that since I was unsure of how to fix the problem I should revert the offending commit forthwith. </div>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">instance</span><span class="p">.</span><span class="nx">headline</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">h</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="k">return</span> <span class="nx">headline</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">headline</span> <span class="o">=</span> <span class="nx">h</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">instance</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Even though the function specifically calls for an argument (<code>h</code>), it can still be called without one. This construction has a ruby equivalent, <code>attr_accessor :headline</code>, which behaves as a getter and a setter, depending on the arguments provided (none, or <code>headline = new_value</code>).</p>
+
+<p>This &ldquo;variable-parameter&rdquo; function design is what enables method chaining. When the function is called as a getter it returns a string, but when it is called as a setter it returns the invoking object, passing itself along to the next method:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">widget</span> <span class="o">=</span> <span class="nx">SimpleWidget</span><span class="p">({</span> <span class="nx">color</span><span class="o">:</span> <span class="s2">&quot;#6439ed&quot;</span> <span class="p">})</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">headline</span><span class="p">(</span><span class="s2">&quot;SimpleWidget&quot;</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">description</span><span class="p">(</span><span class="s2">&quot;This is a simple widget&quot;</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+</div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2014/afraid-of-commitment/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2014/functional-arguing/">Read on &rarr;</a>
     </footer>
   
 
@@ -169,7 +197,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/slack/">Slack</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/how-to-live-on-24-hours-a-day/">How to Live on 24 Hours a Day</a></h1>
     
     
       <p class="meta">
@@ -185,58 +213,34 @@
   
 
 
-<time datetime="2014-02-03T08:06:13-08:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2014</time>
+<time datetime="2014-02-17T00:00:00-08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p><a href="http://www.amazon.com/gp/product/0932633617/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633617&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Slack</a>: Getting Past Burnout, Busywork and the Myth of Total Efficiency, by Tom DeMarco</p>
+  <div class="entry-content"><p><a href="http://www.gutenberg.org/files/2274/2274-h/2274-h.htm">How to Live on 24 Hours a Day</a>, by Arnold Bennett (published in 1910)</p>
 
-<p>Trimming the slack from an organization in an effort to reduce overhead will leave a company with an increased profit margin at the cost of becoming inflexible. &ldquo;Slack is the natural enemy of efficiency, and efficiency is the natural enemy of slack.&rdquo; Knowledge work cannot be optimized in the same manner as manufacturing because it is creative by nature, and creative work is requires immersion, experimentation, and&hellip; well.. slack.</p>
-</div>
-  
-  
+<h3>Arnold Bennett&rsquo;s recommendations for leading a full and happy life:</h3>
 
+<ol>
+<li>Wake up earlier</li>
+<li>Practice concentrating your mind on a single task.</li>
+<li>Don&rsquo;t try to change too much too quickly.</li>
+<li>Spend time each day reflecting on how closely your life aligns with your principles.</li>
+<li>Study the performing arts.</li>
+<li>Read poetry.</li>
+<li>Failing that, read anything except novels, and think about what you read.</li>
+<li>Don&rsquo;t be smug about it.</li>
+</ol>
 
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/a-number-is-a-double-is-a-float/">A Number Is a Double Is a Float</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-02T19:56:17-08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>JavaScript has a single number type &mdash; a 64-bit floating point number. Since there is no separate integer type, 1 and 1.0 are the same value.</p>
 
 </div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2014/a-number-is-a-double-is-a-float/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2014/how-to-live-on-24-hours-a-day/">Read on &rarr;</a>
     </footer>
   
 
@@ -248,7 +252,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/git-add-p/">Git Add -p</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/custom-asides/">Custom Asides</a></h1>
     
     
       <p class="meta">
@@ -264,18 +268,88 @@
   
 
 
-<time datetime="2014-02-01T20:51:09-08:00" pubdate data-updated="true">Feb 1<span>st</span>, 2014</time>
+<time datetime="2014-02-15T00:00:00-08:00" pubdate data-updated="true">Feb 15<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>I learned a new tool that has quickly become an essential part of my workflow. <code>git add -p</code></div>
+  <div class="entry-content"><p>I was following a <a href="http://blog.jmac.org/blog/2013/03/30/putting-twitter-back-into-octopress/">tutorial</a> on how to include a twitter widget in the sidebar of my octopress site and couldn&rsquo;t figure out why my twitter content wouldn&rsquo;t render. It turns out that custom asides require an internal div. </div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2014/git-add-p/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2014/custom-asides/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/for-score/">For Score</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-11T00:00:00-08:00" pubdate data-updated="true">Feb 11<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The <code>for in</code> statement can function as a quick and semantic iterator for looping over object properties.</p>
+
+<figure class='code'><figcaption><span>In your console, try</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">first_name</span><span class="o">:</span> <span class="s2">&quot;Katie&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">last_name</span> <span class="o">:</span> <span class="s2">&quot;Leonard&quot;</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">name</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="k">for</span><span class="p">(</span><span class="nx">name</span> <span class="k">in</span> <span class="nx">person</span><span class="p">){</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot; : &quot;</span> <span class="o">+</span> <span class="nx">person</span><span class="p">[</span><span class="nx">name</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">)};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">first_name</span> <span class="o">:</span> <span class="nx">Katie</span>
+</span><span class='line'><span class="nx">last_name</span> <span class="o">:</span> <span class="nx">Leonard</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/for-score/">Read on &rarr;</a>
     </footer>
   
 
@@ -306,14 +380,6 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails/">#dup vs #clone in Ruby and Rails</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/cleaning-the-campground/">Cleaning the Campground</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2015/the-senior-software-engineer/">TDD and the Senior Software Engineer</a>
       </li>
     
@@ -323,6 +389,14 @@
     
       <li class="post">
         <a href="/blog/2015/the-happiness-hypothesis/">The Happiness Hypothesis</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/method-lookup-in-ruby/">Method Lookup in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/compilers-an-intro/">Compilers &#8211; an Intro</a>
       </li>
     
   </ul>

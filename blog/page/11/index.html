@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="I experiment a lot before I choose an implementation I like. I am sure I am not alone in making a few (or many) false starts, and yet feeling sick at &hellip;">
+  <meta name="description" content="Why use message queues? Message queues offer the benefits of high reliability at the cost of performance. This is particularly useful for web tasks &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,7 +85,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/get-clean/">Get Clean</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/first-in-first-out/">First in, First Out</a></h1>
     
     
       <p class="meta">
@@ -101,18 +101,22 @@
   
 
 
-<time datetime="2014-01-13T21:29:03-08:00" pubdate data-updated="true">Jan 13<span>th</span>, 2014</time>
+<time datetime="2014-02-05T11:14:30-08:00" pubdate data-updated="true">Feb 5<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>I experiment a lot before I choose an implementation I like. I am sure I am not alone in making a few (or many) false starts, and yet feeling sick at the thought of deleting any code. What if one of those paths I started down was the right one? This loss aversion often leads to working trees of non-working code, and <code>git stash</code>-es that I will never revisit. If I stop myself from going too far down yet another road without an end in sight, attempts to clean up my working directory often stall miserably at the end of a <code>git checkout .</code>:</div>
+  <div class="entry-content"><h3>Why use message queues?</h3>
+
+<p>Message queues offer the benefits of high reliability at the cost of performance. This is particularly useful for web tasks that may take longer than the typical HTTP request. Requests are persisted, acknowledged, and confirmed asynchronously. They are not dropped or timed out, no matter how long they take to process.</p>
+
+</div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2014/get-clean/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2014/first-in-first-out/">Read on &rarr;</a>
     </footer>
   
 
@@ -124,7 +128,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/afraid-of-commitment/">Afraid of Commitment</a></h1>
     
     
       <p class="meta">
@@ -140,41 +144,20 @@
   
 
 
-<time datetime="2013-10-29T22:29:03-07:00" pubdate data-updated="true">Oct 29<span>th</span>, 2013</time>
+<time datetime="2014-02-04T08:04:27-08:00" pubdate data-updated="true">Feb 4<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>I am building an application that uses several nested attributes: Users have many Goals (Goals belong_to Users), and Goals have many Hours (Hours belong_to Goals).</p>
+  <div class="entry-content"><h3>or, how to not fubar your git history</h3>
 
-<p>Using <a href="https://github.com/thoughtbot/factory_girl">FactoryGirl</a> to create a User is straightforward:</p>
-
-<div>
-  <pre><code class='ruby'>FactoryGirl.define do
-  factory :user do
-    sequence :name  { |n| &quot;person#{n}&quot; }
-    sequence :email { |n| &quot;person#{n}@example.com&quot; }
-  end
-end
-
-describe User do
-  before  { @user = FactoryGirl.create(:user) }
-  subject { @user }
-  it { should respond_to(:name) }
-  ...
-end</code></pre>
-</div>
-
-
-<p>How do I create Goals that are linked to the User?</p>
-
-</div>
+<p>As with all the git lessons I have learned, this one started with a huge mistake. I had merged a commit to master that was breaking pages I didn&rsquo;t know existed. The sage developer sitting on my right shoulder told me that since I was unsure of how to fix the problem I should revert the offending commit forthwith. </div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2013/factoring-in-nests/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2014/afraid-of-commitment/">Read on &rarr;</a>
     </footer>
   
 
@@ -186,7 +169,7 @@ end</code></pre>
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/meatier-apps-with-meteor/">Meatier Apps With Meteor</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/slack/">Slack</a></h1>
     
     
       <p class="meta">
@@ -202,20 +185,58 @@ end</code></pre>
   
 
 
-<time datetime="2013-10-20T22:29:03-07:00" pubdate data-updated="true">Oct 20<span>th</span>, 2013</time>
+<time datetime="2014-02-03T08:06:13-08:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p><a href="http://www.meteor.com/">Meteor</a> is a framework that allows you to write web applications using only javascript. All the work is done on the client-side. Meteor embraces new principles of web design: data on the wire, one language is enough, and simplicity makes for productivity.</p>
+  <div class="entry-content"><p><a href="http://www.amazon.com/gp/product/0932633617/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0932633617&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Slack</a>: Getting Past Burnout, Busywork and the Myth of Total Efficiency, by Tom DeMarco</p>
 
-<p>Simplicity is something I value as well, and while setting up meteor on my linux machine was not a three-step process as outlined in their examples, it only took a little tinkering to figure out the problem. </div>
+<p>Trimming the slack from an organization in an effort to reduce overhead will leave a company with an increased profit margin at the cost of becoming inflexible. &ldquo;Slack is the natural enemy of efficiency, and efficiency is the natural enemy of slack.&rdquo; Knowledge work cannot be optimized in the same manner as manufacturing because it is creative by nature, and creative work is requires immersion, experimentation, and&hellip; well.. slack.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/a-number-is-a-double-is-a-float/">A Number Is a Double Is a Float</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-02T19:56:17-08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>JavaScript has a single number type &mdash; a 64-bit floating point number. Since there is no separate integer type, 1 and 1.0 are the same value.</p>
+
+</div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2013/meatier-apps-with-meteor/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2014/a-number-is-a-double-is-a-float/">Read on &rarr;</a>
     </footer>
   
 
@@ -227,7 +248,7 @@ end</code></pre>
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/partial-to-ajax/">Partial to Ajax</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/git-add-p/">Git Add -p</a></h1>
     
     
       <p class="meta">
@@ -243,76 +264,18 @@ end</code></pre>
   
 
 
-<time datetime="2013-10-18T22:29:03-07:00" pubdate data-updated="true">Oct 18<span>th</span>, 2013</time>
+<time datetime="2014-02-01T20:51:09-08:00" pubdate data-updated="true">Feb 1<span>st</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>I have been building a new project and getting creative with views. I am working with bootstrap and jquery to develop tabbed displays, and in the process have been gleaning a deeper understanding of rails routes, controllers, and assets. Using Ajax to load partials into rails views is a three part process:</p>
-
-</div>
+  <div class="entry-content"><p>I learned a new tool that has quickly become an essential part of my workflow. <code>git add -p</code></div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2013/partial-to-ajax/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/rails-depends-on-javascript/">Rails, You Can Depend on Javascript</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-16T22:29:03-07:00" pubdate data-updated="true">Sep 16<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I am between computers at the moment, and I really really miss my OSX development environment. Dependency installation is so smooth and painless on mac, that I had quite forgotten the complications of setting up a complete environment in linux. For instance</p>
-
-<h3>Rails requires a javascript runtime environment</h3>
-
-<p>I am running an Ubuntu 9.4 remix on my little Atom Netbook. Getting rails up and running anew is a lesson in returning to fundamentals.</p>
-
-<div>
-  <pre><code class='bash'>$ gem install rails
-$ rails new testapp -T
-$ rails generate rspec:install
-...
-Could not find a JavaScript runtime. See https://github.com/sstephenson/execjs for a list of available runtimes</code></pre>
-</div>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/rails-depends-on-javascript/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2014/git-add-p/">Read on &rarr;</a>
     </footer>
   
 
@@ -343,14 +306,6 @@ Could not find a JavaScript runtime. See https://github.com/sstephenson/execjs f
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails/">#dup vs #clone in Ruby and Rails</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/cleaning-the-campground/">Cleaning the Campground</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2015/the-senior-software-engineer/">TDD and the Senior Software Engineer</a>
       </li>
     
@@ -360,6 +315,14 @@ Could not find a JavaScript runtime. See https://github.com/sstephenson/execjs f
     
       <li class="post">
         <a href="/blog/2015/the-happiness-hypothesis/">The Happiness Hypothesis</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/method-lookup-in-ruby/">Method Lookup in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/compilers-an-intro/">Compilers &#8211; an Intro</a>
       </li>
     
   </ul>

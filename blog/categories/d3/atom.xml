@@ -4,7 +4,7 @@
   <title><![CDATA[Category: D3 | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/d3/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-10T14:24:51-08:00</updated>
+  <updated>2015-01-10T15:31:11-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,134 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Formatting Numbers the Easy Way]]></title>
+    <link href="http://www.katieleonard.ca/blog/2014/formatting-numbers-the-easy-way/"/>
+    <updated>2014-08-23T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2014/formatting-numbers-the-easy-way</id>
+    <content type="html"><![CDATA[<p>D3 has an awesome number formatting function that I discovered only after hacking my own. My first approach was to use string and array manipulation to convert 1234567890 to 1,234,567,890:</p>
+
+<p>
+`&ldquo;javascript
+function numberSmoothing(value) {
+  // split the number into a character array and reverse it
+  reversedNumber = (value).toString().split(&rdquo;).reverse();</p>
+
+<p>  // [&ldquo;0&rdquo;, &ldquo;9&rdquo;, &ldquo;8&rdquo;, &ldquo;7&rdquo;, &ldquo;6&rdquo;, &ldquo;5&rdquo;, &ldquo;4&rdquo;, &ldquo;3&rdquo;, &ldquo;2&rdquo;, &ldquo;1&rdquo;]</p>
+
+<p>  // push the numbers onto another array in groups of 3 and add a comma
+  chunkedNumber = [];
+  while(reversedNumber.length > 3) {</p>
+
+<pre><code>var numberChunk = reversedNumber.splice(3);
+chunkedNumber.push(reversedNumber.join('') + ',');
+reversedNumber = numberChunk;
+</code></pre>
+
+<p>  }</p>
+
+<p>  // push the remaining digits onto the array
+  chunkedNumber.push(reversedNumber.join(&lsquo;&rsquo;));</p>
+
+<p>  // [&ldquo;098,&rdquo;, &ldquo;765,&rdquo;, &ldquo;432,&rdquo;, &ldquo;1&rdquo;]</p>
+
+<p>  // reverse each of the strings in the array and rejoin them
+  for(var j = 0; j &lt; chunkedNumber.length; j++){</p>
+
+<pre><code>chunkedNumber[j] = chunkedNumber[j].split('').reverse().join('');
+</code></pre>
+
+<p>  }</p>
+
+<p>  // [&ldquo;,890&rdquo;, &ldquo;,567&rdquo;, &ldquo;,234&rdquo;, &ldquo;1&rdquo;]</p>
+
+<p>  return chunkedNumber.reverse().join(&lsquo;&rsquo;);
+}</p>
+
+<blockquote><p>numberSmoothing(1234567890)
+&ldquo;1,234,567,890&rdquo;</p></blockquote>
+
+<p>```
+</p>
+
+<p>While it was a fun mental exercise to implement number formatting, I stumbled across this handy d3 function after I was already done:</p>
+
+<p>
+```</p>
+
+<blockquote><p>var format = d3.format(&ldquo;,&rdquo;);
+format(1234567890);
+&ldquo;1,234,567,890&rdquo;
+```
+</p></blockquote>
+
+<p>As it turns out, any way one might want to format a number has <a href="https://github.com/mbostock/d3/wiki/Formatting#d3_format">already been implemented in d3</a>. It is similar to the mini-formatting language from python:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[​[fill]align][sign][symbol][0][width][,][.precision][type]</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>
+```javascript
+// add commas for the thousands separator</p>
+
+<blockquote><p>var format = d3.format(&lsquo;,&rsquo;)
+format(1234567890)
+&ldquo;1,234,567,890&rdquo;</p></blockquote>
+
+<p>// add a sign for positive and negative numbers</p>
+
+<blockquote><p>var format = d3.format(&lsquo;+,&rsquo;)
+format(1234567890)
+&ldquo;+1,234,567,890&rdquo;</p>
+
+<p>format(-1234567890)
+&ldquo;-1,234,567,890&rdquo;</p></blockquote>
+
+<p>// add a currency sign</p>
+
+<blockquote><p>var format = d3.format(&lsquo;+$,&rsquo;)
+format(1234567890)
+&ldquo;+$1,234,567,890&rdquo;</p></blockquote>
+
+<p>// as a percentage</p>
+
+<blockquote><p>var format = d3.format(&lsquo;p&rsquo;)
+format(1/6)
+&ldquo;16.666666666666664%&rdquo;</p></blockquote>
+
+<p>// as a rounded percentage</p>
+
+<blockquote><p>var format = d3.format(&lsquo;%&rsquo;)
+format(1/6)
+&ldquo;17%&rdquo;</p></blockquote>
+
+<p>// as a percent rounded to a single sig fig</p>
+
+<blockquote><p>var format = d3.format(&lsquo;.1%&rsquo;)
+format(1/6)
+&ldquo;16.7%&rdquo;</p></blockquote>
+
+<p>// as a rounded value</p>
+
+<blockquote><p>var format = d3.format(&lsquo;.2r&rsquo;)
+format(123.456)
+&ldquo;120&rdquo;</p>
+
+<p>format(123456789.66)
+&ldquo;120000000&rdquo;</p></blockquote>
+
+<p>// as a rounded, comma separated value</p>
+
+<blockquote><p>var format = d3.format(&lsquo;,.2r&rsquo;)
+format(123456789.66)
+&ldquo;120,000,000&rdquo;
+```
+</p></blockquote>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Line, Spline]]></title>
@@ -408,71 +536,6 @@ importData();
 </span><span class='line'>&lt;/code>&lt;/pre>
 </span><span class='line'>
 </span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Transition With Style]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/transition-with-style/"/>
-    <updated>2014-03-06T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/transition-with-style</id>
-    <content type="html"><![CDATA[<p>Making things zoom across the page is what I used to think javascript was all about, but it wasn&rsquo;t until I started learning d3 that I found out how to make it happen.</p>
-
-<!--more-->
-
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Simple Transition </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">body</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;),</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nx">duration</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">body</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">div</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;)</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;background-color&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;margin&quot;</span><span class="p">,</span> <span class="s2">&quot;40px&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span> <span class="s2">&quot;200px&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">,</span> <span class="s2">&quot;200px&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;border&quot;</span><span class="p">,</span> <span class="s2">&quot;black solid thin&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="p">.</span><span class="nx">transition</span><span class="p">()</span>
-</span><span class='line'><span class="p">.</span><span class="nx">duration</span><span class="p">(</span><span class="nx">duration</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;background-color&quot;</span><span class="p">,</span> <span class="s2">&quot;black&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;margin-left&quot;</span><span class="p">,</span> <span class="s2">&quot;600px&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span> <span class="s2">&quot;100px&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">,</span> <span class="s2">&quot;100px&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>D3 is smart enough to select an appropriate scale for the property in transition. If a transitioning element is not given an explicit starting point, D3 will use the computed style. If the end value is missing, the property will be treated as a constant. In the example above, the border stays the same, as do the top and bottom margins. The only properties that change are the ones specified below the transition().</p>
-
-<p>Awesome.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
 ]]></content>
   </entry>
   
