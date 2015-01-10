@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="D3 has an awesome number formatting function that I discovered only after hacking my own. My first approach was to use string and array manipulation &hellip;">
+  <meta name="description" content="If you have more than one javascript running on a page, you have likely experienced the hell of trying to debug a problem caused by naming collisions &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,165 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/managing-modules/">Gaining Closure Through Modules</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-06T00:00:00-07:00" pubdate data-updated="true">Sep 6<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>If you have more than one javascript running on a page, you have likely experienced the hell of trying to debug a problem caused by naming collisions. Developing the scripts in isolation, it makes sense to assign widgetA.name dynamically using jQuery, but then why does the title of widgetGraphB disappear? Avoid the pain of unintended consequences by namespacing your scripts. </div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/managing-modules/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/backup-meteor-yes-we-can/">Backup Meteor? Yes We Can</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-24T00:00:00-07:00" pubdate data-updated="true">Aug 24<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Retrieving a data dump from your meteor production database and copying it to local development is a three-step, time sensitive process.</p>
+
+<h3>1. Retrieve your production url</h3>
+
+<p>Passing a <code>-url</code> flag to the <code>meteor mongo</code> command will return a long string of goodies:</p>
+
+<figure class='code'><figcaption><span>Dude, where&#8217;s my data? </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ meteor mongo --url my_app.meteor.com
+</span><span class='line'>
+</span><span class='line'>mongodb://client-12345678:9abcdef1-234-5678-9abc-def123456789@singularsensation-db-a3.meteor.io:12345/my_app_meteor_net</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This string contains all the information you require to access your production data:</p>
+
+<ul>
+<li>your client id (from // to :)</li>
+<li>a server password (from : to @)</li>
+<li>a server name and port number (from @ to /)</li>
+<li>the datastore identification (from / to the end)</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mongodb://&lt;CLIENT_ID&gt;:&lt;PASSWORD_HASH&gt;@&lt;SERVER_NAME:PORT&gt;/&lt;YOUR_DATA_STORE&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Retrieving your data is time-sensitive because the password hash will expire after 60 seconds.</p>
+
+<h3>2. Retrieve your data using mongodump</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mongodump -u CLIENT_ID -h SERVER_NAME:PORT -d YOUR_DATA_STORE -p PASSWORD_HASH
+</span><span class='line'>
+</span><span class='line'>connected to: &lt;SERVER_NAME:PORT&gt;
+</span><span class='line'>Sun Aug 24 10:50:32.342 DATABASE: YOUR_DATA_STORE  to   dump/YOUR_DATA_STORE
+</span><span class='line'>Sun Aug 24 10:50:32.989   YOUR_DATA_STORE.system.indexes to dump/YOUR_DATA_STORE/system.indexes.bson
+</span><span class='line'>Sun Aug 24 10:50:34.368      14 objects
+</span><span class='line'>Sun Aug 24 10:50:34.369   YOUR_DATA_STORE.system.users to dump/YOUR_DATA_STORE/system.users.bson
+</span><span class='line'>Sun Aug 24 10:50:34.559      2 objects
+</span><span class='line'>... and on and on
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Mongodb copies your data from production into a new folder called &ldquo;dump&rdquo; in your present working directory.</p>
+
+<h3>3. Use mongorestore to copy the data from the dump into your local datastore</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ mongorestore --host 127.0.0.1 --port 3001 --db meteor --drop dump/YOUR_DATA_STORE/
+</span><span class='line'>
+</span><span class='line'>connected to: 127.0.0.1:3001
+</span><span class='line'>Sun Aug 24 11:36:54.693 dump/YOUR_DATA_STORE/users.bson
+</span><span class='line'>Sun Aug 24 11:36:54.693   going into namespace [meteor.users]
+</span><span class='line'>Sun Aug 24 11:36:54.693    dropping
+</span><span class='line'>2 objects found
+</span><span class='line'>Sun Aug 24 11:36:55.834   Creating index: { name: "_id_", key: { _id: 1 }, ns: "meteor.users" }
+</span><span class='line'>Sun Aug 24 11:36:55.993   Creating index: { name: "username_1", key: { username: 1 }, unique: true, ns: "meteor.users", sparse: 1 }
+</span><span class='line'>... and on and on</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Awesome.</p>
+
+<p>Resources:
+<a href="http://stackoverflow.com/a/12447710">stackoverflow</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -570,144 +729,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/in-operator-avoid-false-falsies/">&#8216;In&#8217; Operator Avoids False Falsies</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-05T00:00:00-07:00" pubdate data-updated="true">Aug 5<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have encountered more than my share of javascript errors because I have made assumptions about the object I am working with, such as assuming that an object contains a property, and that I can call methods on that property:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</span><span class='line'><span class="nx">TypeError</span><span class="o">:</span> <span class="nx">Cannot</span> <span class="nx">read</span> <span class="nx">property</span> <span class="s1">&#39;0&#39;</span> <span class="nx">of</span> <span class="kc">undefined</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This line contains four assumptions, and therefore four places it can fail:</p>
-
-<ol>
-<li><code>myObject</code> exists</li>
-<li><code>myObject</code> contains a property called <code>data</code></li>
-<li><code>data</code> is an array</li>
-<li><code>data</code> is non-empty</li>
-</ol>
-
-
-<p>Presuming that if <code>myObject</code> does not exist means you have bigger problems, it is easy to fall into the trap of checking for the existence of a property by gating a conditional with it:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="k">if</span><span class="p">(</span><span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="c1">//do something important with the data</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This technique will work in development, but the voice of experience tells us that it will not work in production. The reason it will not work is that javascript has more falsy values than most languages. Falsy values include the number zero, empty strings, null, undefined, NaN, and of course, the boolean false. So, if it is possible <code>myObject.data</code> to contain derived information, you have signed up to troubleshoot some unexpected behaviour.</p>
-
-<p>Fortunately, javascript has provided a failsafe way to check the existence of a property, regardless of the data it contains. The <code>in</code> operator checks if the key exists in the object&rsquo;s hash table, and doesn&rsquo;t care if it is a prototype or singleton property.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">myObject</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class='line'><span class="kc">undefined</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;data&#39;</span> <span class="k">in</span> <span class="nx">myObject</span>
-</span><span class='line'><span class="kc">false</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'><span class="s2">&quot;&quot;</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;data&#39;</span> <span class="k">in</span> <span class="nx">myObject</span>
-</span><span class='line'><span class="kc">true</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span> <span class="o">==</span> <span class="kc">true</span>
-</span><span class='line'><span class="kc">false</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>('data' in myObject)</code> returns false if the property is undefined. If the property is defined, it returns true even if data contains a falsy value.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/stringify-cyclic-structures-with-censors/">Stringify Cyclic Structures With Censors</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-07-23T00:00:00-07:00" pubdate data-updated="true">Jul 23<span>rd</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Troubleshooting a d3 data visualization sometimes requires visual inspection of the underlying JSON data structure. You can convert linear data structures to a JSON string using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify"><code>JSON.stringify</code></a></div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/stringify-cyclic-structures-with-censors/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -732,6 +753,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails/">#dup vs #clone in Ruby and Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/cleaning-the-campground/">Cleaning the Campground</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/the-senior-software-engineer/">TDD and the Senior Software Engineer</a>
       </li>
     
@@ -741,14 +770,6 @@
     
       <li class="post">
         <a href="/blog/2015/the-happiness-hypothesis/">The Happiness Hypothesis</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/method-lookup-in-ruby/">Method Lookup in Ruby</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/compilers-an-intro/">Compilers &#8211; an Intro</a>
       </li>
     
   </ul>

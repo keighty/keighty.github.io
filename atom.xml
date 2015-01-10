@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-10T15:31:11-08:00</updated>
+  <updated>2015-01-10T15:42:40-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,323 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[#dup vs #clone in Ruby and Rails]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails/"/>
+    <updated>2015-01-10T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails</id>
+    <content type="html"><![CDATA[<p>I was recently fixing a failing test and discovered that Ruby and Rails implement <code>#clone</code> and <code>#dup</code> in confusing and occasionally opposite ways.</p>
+
+<!--more-->
+
+
+<h3>In Rails <code>#clone</code> is a less complete copy of an object than <code>#dup</code></h3>
+
+<p>Rails versions have flip-flopped on how to implement <code>#clone</code> and <code>#dup</code>, and there is ambiguity in how Rails defines &ldquo;shallow&rdquo;. In Rails 4.0, <a href="https://github.com/rails/rails/blob/4-0-stable/activerecord/lib/active_record/core.rb#L217-L220"><code>#clone</code> is a shallow copy</a> of an ActiveRecord object. &ldquo;Shallow&rdquo; in this context means that the <code>clone</code> shares attributes with the <code>original</code>:</p>
+
+<blockquote><p>Identical to Ruby&rsquo;s clone method.  This is a &ldquo;shallow&rdquo; copy.  Be warned that your attributes are not copied. That means that modifying attributes of the clone will modify the original, since they will both point to the same attributes hash. If you need a copy of your attributes hash, please use the #dup method.</p></blockquote>
+
+<p>However, <a href="https://github.com/rails/rails/blob/4-0-stable/activerecord/lib/active_record/core.rb#L234-L240"><code>#dup</code> is also described as a shallow copy</a>. &ldquo;Shallow&rdquo; in this context means that while the dup does not share attributes with the original, it does share associations.</p>
+
+<blockquote><p>Duped objects have no id assigned and are treated as new records. Note that this is a &ldquo;shallow&rdquo; copy as it copies the object&rsquo;s attributes only, not its associations. The extent of a &ldquo;deep&rdquo; copy is application specific and is therefore left to the application to implement according to its need.</p></blockquote>
+
+<h4><code>clone</code> vs <code>dup</code> in Rails:</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>pry&gt; <span class="nv">original</span> <span class="o">=</span> User.find<span class="o">(</span>3<span class="o">)</span>
+</span><span class='line'>  User Load <span class="o">(</span>0.7ms<span class="o">)</span>  SELECT  <span class="s2">&quot;users&quot;</span>.* FROM <span class="s2">&quot;users&quot;</span> WHERE <span class="s2">&quot;users&quot;</span>.<span class="s2">&quot;id&quot;</span> <span class="o">=</span> ? LIMIT 1  <span class="o">[[</span><span class="s2">&quot;id&quot;</span>, 3<span class="o">]]</span>
+</span><span class='line'><span class="o">=</span>&gt; <span class="c">#&lt;User id: 3, first_name: &quot;katie&quot;, last_name: &quot;leonard&quot;, email: nil, created_at: &quot;2015-01-10 17:37:00&quot;, updated_at: &quot;2015-01-10 17:37:00&quot;&gt;</span>
+</span><span class='line'>
+</span><span class='line'>pry&gt; <span class="nv">clone_copy</span> <span class="o">=</span> original.clone
+</span><span class='line'><span class="o">=</span>&gt; <span class="c">#&lt;User id: 3, first_name: &quot;katie&quot;, last_name: &quot;leonard&quot;, email: nil, created_at: &quot;2015-01-10 17:37:00&quot;, updated_at: &quot;2015-01-10 17:37:00&quot;&gt;</span>
+</span><span class='line'>
+</span><span class='line'>pry&gt; <span class="nv">dup_copy</span> <span class="o">=</span> original.dup
+</span><span class='line'><span class="o">=</span>&gt; <span class="c">#&lt;User id: nil, first_name: &quot;katie&quot;, last_name: &quot;leonard&quot;, email: nil, created_at: nil, updated_at: nil&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that the <code>clone_copy</code> is an exact copy of the original (same <code>user.id</code>) and the <code>dup_copy</code> is a new record (<code>user.id</code> = nil). Any changes made to the <code>clone_copy</code> will be changed in the <code>original</code>, but any changes to the <code>dup_copy</code> attributes will remain isolated.</p>
+
+<h3>In Ruby <code>#clone</code> is a more complete copy of an object than <code>#dup</code></h3>
+
+<p>With simple classes, <code>clone()</code> and <code>dup()</code> behave identically:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>irb&gt; class User
+</span><span class='line'>irb&gt;   attr_accessor :first_name, :last_name, :email
+</span><span class='line'>irb&gt;   def initialize<span class="o">(</span><span class="nv">options</span><span class="o">={})</span>
+</span><span class='line'>irb&gt;     @first_name <span class="o">=</span> options<span class="o">[</span>:first_name<span class="o">]</span>
+</span><span class='line'>irb&gt;     @last_name  <span class="o">=</span> options<span class="o">[</span>:last_name<span class="o">]</span>
+</span><span class='line'>irb&gt;     @email      <span class="o">=</span> options<span class="o">[</span>:email<span class="o">]</span>
+</span><span class='line'>irb&gt;   end
+</span><span class='line'>irb&gt; <span class="nv">end</span>
+</span><span class='line'><span class="o">=</span>&gt; :initialize
+</span><span class='line'>
+</span><span class='line'>irb&gt; <span class="nv">original</span> <span class="o">=</span> User.new<span class="o">(</span>first_name: <span class="s2">&quot;katie&quot;</span>, last_name: <span class="s2">&quot;leonard&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="o">=</span>&gt; <span class="c">#&lt;User:0x007fd7e98e0aa8 @first_name=&quot;katie&quot;, @last_name=&quot;leonard&quot;, @email=nil&gt;</span>
+</span><span class='line'>
+</span><span class='line'>irb&gt; <span class="nv">cloned_copy</span> <span class="o">=</span> original.clone
+</span><span class='line'><span class="o">=</span>&gt; <span class="c">#&lt;User:0x007fd7e98c87c8 @first_name=&quot;katie&quot;, @last_name=&quot;leonard&quot;, @email=nil&gt;</span>
+</span><span class='line'>
+</span><span class='line'>irb&gt; <span class="nv">dup_copy</span> <span class="o">=</span> original.dup
+</span><span class='line'><span class="o">=</span>&gt; <span class="c">#&lt;User:0x007fd7e98b24a0 @first_name=&quot;katie&quot;, @last_name=&quot;leonard&quot;, @email=nil&gt;</span>
+</span><span class='line'>
+</span><span class='line'>irb&gt; cloned_copy.first_name <span class="o">=</span> <span class="s2">&quot;foo&quot;</span>
+</span><span class='line'><span class="o">=</span>&gt; <span class="s2">&quot;foo&quot;</span>
+</span><span class='line'>
+</span><span class='line'>irb&gt; original.first_name
+</span><span class='line'><span class="o">=</span>&gt; <span class="s2">&quot;katie&quot;</span>
+</span><span class='line'>
+</span><span class='line'>irb&gt; dup_copy.first_name
+</span><span class='line'><span class="o">=</span>&gt; <span class="s2">&quot;katie&quot;</span>
+</span><span class='line'>
+</span><span class='line'>irb&gt; dup_copy.first_name <span class="o">=</span> <span class="s2">&quot;bar&quot;</span>
+</span><span class='line'><span class="o">=</span>&gt; <span class="s2">&quot;bar&quot;</span>
+</span><span class='line'>
+</span><span class='line'>irb&gt; original.first_name
+</span><span class='line'><span class="o">=</span>&gt; <span class="s2">&quot;katie&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>clone()</code> and <code>dup()</code> function the same way!</p>
+
+<p><code>clone()</code> from the <a href="http://ruby-doc.org/core-2.1.5/Object.html#method-i-clone">Ruby docs</a>:</p>
+
+<blockquote><p>Produces a shallow copy of obj — the instance variables of obj are copied, but not the objects they reference. Copies the frozen and tainted state of obj. See also the discussion under Object#dup.</p></blockquote>
+
+<p><code>dup()</code> from the <a href="http://ruby-doc.org/core-2.1.5/Object.html#method-i-dup">Ruby docs</a> looks suspiciously like the docs for <code>clone()</code>:</p>
+
+<blockquote><p>Produces a shallow copy of obj — the instance variables of obj are copied, but not the objects they reference. dup copies the tainted state of obj. This method may have class-specific behavior. If so, that behavior will be documented under the #initialize_copy method of the class.</p></blockquote>
+
+<p>This deserves further clarification:</p>
+
+<blockquote><p>In general, clone and dup may have different semantics in descendant classes. While clone is used to duplicate an object, including its internal state, dup typically uses the class of the descendant object to create the new instance. When using dup any modules that the object has been extended with will not be copied.</p></blockquote>
+
+<p>To paraphrase, <code>#dup</code> will act like <code>#clone</code>, but without the original&rsquo;s singleton class (ergo a &ldquo;shallower&rdquo; copy).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>irb&gt; class User
+</span><span class='line'>irb&gt; attr_accessor :first_name, :last_name, :email
+</span><span class='line'>irb&gt;   def initialize<span class="o">(</span><span class="nv">options</span><span class="o">={})</span>
+</span><span class='line'>irb&gt;     @first_name <span class="o">=</span> options<span class="o">[</span>:first_name<span class="o">]</span>
+</span><span class='line'>irb&gt;     @last_name  <span class="o">=</span> options<span class="o">[</span>:last_name<span class="o">]</span>
+</span><span class='line'>irb&gt;     @email      <span class="o">=</span> options<span class="o">[</span>:email<span class="o">]</span>
+</span><span class='line'>irb&gt;   end
+</span><span class='line'>irb&gt; <span class="nv">end</span>
+</span><span class='line'><span class="o">=</span>&gt; :initialize
+</span><span class='line'>
+</span><span class='line'>irb&gt; module Crunchy
+</span><span class='line'>irb&gt;   def bacon
+</span><span class='line'>irb&gt;     <span class="s2">&quot;bacon&quot;</span>
+</span><span class='line'>irb&gt;   end
+</span><span class='line'>irb&gt; <span class="nv">end</span>
+</span><span class='line'><span class="o">=</span>&gt; :bacon
+</span><span class='line'>
+</span><span class='line'>irb&gt; <span class="nv">a</span> <span class="o">=</span> User.new<span class="o">(</span>first_name: <span class="s2">&quot;katie&quot;</span>, last_name: <span class="s2">&quot;leonard&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="o">=</span>&gt; <span class="c">#&lt;User:0x007fd7e8882490 @first_name=&quot;katie&quot;, @last_name=&quot;leonard&quot;, @email=nil&gt;</span>
+</span><span class='line'>
+</span><span class='line'>irb&gt; a.extend<span class="o">(</span>Crunchy<span class="o">)</span>
+</span><span class='line'><span class="o">=</span>&gt; <span class="c">#&lt;User:0x007fd7e8882490 @first_name=&quot;katie&quot;, @last_name=&quot;leonard&quot;, @email=nil&gt;</span>
+</span><span class='line'>
+</span><span class='line'>irb&gt; a.bacon
+</span><span class='line'><span class="o">=</span>&gt; <span class="s2">&quot;bacon&quot;</span>
+</span><span class='line'>
+</span><span class='line'>irb&gt; <span class="nv">b</span> <span class="o">=</span> a.clone
+</span><span class='line'><span class="o">=</span>&gt; <span class="c">#&lt;User:0x007fd7e8843060 @first_name=&quot;katie&quot;, @last_name=&quot;leonard&quot;, @email=nil&gt;</span>
+</span><span class='line'>
+</span><span class='line'>irb&gt; b.bacon
+</span><span class='line'><span class="o">=</span>&gt; <span class="s2">&quot;bacon&quot;</span>
+</span><span class='line'>
+</span><span class='line'>irb&gt; <span class="nv">c</span> <span class="o">=</span> a.dup
+</span><span class='line'><span class="o">=</span>&gt; <span class="c">#&lt;User:0x007fd7e98f05c0 @first_name=&quot;katie&quot;, @last_name=&quot;leonard&quot;, @email=nil&gt;</span>
+</span><span class='line'>
+</span><span class='line'>irb&gt; c.bacon
+</span><span class='line'>NoMethodError: undefined method <span class="sb">`</span>bacon<span class="s1">&#39; for #&lt;User:0x007fd7e98f05c0&gt;</span>
+</span><span class='line'><span class="s1">        from (irb):101</span>
+</span><span class='line'><span class="s1">        from /usr/local/var/rbenv/versions/2.1.5/bin/irb:11:in `&lt;main&gt;&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are subtle differences between <code>#clone</code> and <code>#dup</code> in Ruby, and less subtle differences in Rails (depending on your version). Take care that the object you want is the object you get.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Cleaning the Campground]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/cleaning-the-campground/"/>
+    <updated>2015-01-10T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/cleaning-the-campground</id>
+    <content type="html"><![CDATA[<p>If you work in a code base with many other contributors, you may have learned the scouting philosophy to &ldquo;leave the campground cleaner than you found it.&rdquo; Sometimes the code you are working in can seem so entangled and complex that it is hard to know where to begin, but <a href="http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882/ref=sr_1_1?ie=UTF8&amp;qid=1420928385&amp;sr=8-1&amp;keywords=clean+code">Robert C. Martin&rsquo;s foundational book, *Clean Code</a>*, tells us that very small changes can improve the readability and maintainability of a piece of code.</p>
+
+<blockquote><p>&ldquo;It is not enough to write the code well. The code has to be <em>kept clean</em> over time.&rdquo;</p></blockquote>
+
+<!--more-->
+
+
+<p><a href="http://en.wikipedia.org/wiki/Software_rot">Code rot</a> happens to every well-intentioned but long-lived code base, and it can happen either by neglect or by constant development. <span class='pullquote-right' data-pullquote='Add in more developers, each with different coding styles, and before long you will find your code to be impenetrably complex and impossible to modify.'>Neglected software will suffer a gradual deterioration in performance and responsiveness over time. Security vulnerabilities and incompatibilities aside, as new applications are built in newer and faster frameworks, your application will perform poorly in comparison. If your software is actively developed it will be modified, and as it is modified it&rsquo;s complexity will increase. Add in more developers, each with different coding styles, and before long you will find your code to be impenetrably complex and impossible to modify.
+</span></p>
+
+<p>There is hope for your legacy application, as long as you establish a culture of constant small improvements:</p>
+
+<ol>
+<li>Change one variable name for the better</li>
+<li>Break one large function into two or more smaller ones.</li>
+<li>Eliminate one small bit of duplication</li>
+<li>Clean up one composite if statement.</li>
+</ol>
+
+
+<p>That last one is a bit like low-hanging fruit. Take this complex if statement in <a href="https://github.com/rack/rack/blob/rack-1.5/lib/rack/deflater.rb#L30-L33">Rack::Deflater#call</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def call
+</span><span class='line'>  ...
+</span><span class='line'>
+</span><span class='line'>  # Skip compressing empty entity body responses and responses with
+</span><span class='line'>  # no-transform set.
+</span><span class='line'>  if Utils::STATUS_WITH_NO_ENTITY_BODY.include?(status) ||
+</span><span class='line'>      headers['Cache-Control'].to_s =~ /\bno-transform\b/ ||
+</span><span class='line'>     (headers['Content-Encoding'] && headers['Content-Encoding'] !~ /\bidentity\b/)
+</span><span class='line'>    return [status, headers, body]
+</span><span class='line'>  end
+</span><span class='line'>  ...</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The comment attempts to explain what the code cannot: skip response compression under certain conditions. The intention could easily be described by extracting both the comment and the if statement to a method:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def call
+</span><span class='line'>  ...
+</span><span class='line'>  if skip_compression?
+</span><span class='line'>    return [status, headers, body]
+</span><span class='line'>  end
+</span><span class='line'>  ...
+</span><span class='line'>end
+</span><span class='line'>
+</span><span class='line'>private
+</span><span class='line'>
+</span><span class='line'># Skip compressing empty entity body responses and responses with
+</span><span class='line'># no-transform set.
+</span><span class='line'>def skip_compression?
+</span><span class='line'>  Utils::STATUS_WITH_NO_ENTITY_BODY.include?(status) ||
+</span><span class='line'>    headers['Cache-Control'].to_s =~ /\bno-transform\b/ ||
+</span><span class='line'>   (headers['Content-Encoding'] && headers['Content-Encoding'] !~ /\bidentity\b/)
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>While the <code>if</code> statement itself is not much better, at least <code>#call</code> is a little more readable. Fight against code rot while building new features in a legacy code base by making small improvements where you can.</p>
+
+<!-- resources
+http://en.wikipedia.org/wiki/Software_entropy
+-->
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[TDD and the Senior Software Engineer]]></title>
@@ -1771,224 +2088,6 @@ at Object.Template.postPageItem.helpers.commentsNote (http://localhost:3000/clie
 
 <p><a href="https://www.discovermeteor.com/">discovermeteor.com</a>
 <a href="http://docs.meteor.com">Meteor docs</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mongo Trouble? Reset!]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/mongo-trouble-reset/"/>
-    <updated>2014-05-03T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/mongo-trouble-reset</id>
-    <content type="html"><![CDATA[<p>Back in March I wrote about letting my computer&rsquo;s battery die in the middle of a meteor project, with the consequence being that I could not connect to the underlying mongo database:</p>
-
-<figure class='code'><figcaption><span>What&#8217;s wrong, meteor? </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor
-</span><span class='line'><span class="o">[[[[[</span> ~/project/in/progress <span class="o">]]]]]</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">=</span>&gt; Started proxy.
-</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
-</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
-</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
-</span><span class='line'>Can<span class="err">&#39;</span>t start Mongo server.
-</span><span class='line'>MongoDB had an unspecified uncaught exception.
-</span><span class='line'>This can be caused by MongoDB being unable to write to a <span class="nb">local </span>database.
-</span><span class='line'>Check that you have permissions to write to .meteor/local. MongoDB does
-</span><span class='line'>not support filesystems like NFS that <span class="k">do </span>not allow file locking.
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After much spelunking in stackoverflow and documentation, I discovered the magic of this command:</p>
-
-<figure class='code'><figcaption><span>Magic mongo reset spell %</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u mongodb mongdo --repair --dbpath /var/lib/mongodb
-</span><span class='line'><span class="nv">$ </span>sudo service mongodb start
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Repairing and restarting the mongo service seemed to do the trick, and I continued on my merry meteor way. Well, I did it again &mdash; I let my battery die in the middle of a meteor project, and with feelings of smug satisfaction, I plumbed my blog archive for the answer. Only this time the magic antidote didn&rsquo;t work<!--more-->:</p>
-
-<figure class='code'><figcaption><span>This log has been redacted to protect the ignorant </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo -u mongodb mongod --repair --dbpath /var/lib/mongodb/
-</span><span class='line'>[sudo] password for keighty:
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] finished checking dbs
-</span><span class='line'>Sat May  3 09:52:04.793 dbexit:
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: going to close listening sockets...
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: going to flush diaglog...
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: going to close sockets...
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: waiting for fs preallocator...
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: closing all files...
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] closeAllFiles() finished
-</span><span class='line'>Sat May  3 09:52:04.793 [initandlisten] shutdown: removing fs lock...
-</span><span class='line'>Sat May  3 09:52:04.794 dbexit: really exiting now
-</span><span class='line'>
-</span><span class='line'>$ sudo service mongodb start
-</span><span class='line'>mongodb start/running, process 2415
-</span><span class='line'>$ meteor
-</span><span class='line'>[[[[[ ~/project/in/progress ]]]]]
-</span><span class='line'>
-</span><span class='line'>=> Started proxy.
-</span><span class='line'>Unexpected mongo exit code 100. Restarting.
-</span><span class='line'>Unexpected mongo exit code 100. Restarting.
-</span><span class='line'>Unexpected mongo exit code 100. Restarting.
-</span><span class='line'>Can't start Mongo server.
-</span><span class='line'>MongoDB had an unspecified uncaught exception.
-</span><span class='line'>This can be caused by MongoDB being unable to write to a local database.
-</span><span class='line'>Check that you have permissions to write to .meteor/local. MongoDB does
-</span><span class='line'>not support filesystems like NFS that do not allow file locking.</span></code></pre></td></tr></table></div></figure>
-
-
-<p>C&#8217;mon &mdash; It worked the last time! I tried it again with the same result. I tried <code>chown</code>-ing the local db. I tried <code>chown</code>-ing the database in <code>/var/lib/mongodb</code>. After each attempted solution the mongobd service would start, but meteor hiccuped on writing to the database. So I tried something radical. Something that wasn&rsquo;t in any of the manuals, or any of the <a href="http://stackoverflow.com/questions/5798549/why-cant-i-start-the-mongodb">responses to similar questions</a> on stackoverflow:</p>
-
-<figure class='code'><figcaption><span>Really? That was all? </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor reset
-</span><span class='line'>Project reset.
-</span><span class='line'><span class="nv">$ </span>meteor
-</span><span class='line'><span class="o">[[[[[</span> ~/project/in/progress <span class="o">]]]]]</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">=</span>&gt; Started proxy.
-</span><span class='line'><span class="o">=</span>&gt; Started MongoDB.
-</span><span class='line'><span class="o">=</span>&gt; Started your app.
-</span><span class='line'>
-</span><span class='line'><span class="o">=</span>&gt; App running at: http://localhost:3000/
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Turns out that if you hard shut-down your computer while your meteor project&rsquo;s mongo instance is running, it remains in a locked mode. Since it was only a development database I took a chance that dropping it would cure my ills. Voila! Meteor and mongodb are friends again.</p>
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Meteor, Fetch!]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/meteor-fetch/"/>
-    <updated>2014-03-31T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/meteor-fetch</id>
-    <content type="html"><![CDATA[<p>From <a href="http://book.discovermeteor.com/">Discover Meteor</a>: find() returns a cursor, which is a reactive data source.</p>
-
-<p>Data from reactive sources will be updated automatically to track changes in the data used to generate it. <!--more-->Cursors are derived from specific sources:</p>
-
-<ul>
-<li>Session variables</li>
-<li>Database queries on Collections</li>
-<li>Meteor.status</li>
-<li>The ready() method on a subscription handle</li>
-<li>Meteor.user</li>
-<li>Meteor.userId</li>
-<li>Meteor.loggingIn</li>
-</ul>
-
-
-<figure class='code'><figcaption><span>For example, find() using a database query </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="nx">Posts</span><span class="p">.</span><span class="nx">find</span><span class="p">()</span>
-</span><span class='line'><span class="nx">LocalCollection</span><span class="p">.</span><span class="nx">Cursor</span> <span class="p">{</span><span class="nx">collection</span><span class="o">:</span> <span class="nx">LocalCollection</span><span class="p">,</span> <span class="nx">sorter</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">_selectorId</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">,</span> <span class="nx">matcher</span><span class="o">:</span> <span class="nx">Minimongo</span><span class="p">.</span><span class="nx">Matcher</span><span class="p">,</span> <span class="nx">skip</span><span class="o">:</span> <span class="kc">undefined</span><span class="err">…</span><span class="p">}</span>
-</span><span class='line'>      <span class="nx">_selectorId</span><span class="o">:</span> <span class="kc">undefined</span>
-</span><span class='line'>      <span class="nx">_transform</span><span class="o">:</span> <span class="kc">null</span>
-</span><span class='line'>      <span class="nx">collection</span><span class="o">:</span> <span class="nx">LocalCollection</span>
-</span><span class='line'>      <span class="nx">cursor_pos</span><span class="o">:</span> <span class="mi">0</span>
-</span><span class='line'>      <span class="nx">db_objects</span><span class="o">:</span> <span class="kc">null</span>
-</span><span class='line'>      <span class="nx">fields</span><span class="o">:</span> <span class="kc">undefined</span>
-</span><span class='line'>      <span class="nx">limit</span><span class="o">:</span> <span class="kc">undefined</span>
-</span><span class='line'>      <span class="nx">matcher</span><span class="o">:</span> <span class="nx">Minimongo</span><span class="p">.</span><span class="nx">Matcher</span>
-</span><span class='line'>      <span class="nx">reactive</span><span class="o">:</span> <span class="kc">true</span>
-</span><span class='line'>      <span class="nx">skip</span><span class="o">:</span> <span class="kc">undefined</span>
-</span><span class='line'>      <span class="nx">sorter</span><span class="o">:</span> <span class="kc">null</span>
-</span><span class='line'>      <span class="nx">__proto__</span><span class="o">:</span> <span class="nb">Object</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Cursors are not query snapshots. They are query snapshot containers &mdash; the contents of which are updated by changes to the underlying data. To interact with the data contained in a cursor, we can use fetch() to transform the cursor into an array.</p>
-
-<figure class='code'><figcaption><span>A cursor becomes an array with find().fetch() </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="nx">Posts</span><span class="p">.</span><span class="nx">find</span><span class="p">().</span><span class="nx">fetch</span><span class="p">()</span>
-</span><span class='line'><span class="p">[</span>
-</span><span class='line'>    <span class="nb">Object</span>
-</span><span class='line'>    <span class="nx">_id</span><span class="o">:</span> <span class="s2">&quot;z4z36DFCaGr8Ptuqd&quot;</span>
-</span><span class='line'>    <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;The Way We Live Now&quot;</span>
-</span><span class='line'>    <span class="nx">author</span><span class="o">:</span> <span class="s2">&quot;Anthony Trollope&quot;</span>
-</span><span class='line'>    <span class="nx">__proto__</span><span class="o">:</span> <span class="nb">Object</span>
-</span><span class='line'>    <span class="p">...</span>
-</span><span class='line'><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Meteor can iterate over a cursor without first converting it to an array, but in order to interact with the data directly, you must first use fetch(), map(), or forEach(). For more cursor fun, checkout the <a href="http://docs.meteor.com/#reactivity">Meteor docs</a>.</p>
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   

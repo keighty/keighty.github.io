@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="I am working with a data dump from a meteor project, and while retrieving and displaying the existing collection was no problem at all, I was stuck &hellip;">
+  <meta name="description" content="I have once more been working my way through Sandi Metz&#8217; Practical Object-oriented Design in Ruby (POODR) for a few weeks, and developed a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,226 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/method-lookup-in-ruby/">Method Lookup in Ruby</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-28T00:00:00-08:00" pubdate data-updated="true">Dec 28<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have once more been working my way through Sandi Metz&#8217; <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">Practical Object-oriented Design in Ruby</a> (POODR) for a few weeks, and developed a mental block about method lookup.</p>
+
+<p>In Chapter 6 (Acquiring behaviour through inheritance), she describes how to extract a superclass from a group of related classes that share some behaviour by pulling methods up the inheritance chain instead of driving specializations down. This approach ensures a clean abstraction, leaving no specialized behaviour in the superclass. Where I got stuck was in the call chain that enforces the common interface:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>    <span class="n">baz</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">baz</span>
+</span><span class='line'>    <span class="k">raise</span> <span class="no">NotImplementedError</span><span class="o">.</span><span class="n">new</span> <span class="s2">&quot;You can&#39;t call #baz here!&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Bar</span> <span class="o">&lt;</span> <span class="no">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>    <span class="k">super</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">baz</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Hello, baz&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="no">Bar</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="s2">&quot;Hello, baz&quot;</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;Bar:0x007fc4f903ab90&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I could not understand why, the <code>NotImplementedError</code> wasn&rsquo;t raised when a new <code>Bar</code> was created. This is how I imagined the call stack should work:</p>
+
+<ol>
+<li><code>Bar.new</code> calls <code>Bar#initialize</code></li>
+<li><code>Bar</code> calls <code>super</code> (<code>Foo#initialize</code>)</li>
+<li><code>Foo</code> calls <code>baz</code> (<code>Foo#baz</code>)</li>
+<li>raises <code>NotImplementedError</code></li>
+</ol>
+
+
+<p>This is how the call stack actually works</p>
+
+<ol>
+<li><code>x = Bar.new</code> calls <code>Bar#initialize</code></li>
+<li><code>x</code> receives a call to <code>super</code> (<code>Foo#initalize</code>)</li>
+<li><code>x</code> receives a call to <code>baz</code> (<code>Bar#baz</code>)</li>
+<li>says &ldquo;Hello, baz&rdquo;</li>
+</ol>
+
+
+<p>The call never comes from the context of <code>Foo</code> &mdash; the receiver is always <code>x</code>, the instance of <code>Bar</code>. Classical inheritance dictates that an object can only look to itself or further up the inheritance chain for valid method definitions, not down. <code>x</code> is reaching up to call <code>super</code> but checks itself for an answer to the question <code>#baz</code>. <code>Foo#baz</code> would only ever be called if we made a new <code>Foo</code> directly:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="no">Foo</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="ss">NotImplementedError</span><span class="p">:</span> <span class="no">You</span> <span class="n">can</span><span class="s1">&#39;t call #baz here!</span>
+</span><span class='line'><span class="s1">        from (irb):7:in `baz&#39;</span>
+</span><span class='line'>        <span class="n">from</span> <span class="p">(</span><span class="n">irb</span><span class="p">):</span><span class="mi">3</span><span class="ss">:in</span> <span class="sb">`initialize&#39;</span>
+</span><span class='line'><span class="sb">        from (irb):27:in `</span><span class="kp">new</span><span class="s1">&#39;</span>
+</span><span class='line'><span class="s1">        from (irb):27</span>
+</span><span class='line'><span class="s1">        from /usr/local/var/rbenv/versions/2.1.5/bin/irb:11:in `&lt;main&gt;&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>How ruby resolves a message (classical inheritance)</h3>
+
+<p>The search for a method begins in the class of the receiving object &mdash; in the example above, Bar is always the receiving object. If the class does not implement the message, the search proceeds up the superclass chain. If none of the superclasses contain the method definition, ruby makes a second attempt to resolve the message by sending <code>method_missing(:method_name)</code> to the original object. The search restarts from the bottom, but this time for a <code>method_missing</code> handler rather than <code>:method_name</code>.</p>
+
+<p>Occasionally refreshing the ruby basics is super-rewarding.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/compilers-an-intro/">Compilers &#8211; an Intro</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-08T00:00:00-08:00" pubdate data-updated="true">Nov 8<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Last year, I was wrapping up a stint at code school, and I picked up the challenge of <a href="http://katieleonard.ca/blog/2013/canadian-flair/">building a programming language</a>. It was a very large stretch-goal, and I didn&rsquo;t complete the project, but I learned a lot about how languages are designed and built. Recently, my mentor highlighted a <a href="http://online.stanford.edu/course/compilers-0">Compilers course offered through Stanford Online</a>, and suggested that it may be time to level-up my understanding of languages once again. Since I did not reach the compiler phase for <code>eh?</code>, perhaps this is an opportunity to do so.</p>
+
+<h3>Review of compilers</h3>
+
+<p>A compiler is different from an interpreter. An interpreter takes both the data and the program and produces output. A compiler takes only the program and produces an executable. Fun fact: I learned just recently that javascript is actually a &ldquo;compiled&rdquo; language &mdash; the javascript engine uses just-in-time compilation as it is executed.</p>
+
+<p>The grandfather of all compiled languages was FORTRAN, which was developed to translate formulas into a machine-readable language. Like many software projects, the initial completion date was wildly optimistic &mdash; it took 7 years longer than their original estimate &mdash; but they developed a 5-stage pattern of processing that all later compilers would follow.</p>
+
+<h3>1. Lexical analysis</h3>
+
+<p>This first step is about word and symbol recognition: breaking a stream of characters into recognizable chunks. For example a method definition:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Ruby
+</span><span class='line'>def my_method; end
+</span><span class='line'>
+</span><span class='line'>// Java
+</span><span class='line'>public static void main() { }
+</span><span class='line'>
+</span><span class='line'># eh
+</span><span class='line'>can curl; eh?</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Recognizing white space, punctuation, and words is the first step in translating characters into actions that can be performed. The words that are recognized are usually converted into &ldquo;tokens&rdquo;, for passing in to the next stage of processing, which is why this step is occasionally called Tokenizing.</p>
+
+<h3>2. Parsing</h3>
+
+<p>After the character stream has been tokenized, doing pattern recognition on the sequence of tokens is called parsing. Returning briefly to the example of a method definition, <code>def my_method; end</code>, the lexer would recognize <code>def</code> as a key word and <code>my_method</code> as a variable, but they are grouped together by the parser as the beginning of a method block.</p>
+
+<h3>3. Semantic analysis</h3>
+
+<p>Compilers can only do a very limited amount of semantic analysis, usually limited to catching inconsistencies (such as redeclaring a variable) and ambiguities (such as type mismatches). &ldquo;A panda bear walks into a bar and eats, shoots and leaves&rdquo;, can be tokenized into component parts (verbs, nouns, articles), as well as into phrases (subject, predicate), but determining the exact meaning of the predicate requires deeper understanding of the subject. Machines do not perform well with ambiguous grammar, and developing an unambiguous language syntax is a difficult task.</p>
+
+<h3>4. Optimization</h3>
+
+<p>Optimization is where most modern language compilers spend the majority of their resources, modifying programs so that they reduce the demand for resources like memory allocation, or garbage collection. For example, the java compiler will &ldquo;unroll&rdquo; all the for loops so that they run more efficiently. Another strategy is <a href="http://en.wikipedia.org/wiki/Optimizing_compiler">peephole</a> optimization, where the compiler checks out adjacent code to see if any assignments could be reduced or replaced by simple math.</p>
+
+<p><code>x = y * 2</code> might be reduced to <code>x = y + y</code>.</p>
+
+<p><code>z = 0; x = y * z</code> might be reduced to <code>x = 0</code>, but there is a gotcha hidden there &mdash; <code>y * 0 = 0</code> is only true for integers. It results in <code>NaN</code> for floating point numbers.</p>
+
+<h3>5. Code generation</h3>
+
+<p>Code generation is the final translation of the program into an executable. The written language has been cut into tokens and parsed into phrases. It has been examined for ambiguities and inconsistencies, and optimized wherever possible. The instructions for the program are arranged neatly and must now be evaluated and scheduled. The final product is an executable program that can be run against any data of interest.</p>
+
+<p>This 5 stage pattern is followed by almost all compilers. Where they vary is in their proportions. FORTRAN spent a balanced amount of time in each of the 5 phases, while modern compilers have a much longer optimization phase than lexing or parsing.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -451,165 +671,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/managing-modules/">Gaining Closure Through Modules</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-09-06T00:00:00-07:00" pubdate data-updated="true">Sep 6<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>If you have more than one javascript running on a page, you have likely experienced the hell of trying to debug a problem caused by naming collisions. Developing the scripts in isolation, it makes sense to assign widgetA.name dynamically using jQuery, but then why does the title of widgetGraphB disappear? Avoid the pain of unintended consequences by namespacing your scripts. </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/managing-modules/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/backup-meteor-yes-we-can/">Backup Meteor? Yes We Can</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-24T00:00:00-07:00" pubdate data-updated="true">Aug 24<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Retrieving a data dump from your meteor production database and copying it to local development is a three-step, time sensitive process.</p>
-
-<h3>1. Retrieve your production url</h3>
-
-<p>Passing a <code>-url</code> flag to the <code>meteor mongo</code> command will return a long string of goodies:</p>
-
-<figure class='code'><figcaption><span>Dude, where&#8217;s my data? </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ meteor mongo --url my_app.meteor.com
-</span><span class='line'>
-</span><span class='line'>mongodb://client-12345678:9abcdef1-234-5678-9abc-def123456789@singularsensation-db-a3.meteor.io:12345/my_app_meteor_net</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This string contains all the information you require to access your production data:</p>
-
-<ul>
-<li>your client id (from // to :)</li>
-<li>a server password (from : to @)</li>
-<li>a server name and port number (from @ to /)</li>
-<li>the datastore identification (from / to the end)</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>mongodb://&lt;CLIENT_ID&gt;:&lt;PASSWORD_HASH&gt;@&lt;SERVER_NAME:PORT&gt;/&lt;YOUR_DATA_STORE&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Retrieving your data is time-sensitive because the password hash will expire after 60 seconds.</p>
-
-<h3>2. Retrieve your data using mongodump</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mongodump -u CLIENT_ID -h SERVER_NAME:PORT -d YOUR_DATA_STORE -p PASSWORD_HASH
-</span><span class='line'>
-</span><span class='line'>connected to: &lt;SERVER_NAME:PORT&gt;
-</span><span class='line'>Sun Aug 24 10:50:32.342 DATABASE: YOUR_DATA_STORE  to   dump/YOUR_DATA_STORE
-</span><span class='line'>Sun Aug 24 10:50:32.989   YOUR_DATA_STORE.system.indexes to dump/YOUR_DATA_STORE/system.indexes.bson
-</span><span class='line'>Sun Aug 24 10:50:34.368      14 objects
-</span><span class='line'>Sun Aug 24 10:50:34.369   YOUR_DATA_STORE.system.users to dump/YOUR_DATA_STORE/system.users.bson
-</span><span class='line'>Sun Aug 24 10:50:34.559      2 objects
-</span><span class='line'>... and on and on
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Mongodb copies your data from production into a new folder called &ldquo;dump&rdquo; in your present working directory.</p>
-
-<h3>3. Use mongorestore to copy the data from the dump into your local datastore</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ mongorestore --host 127.0.0.1 --port 3001 --db meteor --drop dump/YOUR_DATA_STORE/
-</span><span class='line'>
-</span><span class='line'>connected to: 127.0.0.1:3001
-</span><span class='line'>Sun Aug 24 11:36:54.693 dump/YOUR_DATA_STORE/users.bson
-</span><span class='line'>Sun Aug 24 11:36:54.693   going into namespace [meteor.users]
-</span><span class='line'>Sun Aug 24 11:36:54.693    dropping
-</span><span class='line'>2 objects found
-</span><span class='line'>Sun Aug 24 11:36:55.834   Creating index: { name: "_id_", key: { _id: 1 }, ns: "meteor.users" }
-</span><span class='line'>Sun Aug 24 11:36:55.993   Creating index: { name: "username_1", key: { username: 1 }, unique: true, ns: "meteor.users", sparse: 1 }
-</span><span class='line'>... and on and on</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
-
-<p>Resources:
-<a href="http://stackoverflow.com/a/12447710">stackoverflow</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -634,6 +695,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails/">#dup vs #clone in Ruby and Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/cleaning-the-campground/">Cleaning the Campground</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/the-senior-software-engineer/">TDD and the Senior Software Engineer</a>
       </li>
     
@@ -643,14 +712,6 @@
     
       <li class="post">
         <a href="/blog/2015/the-happiness-hypothesis/">The Happiness Hypothesis</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/method-lookup-in-ruby/">Method Lookup in Ruby</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/compilers-an-intro/">Compilers &#8211; an Intro</a>
       </li>
     
   </ul>
