@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-10T11:38:40-08:00</updated>
+  <updated>2015-01-10T14:24:51-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -229,6 +229,104 @@
 
 
 <p>There are subtle differences between <code>#clone</code> and <code>#dup</code> in Ruby, and less subtle differences in Rails (depending on your version). Take care that the object you want is the object you get.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Cleaning the Campground]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/cleaning-the-campground/"/>
+    <updated>2015-01-10T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/cleaning-the-campground</id>
+    <content type="html"><![CDATA[<p>If you work in a code base with many other contributors, you may have learned the scouting philosophy to &ldquo;leave the campground cleaner than you found it.&rdquo; Sometimes the code you are working in can seem so entangled and complex that it is hard to know where to begin, but <a href="http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882/ref=sr_1_1?ie=UTF8&amp;qid=1420928385&amp;sr=8-1&amp;keywords=clean+code">Robert C. Martin&rsquo;s foundational book, *Clean Code</a>*, tells us that very small changes can improve the readability and maintainability of a piece of code.</p>
+
+<blockquote><p>&ldquo;It is not enough to write the code well. The code has to be <em>kept clean</em> over time.&rdquo;</p></blockquote>
+
+<!--more-->
+
+
+<p><a href="http://en.wikipedia.org/wiki/Software_rot">Code rot</a> happens to every well-intentioned but long-lived code base, and it can happen either by neglect or by constant development. <span class='pullquote-right' data-pullquote='Add in more developers, each with different coding styles, and before long you will find your code to be impenetrably complex and impossible to modify.'>Neglected software will suffer a gradual deterioration in performance and responsiveness over time. Security vulnerabilities and incompatibilities aside, as new applications are built in newer and faster frameworks, your application will perform poorly in comparison. If your software is actively developed it will be modified, and as it is modified it&rsquo;s complexity will increase. Add in more developers, each with different coding styles, and before long you will find your code to be impenetrably complex and impossible to modify.
+</span></p>
+
+<p>There is hope for your legacy application, as long as you establish a culture of constant small improvements:</p>
+
+<ol>
+<li>Change one variable name for the better</li>
+<li>Break one large function into two or more smaller ones.</li>
+<li>Eliminate one small bit of duplication</li>
+<li>Clean up one composite if statement.</li>
+</ol>
+
+
+<p>That last one is a bit like low-hanging fruit. Take this complex if statement in <a href="https://github.com/rack/rack/blob/rack-1.5/lib/rack/deflater.rb#L30-L33">Rack::Deflater#call</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def call
+</span><span class='line'>  ...
+</span><span class='line'>
+</span><span class='line'>  # Skip compressing empty entity body responses and responses with
+</span><span class='line'>  # no-transform set.
+</span><span class='line'>  if Utils::STATUS_WITH_NO_ENTITY_BODY.include?(status) ||
+</span><span class='line'>      headers['Cache-Control'].to_s =~ /\bno-transform\b/ ||
+</span><span class='line'>     (headers['Content-Encoding'] && headers['Content-Encoding'] !~ /\bidentity\b/)
+</span><span class='line'>    return [status, headers, body]
+</span><span class='line'>  end
+</span><span class='line'>  ...</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The comment attempts to explain what the code cannot: skip response compression under certain conditions. The intention could easily be described by extracting both the comment and the if statement to a method:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def call
+</span><span class='line'>  ...
+</span><span class='line'>  if skip_compression?
+</span><span class='line'>    return [status, headers, body]
+</span><span class='line'>  end
+</span><span class='line'>  ...
+</span><span class='line'>end
+</span><span class='line'>
+</span><span class='line'>private
+</span><span class='line'>
+</span><span class='line'># Skip compressing empty entity body responses and responses with
+</span><span class='line'># no-transform set.
+</span><span class='line'>def skip_compression?
+</span><span class='line'>  Utils::STATUS_WITH_NO_ENTITY_BODY.include?(status) ||
+</span><span class='line'>    headers['Cache-Control'].to_s =~ /\bno-transform\b/ ||
+</span><span class='line'>   (headers['Content-Encoding'] && headers['Content-Encoding'] !~ /\bidentity\b/)
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>While the <code>if</code> statement itself is not much better, at least <code>#call</code> is a little more readable. Fight against code rot while building new features in a legacy code base by making small improvements where you can.</p>
+
+<!-- resources
+http://en.wikipedia.org/wiki/Software_entropy
+-->
+
 ]]></content>
   </entry>
   
@@ -1725,121 +1823,6 @@ importData();
 <li><strong>tickSize()</strong>: specify one arg for inner ticks, another argument for outer ticks, or use outerTickSize() or innerTickSize() to specify one or the other. Outer ticks are at the ends of the scales.</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[D3 Nests and Rollups]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/d3-nests-and-rollups/"/>
-    <updated>2014-03-04T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/d3-nests-and-rollups</id>
-    <content type="html"><![CDATA[<p>D3 provides powerful functions for manipulating raw data sets, including csv(), nest(), and rollup().</p>
-
-<!--more-->
-
-
-<p>I generated a hundred rows of test_data.csv using <a href="http://www.generatedata.com/#about">generatedata.com</a>:</p>
-
-<figure class='code'><figcaption><span>test_data.csv</span><a href='https://gist.github.com/keighty/9348444#file-test_data-csv'>Gist </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>Colors,X,Y,Quantity
-</span><span class='line'>violet,1,8,91
-</span><span class='line'>blue,9,1,32
-</span><span class='line'>blue,3,1,67
-</span><span class='line'>yellow,5,5,63
-</span><span class='line'>violet,6,6,57
-</span><span class='line'>green,5,10,65
-</span><span class='line'>red,8,2,36
-</span><span class='line'>...
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The basic properties are a Color (one of blue, yellow, violet, green, and red), an X-value (between 1 and 10), a Y-value (also between 1 and 10), and a Quantity value (between 1 and 100).</p>
-
-<h3>csv()</h3>
-
-<p>You can import a raw, comma-delimited data file, and bind the data directly to an svg.</p>
-
-<figure class='code'><figcaption><span>csv()</span><a href='https://gist.github.com/keighty/9348444'>Gist </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">d3</span><span class="p">.</span><span class="nx">csv</span><span class="p">(</span><span class="s2">&quot;test_data.csv&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">csv</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="nx">csv</span><span class="p">).</span><span class="nx">enter</span><span class="p">()</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">);</span>
-</span><span class='line'><span class="p">})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><img src="http://www.katieleonard.ca/images/post_d3_csv_data.png"></p>
-
-<h3>nest() and rollup()</h3>
-
-<p>You can also aggregate data on any property &mdash; just tell D3 which one, and use any of D3&rsquo;s handy utility functions (mean, median, sum, min/max, quantile, etc) to return the aggregate data you want to display. For example, I want to plot the average data for each color. I tell my D3 selection to nest the data on the color key. Then I tell the rollup function to take the average for each property of the data. Pass the new data to the svg instead of the csv, and voila</p>
-
-<figure class='code'><figcaption><span>nest() and rollup()</span><a href='https://gist.github.com/keighty/9348540'>Gist </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">d3</span><span class="p">.</span><span class="nx">csv</span><span class="p">(</span><span class="s2">&quot;test_data.csv&quot;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">csv</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">data</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">nest</span><span class="p">()</span>
-</span><span class='line'>          <span class="p">.</span><span class="nx">key</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">Colors</span><span class="p">;</span> <span class="p">})</span>
-</span><span class='line'>          <span class="p">.</span><span class="nx">rollup</span><span class="p">(</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="k">return</span> <span class="p">{</span>
-</span><span class='line'>              <span class="s2">&quot;X&quot;</span><span class="o">:</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">mean</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">+</span><span class="nx">e</span><span class="p">.</span><span class="nx">X</span><span class="p">;</span> <span class="p">}),</span>
-</span><span class='line'>              <span class="s2">&quot;Y&quot;</span><span class="o">:</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">mean</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">+</span><span class="nx">e</span><span class="p">.</span><span class="nx">Y</span><span class="p">;</span> <span class="p">}),</span>
-</span><span class='line'>              <span class="s2">&quot;Quantity&quot;</span><span class="o">:</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">mean</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">+</span><span class="nx">e</span><span class="p">.</span><span class="nx">Quantity</span><span class="p">;</span> <span class="p">})</span>
-</span><span class='line'>            <span class="p">};</span>
-</span><span class='line'>          <span class="p">})</span>
-</span><span class='line'>          <span class="p">.</span><span class="nx">entries</span><span class="p">(</span><span class="nx">csv</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="nx">data</span><span class="p">).</span><span class="nx">enter</span><span class="p">()</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;circle&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><img src="http://www.katieleonard.ca/images/post_d3_rollupdata_image.png"></p>
-
-<p>D3 is so awesome.</p>
 ]]></content>
   </entry>
   

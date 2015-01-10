@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Read | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/read/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-10T11:38:40-08:00</updated>
+  <updated>2015-01-10T14:24:51-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,88 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Cleaning the Campground]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/cleaning-the-campground/"/>
+    <updated>2015-01-10T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/cleaning-the-campground</id>
+    <content type="html"><![CDATA[<p>If you work in a code base with many other contributors, you may have learned the scouting philosophy to &ldquo;leave the campground cleaner than you found it.&rdquo; Sometimes the code you are working in can seem so entangled and complex that it is hard to know where to begin, but <a href="http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882/ref=sr_1_1?ie=UTF8&amp;qid=1420928385&amp;sr=8-1&amp;keywords=clean+code">Robert C. Martin&rsquo;s foundational book, *Clean Code</a>*, tells us that very small changes can improve the readability and maintainability of a piece of code.</p>
+
+<blockquote><p>&ldquo;It is not enough to write the code well. The code has to be <em>kept clean</em> over time.&rdquo;</p></blockquote>
+
+<!--more-->
+
+
+<p><a href="http://en.wikipedia.org/wiki/Software_rot">Code rot</a> happens to every well-intentioned but long-lived code base, and it can happen either by neglect or by constant development. Surround your pullquote like this {" text to be quoted "}</p>
+
+<p>There is hope for your legacy application, as long as you establish a culture of constant small improvements:</p>
+
+<ol>
+<li>Change one variable name for the better</li>
+<li>Break one large function into two or more smaller ones.</li>
+<li>Eliminate one small bit of duplication</li>
+<li>Clean up one composite if statement.</li>
+</ol>
+
+
+<p>That last one is a bit like low-hanging fruit. Take this complex if statement in <a href="https://github.com/rack/rack/blob/rack-1.5/lib/rack/deflater.rb#L30-L33">Rack::Deflater#call</a></p>
+
+<p>```
+def call
+  &hellip;</p>
+
+<p>  # Skip compressing empty entity body responses and responses with
+  # no-transform set.
+  if Utils::STATUS_WITH_NO_ENTITY_BODY.include?(status) ||</p>
+
+<pre><code>  headers['Cache-Control'].to_s =~ /\bno-transform\b/ ||
+ (headers['Content-Encoding'] &amp;&amp; headers['Content-Encoding'] !~ /\bidentity\b/)
+return [status, headers, body]
+</code></pre>
+
+<p>  end
+  &hellip;
+```</p>
+
+<p>The comment attempts to explain what the code cannot: skip response compression under certain conditions. The intention could easily be described by extracting both the comment and the if statement to a method:</p>
+
+<p>```
+def call
+  &hellip;
+  if skip_compression?</p>
+
+<pre><code>return [status, headers, body]
+</code></pre>
+
+<p>  end
+  &hellip;
+end</p>
+
+<p>private</p>
+
+<h1>Skip compressing empty entity body responses and responses with</h1>
+
+<h1>no-transform set.</h1>
+
+<p>def skip_compression?
+  Utils::STATUS_WITH_NO_ENTITY_BODY.include?(status) ||</p>
+
+<pre><code>headers['Cache-Control'].to_s =~ /\bno-transform\b/ ||
+</code></pre>
+
+<p>   (headers[&lsquo;Content-Encoding&rsquo;] &amp;&amp; headers[&lsquo;Content-Encoding&rsquo;] !~ /\bidentity\b/)
+end
+```</p>
+
+<p>While the <code>if</code> statement itself is not much better, at least <code>#call</code> is a little more readable. Fight against code rot while building new features in a legacy code base by making small improvements where you can.</p>
+
+<!-- resources
+http://en.wikipedia.org/wiki/Software_entropy
+-->
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[TDD and the Senior Software Engineer]]></title>
@@ -165,58 +247,6 @@ Test-driven development can help you grow your career.
 <p>She has recently begun a campaign to <a href="http://banbossy.com/">ban the word &ldquo;bossy&rdquo;</a>, and while words have the power to shape our values, it is a passive approach to solving the problem. Boys don&rsquo;t show a propensity towards leadership in middle-school any more than girls show a propensity towards secretarial work. Sandberg&rsquo;s <a href="http://leanin.org/">&ldquo;Lean In&rdquo;</a> project comes closer to directly addressing the issue. She realizes that you can&rsquo;t be what you can&rsquo;t see", and works to raise the profiles of powerful women. When it becomes normal to have female leaders, I am sure we will find more girls expressing ambition. Likewise, when it becomes normal for men to share equally in care-giving, boys will begin making different choices.</p>
 
 <p><a href="http://www.amazon.com/Lean-In-Women-Work-Will/dp/0385349947/ref=sr_1_1?ie=UTF8&amp;qid=1395756488&amp;sr=8-1&amp;keywords=lean+in">Lean In: Women, Work, and the Will to Lead</a> by Sheryl Sandberg</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The Value of Slow Transitions]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/the-value-of-transition/"/>
-    <updated>2014-03-08T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/the-value-of-transition</id>
-    <content type="html"><![CDATA[<h3>The Why</h3>
-
-<p>From <a href="http://bost.ocks.org/mike/constancy/">Object Constancy</a> by Mike Bostock:</p>
-
-<blockquote><p>Animated transitions are pretty, but they also serve a purpose: they make it easier to follow the data. This is known as <strong>object constancy</strong>: a graphical element that represents a particular data point&hellip; can be tracked visually through the transition. This lessens the cognitive burden by using <strong>preattentive processing</strong> of motion rather than sequential scanning of labels.</p></blockquote>
-
-<p>(The emphasis is mine)</p>
-
-<h3>The How</h3>
-
-<p>Object constancy is achieved through object identity: the data is bound to it&rsquo;s object by a shared unique identifier. This allows D3 to reuse the object when the data set is updated. Object identity is achieved by passing a key function to the data() method at the time of data binding:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>var data = [ // &lt;-A&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;pre>&lt;code>    {id: 0, value: "foo"},
-</span><span class='line'>    {id: 1, value: "bar"},
-</span><span class='line'>    {id: 2, value: "foo"},
-</span><span class='line'>    {id: 3, value: "baz"},
-</span><span class='line'>    {id: 4, value: "bar"}
-</span><span class='line'>];
-</span><span class='line'>&lt;/code>&lt;/pre>
-</span><span class='line'>
-</span><span class='line'>&lt;p>d3.selectAll(&ldquo;svg:g&rdquo;)&lt;/p>
-</span><span class='line'>
-</span><span class='line'>&lt;pre>&lt;code>.data(data, function(d){return d.id;});
-</span><span class='line'>&lt;/code>&lt;/pre>
-</span><span class='line'>
-</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
 ]]></content>
   </entry>
   
