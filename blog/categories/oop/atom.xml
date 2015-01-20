@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Oop | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/oop/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-20T07:40:43-08:00</updated>
+  <updated>2015-01-20T07:41:52-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -18,7 +18,7 @@
     <link href="http://www.katieleonard.ca/blog/2015/objects-vs-data-structures/"/>
     <updated>2015-01-18T00:00:00-08:00</updated>
     <id>http://www.katieleonard.ca/blog/2015/objects-vs-data-structures</id>
-    <content type="html"><![CDATA[<p>&ldquo;It is impossible to create an abstraction unknowingly or by accident,&rdquo; says Sandi Metz in <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330/ref=sr_1_1?ie=UTF8&amp;qid=1421723392&amp;sr=8-1&amp;keywords=practical+object+oriented+design+in+ruby"><em>Practical Object Oriented Design in Ruby</em></a>. An abstraction is a common, stable quality, such that you would find in a java interface. An interface is an idea that cannot be made concrete, but contains behaviour <a href="http://en.wikipedia.org/wiki/Interface_%28Java%29">encode similarities</a> which objects might share. Even the definition of abstraction is abstract. I wasn&rsquo;t until I read Robert C. Martin&rsquo;s chapter on Objects and Data Structures in <a href="http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882"><em>Clean Code</em></a> that I really started to understand them.</p>
+    <content type="html"><![CDATA[<p>&ldquo;It is impossible to create an abstraction unknowingly or by accident,&rdquo; says Sandi Metz in <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330/ref=sr_1_1?ie=UTF8&amp;qid=1421723392&amp;sr=8-1&amp;keywords=practical+object+oriented+design+in+ruby"><em>Practical Object Oriented Design in Ruby</em></a>. An abstraction is a common, stable quality, such that you would find in a java interface. An interface is an idea that cannot be made concrete, but contains behaviour <a href="http://en.wikipedia.org/wiki/Interface_%28Java%29">encoding similarities</a> which objects might share. Even the definition of abstraction is abstract. I wasn&rsquo;t until I read Robert C. Martin&rsquo;s chapter on Objects and Data Structures in <a href="http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882"><em>Clean Code</em></a> that I really started to understand them.</p>
 
 <!--more-->
 
