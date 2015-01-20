@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Node | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/node/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-20T07:42:26-08:00</updated>
+  <updated>2015-01-20T07:57:47-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -22,22 +22,34 @@
 
 <p>My schema was pretty straightforward and taken directly from an existing document:</p>
 
-<p>{% codeblock %}
-var postSchema = mongoose.Schema({
-  &ldquo;title&rdquo; : String,
-  &ldquo;company&rdquo; : String,
-  &ldquo;author&rdquo; : String,
-  &ldquo;music&rdquo; : String,
-  &ldquo;choreographer&rdquo; : String,
-  &ldquo;showDate&rdquo; : String,
-  &ldquo;image&rdquo;: String,
-  &ldquo;userId&rdquo; : String,
-  &ldquo;postAuthor&rdquo; : String,
-  &ldquo;submitted&rdquo; : Number,
-  &ldquo;commentsCount&rdquo; : Number,
-  &ldquo;_id&rdquo;:  String
-});
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var postSchema = mongoose.Schema({
+</span><span class='line'>  &ldquo;title&rdquo; : String,
+</span><span class='line'>  &ldquo;company&rdquo; : String,
+</span><span class='line'>  &ldquo;author&rdquo; : String,
+</span><span class='line'>  &ldquo;music&rdquo; : String,
+</span><span class='line'>  &ldquo;choreographer&rdquo; : String,
+</span><span class='line'>  &ldquo;showDate&rdquo; : String,
+</span><span class='line'>  &ldquo;image&rdquo;: String,
+</span><span class='line'>  &ldquo;userId&rdquo; : String,
+</span><span class='line'>  &ldquo;postAuthor&rdquo; : String,
+</span><span class='line'>  &ldquo;submitted&rdquo; : Number,
+</span><span class='line'>  &ldquo;commentsCount&rdquo; : Number,
+</span><span class='line'>  &ldquo;_id&rdquo;:  String
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>The problem was that last field: <code>_id</code>. If I included it in the schema then I would have the objectId available on the front end but would get an error trying to insert a new document: <code>[Error: document must have an _id before saving]</code>. If I removed <code>_id</code> from the schema I could save documents just fine but could not pass through the objectIds of already existing documents. I have learned that mongo is very flexible when it comes to assigning ids before insertion into the database.</p>
 
@@ -58,7 +70,7 @@ var postSchema = mongoose.Schema({
 </ol>
 
 
-<p>{% raw %}
+<p>
 ```</p>
 
 <blockquote><p>doc = db.posts.findOne()
@@ -98,7 +110,7 @@ ObjectId(&ldquo;5442af27cc37fe6f03648fdd&rdquo;)</p>
 }</p></blockquote>
 
 <p>```
-{% endraw %}</p>
+</p>
 
 <p>Here is a handy script for changing the entire collection at once:</p>
 
@@ -125,15 +137,17 @@ db.posts.find().forEach(function(doc){ var doc = db.posts.findOne(); var title =
 
 <p>I am adapting one of my meteor projects to use mongo and node.js, connected through mongoose, and fitting in the callback required for node sent me to the google. After a few stackoverflow searches I turned up a several options:</p>
 
-<p>{% codeblock Option 1 (spoiler.. it didn&rsquo;t work) %}
-Post.find({}, {sort:[[&lsquo;submitted&rsquo;,-1]]}, function(err, doc) {
-  response.send(doc);
-});
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Option 1 (spoiler.. it didn&rsquo;t work) </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Post.find({}, {sort:[[&lsquo;submitted&rsquo;,-1]]}, function(err, doc) {
+</span><span class='line'>  response.send(doc);
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>This option returned a object containing only the entry ids, not the full documents:</p>
 
-<p>{% raw %}
+<p>
 <code>
 0: {_id:2tcte4Srd8QMSqrKt}
 1: {_id:5c3FdWphiYiMQzukw}
@@ -141,55 +155,72 @@ Post.find({}, {sort:[[&lsquo;submitted&rsquo;,-1]]}, function(err, doc) {
 3: {_id:AWNYsxBgFnv9Z4NSA}
 ...
 </code>
-{% endraw %}</p>
+</p>
 
 <p>Another option suggested that converting the result to an Array would complete the query:</p>
 
-<p>{% codeblock Option2 (spoiler.. also didn&rsquo;t work) %}
-Post.find({},{sort: [[&lsquo;submitted&rsquo;,-1]]}).toArray(function(e, results){
-  response.send(results);
-});
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Option2 (spoiler.. also didn&rsquo;t work) </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Post.find({},{sort: [[&lsquo;submitted&rsquo;,-1]]}).toArray(function(e, results){
+</span><span class='line'>  response.send(results);
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>This option resulted in <code>TypeError: Object #&lt;Query&gt; has no method 'toArray'</code>.</p>
 
 <p>Rather than continuing to search for a snippet to steal, I turned to the source, and it turns out that querying mongo from mongoose is simpler than either of these strategies.</p>
 
-<p>{% codeblock Option3 &mdash; just right %}
-Post.find()
-  .sort(&ldquo;-submitted&rdquo;)
-  .exec(function(err, doc) {</p>
-
-<pre><code>response.send(doc);
-</code></pre>
-
-<p>  });
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Option3 &mdash; just right </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Post.find()
+</span><span class='line'>  .sort(&ldquo;-submitted&rdquo;)
+</span><span class='line'>  .exec(function(err, doc) {&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>response.send(doc);
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>  });</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Success! Why? Because while mongo itself returns a cursor object which can be transformed into documents using <code>toArray()</code>, or <code>fetch()</code> in the case of meteor, mongoose returns a <a href="http://mongoosejs.com/docs/queries.html">Query</a> object, which will return the full documents once it is passed a callback.</p>
 
 <p>A Query object can be built using <a href="https://github.com/LearnBoost/mongoose/blob/master/lib/query.js#L211-L216">method chaining</a> &mdash;
  each method (find | where | limit | select | sort) returns a new Query object, which allows you to build in stages:</p>
 
-<p>{% codeblock %}
-Post
-.find({ title: /the/ }) // query
-.where(&lsquo;cost&rsquo;).gt(17).lt(66)  // query
-.where(&lsquo;location&rsquo;).in([&lsquo;Schnitz&rsquo;, &lsquo;Armory&rsquo;])  // query
-.limit(10)  // query
-.sort(&lsquo;-ticketDate&rsquo;)  // query
-.select(&lsquo;title company&rsquo;)  // query
-.exec(callback);  // EXECUTE THE QUERY
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Post
+</span><span class='line'>.find({ title: /the/ }) // query
+</span><span class='line'>.where(&lsquo;cost&rsquo;).gt(17).lt(66)  // query
+</span><span class='line'>.where(&lsquo;location&rsquo;).in([&lsquo;Schnitz&rsquo;, &lsquo;Armory&rsquo;])  // query
+</span><span class='line'>.limit(10)  // query
+</span><span class='line'>.sort(&lsquo;-ticketDate&rsquo;)  // query
+</span><span class='line'>.select(&lsquo;title company&rsquo;)  // query
+</span><span class='line'>.exec(callback);  // EXECUTE THE QUERY</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Another fun bit of javascript/mongoose magic, is that you can indicate <a href="https://github.com/LearnBoost/mongoose/blob/master/lib/query.js#L1295-L1297">sorting in descending order</a> by prefacing the sort string with a &ldquo;&ndash;&rdquo; :</p>
 
-<p>{% codeblock %}
-Post
-.find({ title: /the/ }) // query
-.sort(&lsquo;-ticketDate&rsquo;)  // DESC!
-.exec(callback);  // EXECUTE THE QUERY
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Post
+</span><span class='line'>.find({ title: /the/ }) // query
+</span><span class='line'>.sort(&lsquo;-ticketDate&rsquo;)  // DESC!
+</span><span class='line'>.exec(callback);  // EXECUTE THE QUERY</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Awesome.</p>
 

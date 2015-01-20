@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-20T07:42:26-08:00</updated>
+  <updated>2015-01-20T07:57:47-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,99 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Objects vs Data Structures]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/objects-vs-data-structures/"/>
+    <updated>2015-01-18T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/objects-vs-data-structures</id>
+    <content type="html"><![CDATA[<p>&ldquo;It is impossible to create an abstraction unknowingly or by accident,&rdquo; says Sandi Metz in <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330/ref=sr_1_1?ie=UTF8&amp;qid=1421723392&amp;sr=8-1&amp;keywords=practical+object+oriented+design+in+ruby"><em>Practical Object Oriented Design in Ruby</em></a>. An abstraction is a common, stable quality, such that you would find in a java interface. An interface is an idea that cannot be made concrete, but contains behaviour <a href="http://en.wikipedia.org/wiki/Interface_%28Java%29">encoding similarities</a> which objects might share. Even the definition of abstraction is abstract, and it wasn&rsquo;t until I read Robert C. Martin&rsquo;s chapter on Objects and Data Structures in <a href="http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882"><em>Clean Code</em></a> that I really started to understand them.</p>
+
+<!--more-->
+
+
+<h3>What is a data structure</h3>
+
+<p>A data structure is a class that exposes its data to the public. It should have no meaningful behaviour, and can be characterized by a set of attributes along with getters and setters.</p>
+
+<p>```ruby
+class Point1
+  attr_accessor :x, :y, :z
+end</p>
+
+<p>p = Point1.new
+p.x = 1
+p.y = 1
+p.z = 1
+p
+```</p>
+
+<p>In this example, a Point is defined as an object at some location on a coordinate grid of some kind. That sounds abstract enough: you can create a point, Surround your pullquote like this {" text to be quoted "} Adding an initializer that sets each variable, or a <code>to_s</code> method for getting a pretty output, would not make the Point1 class any more an abstraction of a position in space. To make an abstraction you can&rsquo;t just use getters and setters &mdash; you have to think about how you are representing the data.</p>
+
+<h3>What is an object</h3>
+
+<p>An object hides its data behind abstractions. A Point is not defined by its <code>[@x, @y, @z]</code>, but by its location in space. If space is a coordinate system, it could be 2- or 3-dimensional.</p>
+
+<p>```
+class Point2
+  def initialize(x, y, z = nil)</p>
+
+<pre><code>set_location(x, y, z)
+</code></pre>
+
+<p>  end</p>
+
+<p>  def to_s</p>
+
+<pre><code>"(#{[@x, @y, @z].compact.join(',')})"
+</code></pre>
+
+<p>  end
+  alias_method :location, :to_s</p>
+
+<p>  def set_location(x, y, z = nil)</p>
+
+<pre><code>@x = x
+@y = y
+@z = z
+location
+</code></pre>
+
+<p>  end
+  private :set_location</p>
+
+<p>  alias_method :move_point, :set_location
+  public :move_point</p>
+
+<p>end</p>
+
+<p>p = Point2.new(1, 1)
+p.move_point(2, 3)
+p.move_point(2, 3, 7)
+```</p>
+
+<p>A point cannot exist separate from it&rsquo;s coordinates, and coordinates cannot exist or be altered without using the abstraction of moving in space.</p>
+
+<blockquote><p>&ldquo;We do not want to expose the details of our data. Rather we want to express our data in abstract terms. This is not merely accomplished by using interfaces and/or getters and setters. Serious thought needs to be put into the best way to represent the data that an object contains.&rdquo;</p>
+
+<p>&mdash; Martin</p></blockquote>
+
+<p>This is why <a href="http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/">fat models are an anti-pattern in Rails</a>. ActiveRecord makes an object out of a data structure, and adding behaviour beyond data validation makes the model a hybrid data object. <a href="http://railscasts.com/episodes/398-service-objects">Service Objects</a> are abstractions of model behaviour (pun intended).</p>
+
+<p>Now I know what an abstraction is, and I understand that simply extracting methods into interfaces doesn&rsquo;t magically make an abstraction. As Metz says, &ldquo;good design naturally progresses toward small independent objects that rely on abstractions.&rdquo; An object is more than a data structure; it is an idea and it must be applied deliberately.</p>
+
+<!-- resources
+http://www.cgore.com/programming/ruby/public-aliases-of-private-methods.lisp
+-->
+
+
+<!-- resources
+http://railscasts.com/episodes/398-service-objects
+http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/
+-->
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[#dup vs #clone in Ruby and Rails]]></title>
@@ -162,23 +255,25 @@ NoMethodError: undefined method `bacon' for #&lt;User:0x007fd7e98f05c0></p>
 
 <p>Using <a href="https://github.com/thoughtbot/factory_girl">FactoryGirl</a> to create a User is straightforward:</p>
 
-<p>{% highlight ruby %}
-FactoryGirl.define do
-  factory :user do</p>
+<p><div>
+  <pre><code class='ruby'>FactoryGirl.define do
+  factory :user do&lt;/p&gt;
 
-<pre><code>sequence :name  { |n| "person#{n}" }
-sequence :email { |n| "person#{n}@example.com" }
-</code></pre>
+&lt;pre&gt;&lt;code&gt;sequence :name  { |n| &quot;person#{n}&quot; }
+sequence :email { |n| &quot;person#{n}@example.com&quot; }
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>  end
-end</p>
+&lt;p&gt;  end
+end&lt;/p&gt;
 
-<p>describe User do
+&lt;p&gt;describe User do
   before  { @user = FactoryGirl.create(:user) }
   subject { @user }
   it { should respond_to(:name) }
-  &hellip;
-end {% endhighlight %}</p>
+  &amp;hellip;
+end</code></pre>
+</div>
+</p>
 
 <p>How do I create Goals that are linked to the User?</p>
 
@@ -189,82 +284,94 @@ end {% endhighlight %}</p>
 
 <h5>1. Make a new Factory for producing Goals:</h5>
 
-<p>{% highlight ruby %}
-FactoryGirl.define do
-  factory :goal do</p>
+<p><div>
+  <pre><code class='ruby'>FactoryGirl.define do
+  factory :goal do&lt;/p&gt;
 
-<pre><code>sequence :description { |n| "my goal #{n}" }
-sequence :motivation  { |n| "my motivation #{n}" }
-</code></pre>
+&lt;pre&gt;&lt;code&gt;sequence :description { |n| &quot;my goal #{n}&quot; }
+sequence :motivation  { |n| &quot;my motivation #{n}&quot; }
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>  end
-end {% endhighlight %}</p>
+&lt;p&gt;  end
+end</code></pre>
+</div>
+</p>
 
 <h5>2. Call the Goal Factory from the User Factory and store the Goals in an Array</h5>
 
-<p>{% highlight ruby %}
-FactoryGirl.define do
-  factory :user do</p>
+<p><div>
+  <pre><code class='ruby'>FactoryGirl.define do
+  factory :user do&lt;/p&gt;
 
-<pre><code>sequence :name { |n| "person#{n}" }
-sequence :email { |n| "person#{n}@example.com" }
+&lt;pre&gt;&lt;code&gt;sequence :name { |n| &quot;person#{n}&quot; }
+sequence :email { |n| &quot;person#{n}@example.com&quot; }
 
 goals { Array.new(1) { FactoryGirl.build(:goal) } }
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>  end
-end {% endhighlight %}</p>
+&lt;p&gt;  end
+end</code></pre>
+</div>
+</p>
 
 <p>Your objects will look like this:
-{% highlight bash %}</p>
+<div>
+  <pre><code class='bash'>&lt;/p&gt;
 
-<blockquote><p>p @user</p>
+&lt;blockquote&gt;&lt;p&gt;p @user&lt;/p&gt;
 
-<h1><User id: 1, name: "person1", email: "person1@example.com", ... ></h1>
+&lt;h1&gt;&lt;User id: 1, name: &quot;person1&quot;, email: &quot;person1@example.com&quot;, ... &gt;&lt;/h1&gt;
 
-<p>p @user.goals.first</p>
+&lt;p&gt;p @user.goals.first&lt;/p&gt;
 
-<h1>&lt;ActiveRecord::Associations::CollectionProxy [#<Goal id: 1, user_id: 1, description: "my goal 1", motivation: "my motivation 1", ...]> {% endhighlight %}</h1></blockquote>
+&lt;h1&gt;&amp;lt;ActiveRecord::Associations::CollectionProxy [#&lt;Goal id: 1, user_id: 1, description: &quot;my goal 1&quot;, motivation: &quot;my motivation 1&quot;, ...]&gt;</code></pre>
+</div>
+</h1></blockquote>
 
 <p>Create Hours for Goals in the same manner: create a Factory for making Hours, call the Hours Factory from the Goals Factory.</p>
 
-<p>{% highlight ruby %}
-FactoryGirl.define do
-  factory :hour do</p>
+<p><div>
+  <pre><code class='ruby'>FactoryGirl.define do
+  factory :hour do&lt;/p&gt;
 
-<pre><code>duration { 100 * rand(36) }
+&lt;pre&gt;&lt;code&gt;duration { 100 * rand(36) }
 ...
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>  end
-end</p>
+&lt;p&gt;  end
+end&lt;/p&gt;
 
-<p>FactoryGirl.define do
-  factory :goal do</p>
+&lt;p&gt;FactoryGirl.define do
+  factory :goal do&lt;/p&gt;
 
-<pre><code>sequence :description { |n| "my goal #{n}" }
-sequence :motivation  { |n| "my motivation #{n}" }
+&lt;pre&gt;&lt;code&gt;sequence :description { |n| &quot;my goal #{n}&quot; }
+sequence :motivation  { |n| &quot;my motivation #{n}&quot; }
 
 hours { Array.new(3) { FactoryGirl.build(:hour) } }
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>  end
-end {% endhighlight %}</p>
+&lt;p&gt;  end
+end</code></pre>
+</div>
+</p>
 
 <p>Checking your objects:
-{% highlight bash %}</p>
+<div>
+  <pre><code class='bash'>&lt;/p&gt;
 
-<blockquote><p>p @user</p>
+&lt;blockquote&gt;&lt;p&gt;p @user&lt;/p&gt;
 
-<h1><User id: 1, name: "person1", email: "person1@example.com", ... ></h1>
+&lt;h1&gt;&lt;User id: 1, name: &quot;person1&quot;, email: &quot;person1@example.com&quot;, ... &gt;&lt;/h1&gt;
 
-<p>p @user.goals.first</p>
+&lt;p&gt;p @user.goals.first&lt;/p&gt;
 
-<h1>&lt;ActiveRecord::Associations::CollectionProxy [#<Goal id: 1, user_id: 1, description: "my goal 1", motivation: "my motivation 1", ...]></h1>
+&lt;h1&gt;&amp;lt;ActiveRecord::Associations::CollectionProxy [#&lt;Goal id: 1, user_id: 1, description: &quot;my goal 1&quot;, motivation: &quot;my motivation 1&quot;, ...]&gt;&lt;/h1&gt;
 
-<p>p @user.goals.first.hours.first</p>
+&lt;p&gt;p @user.goals.first.hours.first&lt;/p&gt;
 
-<h1>&lt;ActiveRecord::Associations::CollectionProxy [#<Hour id: 1, goal_id: 1, duration: 3200 , ...]> {% endhighlight %}</h1></blockquote>
+&lt;h1&gt;&amp;lt;ActiveRecord::Associations::CollectionProxy [#&lt;Hour id: 1, goal_id: 1, duration: 3200 , ...]&gt;</code></pre>
+</div>
+</h1></blockquote>
 
 <p>Awesome.</p>
 ]]></content>
@@ -284,40 +391,47 @@ end {% endhighlight %}</p>
 
 <p>/path/to/view.html.erb</p>
 
-<p>{% highlight ruby %}
-&lt;%= link_to &ldquo;Show my partial&rdquo;, path_to_controller, remote: true %> {% endhighlight %}</p>
+<p><div>
+  <pre><code class='ruby'>&amp;lt;%= link_to &amp;ldquo;Show my partial&amp;rdquo;, path_to_controller, remote: true %&gt;</code></pre>
+</div>
+</p>
 
 <p>The key difference in the syntax for this link is &ldquo;remote: true&rdquo;, which signals to the controller action to respond using ajax, not html.</p>
 
 <h4>2. Create a Partial</h4>
 
 <p>/path/to/view/_my_partial.html.erb
-{% highlight ruby %}</p>
-
 <div>
-  <%= form_for @model do |f| %>
-    <%= f.label :my_text_field, "Text Field Label" %>
-    <%= f.text_area :my_text_field %>
-    <%= f.submit "New", class: "btn btn-primary" %>
-  <% end %>
+  <pre><code class='ruby'>&lt;/p&gt;
+
+&lt;div&gt;
+  &lt;%= form_for @model do |f| %&gt;
+    &lt;%= f.label :my_text_field, &quot;Text Field Label&quot; %&gt;
+    &lt;%= f.text_area :my_text_field %&gt;
+    &lt;%= f.submit &quot;New&quot;, class: &quot;btn btn-primary&quot; %&gt;
+  &lt;% end %&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;</code></pre>
 </div>
-
-
-<p>{% endhighlight %}</p>
+</p>
 
 <h4>3. In the Controller Action, Add a js Response</h4>
 
 <p>/path/to/controller.rb</p>
 
-<p>{% highlight ruby %}
-def my_action
-  respond_to do |format|</p>
+<p><div>
+  <pre><code class='ruby'>def my_action
+  respond_to do |format|&lt;/p&gt;
 
-<pre><code>format.js
-</code></pre>
+&lt;pre&gt;&lt;code&gt;format.js
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>  end
-end{% endhighlight %}</p>
+&lt;p&gt;  end
+end</code></pre>
+</div>
+</p>
 
 <p>Normally, Rails will render the view that corresponds to the name of the action in response to an html request. The format.js line asks rails to look for a javascript file instead of an html file when it tries to render a view.</p>
 
@@ -325,16 +439,19 @@ end{% endhighlight %}</p>
 
 <p>/path/to/view/my_action.js.erb</p>
 
-<p>{% highlight javascript %}
-$(&ldquo;#your-placeholder-id&rdquo;).prepend(&lsquo;&lt;%= escape_javascript(render 'path/to/view/my_partial&rsquo;) %>
-{% endhighlight %}</p>
+<p><div>
+  <pre><code class='javascript'>$(&amp;ldquo;#your-placeholder-id&amp;rdquo;).prepend(&amp;lsquo;&amp;lt;%= escape_javascript(render &#39;path/to/view/my_partial&amp;rsquo;) %&gt;</code></pre>
+</div>
+</p>
 
 <p>Files with multiple extensions are processed from last to the first one. With js.erb, the erb will process all the ruby content first, and then the javascript will be run. Your js.erb file should be saved in the same folder as the rest of your controller&rsquo;s views. This is an example :
-{% highlight bash %}
-app/views/users/
+<div>
+  <pre><code class='bash'>app/views/users/
 ├── _my_partial.html.erb
 ├── edit.js.erb
-├── show.html.erb {% endhighlight %}</p>
+├── show.html.erb</code></pre>
+</div>
+</p>
 
 <p>Voila! When you click the link in your view the partial is loaded using Ajax.</p>
 
@@ -352,12 +469,14 @@ app/views/users/
 <h3>Rails requires a javascript runtime environment</h3>
 
 <p>I am running an Ubuntu 9.4 remix on my little Atom Netbook. Getting rails up and running anew is a lesson in returning to fundamentals.
-{% highlight bash %}
-$ gem install rails
+<div>
+  <pre><code class='bash'>$ gem install rails
 $ rails new testapp -T
 $ rails generate rspec:install
-&hellip;
-Could not find a JavaScript runtime. See <a href="https://github.com/sstephenson/execjs">https://github.com/sstephenson/execjs</a> for a list of available runtimes{% endhighlight %}</p>
+&amp;hellip;
+Could not find a JavaScript runtime. See &lt;a href=&quot;https://github.com/sstephenson/execjs&quot;&gt;https://github.com/sstephenson/execjs&lt;/a&gt; for a list of available runtimes</code></pre>
+</div>
+</p>
 
 <!--more-->
 
@@ -373,110 +492,36 @@ Could not find a JavaScript runtime. See <a href="https://github.com/sstephenson
 <h3>Setup Node.js on Linux</h3>
 
 <p>In Ubuntu 10.4 and above, a JavaScript runtime is included, but installing Node on an older Ubuntu distro is not as simple as
-{% highlight bash %}
-$ sudo apt-get nodejs{% endhighlight %}</p>
+<div>
+  <pre><code class='bash'>$ sudo apt-get nodejs</code></pre>
+</div>
+</p>
 
 <p>I found the key sequence of commands on the Node.js website. First, update your packages and install node.js dependencies: python, g++, make, etc
-{% highlight bash %}
-$ sudo apt-get update
-$ sudo apt-get install python-software-properties python g++ make {% endhighlight %}</p>
+<div>
+  <pre><code class='bash'>$ sudo apt-get update
+$ sudo apt-get install python-software-properties python g++ make</code></pre>
+</div>
+</p>
 
 <p>Next, add the location of the nodejs repository, update, and install.
-{% highlight bash %}
-$ sudo add-apt-repository ppa:chris-lea/node.js
+<div>
+  <pre><code class='bash'>$ sudo add-apt-repository ppa:chris-lea/node.js
 $ sudo apt-get update
-$ sudo apt-get install nodejs {% endhighlight %}</p>
+$ sudo apt-get install nodejs</code></pre>
+</div>
+</p>
 
 <p>Wow &mdash; with all of that done, I can finally:
-{% highlight bash %}
-$ rails generate rspec:install</p>
+<div>
+  <pre><code class='bash'>$ rails generate rspec:install&lt;/p&gt;
 
-<pre><code>  create  .rspec
+&lt;pre&gt;&lt;code&gt;  create  .rspec
   create  spec
-  create  spec/spec_helper.rb {% endhighlight %}
+  create  spec/spec_helper.rb</code></pre>
+</div>
+
 </code></pre>
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mass Assignment X Gravity]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/mass-assignment-x-gravity/"/>
-    <updated>2013-07-15T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/mass-assignment-x-gravity</id>
-    <content type="html"><![CDATA[<h3>What is Mass Assignment?</h3>
-
-<p>Mass assignment is using a ruby-esque shortcut to interact with models<!--more-->:</p>
-
-<p>This is NOT mass assignment.
-{% highlight ruby %}
-def create
-  u = User.new
-  u.first_name = params[:user][:firstname]
-  u.last_name = params[:user][:lastname]
-  if u.save</p>
-
-<pre><code>redirect_to :index, flash: { success: "Created!" }
-</code></pre>
-
-<p>  else</p>
-
-<pre><code>render :action =&gt; 'new'
-</code></pre>
-
-<p>  end
-end{% endhighlight %}</p>
-
-<p>Each param is extracted from the params hash and assigned explicitly. Any params that are not assigned are thrown on the floor.</p>
-
-<p>This IS mass assignment.</p>
-
-<p>{% highlight ruby %}
-def create
-  u = User.new(params[:user])
-  if u.save</p>
-
-<pre><code>redirect_to :index, flash: { success: "Created!" }
-</code></pre>
-
-<p>  else</p>
-
-<pre><code>render :action =&gt; 'new'
-</code></pre>
-
-<p>  end
-end{% endhighlight %}
-The programmer assumes that the params include all the data necessary, and <em>only</em> the data necessary. All params in the hash are used to create the new user record.</p>
-
-<h3>Why is mass assignment a problem?</h3>
-
-<p>The problem with mass assignment is that if you have a sensitive tag in your model, for example user_type (which could be set to admin), a malicious user can add <code>user[:user_type] = 'admin'</code> to your params hash. Your controller will unwittingly include it in the save command, creating a new admin account for the  malicious user.</p>
-
-<h3>Is there any way to prevent this diabolical schema scheme?</h3>
-
-<p>There is! With Rails 4 comes <strong>strong params</strong>.
-Strong params live in the controller and tell it explicitly what params can be trusted.
-{% highlight ruby %}
-def create
-  u = User.new(user_params)
-  if u.save</p>
-
-<pre><code>redirect_to :index, flash: { success: "Created!" }
-</code></pre>
-
-<p>  else</p>
-
-<pre><code>render :action =&gt; 'new'
-</code></pre>
-
-<p>  end
-end
-&hellip;
-def user_params
-  params.require(:user).permit(:name, :email, :password, :password_confirmation)
-end{% endhighlight %}
-The only parameters our controller will send to the model are those specified on our white-list. If rails detects a user attempting to access a param that is not on the white-list, said user had better be prepared for <em>grave consequences</em>. Their session will be <strong>deleted</strong>, their attempt will be <strong>logged</strong>, and Rails will email their mother.</p>
 
 <p>Awesome.</p>
 ]]></content>

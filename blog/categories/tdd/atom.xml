@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tdd | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/tdd/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-20T07:42:26-08:00</updated>
+  <updated>2015-01-20T07:57:47-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -23,13 +23,9 @@
 <!--more-->
 
 
-<p>A senior software engineer is efficient, and delivers a quality product in a timely fashion. {% pullquote left %}{&ldquo;Effective problem solvers first spend time understanding the problem space and then design a plan&rdquo;}: documenting feature behaviour in a test suite allows you to plan your implementation. Code maintenance and modification are also more efficient when you have a good test suite. If the code has been built using TDD, its behaviour is already well tested. When someone needs to build on top of your feature, the tests will protect it and eliminate the worry of causing regressions (win-win).
-{% endpullquote %}</p>
+<p>A senior software engineer is efficient, and delivers a quality product in a timely fashion. Surround your pullquote like this {" text to be quoted "}</p>
 
-<p>Explicitly describing your plan in a test suite has another benefit that I had not considered before, and that is making you resilient to interruption. If your plan is not layed out on paper, you are maintaining it all in your head, and you have to hold on to a lot of context in your working memory. {% pullquote %}Every time you are interrupted, you have to dump things out of your working memory, and reloading the problem space takes time and energy. You won&rsquo;t suffer interruptions well if reloading the context takes 15 minutes each time. You will become unresponsive as you block out the outside world, trying to maintain your context.</p>
-
-<p>{&ldquo;TDD can help you structure your coding task so that it has natural breaking points. If you are interrupted while trying to fix a failing test, you know exactly where you can pick the task up again.&rdquo;} If you are interrupted after getting a test to pass you can easily read through your test suite to regain your context and pick up the next task.
-{% endpullquote %}</p>
+<p>Explicitly describing your plan in a test suite has another benefit that I had not considered before, and that is making you resilient to interruption. If your plan is not layed out on paper, you are maintaining it all in your head, and you have to hold on to a lot of context in your working memory. Surround your pullquote like this {" text to be quoted "}</p>
 
 <p>Time and context management are essential skills for becoming a senior software engineer, and I am going to try using test driven development to become more interruptable and more productive.</p>
 

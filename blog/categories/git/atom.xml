@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-20T07:42:26-08:00</updated>
+  <updated>2015-01-20T07:57:47-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -22,18 +22,23 @@
 
 <p>Adding the file to your gitignore is not enough to stop tracking file changes. You must also clear the file from your git cache:</p>
 
-<p>{% codeblock gitignore, this time with spite lang:bash %}
-$ git rm &mdash;cached [filename]
-$ git add .
-$ git commit -m &ldquo;I really mean to ignore this file.&rdquo;
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>gitignore, this time with spite </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git rm &amp;mdash;cached <span class="o">[</span>filename<span class="o">]</span>
+</span><span class='line'><span class="nv">$ </span>git add .
+</span><span class='line'><span class="nv">$ </span>git commit -m &amp;ldquo;I really mean to ignore this file.&amp;rdquo;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>To untrack everything that has been added to the .gitignore:</p>
 
-<p>{% codeblock For realz lang:bash %}
-$ git rm -r &mdash;cached .
-$ git commit -a -m &ldquo;I mean it!&rdquo;
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>For realz </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git rm -r &amp;mdash;cached .
+</span><span class='line'><span class="nv">$ </span>git commit -a -m &amp;ldquo;I mean it!&amp;rdquo;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <h3>Resources</h3>
 
@@ -49,66 +54,98 @@ $ git commit -a -m &ldquo;I mean it!&rdquo;
     <id>http://www.katieleonard.ca/blog/2014/multiple-remotes</id>
     <content type="html"><![CDATA[<p>Somehow I had worked out in my head that there could be only one remote. Origin. Turns out you can set and push to a (presumably) infinite number of remote repositories <!--more-->:</p>
 
-<p>{% codeblock Checkout your git config %}
-$ git config &mdash;list
-push.default=nothing
-alias.hist=log &mdash;pretty=format:&ldquo;%h %ad | %s%d [%an]&rdquo; &mdash;graph &mdash;date=short
-user.name=Katie Leonard
-…
-remote.origin.url=git@github.com:keighty/thorfiles.git
-remote.origin.fetch=+refs/heads/<em>:refs/remotes/origin/</em>
-branch.master.remote=origin
-branch.master.merge=refs/heads/master
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Checkout your git config </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git config &mdash;list
+</span><span class='line'>push.default=nothing
+</span><span class='line'>alias.hist=log &mdash;pretty=format:&ldquo;%h %ad | %s%d [%an]&rdquo; &mdash;graph &mdash;date=short
+</span><span class='line'>user.name=Katie Leonard
+</span><span class='line'>…
+</span><span class='line'>remote.origin.url=git@github.com:keighty/thorfiles.git
+</span><span class='line'>remote.origin.fetch=+refs/heads/&lt;em>:refs/remotes/origin/&lt;/em>
+</span><span class='line'>branch.master.remote=origin
+</span><span class='line'>branch.master.merge=refs/heads/master</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>(On a side note, I am not sure I remember putting <code>alias.hist</code> in my git config, but I find it to be wickedly useful.)</p>
 
 <p>Setting a new remote is as easy as:</p>
 
-<p>{% codeblock 1 2 3 a b c %}
-$ git remote add new_destination git@github.com:otheruser/thorfiles.git
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>1 2 3 a b c </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git remote add new_destination git@github.com:otheruser/thorfiles.git</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Standing back to admire the results:
-{% codeblock Simple, but does it work? %}
-$ git config &mdash;list
-push.default=nothing
-alias.hist=log &mdash;pretty=format:&ldquo;%h %ad | %s%d [%an]&rdquo; &mdash;graph &mdash;date=short
-user.name=Katie Leonard
-…
-remote.origin.url=git@github.com:keighty/thorfiles.git
-remote.origin.fetch=+refs/heads/<em>:refs/remotes/origin/</em>
-branch.master.remote=origin
-branch.master.merge=refs/heads/master
-remote.new_destination.url=git@github.com:otheruser/thorfiles.git
-remote.new_destination.fetch=+refs/heads/<em>:refs/remotes/new_destination/</em>
-{% endcodeblock %}</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Simple, but does it work? </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git config &mdash;list
+</span><span class='line'>push.default=nothing
+</span><span class='line'>alias.hist=log &mdash;pretty=format:&ldquo;%h %ad | %s%d [%an]&rdquo; &mdash;graph &mdash;date=short
+</span><span class='line'>user.name=Katie Leonard
+</span><span class='line'>…
+</span><span class='line'>remote.origin.url=git@github.com:keighty/thorfiles.git
+</span><span class='line'>remote.origin.fetch=+refs/heads/&lt;em>:refs/remotes/origin/&lt;/em>
+</span><span class='line'>branch.master.remote=origin
+</span><span class='line'>branch.master.merge=refs/heads/master
+</span><span class='line'>remote.new_destination.url=git@github.com:otheruser/thorfiles.git
+</span><span class='line'>remote.new_destination.fetch=+refs/heads/&lt;em>:refs/remotes/new_destination/&lt;/em></span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Fast-forward through some excellent and brilliant feature work on <code>my_branch</code>, and I naturally want to save it for posterity:</p>
 
-<p>{% codeblock Chizeled in metal on GitHub servers %}
-$ git push origin my_branch
-Counting objects: 611, done.
-Delta compression using up to 4 threads.
-Compressing objects: 100% (263/263), done.
-Writing objects: 100% (375/375), 63.40 KiB | 0 bytes/s, done.
-Total 375 (delta 280), reused 189 (delta 105)
-To git@github.com:keighty/thorfiles.git
- * [new branch]      my_branch &ndash;> my_branch
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Chizeled in metal on GitHub servers </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git push origin my_branch
+</span><span class='line'>Counting objects: 611, done.
+</span><span class='line'>Delta compression using up to 4 threads.
+</span><span class='line'>Compressing objects: 100% (263/263), done.
+</span><span class='line'>Writing objects: 100% (375/375), 63.40 KiB | 0 bytes/s, done.
+</span><span class='line'>Total 375 (delta 280), reused 189 (delta 105)
+</span><span class='line'>To git@github.com:keighty/thorfiles.git
+</span><span class='line'> * [new branch]      my_branch &ndash;> my_branch</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>I can also share it with my friend&rsquo;s repo, presuming I have write access, and knowing full well he will want to use my new feature:</p>
 
-<p>{% codeblock Update your friends! %}
-$ git push new_destination my_branch
-Counting objects: 611, done.
-Delta compression using up to 4 threads.
-Compressing objects: 100% (263/263), done.
-Writing objects: 100% (375/375), 63.40 KiB | 0 bytes/s, done.
-Total 375 (delta 280), reused 189 (delta 105)
-To git@github.com:otheruser/thorfiles.git
- * [new branch]      my_branch &ndash;> my_branch
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Update your friends! </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git push new_destination my_branch
+</span><span class='line'>Counting objects: 611, done.
+</span><span class='line'>Delta compression using up to 4 threads.
+</span><span class='line'>Compressing objects: 100% (263/263), done.
+</span><span class='line'>Writing objects: 100% (375/375), 63.40 KiB | 0 bytes/s, done.
+</span><span class='line'>Total 375 (delta 280), reused 189 (delta 105)
+</span><span class='line'>To git@github.com:otheruser/thorfiles.git
+</span><span class='line'> * [new branch]      my_branch &ndash;> my_branch</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Git is so awesome.</p>
 ]]></content>
@@ -122,19 +159,30 @@ To git@github.com:otheruser/thorfiles.git
     <content type="html"><![CDATA[<p>Git, the superhero of version control, allows you to review all the commands that have modified the HEAD tag in a git repo: <code>git reflog</code></p>
 
 <p>The output for one of my demo apps:
-{% codeblock Git, you&rsquo;re my hero lang:bash %}
-5075d26 HEAD@{0}: checkout: moving from master to kleonard/add_skyline_background
-531c396 HEAD@{1}: pull: fast forward
-435f6de HEAD@{2}: commit: Adds logic for running and testing
-043e35a HEAD@{3}: commit: Adds logic to process input
-5155ba4 HEAD@{4}: commit: Adds input file
-a629871 HEAD@{5}: rebase finished: returning to refs/heads/kleonard/create_input_files
-a010021 HEAD@{6}: rebase: Add input file
-b7cd86a HEAD@{7}: commit: Initial commit arbitrage
-5ed00ea HEAD@{8}: commit: Adds launcher
-7b2d720 HEAD@{9}: commit: Adds logic to find smallest number of moves
-9c0dfce HEAD@{10}: commit: Adds implementation for bin creation
-{% endcodeblock %}</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Git, you&rsquo;re my hero </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>5075d26 HEAD@<span class="o">{</span>0<span class="o">}</span>: checkout: moving from master to kleonard/add_skyline_background
+</span><span class='line'>531c396 HEAD@<span class="o">{</span>1<span class="o">}</span>: pull: fast forward
+</span><span class='line'>435f6de HEAD@<span class="o">{</span>2<span class="o">}</span>: commit: Adds logic <span class="k">for </span>running and testing
+</span><span class='line'>043e35a HEAD@<span class="o">{</span>3<span class="o">}</span>: commit: Adds logic to process input
+</span><span class='line'>5155ba4 HEAD@<span class="o">{</span>4<span class="o">}</span>: commit: Adds input file
+</span><span class='line'>a629871 HEAD@<span class="o">{</span>5<span class="o">}</span>: rebase finished: returning to refs/heads/kleonard/create_input_files
+</span><span class='line'>a010021 HEAD@<span class="o">{</span>6<span class="o">}</span>: rebase: Add input file
+</span><span class='line'>b7cd86a HEAD@<span class="o">{</span>7<span class="o">}</span>: commit: Initial commit arbitrage
+</span><span class='line'>5ed00ea HEAD@<span class="o">{</span>8<span class="o">}</span>: commit: Adds launcher
+</span><span class='line'>7b2d720 HEAD@<span class="o">{</span>9<span class="o">}</span>: commit: Adds logic to find smallest number of moves
+</span><span class='line'>9c0dfce HEAD@<span class="o">{</span>10<span class="o">}</span>: commit: Adds implementation <span class="k">for </span>bin creation
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Hmmm&hellip; looks like my commit messages need a little work&hellip; Still, it is a great tool for catching up on the changes to a repo (especially if you haven&rsquo;t touched it in a while), finding out where the bulk of the work is happening, or just reminding yourself what you did yesterday.</p>
 
@@ -249,7 +297,7 @@ e - manually edit the current hunk
 
 <p>Lo, and behold! Instructions after the hunk!</p>
 
-<p>{% img /images/addp-hunk-edit_diff-8.png %}</p>
+<p><img src="/images/addp-hunk-edit_diff-8.png"></p>
 
 <p>Simple enough:</p>
 

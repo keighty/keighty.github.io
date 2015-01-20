@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-20T07:42:26-08:00</updated>
+  <updated>2015-01-20T07:57:47-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,99 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Objects vs Data Structures]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/objects-vs-data-structures/"/>
+    <updated>2015-01-18T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/objects-vs-data-structures</id>
+    <content type="html"><![CDATA[<p>&ldquo;It is impossible to create an abstraction unknowingly or by accident,&rdquo; says Sandi Metz in <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330/ref=sr_1_1?ie=UTF8&amp;qid=1421723392&amp;sr=8-1&amp;keywords=practical+object+oriented+design+in+ruby"><em>Practical Object Oriented Design in Ruby</em></a>. An abstraction is a common, stable quality, such that you would find in a java interface. An interface is an idea that cannot be made concrete, but contains behaviour <a href="http://en.wikipedia.org/wiki/Interface_%28Java%29">encoding similarities</a> which objects might share. Even the definition of abstraction is abstract, and it wasn&rsquo;t until I read Robert C. Martin&rsquo;s chapter on Objects and Data Structures in <a href="http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882"><em>Clean Code</em></a> that I really started to understand them.</p>
+
+<!--more-->
+
+
+<h3>What is a data structure</h3>
+
+<p>A data structure is a class that exposes its data to the public. It should have no meaningful behaviour, and can be characterized by a set of attributes along with getters and setters.</p>
+
+<p>```ruby
+class Point1
+  attr_accessor :x, :y, :z
+end</p>
+
+<p>p = Point1.new
+p.x = 1
+p.y = 1
+p.z = 1
+p
+```</p>
+
+<p>In this example, a Point is defined as an object at some location on a coordinate grid of some kind. That sounds abstract enough: you can create a point, Surround your pullquote like this {" text to be quoted "} Adding an initializer that sets each variable, or a <code>to_s</code> method for getting a pretty output, would not make the Point1 class any more an abstraction of a position in space. To make an abstraction you can&rsquo;t just use getters and setters &mdash; you have to think about how you are representing the data.</p>
+
+<h3>What is an object</h3>
+
+<p>An object hides its data behind abstractions. A Point is not defined by its <code>[@x, @y, @z]</code>, but by its location in space. If space is a coordinate system, it could be 2- or 3-dimensional.</p>
+
+<p>```
+class Point2
+  def initialize(x, y, z = nil)</p>
+
+<pre><code>set_location(x, y, z)
+</code></pre>
+
+<p>  end</p>
+
+<p>  def to_s</p>
+
+<pre><code>"(#{[@x, @y, @z].compact.join(',')})"
+</code></pre>
+
+<p>  end
+  alias_method :location, :to_s</p>
+
+<p>  def set_location(x, y, z = nil)</p>
+
+<pre><code>@x = x
+@y = y
+@z = z
+location
+</code></pre>
+
+<p>  end
+  private :set_location</p>
+
+<p>  alias_method :move_point, :set_location
+  public :move_point</p>
+
+<p>end</p>
+
+<p>p = Point2.new(1, 1)
+p.move_point(2, 3)
+p.move_point(2, 3, 7)
+```</p>
+
+<p>A point cannot exist separate from it&rsquo;s coordinates, and coordinates cannot exist or be altered without using the abstraction of moving in space.</p>
+
+<blockquote><p>&ldquo;We do not want to expose the details of our data. Rather we want to express our data in abstract terms. This is not merely accomplished by using interfaces and/or getters and setters. Serious thought needs to be put into the best way to represent the data that an object contains.&rdquo;</p>
+
+<p>&mdash; Martin</p></blockquote>
+
+<p>This is why <a href="http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/">fat models are an anti-pattern in Rails</a>. ActiveRecord makes an object out of a data structure, and adding behaviour beyond data validation makes the model a hybrid data object. <a href="http://railscasts.com/episodes/398-service-objects">Service Objects</a> are abstractions of model behaviour (pun intended).</p>
+
+<p>Now I know what an abstraction is, and I understand that simply extracting methods into interfaces doesn&rsquo;t magically make an abstraction. As Metz says, &ldquo;good design naturally progresses toward small independent objects that rely on abstractions.&rdquo; An object is more than a data structure; it is an idea and it must be applied deliberately.</p>
+
+<!-- resources
+http://www.cgore.com/programming/ruby/public-aliases-of-private-methods.lisp
+-->
+
+
+<!-- resources
+http://railscasts.com/episodes/398-service-objects
+http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/
+-->
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[#dup vs #clone in Ruby and Rails]]></title>
@@ -268,8 +361,8 @@ NotImplementedError: You can&rsquo;t call #baz here!</p>
 
 
 <p>The commands will be provided in an input file, and an output is specified. Fun problem, right? So, I start my project folder using my <a href="http://www.katieleonard.ca/automation/2013/09/08/thor-sets-up-a-project/">thor task</a>, and work awhile adding logic and tests and data as appropriate. My file tree finishes like this:
-{% highlight bash %}
-blocks
+<div>
+  <pre><code class='bash'>blocks
 ├── data
 │   ├── input.txt
 │   └── output.txt
@@ -279,43 +372,54 @@ blocks
 │   ├── blocks_spec.rb
 │   └── spec_helper.rb
 ├── Gemfile
-└── README.md{% endhighlight %}</p>
+└── README.md</code></pre>
+</div>
+</p>
 
 <p>So, in order to use my script, I would have to call it from the command line:
-{% highlight bash %}
-$ ruby lib/blocks.rb data/input.txt</p>
+<div>
+  <pre><code class='bash'>$ ruby lib/blocks.rb data/input.txt&lt;/p&gt;
 
-<h1>=> or</h1>
+&lt;h1&gt;=&gt; or&lt;/h1&gt;
 
-<p>$ data/input.txt | ruby lib/blocks.rb{% endhighlight %}</p>
+&lt;p&gt;$ data/input.txt | ruby lib/blocks.rb</code></pre>
+</div>
+</p>
 
 <p>This is an extremely verbose way to deliver a final product, and I would much rather call $ blocks &lt;file_input&gt;. It turns out that making an executable is easy and elegant, just like everything else in ruby. You just have to declare the ruby environment, include a few notes on usage, load the file tree, and call the class:
-{% highlight ruby %}</p>
+<div>
+  <pre><code class='ruby'>&lt;/p&gt;
 
-<h1>!/usr/bin/env ruby</h1>
+&lt;h1&gt;!/usr/bin/env ruby&lt;/h1&gt;
 
-<h1>blocks</h1>
+&lt;h1&gt;blocks&lt;/h1&gt;
 
-<h1>10-Sep-2013</h1>
+&lt;h1&gt;10-Sep-2013&lt;/h1&gt;
 
-<p>#</p>
+&lt;p&gt;#&lt;/p&gt;
 
-<h1>Usage:</h1>
+&lt;h1&gt;Usage:&lt;/h1&gt;
 
-<h1>./blocks data/input.txt</h1>
+&lt;h1&gt;./blocks data/input.txt&lt;/h1&gt;
 
-<p>#
-$LOAD_PATH.unshift(File.join(File.dirname(<strong>FILE</strong>), &lsquo;lib&rsquo;))
-require &lsquo;blocks&rsquo;
-Blocks.new.process_input{% endhighlight %}</p>
+&lt;p&gt;#
+$LOAD_PATH.unshift(File.join(File.dirname(&lt;strong&gt;FILE&lt;/strong&gt;), &amp;lsquo;lib&amp;rsquo;))
+require &amp;lsquo;blocks&amp;rsquo;
+Blocks.new.process_input</code></pre>
+</div>
+</p>
 
 <p>Placing this code in a non-extension file, like &lsquo;blocks&rsquo;, in the main directory, I can make it an executable by changing the file permissions:
-{% highlight bash %}
-$ chmod +x ./blocks{% endhighlight %}</p>
+<div>
+  <pre><code class='bash'>$ chmod +x ./blocks</code></pre>
+</div>
+</p>
 
 <p>And I can call it like any other executable:
-{% highlight bash %}
-$ ./blocks data/input.txt{% endhighlight %}</p>
+<div>
+  <pre><code class='bash'>$ ./blocks data/input.txt</code></pre>
+</div>
+</p>
 
 <p>I liked this solution so much, I added it to my thor project setup! Oh, and if you are interested in seeing my solution for the blocks problem, checkout my <a href="https://github.com/keighty/datastructures/tree/master/ruby/blocks">github repo</a></p>
 
@@ -334,126 +438,136 @@ $ ./blocks data/input.txt{% endhighlight %}</p>
 
 
 <p>My Goal Tree:
-{% highlight bash %}
-project_name
+<div>
+  <pre><code class='bash'>project_name
 ├── lib
 │   └── project_name.rb
 ├── spec
 │   ├── project_name_spec.rb
 │   └── spec_helper.rb
 ├── Gemfile
-└── README.md{% endhighlight %}</p>
+└── README.md</code></pre>
+</div>
+</p>
 
 <p>I always begin with these files and this organization. A Gemfile and README are essential for setting up the environment and explaining the gist of the project. I am most comfortable with RSpec, and to get into the practice of TDD, setting up a testing environment right away is non-negotiable. All of these standard files contain some automatic content as well:</p>
 
 <h5>spec_helper.rb loads the library</h5>
 
-<p>{% highlight ruby %}
-$LOAD_PATH.unshift(File.join(File.dirname(<strong>FILE</strong>), &lsquo;..&rsquo;, &lsquo;lib&rsquo;))
-require &lsquo;rspec&rsquo;
-require &lsquo;project_name&rsquo;
-{% endhighlight %}</p>
+<p><div>
+  <pre><code class='ruby'>$LOAD_PATH.unshift(File.join(File.dirname(&lt;strong&gt;FILE&lt;/strong&gt;), &amp;lsquo;..&amp;rsquo;, &amp;lsquo;lib&amp;rsquo;))
+require &amp;lsquo;rspec&amp;rsquo;
+require &amp;lsquo;project_name&amp;rsquo;</code></pre>
+</div>
+</p>
 
 <h5>project_name_spec.rb sets up the first test</h5>
 
-<p>{% highlight ruby %}
-require &lsquo;spec_helper&rsquo;</p>
+<p><div>
+  <pre><code class='ruby'>require &amp;lsquo;spec_helper&amp;rsquo;&lt;/p&gt;
 
-<p>describe ProjectName do
+&lt;p&gt;describe ProjectName do
   before (:each) {  }
-  subject {  }</p>
+  subject {  }&lt;/p&gt;
 
-<p>  it &ldquo;should pass&rdquo;
-end
-{% endhighlight %}</p>
+&lt;p&gt;  it &amp;ldquo;should pass&amp;rdquo;
+end</code></pre>
+</div>
+</p>
 
 <h5>Gemfile specifies the right gems for setting up the project</h5>
 
-<p>{% highlight ruby %}
-ruby &lsquo;2.0.0&rsquo;
-gem &lsquo;rspec&rsquo;
-{% endhighlight %}</p>
+<p><div>
+  <pre><code class='ruby'>ruby &amp;lsquo;2.0.0&amp;rsquo;
+gem &amp;lsquo;rspec&amp;rsquo;</code></pre>
+</div>
+</p>
 
 <p>There are other files that could have auto-generated content as well, like a Rakefile, or a config.ru, but this is a good start.</p>
 
 <h4>Create a Thor task (rb_project.thor):</h4>
 
-<p>{% highlight ruby %}</p>
+<p><div>
+  <pre><code class='ruby'>&lt;/p&gt;
 
-<h1>!/usr/bin/env ruby</h1>
+&lt;h1&gt;!/usr/bin/env ruby&lt;/h1&gt;
 
-<p>require &ldquo;rubygems&rdquo;
-require &ldquo;thor&rdquo;</p>
+&lt;p&gt;require &amp;ldquo;rubygems&amp;rdquo;
+require &amp;ldquo;thor&amp;rdquo;&lt;/p&gt;
 
-<p>class RbProject &lt; Thor
-  desc &ldquo;init&rdquo;, &ldquo;creates a ruby project with rspec&rdquo;</p>
+&lt;p&gt;class RbProject &amp;lt; Thor
+  desc &amp;ldquo;init&amp;rdquo;, &amp;ldquo;creates a ruby project with rspec&amp;rdquo;&lt;/p&gt;
 
-<p>  def init(title=&ldquo;new_project&rdquo;)</p>
+&lt;p&gt;  def init(title=&amp;ldquo;new_project&amp;rdquo;)&lt;/p&gt;
 
-<pre><code>Dir.mkdir(title)
+&lt;pre&gt;&lt;code&gt;Dir.mkdir(title)
 Dir.chdir(title)
-Dir.mkdir("spec")
-Dir.mkdir("lib")
-filename = "#{title}"
+Dir.mkdir(&quot;spec&quot;)
+Dir.mkdir(&quot;lib&quot;)
+filename = &quot;#{title}&quot;
 
-open(File.new("README.md", "w"), "w") do |note|
-  note.puts "# #{title}"
+open(File.new(&quot;README.md&quot;, &quot;w&quot;), &quot;w&quot;) do |note|
+  note.puts &quot;# #{title}&quot;
 end
 
-open(File.new("Gemfile", "w"), "w") do |my_gem|
-  my_gem.puts "ruby '2.0.0'"
-  my_gem.puts "gem 'rspec'"
+open(File.new(&quot;Gemfile&quot;, &quot;w&quot;), &quot;w&quot;) do |my_gem|
+  my_gem.puts &quot;ruby &#39;2.0.0&#39;&quot;
+  my_gem.puts &quot;gem &#39;rspec&#39;&quot;
 end
 
-open(File.new("spec/spec_helper.rb", "w"), "w") do |spec|
-  spec.puts "$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))"
-  spec.puts "require 'rspec'"
-  spec.puts "require '#{filename}'"
+open(File.new(&quot;spec/spec_helper.rb&quot;, &quot;w&quot;), &quot;w&quot;) do |spec|
+  spec.puts &quot;$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), &#39;..&#39;, &#39;lib&#39;))&quot;
+  spec.puts &quot;require &#39;rspec&#39;&quot;
+  spec.puts &quot;require &#39;#{filename}&#39;&quot;
 end
 
-open(File.new("spec/#{filename}_spec.rb", "w"), "w") do |spec|
-  spec.puts "require 'spec_helper'"
-  spec.puts ""
-  spec.puts "describe #{camelize(filename)} do"
-  spec.puts "  before (:each) {  }"
-  spec.puts "  xit 'should pass'"
-  spec.puts "end"
+open(File.new(&quot;spec/#{filename}_spec.rb&quot;, &quot;w&quot;), &quot;w&quot;) do |spec|
+  spec.puts &quot;require &#39;spec_helper&#39;&quot;
+  spec.puts &quot;&quot;
+  spec.puts &quot;describe #{camelize(filename)} do&quot;
+  spec.puts &quot;  before (:each) {  }&quot;
+  spec.puts &quot;  xit &#39;should pass&#39;&quot;
+  spec.puts &quot;end&quot;
 end
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>  end</p>
+&lt;p&gt;  end&lt;/p&gt;
 
-<p>  private</p>
+&lt;p&gt;  private&lt;/p&gt;
 
-<pre><code>def camelize(snake)
-  title = snake.split('_').each do |word|
+&lt;pre&gt;&lt;code&gt;def camelize(snake)
+  title = snake.split(&#39;_&#39;).each do |word|
     word.capitalize!
   end
-  title.join('')
+  title.join(&#39;&#39;)
 end
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
 
-<p>end {% endhighlight %}</p>
+&lt;p&gt;end</code></pre>
+</div>
+</p>
 
 <p>I created a private method camelize in order to change the snake_case project name into a CamelCase class name.</p>
 
 <p>As before, I install my thor task system wide:
-{% highlight bash %}
-$ thor install rb_project.thor {% endhighlight %}</p>
+<div>
+  <pre><code class='bash'>$ thor install rb_project.thor</code></pre>
+</div>
+</p>
 
 <p>And now my project generation task can be run from any directory, anywhere on my system:
-{% highlight bash %}
-$ thor list</p>
+<div>
+  <pre><code class='bash'>$ thor list&lt;/p&gt;
 
-<h2>note</h2>
+&lt;h2&gt;note&lt;/h2&gt;
 
-<p>thor note:create  # creates a notes file in markdown</p>
+&lt;p&gt;thor note:create  # creates a notes file in markdown&lt;/p&gt;
 
-<h2>rb_project</h2>
+&lt;h2&gt;rb_project&lt;/h2&gt;
 
-<p>thor rb_project:init  # creates a ruby project with rspec</p>
+&lt;p&gt;thor rb_project:init  # creates a ruby project with rspec&lt;/p&gt;
 
-<p>$ thor rb_project:init test_project
+&lt;p&gt;$ thor rb_project:init test_project
 $ tree test_project/
 test_project/
 ├── lib
@@ -462,79 +576,22 @@ test_project/
 │   ├── spec_helper.rb
 │   └── test_project_spec.rb
 ├── Gemfile
-├── README.md</p>
+├── README.md&lt;/p&gt;
 
-<p>2 directories, 6 files
-{% endhighlight %}</p>
-
-<p>Awesome.</p>
-
-<p>{% highlight bash %}{% endhighlight %}
-{% highlight bash %}{% endhighlight %}</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ARGF All You Want]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/argf-all-you-want/"/>
-    <updated>2013-09-05T22:29:03-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/argf-all-you-want</id>
-    <content type="html"><![CDATA[<p>Many of the fun, junior code challenges I have encountered deal a lot with input/output of data, and I found a great ruby feature that provides flexibility at the command line.</p>
-
-<!--more-->
-
-
-<h3>Data Input</h3>
-
-<p>There are a lot of ways to treat data at the command line, but the one I was most familiar with is passing in a filename as an argument:</p>
-
-<p>{% highlight bash linenos%}
-$ ruby example_script.rb file1.csv file2.csv &hellip;
-$ ruby example_script.rb file1.csv | more
-$ ruby example_script.rb file1.csv > output.txt{% endhighlight %}</p>
-
-<h3>Filename Input</h3>
-
-<p>Using ARGV, we can access the list of filenames provided at the command line. ARGV is an array containing all the information that follows the command. For example:
-{% highlight bash %}
-$ example_command apple banana orange</p>
-
-<h1>ARGV = [&ldquo;apple&rdquo;, &ldquo;banana&rdquo;, &ldquo;orange&rdquo;]{% endhighlight %}</h1>
-
-<p>One can process each filename in ARGV using regular array methods:</p>
-
-<p>{% highlight ruby %}
-ARGV.each do |arg|
-  process_string(File.read(arg))
-end {% endhighlight %}</p>
-
-<p>File.read(arg) reads the file into a &ldquo;\n&rdquo; delimited string, which can be processed further. If there are no arguments, ARGV is an empty array.</p>
-
-<h3>Piped Input</h3>
-
-<p>Say that we want to enter data directly into a program rather than use a fixed filename at the command line &mdash; a useful technique for when we want data to flow out of one process and into another:
-{% highlight bash %}
-$ cat file1.csv | ruby example_script.rb
-$ cat *.csv | ruby example_script.rb
-$ ruby example_script.rb &lt; file1.csv {% endhighlight %}</p>
-
-<p>Using the pipe, &ldquo;|&rdquo; or &ldquo;&lt;&rdquo;, we can push a string of data from one process into another, but what happens to our program when we try to do this?
-{% highlight bash %}
-$ example.csv | ruby example_script.rb
-TypeError: can`t convert nil into String {% endhighlight %}</p>
-
-<p>We get a TypeError! Recall that command line arguments are stored in ARGV, but we are not providing any command line arguments. ARGV is an empty array, and we are attempting to open a file from ARGV[0] = nil. Shame on us! How do we access data that is piped in as well as data that is appended to the command line? Do we have to check for the source of the data before we can treat it? Turns out, we DON&rsquo;T.</p>
-
-<h3>The ARGF Solution</h3>
-
-<p>Ruby has a nifty interface for handling data input, regardless of whether it arrives as a command line argument or from another data source. We can replace the code we wrote earlier with a single line:</p>
-
-<p>{% highlight ruby%}
-process_string(ARGF.read){% endhighlight %}</p>
-
-<p>If ARGV is not empty, ARGF will assume it is an array of filenames and will treat them accordingly. If ARGV is empty, it will read from $stdin to get the data passed in via the pipe. One caveat is that you can&rsquo;t read from both ARGV and the pipe: if ARGV != [  ], $stdin is ignored.</p>
+&lt;p&gt;2 directories, 6 files</code></pre>
+</div>
+</p>
 
 <p>Awesome.</p>
+
+<p><div>
+  <pre><code class='bash'></code></pre>
+</div>
+
+<div>
+  <pre><code class='bash'></code></pre>
+</div>
+</p>
 ]]></content>
   </entry>
   

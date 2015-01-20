@@ -4,7 +4,7 @@
   <title><![CDATA[Category: D3 | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/d3/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-20T07:42:26-08:00</updated>
+  <updated>2015-01-20T07:57:47-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -20,7 +20,7 @@
     <id>http://www.katieleonard.ca/blog/2014/formatting-numbers-the-easy-way</id>
     <content type="html"><![CDATA[<p>D3 has an awesome number formatting function that I discovered only after hacking my own. My first approach was to use string and array manipulation to convert 1234567890 to 1,234,567,890:</p>
 
-<p>{% raw %}
+<p>
 `&ldquo;javascript
 function numberSmoothing(value) {
   // split the number into a character array and reverse it
@@ -61,26 +61,25 @@ reversedNumber = numberChunk;
 &ldquo;1,234,567,890&rdquo;</p></blockquote>
 
 <p>```
-{% endraw %}</p>
+</p>
 
 <p>While it was a fun mental exercise to implement number formatting, I stumbled across this handy d3 function after I was already done:</p>
 
-<p>{% raw %}
+<p>
 ```</p>
 
 <blockquote><p>var format = d3.format(&ldquo;,&rdquo;);
 format(1234567890);
 &ldquo;1,234,567,890&rdquo;
 ```
-{% endraw %}</p></blockquote>
+</p></blockquote>
 
 <p>As it turns out, any way one might want to format a number has <a href="https://github.com/mbostock/d3/wiki/Formatting#d3_format">already been implemented in d3</a>. It is similar to the mini-formatting language from python:</p>
 
-<p>{% codeblock %}
-[​[fill]align][sign][symbol][0][width][,][.precision][type]
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[​[fill]align][sign][symbol][0][width][,][.precision][type]</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>{% raw %}
+<p>
 ```javascript
 // add commas for the thousands separator</p>
 
@@ -136,7 +135,7 @@ format(123.456)
 format(123456789.66)
 &ldquo;120,000,000&rdquo;
 ```
-{% endraw %}</p></blockquote>
+</p></blockquote>
 
 <p>Awesome.</p>
 ]]></content>
@@ -226,39 +225,69 @@ var svg = d3.select("#graph-here").append("svg");
     <id>http://www.katieleonard.ca/blog/2014/delay-chained-transitions</id>
     <content type="html"><![CDATA[<p>Changing an element using multiple, chained transitions requires a little troubleshooting. You would think that just chaining them one after another would suffice:</p>
 
-<p>{% codeblock Chained Transitions lang:js %}
-selection.transition().duration(1500)</p>
-
-<pre><code>.attr("cx",getX)
-.attr("cy",getY)
-.attr("r", getR)
-.style("fill", getColor)
-</code></pre>
-
-<p>  .transition().duration(1500)</p>
-
-<pre><code>.attr("r", doubleR);
-</code></pre>
-
-<p>{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Chained Transitions </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">doubleR</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>But D3 does not wait for one transition to be complete before it begins the next one. Adding a delay will accomplish the desired transition chaining:</p>
 
-<p>{% codeblock ACTUAL Chained Transitions lang:js <a href="https://gist.github.com/keighty/9508948">https://gist.github.com/keighty/9508948</a> Gist %}
-selection.transition().duration(1500)</p>
-
-<pre><code>.attr("cx",getX)
-.attr("cy",getY)
-.attr("r", getR)
-.style("fill", getColor)
-</code></pre>
-
-<p>  .transition().delay(1700).duration(1500)</p>
-
-<pre><code>.attr("r", doubleR);
-</code></pre>
-
-<p>{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>ACTUAL Chained Transitions <a href="https://gist.github.com/keighty/9508948">https://gist.github.com/keighty/9508948</a> Gist </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">delay</span><span class="p">(</span><span class="mi">1700</span><span class="p">).</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">doubleR</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <div id="showme">
 <style>
@@ -414,18 +443,28 @@ importData();
 
 <blockquote><p>&ldquo;<strong>Easing functions</strong> specify the rate of change of a parameter over time.&rdquo; &mdash;Robert Penner</p></blockquote>
 
-<p>{% codeblock Easy easing lang:js <a href="https://gist.github.com/keighty/9508948">https://gist.github.com/keighty/9508948</a> Gist %}
-selection.enter()
-  .append(&ldquo;circle&rdquo;)
-  .attr(&ldquo;cx&rdquo;,scaleX(0))
-  .attr(&ldquo;cy&rdquo;,scaleY(0))
-  .attr(&ldquo;r&rdquo;, 0);
-selection.transition().ease(&ldquo;cubic-in-out&rdquo;).duration(1500)
-  .attr(&ldquo;cx&rdquo;,getX)
-  .attr(&ldquo;cy&rdquo;,getY)
-  .attr(&ldquo;r&rdquo;, getR)
-  .style(&ldquo;fill&rdquo;, getColor);
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Easy easing <a href="https://gist.github.com/keighty/9508948">https://gist.github.com/keighty/9508948</a> Gist </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">enter</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">circle</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">cx</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span><span class="nx">scaleX</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">cy</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span><span class="nx">scaleY</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">r</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">ease</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">cubic</span><span class="o">-</span><span class="k">in</span><span class="o">-</span><span class="nx">out</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;).</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">cx</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span><span class="nx">getX</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">cy</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span><span class="nx">getY</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">r</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span> <span class="nx">getR</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">fill</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span> <span class="nx">getColor</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>The transition will act on the selection in the following ways:</p>
 
@@ -465,23 +504,38 @@ selection.transition().ease(&ldquo;cubic-in-out&rdquo;).duration(1500)
 
 <p>Object constancy is achieved through object identity: the data is bound to it&rsquo;s object by a shared unique identifier. This allows D3 to reuse the object when the data set is updated. Object identity is achieved by passing a key function to the data() method at the time of data binding:</p>
 
-<p>{% codeblock %}
-var data = [ // &lt;-A</p>
-
-<pre><code>    {id: 0, value: "foo"},
-    {id: 1, value: "bar"},
-    {id: 2, value: "foo"},
-    {id: 3, value: "baz"},
-    {id: 4, value: "bar"}
-];
-</code></pre>
-
-<p>d3.selectAll(&ldquo;svg:g&rdquo;)</p>
-
-<pre><code>.data(data, function(d){return d.id;});
-</code></pre>
-
-<p>{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var data = [ // &lt;-A&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>    {id: 0, value: "foo"},
+</span><span class='line'>    {id: 1, value: "bar"},
+</span><span class='line'>    {id: 2, value: "foo"},
+</span><span class='line'>    {id: 3, value: "baz"},
+</span><span class='line'>    {id: 4, value: "bar"}
+</span><span class='line'>];
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>d3.selectAll(&ldquo;svg:g&rdquo;)&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>.data(data, function(d){return d.id;});
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></notextile></div></p>
 ]]></content>
   </entry>
   
