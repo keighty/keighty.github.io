@@ -4,7 +4,7 @@
   <title><![CDATA[Category: I Didn't Know That | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/i-didnt-know-that/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-10T15:54:40-08:00</updated>
+  <updated>2015-01-20T07:40:43-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -20,98 +20,66 @@
     <id>http://www.katieleonard.ca/blog/2014/multiple-remotes</id>
     <content type="html"><![CDATA[<p>Somehow I had worked out in my head that there could be only one remote. Origin. Turns out you can set and push to a (presumably) infinite number of remote repositories <!--more-->:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Checkout your git config </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ git config &mdash;list
-</span><span class='line'>push.default=nothing
-</span><span class='line'>alias.hist=log &mdash;pretty=format:&ldquo;%h %ad | %s%d [%an]&rdquo; &mdash;graph &mdash;date=short
-</span><span class='line'>user.name=Katie Leonard
-</span><span class='line'>…
-</span><span class='line'>remote.origin.url=git@github.com:keighty/thorfiles.git
-</span><span class='line'>remote.origin.fetch=+refs/heads/&lt;em>:refs/remotes/origin/&lt;/em>
-</span><span class='line'>branch.master.remote=origin
-</span><span class='line'>branch.master.merge=refs/heads/master</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock Checkout your git config %}
+$ git config &mdash;list
+push.default=nothing
+alias.hist=log &mdash;pretty=format:&ldquo;%h %ad | %s%d [%an]&rdquo; &mdash;graph &mdash;date=short
+user.name=Katie Leonard
+…
+remote.origin.url=git@github.com:keighty/thorfiles.git
+remote.origin.fetch=+refs/heads/<em>:refs/remotes/origin/</em>
+branch.master.remote=origin
+branch.master.merge=refs/heads/master
+{% endcodeblock %}</p>
 
 <p>(On a side note, I am not sure I remember putting <code>alias.hist</code> in my git config, but I find it to be wickedly useful.)</p>
 
 <p>Setting a new remote is as easy as:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>1 2 3 a b c </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ git remote add new_destination git@github.com:otheruser/thorfiles.git</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock 1 2 3 a b c %}
+$ git remote add new_destination git@github.com:otheruser/thorfiles.git
+{% endcodeblock %}</p>
 
 <p>Standing back to admire the results:
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Simple, but does it work? </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ git config &mdash;list
-</span><span class='line'>push.default=nothing
-</span><span class='line'>alias.hist=log &mdash;pretty=format:&ldquo;%h %ad | %s%d [%an]&rdquo; &mdash;graph &mdash;date=short
-</span><span class='line'>user.name=Katie Leonard
-</span><span class='line'>…
-</span><span class='line'>remote.origin.url=git@github.com:keighty/thorfiles.git
-</span><span class='line'>remote.origin.fetch=+refs/heads/&lt;em>:refs/remotes/origin/&lt;/em>
-</span><span class='line'>branch.master.remote=origin
-</span><span class='line'>branch.master.merge=refs/heads/master
-</span><span class='line'>remote.new_destination.url=git@github.com:otheruser/thorfiles.git
-</span><span class='line'>remote.new_destination.fetch=+refs/heads/&lt;em>:refs/remotes/new_destination/&lt;/em></span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% codeblock Simple, but does it work? %}
+$ git config &mdash;list
+push.default=nothing
+alias.hist=log &mdash;pretty=format:&ldquo;%h %ad | %s%d [%an]&rdquo; &mdash;graph &mdash;date=short
+user.name=Katie Leonard
+…
+remote.origin.url=git@github.com:keighty/thorfiles.git
+remote.origin.fetch=+refs/heads/<em>:refs/remotes/origin/</em>
+branch.master.remote=origin
+branch.master.merge=refs/heads/master
+remote.new_destination.url=git@github.com:otheruser/thorfiles.git
+remote.new_destination.fetch=+refs/heads/<em>:refs/remotes/new_destination/</em>
+{% endcodeblock %}</p>
 
 <p>Fast-forward through some excellent and brilliant feature work on <code>my_branch</code>, and I naturally want to save it for posterity:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Chizeled in metal on GitHub servers </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ git push origin my_branch
-</span><span class='line'>Counting objects: 611, done.
-</span><span class='line'>Delta compression using up to 4 threads.
-</span><span class='line'>Compressing objects: 100% (263/263), done.
-</span><span class='line'>Writing objects: 100% (375/375), 63.40 KiB | 0 bytes/s, done.
-</span><span class='line'>Total 375 (delta 280), reused 189 (delta 105)
-</span><span class='line'>To git@github.com:keighty/thorfiles.git
-</span><span class='line'> * [new branch]      my_branch &ndash;> my_branch</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock Chizeled in metal on GitHub servers %}
+$ git push origin my_branch
+Counting objects: 611, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (263/263), done.
+Writing objects: 100% (375/375), 63.40 KiB | 0 bytes/s, done.
+Total 375 (delta 280), reused 189 (delta 105)
+To git@github.com:keighty/thorfiles.git
+ * [new branch]      my_branch &ndash;> my_branch
+{% endcodeblock %}</p>
 
 <p>I can also share it with my friend&rsquo;s repo, presuming I have write access, and knowing full well he will want to use my new feature:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Update your friends! </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ git push new_destination my_branch
-</span><span class='line'>Counting objects: 611, done.
-</span><span class='line'>Delta compression using up to 4 threads.
-</span><span class='line'>Compressing objects: 100% (263/263), done.
-</span><span class='line'>Writing objects: 100% (375/375), 63.40 KiB | 0 bytes/s, done.
-</span><span class='line'>Total 375 (delta 280), reused 189 (delta 105)
-</span><span class='line'>To git@github.com:otheruser/thorfiles.git
-</span><span class='line'> * [new branch]      my_branch &ndash;> my_branch</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock Update your friends! %}
+$ git push new_destination my_branch
+Counting objects: 611, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (263/263), done.
+Writing objects: 100% (375/375), 63.40 KiB | 0 bytes/s, done.
+Total 375 (delta 280), reused 189 (delta 105)
+To git@github.com:otheruser/thorfiles.git
+ * [new branch]      my_branch &ndash;> my_branch
+{% endcodeblock %}</p>
 
 <p>Git is so awesome.</p>
 ]]></content>
@@ -232,29 +200,20 @@ svg.selectAll(&ldquo;circle&rdquo;)</p>
 
 <p>A <strong>global abatement</strong> is a strategy used to reduce the vulnerability of your javascript variables by removing them from the global scope. Application namespacing is one such strategy:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>BAD GLOBAL</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">first_name</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Hello</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;,</span>
-</span><span class='line'>  <span class="nx">last_name</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Kitty</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:javascript BAD GLOBAL%}
+person = {
+  first_name: &lsquo;Hello&rsquo;,
+  last_name: &lsquo;Kitty&rsquo;
+};
+{% endcodeblock %}</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>GOOD LOCAL</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">MYAPP</span> <span class="o">=</span> <span class="p">{};</span>
-</span><span class='line'><span class="nx">MYAPP</span><span class="p">.</span><span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">first_name</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Hello</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;,</span>
-</span><span class='line'>  <span class="nx">last_name</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">Kitty</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:javascript GOOD LOCAL%}
+var MYAPP = {};
+MYAPP.person = {
+  first_name: &lsquo;Hello&rsquo;,
+  last_name: &lsquo;Kitty&rsquo;
+};
+{% endcodeblock %}</p>
 
 <p>Declaring an application-level function ensures that the correct <code>person</code> is called when needed. It improves readability by essentially flagging the scope of the variable and reducing ambiguity.</p>
 

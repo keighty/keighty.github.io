@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-10T15:54:40-08:00</updated>
+  <updated>2015-01-20T07:40:31-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,135 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Objects vs Data Structures]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/objects-vs-data-structures/"/>
+    <updated>2015-01-18T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/objects-vs-data-structures</id>
+    <content type="html"><![CDATA[<p>&ldquo;It is impossible to create an abstraction unknowingly or by accident,&rdquo; says Sandi Metz in <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330/ref=sr_1_1?ie=UTF8&amp;qid=1421723392&amp;sr=8-1&amp;keywords=practical+object+oriented+design+in+ruby"><em>Practical Object Oriented Design in Ruby</em></a>. An abstraction is a common, stable quality, such that you would find in a java interface. An interface is an idea that cannot be made concrete, but contains behaviour <a href="http://en.wikipedia.org/wiki/Interface_%28Java%29">encode similarities</a> which objects might share. Even the definition of abstraction is abstract. I wasn&rsquo;t until I read Robert C. Martin&rsquo;s chapter on Objects and Data Structures in <a href="http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882"><em>Clean Code</em></a> that I really started to understand them.</p>
+
+<!--more-->
+
+
+<h3>What is a data structure</h3>
+
+<p>A data structure is a class that exposes its data to the public. It should have no meaningful behaviour, and can be characterized by a set of attributes along with getters and setters.</p>
+
+<figure class='code'><figcaption><span>Point as data structure </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Point1</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:x</span><span class="p">,</span> <span class="ss">:y</span><span class="p">,</span> <span class="ss">:z</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">p</span> <span class="o">=</span> <span class="no">Point1</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="nb">p</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'><span class="nb">p</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'><span class="nb">p</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'><span class="nb">p</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;Point1:0x007f86092452e8 @x=1, @y=1, @z=1&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this example, a Point is defined as an object at some location on a coordinate grid of some kind. That sounds abstract enough: you can create a point, <span class='pullquote-right' data-pullquote='Hiding implementation is not about putting a layer of functions between the variables. It is about abstractions.'>access all of the point&rsquo;s data, and set its location along each axis independently. You have an instance of a point, but it is not an abstraction of a point &mdash; it is a data structure. Hiding implementation is not about putting a layer of functions between the variables. It is about abstractions.
+</span> Adding an initializer that sets each variable, or a <code>to_s</code> method for getting a pretty output, would not make the Point1 class any more an abstraction of a position in space. To make an abstraction you can&rsquo;t just use getters and setters &mdash; you have to think about how you are representing the data.</p>
+
+<h3>What is an object</h3>
+
+<p>An object hides its data behind abstractions. A Point is not defined by its <code>[@x, @y, @z]</code>, but by its location in space. If space is a coordinate system, it could be 2- or 3-dimensional.</p>
+
+<figure class='code'><figcaption><span>Point as abstraction </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Point2
+</span><span class='line'>  def initialize(x, y, z = nil)
+</span><span class='line'>    set_location(x, y, z)
+</span><span class='line'>  end
+</span><span class='line'>
+</span><span class='line'>  def to_s
+</span><span class='line'>    "(#{[@x, @y, @z].compact.join(',')})"
+</span><span class='line'>  end
+</span><span class='line'>  alias_method :location, :to_s
+</span><span class='line'>
+</span><span class='line'>  def set_location(x, y, z = nil)
+</span><span class='line'>    @x = x
+</span><span class='line'>    @y = y
+</span><span class='line'>    @z = z
+</span><span class='line'>    location
+</span><span class='line'>  end
+</span><span class='line'>  private :set_location
+</span><span class='line'>
+</span><span class='line'>  alias_method :move_point, :set_location
+</span><span class='line'>  public :move_point
+</span><span class='line'>
+</span><span class='line'>end
+</span><span class='line'>
+</span><span class='line'>p = Point2.new(1, 1)
+</span><span class='line'>=> #&lt;Point2:0x007fca39927038 @x=1, @y=1, @z=nil>
+</span><span class='line'>p.move_point(2, 3)
+</span><span class='line'>=> "(2,3)"
+</span><span class='line'>p.move_point(2, 3, 7)
+</span><span class='line'>=> "(2,3,7)"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A point cannot exist separate from it&rsquo;s coordinates, and coordinates cannot exist or be altered without using the abstraction of moving in space.</p>
+
+<blockquote><p>&ldquo;We do not want to expose the details of our data. Rather we want to express our data in abstract terms. This is not merely accomplished by using interfaces and/or getters and setters. Serious thought needs to be put into the best way to represent the data that an object contains.&rdquo;</p>
+
+<p>&mdash; Martin</p></blockquote>
+
+<p>This is why <a href="http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/">fat models are an anti-pattern in Rails</a>. ActiveRecord makes an object out of a data structure, and adding behaviour beyond data validation makes the model a hybrid data object. <a href="http://railscasts.com/episodes/398-service-objects">Service Objects</a> are abstractions of model behaviour (pun intended).</p>
+
+<p>Now I know what an abstraction is, and I understand that simply extracting methods into interfaces doesn&rsquo;t magically make an abstraction. As Metz says, &ldquo;good design naturally progresses toward small independent objects that rely on abstractions.&rdquo; An object is more than a data structure; it is an idea and it must be applied deliberately.</p>
+
+<!-- resources
+http://www.cgore.com/programming/ruby/public-aliases-of-private-methods.lisp
+-->
+
+
+<!-- resources
+http://railscasts.com/episodes/398-service-objects
+http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/
+-->
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[#dup vs #clone in Ruby and Rails]]></title>
@@ -485,7 +614,7 @@ Test-driven development can help you grow your career.
 
 <p>Social groups cannot be formed without cooperation and a set of norms. Norms can be enforced through gossip:</p>
 
-<blockquote><p>Many species reciprocate, but only humans gossip, and much of what we gossip about is the value of other people as partners for reciprocal relationships&hellip; Gossip paired with reciprocity allow karma to work here on eatch, not in the next life.</p></blockquote>
+<blockquote><p>Many species reciprocate, but only humans gossip, and much of what we gossip about is the value of other people as partners for reciprocal relationships&hellip; Gossip paired with reciprocity allow karma to work here on earth, not in the next life.</p></blockquote>
 
 <h3>On writing your life story</h3>
 
@@ -1986,108 +2115,6 @@ at Object.Template.postPageItem.helpers.commentsNote (http://localhost:3000/clie
 
 
 <p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Flash Your Local Collection]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/flash-your-local-collection/"/>
-    <updated>2014-05-26T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/flash-your-local-collection</id>
-    <content type="html"><![CDATA[<p>Rails allows you to pass messages to the user between actions (&ldquo;This <a href="http://api.rubyonrails.org/classes/ActionDispatch/Flash.html">ActionDispatch::Flash</a> will self-destruct&rdquo;), and because Rails, all the message generation happens server side:</p>
-
-<figure class='code'><figcaption><span>flashy_controller.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">show</span>
-</span><span class='line'>  <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;You dropped your packet.&quot;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Meteor is mostly a client-side application framework, and you can implement a similar message system, which will never touch the server, by defining a collection that is local to the browser.<!--more--></p>
-
-<h3>1. Create a local collection</h3>
-
-<figure class='code'><figcaption><span>/client/errors.js </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Errors</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Meteor</span><span class="p">.</span><span class="nx">Collection</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Passing <code>null</code> into the Collection declaration tells Meteor that the collection should not be extended to the server &mdash; it creates an &ldquo;unmanaged (unsynchronized) local collection&rdquo; (<a href="http://docs.meteor.com/#meteor_collection">docs</a>)</p>
-
-<h3>2. Throw an error whenever you need to</h3>
-
-<figure class='code'><figcaption><span>/missionCritical.js </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>if(error){
-</span><span class='line'>  Errors.insert({message: error.reason});
-</span><span class='line'>}
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>3. Create a template for displaying the error</h3>
-
-<figure class='code'><figcaption><span>/client/errors.html </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&lt;</span><span class="nx">template</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;errors&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;errors&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="p">{{</span><span class="err">#</span><span class="nx">each</span> <span class="nx">errors</span><span class="p">}}</span>
-</span><span class='line'>      <span class="p">{{</span><span class="o">&gt;</span> <span class="nx">error</span><span class="p">}}</span>
-</span><span class='line'>    <span class="p">{{</span><span class="err">/each}}</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="err">/div&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/template&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">template</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;alert alert-error&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;button&quot;</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;close&quot;</span> <span class="nx">data</span><span class="o">-</span><span class="nx">dismiss</span><span class="o">=</span><span class="s2">&quot;alert&quot;</span><span class="o">&gt;&amp;</span><span class="nx">times</span><span class="p">;</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
-</span><span class='line'>    <span class="p">{{</span><span class="nx">message</span><span class="p">}}</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="err">/div&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/template&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>4. Create a helper method for serving the errors to the template</h3>
-
-<figure class='code'><figcaption><span>/client/errors.js continued again </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="p">...</span>
-</span><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">errors</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">Errors</span><span class="p">.</span><span class="nx">find</span><span class="p">();</span>
-</span><span class='line'>  <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Every template that contains the handlebars <code>{{&gt; errors}}</code> will now display whatever errors have been saved to the session collection.</p>
-
-<p>Awesome.</p>
-
-<h3>Resources</h3>
-
-<p><a href="https://www.discovermeteor.com/">discovermeteor.com</a>
-<a href="http://docs.meteor.com">Meteor docs</a></p>
 ]]></content>
   </entry>
   

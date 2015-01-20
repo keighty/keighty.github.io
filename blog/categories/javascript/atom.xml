@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-10T15:54:40-08:00</updated>
+  <updated>2015-01-20T07:40:43-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -22,40 +22,24 @@
 
 <p>Closures occur when you pass functions to variables to call at a later date. The javascript engine does all the work of compiling the script and loading the contents into the memory stack, but until the function is called the stack just sits there, sealed like a time capsule.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Closure in the wild </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">timeCapsule</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">year</span> <span class="o">=</span> <span class="mi">1999</span><span class="p">;</span>
-</span><span class='line'>  <span class="kd">function</span> <span class="nx">party</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;We&#39;re gonna party like it&#39;s &quot;</span> <span class="o">+</span> <span class="nx">year</span><span class="p">);</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="k">return</span> <span class="nx">party</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kd">var</span> <span class="nx">year</span> <span class="o">=</span> <span class="mi">2099</span><span class="p">;</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">tonight</span> <span class="o">=</span> <span class="nx">timeCapsule</span><span class="p">();</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">tonight</span><span class="p">();</span> <span class="c1">// We&amp;rsquo;re gonna party like it&amp;rsquo;s 1999</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock Closure in the wild lang:js %}
+function timeCapsule() {
+  var year = 1999;
+  function party() {</p>
+
+<pre><code>console.log("We're gonna party like it's " + year);
+</code></pre>
+
+<p>  }</p>
+
+<p>  return party;
+}</p>
+
+<p>var year = 2099;
+var tonight = timeCapsule();</p>
+
+<p>tonight(); // We&rsquo;re gonna party like it&rsquo;s 1999
+{% endcodeblock %}</p>
 
 <p>The <code>party()</code> function has a closure over <code>timeCapsule()</code>, which means all the variables and functions within timeCapsule remain unmolested by any assignments made outside of their scope.</p>
 
@@ -63,33 +47,24 @@
 
 <p>Breaking your monolithic javascript into modules is a great way to separate concerns and create closures.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>myModule.js </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">myModuleFunction</span><span class="p">()</span> <span class="p">{</span> <span class="err">/&lt;em&gt; Do work1 &lt;/em&gt;/ }</span>
-</span><span class='line'><span class="kd">function</span> <span class="nx">mySecondModuleFuntion</span><span class="p">()</span> <span class="p">{</span> <span class="err">/&lt;em&gt; Do work2 &lt;/em&gt;/ }&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">exports</span><span class="p">.</span><span class="nx">myModuleFunction</span> <span class="o">=</span> <span class="nx">myModuleFunction</span><span class="p">;</span>
-</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">mySecondModuleFunction</span> <span class="o">=</span> <span class="nx">mySecondModuleFunction</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock myModule.js lang:js %}
+function myModuleFunction() { /<em> Do work1 </em>/ }
+function mySecondModuleFuntion() { /<em> Do work2 </em>/ }</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Using the module </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">myModule</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">myModule</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;);</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">myModule</span><span class="p">.</span><span class="nx">myModuleFunction</span><span class="p">();</span> <span class="c1">// performs work1</span>
-</span><span class='line'><span class="nx">myModule</span><span class="p">.</span><span class="nx">mySecondModuleFunction</span><span class="p">();</span> <span class="c1">// performs work2</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>exports.myModuleFunction = myModuleFunction;
+exports.mySecondModuleFunction = mySecondModuleFunction;
+{% endcodeblock %}</p>
+
+<p>{% codeblock Using the module lang:js %}
+var myModule = require(&ldquo;myModule&rdquo;);</p>
+
+<p>myModule.myModuleFunction(); // performs work1
+myModule.mySecondModuleFunction(); // performs work2
+{% endcodeblock %}</p>
 
 <p>Using modules will prevent naming conflicts on functions and variables:</p>
 
-<p>
+<p>{% raw %}
 ```javascript
 var module1 = require(&ldquo;myModuleName&rdquo;);</p>
 
@@ -101,7 +76,7 @@ var module1 = require(&ldquo;myModuleName&rdquo;);</p>
 myModuleFunction(); // outputs snarky phrase</p>
 
 <p>```
-</p>
+{% endraw %}</p>
 
 <p>Voila &mdash; no conflicts.</p>
 ]]></content>
@@ -114,7 +89,7 @@ myModuleFunction(); // outputs snarky phrase</p>
     <id>http://www.katieleonard.ca/blog/2014/formatting-numbers-the-easy-way</id>
     <content type="html"><![CDATA[<p>D3 has an awesome number formatting function that I discovered only after hacking my own. My first approach was to use string and array manipulation to convert 1234567890 to 1,234,567,890:</p>
 
-<p>
+<p>{% raw %}
 `&ldquo;javascript
 function numberSmoothing(value) {
   // split the number into a character array and reverse it
@@ -155,25 +130,26 @@ reversedNumber = numberChunk;
 &ldquo;1,234,567,890&rdquo;</p></blockquote>
 
 <p>```
-</p>
+{% endraw %}</p>
 
 <p>While it was a fun mental exercise to implement number formatting, I stumbled across this handy d3 function after I was already done:</p>
 
-<p>
+<p>{% raw %}
 ```</p>
 
 <blockquote><p>var format = d3.format(&ldquo;,&rdquo;);
 format(1234567890);
 &ldquo;1,234,567,890&rdquo;
 ```
-</p></blockquote>
+{% endraw %}</p></blockquote>
 
 <p>As it turns out, any way one might want to format a number has <a href="https://github.com/mbostock/d3/wiki/Formatting#d3_format">already been implemented in d3</a>. It is similar to the mini-formatting language from python:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[​[fill]align][sign][symbol][0][width][,][.precision][type]</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock %}
+[​[fill]align][sign][symbol][0][width][,][.precision][type]
+{% endcodeblock %}</p>
 
-<p>
+<p>{% raw %}
 ```javascript
 // add commas for the thousands separator</p>
 
@@ -229,7 +205,7 @@ format(123.456)
 format(123456789.66)
 &ldquo;120,000,000&rdquo;
 ```
-</p></blockquote>
+{% endraw %}</p></blockquote>
 
 <p>Awesome.</p>
 ]]></content>
@@ -242,7 +218,7 @@ format(123456789.66)
     <id>http://www.katieleonard.ca/blog/2014/javascript-getters-and-setters</id>
     <content type="html"><![CDATA[<p>Getters and setters make sense in java, and I just learned that there is an equivalent pattern in javascript:</p>
 
-<p>
+<p>{% raw %}
 ```javascript</p>
 
 <blockquote><p>var favouriteBook = {
@@ -270,11 +246,11 @@ favouriteBook.title
 <p>favouriteBook.title
  Getting title Slaughterhouse 5
 ```
-</p></blockquote>
+{% endraw %}</p></blockquote>
 
 <p>The <code>get</code> and <code>set</code> key words are reserved for accessing or mutating a data property (instance variable). Of course, one can get and set data properties directly:</p>
 
-<p>
+<p>{% raw %}
 ```javascript</p>
 
 <blockquote><p>favouriteBook.title
@@ -284,11 +260,11 @@ favouriteBook.title
 favouriteBook.title
 &ldquo;Slaughterhouse 5&rdquo;
 ```
-</p></blockquote>
+{% endraw %}</p></blockquote>
 
 <p>The advantage of using a getter and setter is that if a setter is defined without a getter, one can change the value of the data property, but can never read it. If a getter is defined without a setter, then the variable can be read but not be changed:</p>
 
-<p>
+<p>{% raw %}
 ```javascript</p>
 
 <blockquote><p>var favouriteBook = {
@@ -309,7 +285,7 @@ Getting title Catch-22</p>
 <p>favouriteBook.title
 Getting title Catch-22
 ```
-</p></blockquote>
+{% endraw %}</p></blockquote>
 
 <p>The setter function will fail silently, which makes troubleshooting difficult but ensures that the property remains undisturbed.</p>
 
@@ -326,7 +302,7 @@ Getting title Catch-22
     <id>http://www.katieleonard.ca/blog/2014/constructors-and-prototypes</id>
     <content type="html"><![CDATA[<p>Object-oriented programming (OOP) can be thought of as describing the properties and behaviour of a noun in a blueprint, which is used to create instances of an object. The blueprint is defined as a Constructor &mdash; a function that identifies a class of objects and begins with a capital letter. New objects are created by calling a Constructor with the keyword <code>new</code>.</p>
 
-<p>
+<p>{% raw %}
 ```javascript</p>
 
 <blockquote><p>function Book(title, author) {</p>
@@ -351,7 +327,7 @@ this.listing = function() {
 <p>book1.listing()
 Catch-22 by Joseph Heller
 ```
-</p></blockquote>
+{% endraw %}</p></blockquote>
 
 <p>The Book constructor specifies two properties, <code>title</code> and <code>author</code>, and one method, <code>listing</code>. Defining a method in a constructor ensures that all instances of the Object have the same method, but it also results in duplication of the method in the memory stack for every instance of the Object. If I made 1000 instances of Book, there would be 1000 instances of the listing method, even though it is only defined once, and is the same for every object.</p>
 
@@ -364,7 +340,7 @@ Catch-22 by Joseph Heller
 
 <p>A Prototype is a property that is shared by all instances of an object. When the constructor for an object is called for the first time, all the object&rsquo;s properties are loaded onto the memory stack as well as the object&rsquo;s Prototype. All subsequent instances of that object include a pointer to the same Prototype, and they pass in a pointer to themselves as <code>this</code> whenever they call a method from the Prototype.</p>
 
-<p>
+<p>{% raw %}
 ```javascript
 function Book(title, author) {
   this.title = title;
@@ -393,7 +369,7 @@ false
 &lsquo;listing&rsquo; in book1
 true
 ```
-</p></blockquote>
+{% endraw %}</p></blockquote>
 
 <h4>Memory stack of object with prototypes:</h4>
 
@@ -413,13 +389,13 @@ true
     <id>http://www.katieleonard.ca/blog/2014/in-operator-avoid-false-falsies</id>
     <content type="html"><![CDATA[<p>I have encountered more than my share of javascript errors because I have made assumptions about the object I am working with, such as assuming that an object contains a property, and that I can call methods on that property:</p>
 
-<p>
+<p>{% raw %}
 ```javascript</p>
 
 <blockquote><p>myObject.data[0]
 TypeError: Cannot read property &lsquo;0&rsquo; of undefined
 ```
-</p></blockquote>
+{% endraw %}</p></blockquote>
 
 <p>This line contains four assumptions, and therefore four places it can fail:</p>
 
@@ -433,19 +409,19 @@ TypeError: Cannot read property &lsquo;0&rsquo; of undefined
 
 <p>Presuming that if <code>myObject</code> does not exist means you have bigger problems, it is easy to fall into the trap of checking for the existence of a property by gating a conditional with it:</p>
 
-<p>
+<p>{% raw %}
 <code>javascript
 if(myObject.data) {
   //do something important with the data
 }
 </code>
-</p>
+{% endraw %}</p>
 
 <p>This technique will work in development, but the voice of experience tells us that it will not work in production. The reason it will not work is that javascript has more falsy values than most languages. Falsy values include the number zero, empty strings, null, undefined, NaN, and of course, the boolean false. So, if it is possible <code>myObject.data</code> to contain derived information, you have signed up to troubleshoot some unexpected behaviour.</p>
 
 <p>Fortunately, javascript has provided a failsafe way to check the existence of a property, regardless of the data it contains. The <code>in</code> operator checks if the key exists in the object&rsquo;s hash table, and doesn&rsquo;t care if it is a prototype or singleton property.</p>
 
-<p>
+<p>{% raw %}
 ```javascript</p>
 
 <blockquote><p>var myObject = {}
@@ -460,7 +436,7 @@ true
 myObject.data == true
 false
 ```
-</p></blockquote>
+{% endraw %}</p></blockquote>
 
 <p><code>('data' in myObject)</code> returns false if the property is undefined. If the property is defined, it returns true even if data contains a falsy value.</p>
 

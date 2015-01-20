@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-10T15:54:40-08:00</updated>
+  <updated>2015-01-20T07:40:43-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -268,8 +268,8 @@ NotImplementedError: You can&rsquo;t call #baz here!</p>
 
 
 <p>The commands will be provided in an input file, and an output is specified. Fun problem, right? So, I start my project folder using my <a href="http://www.katieleonard.ca/automation/2013/09/08/thor-sets-up-a-project/">thor task</a>, and work awhile adding logic and tests and data as appropriate. My file tree finishes like this:
-<div>
-  <pre><code class='bash'>blocks
+{% highlight bash %}
+blocks
 ├── data
 │   ├── input.txt
 │   └── output.txt
@@ -279,54 +279,43 @@ NotImplementedError: You can&rsquo;t call #baz here!</p>
 │   ├── blocks_spec.rb
 │   └── spec_helper.rb
 ├── Gemfile
-└── README.md</code></pre>
-</div>
-</p>
+└── README.md{% endhighlight %}</p>
 
 <p>So, in order to use my script, I would have to call it from the command line:
-<div>
-  <pre><code class='bash'>$ ruby lib/blocks.rb data/input.txt&lt;/p&gt;
+{% highlight bash %}
+$ ruby lib/blocks.rb data/input.txt</p>
 
-&lt;h1&gt;=&gt; or&lt;/h1&gt;
+<h1>=> or</h1>
 
-&lt;p&gt;$ data/input.txt | ruby lib/blocks.rb</code></pre>
-</div>
-</p>
+<p>$ data/input.txt | ruby lib/blocks.rb{% endhighlight %}</p>
 
 <p>This is an extremely verbose way to deliver a final product, and I would much rather call $ blocks &lt;file_input&gt;. It turns out that making an executable is easy and elegant, just like everything else in ruby. You just have to declare the ruby environment, include a few notes on usage, load the file tree, and call the class:
-<div>
-  <pre><code class='ruby'>&lt;/p&gt;
+{% highlight ruby %}</p>
 
-&lt;h1&gt;!/usr/bin/env ruby&lt;/h1&gt;
+<h1>!/usr/bin/env ruby</h1>
 
-&lt;h1&gt;blocks&lt;/h1&gt;
+<h1>blocks</h1>
 
-&lt;h1&gt;10-Sep-2013&lt;/h1&gt;
+<h1>10-Sep-2013</h1>
 
-&lt;p&gt;#&lt;/p&gt;
+<p>#</p>
 
-&lt;h1&gt;Usage:&lt;/h1&gt;
+<h1>Usage:</h1>
 
-&lt;h1&gt;./blocks data/input.txt&lt;/h1&gt;
+<h1>./blocks data/input.txt</h1>
 
-&lt;p&gt;#
-$LOAD_PATH.unshift(File.join(File.dirname(&lt;strong&gt;FILE&lt;/strong&gt;), &amp;lsquo;lib&amp;rsquo;))
-require &amp;lsquo;blocks&amp;rsquo;
-Blocks.new.process_input</code></pre>
-</div>
-</p>
+<p>#
+$LOAD_PATH.unshift(File.join(File.dirname(<strong>FILE</strong>), &lsquo;lib&rsquo;))
+require &lsquo;blocks&rsquo;
+Blocks.new.process_input{% endhighlight %}</p>
 
 <p>Placing this code in a non-extension file, like &lsquo;blocks&rsquo;, in the main directory, I can make it an executable by changing the file permissions:
-<div>
-  <pre><code class='bash'>$ chmod +x ./blocks</code></pre>
-</div>
-</p>
+{% highlight bash %}
+$ chmod +x ./blocks{% endhighlight %}</p>
 
 <p>And I can call it like any other executable:
-<div>
-  <pre><code class='bash'>$ ./blocks data/input.txt</code></pre>
-</div>
-</p>
+{% highlight bash %}
+$ ./blocks data/input.txt{% endhighlight %}</p>
 
 <p>I liked this solution so much, I added it to my thor project setup! Oh, and if you are interested in seeing my solution for the blocks problem, checkout my <a href="https://github.com/keighty/datastructures/tree/master/ruby/blocks">github repo</a></p>
 
@@ -345,136 +334,126 @@ Blocks.new.process_input</code></pre>
 
 
 <p>My Goal Tree:
-<div>
-  <pre><code class='bash'>project_name
+{% highlight bash %}
+project_name
 ├── lib
 │   └── project_name.rb
 ├── spec
 │   ├── project_name_spec.rb
 │   └── spec_helper.rb
 ├── Gemfile
-└── README.md</code></pre>
-</div>
-</p>
+└── README.md{% endhighlight %}</p>
 
 <p>I always begin with these files and this organization. A Gemfile and README are essential for setting up the environment and explaining the gist of the project. I am most comfortable with RSpec, and to get into the practice of TDD, setting up a testing environment right away is non-negotiable. All of these standard files contain some automatic content as well:</p>
 
 <h5>spec_helper.rb loads the library</h5>
 
-<p><div>
-  <pre><code class='ruby'>$LOAD_PATH.unshift(File.join(File.dirname(&lt;strong&gt;FILE&lt;/strong&gt;), &amp;lsquo;..&amp;rsquo;, &amp;lsquo;lib&amp;rsquo;))
-require &amp;lsquo;rspec&amp;rsquo;
-require &amp;lsquo;project_name&amp;rsquo;</code></pre>
-</div>
-</p>
+<p>{% highlight ruby %}
+$LOAD_PATH.unshift(File.join(File.dirname(<strong>FILE</strong>), &lsquo;..&rsquo;, &lsquo;lib&rsquo;))
+require &lsquo;rspec&rsquo;
+require &lsquo;project_name&rsquo;
+{% endhighlight %}</p>
 
 <h5>project_name_spec.rb sets up the first test</h5>
 
-<p><div>
-  <pre><code class='ruby'>require &amp;lsquo;spec_helper&amp;rsquo;&lt;/p&gt;
+<p>{% highlight ruby %}
+require &lsquo;spec_helper&rsquo;</p>
 
-&lt;p&gt;describe ProjectName do
+<p>describe ProjectName do
   before (:each) {  }
-  subject {  }&lt;/p&gt;
+  subject {  }</p>
 
-&lt;p&gt;  it &amp;ldquo;should pass&amp;rdquo;
-end</code></pre>
-</div>
-</p>
+<p>  it &ldquo;should pass&rdquo;
+end
+{% endhighlight %}</p>
 
 <h5>Gemfile specifies the right gems for setting up the project</h5>
 
-<p><div>
-  <pre><code class='ruby'>ruby &amp;lsquo;2.0.0&amp;rsquo;
-gem &amp;lsquo;rspec&amp;rsquo;</code></pre>
-</div>
-</p>
+<p>{% highlight ruby %}
+ruby &lsquo;2.0.0&rsquo;
+gem &lsquo;rspec&rsquo;
+{% endhighlight %}</p>
 
 <p>There are other files that could have auto-generated content as well, like a Rakefile, or a config.ru, but this is a good start.</p>
 
 <h4>Create a Thor task (rb_project.thor):</h4>
 
-<p><div>
-  <pre><code class='ruby'>&lt;/p&gt;
+<p>{% highlight ruby %}</p>
 
-&lt;h1&gt;!/usr/bin/env ruby&lt;/h1&gt;
+<h1>!/usr/bin/env ruby</h1>
 
-&lt;p&gt;require &amp;ldquo;rubygems&amp;rdquo;
-require &amp;ldquo;thor&amp;rdquo;&lt;/p&gt;
+<p>require &ldquo;rubygems&rdquo;
+require &ldquo;thor&rdquo;</p>
 
-&lt;p&gt;class RbProject &amp;lt; Thor
-  desc &amp;ldquo;init&amp;rdquo;, &amp;ldquo;creates a ruby project with rspec&amp;rdquo;&lt;/p&gt;
+<p>class RbProject &lt; Thor
+  desc &ldquo;init&rdquo;, &ldquo;creates a ruby project with rspec&rdquo;</p>
 
-&lt;p&gt;  def init(title=&amp;ldquo;new_project&amp;rdquo;)&lt;/p&gt;
+<p>  def init(title=&ldquo;new_project&rdquo;)</p>
 
-&lt;pre&gt;&lt;code&gt;Dir.mkdir(title)
+<pre><code>Dir.mkdir(title)
 Dir.chdir(title)
-Dir.mkdir(&quot;spec&quot;)
-Dir.mkdir(&quot;lib&quot;)
-filename = &quot;#{title}&quot;
+Dir.mkdir("spec")
+Dir.mkdir("lib")
+filename = "#{title}"
 
-open(File.new(&quot;README.md&quot;, &quot;w&quot;), &quot;w&quot;) do |note|
-  note.puts &quot;# #{title}&quot;
+open(File.new("README.md", "w"), "w") do |note|
+  note.puts "# #{title}"
 end
 
-open(File.new(&quot;Gemfile&quot;, &quot;w&quot;), &quot;w&quot;) do |my_gem|
-  my_gem.puts &quot;ruby &#39;2.0.0&#39;&quot;
-  my_gem.puts &quot;gem &#39;rspec&#39;&quot;
+open(File.new("Gemfile", "w"), "w") do |my_gem|
+  my_gem.puts "ruby '2.0.0'"
+  my_gem.puts "gem 'rspec'"
 end
 
-open(File.new(&quot;spec/spec_helper.rb&quot;, &quot;w&quot;), &quot;w&quot;) do |spec|
-  spec.puts &quot;$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), &#39;..&#39;, &#39;lib&#39;))&quot;
-  spec.puts &quot;require &#39;rspec&#39;&quot;
-  spec.puts &quot;require &#39;#{filename}&#39;&quot;
+open(File.new("spec/spec_helper.rb", "w"), "w") do |spec|
+  spec.puts "$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))"
+  spec.puts "require 'rspec'"
+  spec.puts "require '#{filename}'"
 end
 
-open(File.new(&quot;spec/#{filename}_spec.rb&quot;, &quot;w&quot;), &quot;w&quot;) do |spec|
-  spec.puts &quot;require &#39;spec_helper&#39;&quot;
-  spec.puts &quot;&quot;
-  spec.puts &quot;describe #{camelize(filename)} do&quot;
-  spec.puts &quot;  before (:each) {  }&quot;
-  spec.puts &quot;  xit &#39;should pass&#39;&quot;
-  spec.puts &quot;end&quot;
+open(File.new("spec/#{filename}_spec.rb", "w"), "w") do |spec|
+  spec.puts "require 'spec_helper'"
+  spec.puts ""
+  spec.puts "describe #{camelize(filename)} do"
+  spec.puts "  before (:each) {  }"
+  spec.puts "  xit 'should pass'"
+  spec.puts "end"
 end
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;  end&lt;/p&gt;
+<p>  end</p>
 
-&lt;p&gt;  private&lt;/p&gt;
+<p>  private</p>
 
-&lt;pre&gt;&lt;code&gt;def camelize(snake)
-  title = snake.split(&#39;_&#39;).each do |word|
+<pre><code>def camelize(snake)
+  title = snake.split('_').each do |word|
     word.capitalize!
   end
-  title.join(&#39;&#39;)
+  title.join('')
 end
-&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
 
-&lt;p&gt;end</code></pre>
-</div>
-</p>
+<p>end {% endhighlight %}</p>
 
 <p>I created a private method camelize in order to change the snake_case project name into a CamelCase class name.</p>
 
 <p>As before, I install my thor task system wide:
-<div>
-  <pre><code class='bash'>$ thor install rb_project.thor</code></pre>
-</div>
-</p>
+{% highlight bash %}
+$ thor install rb_project.thor {% endhighlight %}</p>
 
 <p>And now my project generation task can be run from any directory, anywhere on my system:
-<div>
-  <pre><code class='bash'>$ thor list&lt;/p&gt;
+{% highlight bash %}
+$ thor list</p>
 
-&lt;h2&gt;note&lt;/h2&gt;
+<h2>note</h2>
 
-&lt;p&gt;thor note:create  # creates a notes file in markdown&lt;/p&gt;
+<p>thor note:create  # creates a notes file in markdown</p>
 
-&lt;h2&gt;rb_project&lt;/h2&gt;
+<h2>rb_project</h2>
 
-&lt;p&gt;thor rb_project:init  # creates a ruby project with rspec&lt;/p&gt;
+<p>thor rb_project:init  # creates a ruby project with rspec</p>
 
-&lt;p&gt;$ thor rb_project:init test_project
+<p>$ thor rb_project:init test_project
 $ tree test_project/
 test_project/
 ├── lib
@@ -483,22 +462,15 @@ test_project/
 │   ├── spec_helper.rb
 │   └── test_project_spec.rb
 ├── Gemfile
-├── README.md&lt;/p&gt;
+├── README.md</p>
 
-&lt;p&gt;2 directories, 6 files</code></pre>
-</div>
-</p>
+<p>2 directories, 6 files
+{% endhighlight %}</p>
 
 <p>Awesome.</p>
 
-<p><div>
-  <pre><code class='bash'></code></pre>
-</div>
-
-<div>
-  <pre><code class='bash'></code></pre>
-</div>
-</p>
+<p>{% highlight bash %}{% endhighlight %}
+{% highlight bash %}{% endhighlight %}</p>
 ]]></content>
   </entry>
   
@@ -516,50 +488,40 @@ test_project/
 
 <p>There are a lot of ways to treat data at the command line, but the one I was most familiar with is passing in a filename as an argument:</p>
 
-<p><div>
-  <pre><code class='bash'>$ ruby example_script.rb file1.csv file2.csv &amp;hellip;
+<p>{% highlight bash linenos%}
+$ ruby example_script.rb file1.csv file2.csv &hellip;
 $ ruby example_script.rb file1.csv | more
-$ ruby example_script.rb file1.csv &gt; output.txt</code></pre>
-</div>
-</p>
+$ ruby example_script.rb file1.csv > output.txt{% endhighlight %}</p>
 
 <h3>Filename Input</h3>
 
 <p>Using ARGV, we can access the list of filenames provided at the command line. ARGV is an array containing all the information that follows the command. For example:
-<div>
-  <pre><code class='bash'>$ example_command apple banana orange&lt;/p&gt;
+{% highlight bash %}
+$ example_command apple banana orange</p>
 
-&lt;h1&gt;ARGV = [&amp;ldquo;apple&amp;rdquo;, &amp;ldquo;banana&amp;rdquo;, &amp;ldquo;orange&amp;rdquo;]</code></pre>
-</div>
-</h1>
+<h1>ARGV = [&ldquo;apple&rdquo;, &ldquo;banana&rdquo;, &ldquo;orange&rdquo;]{% endhighlight %}</h1>
 
 <p>One can process each filename in ARGV using regular array methods:</p>
 
-<p><div>
-  <pre><code class='ruby'>ARGV.each do |arg|
+<p>{% highlight ruby %}
+ARGV.each do |arg|
   process_string(File.read(arg))
-end</code></pre>
-</div>
-</p>
+end {% endhighlight %}</p>
 
 <p>File.read(arg) reads the file into a &ldquo;\n&rdquo; delimited string, which can be processed further. If there are no arguments, ARGV is an empty array.</p>
 
 <h3>Piped Input</h3>
 
 <p>Say that we want to enter data directly into a program rather than use a fixed filename at the command line &mdash; a useful technique for when we want data to flow out of one process and into another:
-<div>
-  <pre><code class='bash'>$ cat file1.csv | ruby example_script.rb
+{% highlight bash %}
+$ cat file1.csv | ruby example_script.rb
 $ cat *.csv | ruby example_script.rb
-$ ruby example_script.rb &amp;lt; file1.csv</code></pre>
-</div>
-</p>
+$ ruby example_script.rb &lt; file1.csv {% endhighlight %}</p>
 
 <p>Using the pipe, &ldquo;|&rdquo; or &ldquo;&lt;&rdquo;, we can push a string of data from one process into another, but what happens to our program when we try to do this?
-<div>
-  <pre><code class='bash'>$ example.csv | ruby example_script.rb
-TypeError: can`t convert nil into String</code></pre>
-</div>
-</p>
+{% highlight bash %}
+$ example.csv | ruby example_script.rb
+TypeError: can`t convert nil into String {% endhighlight %}</p>
 
 <p>We get a TypeError! Recall that command line arguments are stored in ARGV, but we are not providing any command line arguments. ARGV is an empty array, and we are attempting to open a file from ARGV[0] = nil. Shame on us! How do we access data that is piped in as well as data that is appended to the command line? Do we have to check for the source of the data before we can treat it? Turns out, we DON&rsquo;T.</p>
 
@@ -567,10 +529,8 @@ TypeError: can`t convert nil into String</code></pre>
 
 <p>Ruby has a nifty interface for handling data input, regardless of whether it arrives as a command line argument or from another data source. We can replace the code we wrote earlier with a single line:</p>
 
-<p><div>
-  <pre><code class='ruby'>process_string(ARGF.read)</code></pre>
-</div>
-</p>
+<p>{% highlight ruby%}
+process_string(ARGF.read){% endhighlight %}</p>
 
 <p>If ARGV is not empty, ARGF will assume it is an array of filenames and will treat them accordingly. If ARGV is empty, it will read from $stdin to get the data passed in via the pipe. One caveat is that you can&rsquo;t read from both ARGV and the pipe: if ARGV != [  ], $stdin is ignored.</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Web | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/web/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-10T15:54:40-08:00</updated>
+  <updated>2015-01-20T07:40:43-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -25,32 +25,29 @@
 2. remove all the contents
 3. fill the branch with your boastful new site</p>
 
-<p><div>
-  <pre><code class='bash'>$ cd repository&lt;/p&gt;
+<p>{% highlight bash %}
+$ cd repository</p>
 
-&lt;p&gt;$ git checkout &amp;mdash;orphan gh-pages&lt;/p&gt;
+<p>$ git checkout &mdash;orphan gh-pages</p>
 
-&lt;h1&gt;Creates a branch, without any parents&lt;/h1&gt;
+<h1>Creates a branch, without any parents</h1>
 
-&lt;h1&gt;Switched to a new branch &amp;lsquo;gh-pages&amp;rsquo;&lt;/h1&gt;
+<h1>Switched to a new branch &lsquo;gh-pages&rsquo;</h1>
 
-&lt;p&gt;$ git rm -rf .&lt;/p&gt;
+<p>$ git rm -rf .</p>
 
-&lt;h1&gt;Remove all files from the old working tree&lt;/h1&gt;
+<h1>Remove all files from the old working tree</h1>
 
-&lt;p&gt;</code></pre>
-</div>
-</p>
+<p>{% endhighlight %}</p>
 
 <p>From here you can use the <a href="https://help.github.com/articles/creating-pages-with-the-automatic-generator">GitHub Automatic Page generator</a> to throw up a theme and some standard content, you can roll out a <a href="http://jekyllbootstrap.com/">jekyll bootstrap</a> platform with blogging integration, or you can simply:</p>
 
-<p><div>
-  <pre><code class='bash'>$ echo &amp;ldquo;Hello gh-pages!&amp;rdquo; &gt; index.html
+<p>{% highlight bash %}
+$ echo &ldquo;Hello gh-pages!&rdquo; > index.html
 $ git add index.html
-$ git commit -a -m &amp;ldquo;First pages commit&amp;rdquo;
-$ git push origin gh-pages</code></pre>
-</div>
-</p>
+$ git commit -a -m &ldquo;First pages commit&rdquo;
+$ git push origin gh-pages
+{% endhighlight %}</p>
 
 <p>Add and commit your content to your gh-pages branch, and GitHub will generate what needs to be generated in order to serve your website.</p>
 
@@ -63,16 +60,14 @@ $ git push origin gh-pages</code></pre>
 <p>Docco works with  Python, Ruby, JavaScript, Java, and many other languages, with no configuration &mdash; just plug and play!</p>
 
 <p>Install Docco with npm:
-<div>
-  <pre><code class='bash'>sudo npm install -g docco</code></pre>
-</div>
-</p>
+{% highlight bash %}
+sudo npm install -g docco
+{% endhighlight %}</p>
 
 <p>Run it against your code:
-<div>
-  <pre><code class='javascript'>docco lib/*.ruby</code></pre>
-</div>
-</p>
+{% highlight javascript %}
+docco lib/*.ruby
+{% endhighlight %}</p>
 
 <p>Docco will create a docs/ folder in your project and will generate an html file for each ruby file in the lib directory. This is where beautifully commented code really pays off, but docco does not format multi-line code the same way. Check out my <a href="http://www.katieleonard.ca/PCSnotes/docs/benchmark.html">benchmark.rb</a> for an example of how each comment style is treated by docco.</p>
 

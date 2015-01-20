@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="A few months ago I gave a small lightning talk to my code school class about automating tasks using Rake. Before I learned ruby I used bash scripts &hellip;">
+  <meta name="description" content="Many of the fun, junior code challenges I have encountered deal a lot with input/output of data, and I found a great ruby feature that provides &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,47 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/argf-all-you-want/">ARGF All You Want</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-05T22:29:03-07:00" pubdate data-updated="true">Sep 5<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Many of the fun, junior code challenges I have encountered deal a lot with input/output of data, and I found a great ruby feature that provides flexibility at the command line.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/argf-all-you-want/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -250,61 +291,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/flex-your-lexer/">Flex Your Lexer</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-15T22:29:03-07:00" pubdate data-updated="true">Aug 15<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>A Lexer is a ruby class with a single method: tokenize(). Its purpose is to label each chunk of code with a particular token. Strings are labeled as strings, numbers as numbers, and class names as constants. For example,</p>
-
-<div>
-  <pre><code class='ruby'>Lexer.new.tokenize(&quot;string&quot;)
-# =&gt;[[:STRING, &quot;string&quot;]]
-Lexer.new.tokenize(&quot;True&quot;)
-# =&gt;[[:CONSTANT, &quot;True&quot;]]
-Lexer.new.tokenize(&quot;a Car&quot;)
-# =&gt;[[:A, &#39;a&#39;], [:CONSTANT, &#39;Car&#39;]])
-Lexer.new.tokenize(&quot;+&quot;)
-# =&gt;[[&quot;+&quot;, &quot;+&quot;]]</code></pre>
-</div>
-
-
-<p>&ldquo;Lexing&rdquo; is accomplished using regular expressions. The lexer treats the text string of your code like a shish kabob &ndash; it slides recognizable chunks off the skewer one at a time and categorizes them (onion, pepper, method definition, etc).</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/flex-your-lexer/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/16/">&larr; Older</a>
@@ -329,6 +315,10 @@ Lexer.new.tokenize(&quot;+&quot;)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/objects-vs-data-structures/">Objects vs Data Structures</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails/">#dup vs #clone in Ruby and Rails</a>
       </li>
     
@@ -342,10 +332,6 @@ Lexer.new.tokenize(&quot;+&quot;)
     
       <li class="post">
         <a href="/blog/2015/octopress-reloaded/">Octopress Reloaded</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/the-happiness-hypothesis/">The Happiness Hypothesis</a>
       </li>
     
   </ul>

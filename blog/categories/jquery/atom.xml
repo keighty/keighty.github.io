@@ -4,7 +4,7 @@
   <title><![CDATA[Category: jQuery | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/jquery/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-10T15:54:40-08:00</updated>
+  <updated>2015-01-20T07:40:43-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -22,12 +22,11 @@
 
 <p>Chuck taught me a great trick today &mdash; how to avoid namespace
 conflicts in jQuery<!--more-->:
-<div>
-  <pre><code class='javascript'>(function($){
-&amp;hellip;
-})(jQuery);</code></pre>
-</div>
-
+{% highlight javascript %}
+(function($){
+&hellip;
+})(jQuery);
+{% endhighlight %}
 This function is being passed jQuery as an argument, and is
 assigning it the local variable $ &mdash; allowing you to use
 the $ and reference the jQuery library.</p>
