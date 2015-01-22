@@ -32,7 +32,7 @@ I love the idea of our conscious mind acting as a lawyer defending our actions a
 
 Social groups cannot be formed without cooperation and a set of norms. Norms can be enforced through gossip:
 
-> Many species reciprocate, but only humans gossip, and much of what we gossip about is the value of other people as partners for reciprocal relationships... Gossip paired with reciprocity allow karma to work here on eatch, not in the next life.
+> Many species reciprocate, but only humans gossip, and much of what we gossip about is the value of other people as partners for reciprocal relationships... Gossip paired with reciprocity allow karma to work here on earth, not in the next life.
 
 ### On writing your life story
 > The third level of personality is that of the "life story." Human beings in every culture are fascinated by stories; we create them wherever we can.. It's no different with our own lives. We can't stop ourselves from creating what McAdams describes as an "evolving story that integrates a reconstructed past, perceived present, and anticipated future into a coherent and vitalizing life myth." Although the lowest level of personality is mostly about the elephant, the life story is written primarily by the rider. You create your story in consciousness as you interpret your own behavior, and as you listen to other people's thoughts about you.
