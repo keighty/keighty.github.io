@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-21T20:39:49-08:00</updated>
+  <updated>2015-01-21T20:43:16-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,44 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Our Healthcare System Is a Legacy Application]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/healthcare-is-a-legacy-application/"/>
+    <updated>2015-01-20T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/healthcare-is-a-legacy-application</id>
+    <content type="html"><![CDATA[<p>One of my favourite blogs is <a href="http://www.brainpickings.org">Brain Pickings</a>, written by Maria Popova, which is a collection of thoughts spanning art, science, psychology, and almost every other subject I read voraciously. Recently I stumbled upon <a href="http://www.brainpickings.org/2014/09/17/sherwin-nuland-how-we-die/">this gem</a>, Sherwin B. Nuland&rsquo;s <a href="http://www.amazon.com/How-We-Die-Sherwin-Nuland-ebook/dp/B004CJ8QCE"><em>How We Die</em></a><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. It is a raw look at the biological processes that occur at the end of life, which resonated with me on many levels.</p>
+
+<!--more-->
+
+
+<p>The biologist within was fascinated by Nuland&rsquo;s ability to reduce the &ldquo;ten thousand several doors for men to take their exits&rdquo;<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup> to the same basic process of poor oxygenation and nutrition of vital tissues resulting in organ failure. Whether the process is long or slow, instigated by heart disease, Alzheimer&rsquo;s disease, AIDS, accident, or old age, the end must come when the heart stops nourishing the brain.</p>
+
+<p>As a Clinical Professor of Surgery at Yale University, Nuland became intimate with death and its increasingly dehumanizing circumstances. Life’s final chapter has become invisible to most of us. It is likely to be carried out in an intensive care unit, the person reduced to data on a screen, and the advancing disease perceived as a failure of management rather than a natural and inevitable process. He shares the lessons he learned about providing true patient care rather than solving a biological riddle (sometimes the best patient care is no care at all).</p>
+
+<p>Most importantly, he calls attention to the deplorable state of healthcare today, where the &ldquo;provider&rdquo; has usurped the role of the physician:</p>
+
+<blockquote><p>[Our] present system of in-hospital care&hellip; has simply accreted by the constant piling on or insinuation of patches of not necessarily compatible structure to an edifice already jerry-built of competing needs.</p></blockquote>
+
+<p>Sounds remarkably like a long-lived legacy application that is impossibly complex and difficult to work in. The healthcare system is in need of a great refactoring, which isn&rsquo;t without precedent (read about Abraham Flexner&rsquo;s report <a href="https://books.google.com/books?id=lxgTAAAAYAAJ&amp;printsec=frontcover&amp;dq=inauthor:%22Abraham+Flexner%22&amp;hl=en&amp;sa=X&amp;ei=rmXAVIvHLYKYoQSM5YGgDQ&amp;ved=0CCwQ6AEwAg#v=onepage&amp;q&amp;f=false">Medical Education in the United States and Canada</a> that started the movement to raise &ldquo;American medical education&hellip; to the highest [status] in the civilized world&rdquo;<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>)</p>
+
+<p><em>How We Die</em> won the National Book Award, was a finalist for the Pulitzer Prize, and perched atop the New York Times&#8217; bestseller list for more than thirty weeks. This book answers a question we have all asked at some point &mdash; what will it be like to die? A hope many of us share is to have a dignified death with little suffering for ourselves and our families, but reflecting on his many years and experiences with death, Nuland has found that</p>
+
+<blockquote><p>the greatest dignity to be found in death is the dignity of the life that preceded it. This is a form of hope we can all achieve, and it is the most abiding of all. Hope resides in the meaning of what our lives have been.</p></blockquote>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Nuland, Sherwin B. (2014-06-25). <em>How We Die: Reflections on Life&rsquo;s Final Chapter</em>. Kindle Edition<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>Webster, John. (1612) <em>The Duchess of Malfi</em><a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<li id="fn:3">
+<p>Flenxer, Abraham. (1910). <em>Medical Education in the United States and Canada</em>.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Objects vs Data Structures]]></title>
@@ -1931,181 +1969,6 @@ Test-driven development can help you grow your career.
 <p>Voila! A beautiful, functional datepicker!</p>
 
 <p><img src="http://www.katieleonard.ca/images/post_datepicker.png" /></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Helpers Calling Helpers]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/helpers-calling-helpers/"/>
-    <updated>2014-06-03T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/helpers-calling-helpers</id>
-    <content type="html"><![CDATA[<p>Whittling away at the Discover Meteor tutorial for creating a social news sharing site, I was implementing a Comments collection and related accoutrements (templates, helpers, forms, etc.) when I uncovered a need to call one helper method from another<!--more-->.</p>
-
-<p>I was using this handy method to return the number of comments made on a particular post:</p>
-
-<figure class='code'><figcaption><span>Helpful helpers </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">commentsCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>Template helper magic sauce </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">submitted</span> <span class="nx">by</span> <span class="p">{{</span><span class="nx">postAuthor</span><span class="p">}},</span> <span class="kd">with</span>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">a</span> <span class="nx">href</span><span class="o">=</span><span class="s2">&quot;{{pathFor &#39;postPage&#39;}}&quot;</span><span class="o">&gt;</span><span class="p">{{</span><span class="nx">commentsCount</span><span class="p">}}</span> <span class="nx">comments</span><span class="o">&lt;</span><span class="err">/a&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Which returned a very ordinary:</p>
-
-<blockquote><p>submitted by meImAnAwesomeUser, with 1 comments</p></blockquote>
-
-<p>1 <strong>comments</strong>?! That makes no sense.. I didn&rsquo;t minor in English so I could let that travesty fly. I made a new helper method:</p>
-
-<figure class='code'><figcaption><span>This WORKS! </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">commentsCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
-</span><span class='line'>  <span class="p">},</span>
-</span><span class='line'>  <span class="nx">commentsNote</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">()</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s2">&quot;comment&quot;</span> <span class="o">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>UGH! What is that on line 6? Possibly the ugliest ternary statement I have written today (probably). Is that code duplication I smell? Won&rsquo;t reusing <code>commentsCount</code> remove the redundancy?</p>
-
-<figure class='code'><figcaption><span>Starting to DRY the meteor </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">commentsCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
-</span><span class='line'>  <span class="p">},</span>
-</span><span class='line'>  <span class="nx">commentsNote</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">commentsCount</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s2">&quot;comment&quot;</span> <span class="o">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Only.. that doesn&rsquo;t work:</p>
-
-<pre><code>Exception from Deps recompute function: ReferenceError: commentsCount is not defined
-at Object.Template.postPageItem.helpers.commentsNote (http://localhost:3000/client/views/posts/post_page_item.js?160ec9a926881c795377a47c15affc4f553c4d88:9:12)
-</code></pre>
-
-<p>But it is RIGHT ABOVE! I can see it! It is in the same file! I tried all permutations of <code>commentsCount()</code>, <code>this.commentsCount</code>, <code>self.commentsCount</code>, <code>this.self.commentsCount()</code>, and they all threw either similar errors or <code>undefined</code>. Calling the prototype method directly turns out to work just fine:</p>
-
-<figure class='code'><figcaption><span>THIS is not THAT and also doesn&#8217;t work </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">commentsCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
-</span><span class='line'>  <span class="p">},</span>
-</span><span class='line'>  <span class="nx">commentsNote</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">commentsCount</span><span class="p">()</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">count</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s2">&quot;comment&quot;</span> <span class="o">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Except that when <code>commentsCount</code> is called on line 6, <code>this</code> is no longer the lovely Post item provided by the template. No, <code>this</code> becomes the context of the <code>commentsNote</code> function, and therefore calling <code>this._id</code> will return <code>undefined</code>. The closure issue can be worked around with a little argument passing:</p>
-
-<figure class='code'><figcaption><span>Is DRY so much better? </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">commentsCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">count_id</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">id</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">?</span> <span class="nx">id</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="nx">count_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
-</span><span class='line'>  <span class="p">},</span>
-</span><span class='line'>  <span class="nx">commentsNote</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">commentsCount</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">count</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s2">&quot;comment&quot;</span> <span class="o">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Wow. Passing in the id works, but now I have to check the context to determine the appropriate id. That is the most unreadable-but-reused code I have written today (probably), and I learned some valuable lessons on this frantic search for DRY:</p>
-
-<ul>
-<li><code>self</code>, whether called from a helper or the console, will always be <code>window</code></li>
-<li><code>this</code> called from a Template helper refers to the item of the collection that is passed in to the template</li>
-<li>because helper methods are closures, <code>this</code> in the calling method is different from <code>this</code> in the called method</li>
-<li>don&rsquo;t dry out your code to the point of unreadability</li>
-</ul>
-
-
-<p>In the end, cleaning up the ugly ternary makes the code reuse more reasonable.</p>
-
-<figure class='code'><figcaption><span>This is just fine </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">Template</span><span class="p">.</span><span class="nx">postPageItem</span><span class="p">.</span><span class="nx">helpers</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">commentsCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
-</span><span class='line'>  <span class="p">},</span>
-</span><span class='line'>  <span class="nx">commentsNote</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="nx">Comments</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">postId</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">}).</span><span class="nx">count</span><span class="p">();</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">count</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="s2">&quot;comment&quot;</span> <span class="o">:</span> <span class="s2">&quot;comments&quot;</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   

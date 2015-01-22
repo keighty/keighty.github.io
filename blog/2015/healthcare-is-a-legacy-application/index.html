@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Method Lookup in Ruby - keighty</title>
+  <title>Our Healthcare System Is a Legacy Application - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="I have once more been working my way through Sandi Metz&#8217; Practical Object-oriented Design in Ruby (POODR) for a few weeks, and developed a &hellip;">
+  <meta name="description" content="One of my favourite blogs is Brain Pickings, written by Maria Popova, which is a collection of thoughts spanning art, science, psychology, and almost &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/method-lookup-in-ruby">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2015/healthcare-is-a-legacy-application">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">Method Lookup in Ruby</h1>
+      <h1 class="entry-title">Our Healthcare System Is a Legacy Application</h1>
     
     
       <p class="meta">
@@ -98,110 +98,43 @@
   
 
 
-<time datetime="2014-12-28T00:00:00-08:00" pubdate data-updated="true">Dec 28<span>th</span>, 2014</time>
+<time datetime="2015-01-20T00:00:00-08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2015</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I have once more been working my way through Sandi Metz&#8217; <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">Practical Object-oriented Design in Ruby</a> (POODR) for a few weeks, and developed a mental block about method lookup.</p>
+<div class="entry-content"><p>One of my favourite blogs is <a href="http://www.brainpickings.org">Brain Pickings</a>, written by Maria Popova, which is a collection of thoughts spanning art, science, psychology, and almost every other subject I read voraciously. Recently I stumbled upon <a href="http://www.brainpickings.org/2014/09/17/sherwin-nuland-how-we-die/">this gem</a>, Sherwin B. Nuland&rsquo;s <a href="http://www.amazon.com/How-We-Die-Sherwin-Nuland-ebook/dp/B004CJ8QCE"><em>How We Die</em></a><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. It is a raw look at the biological processes that occur at the end of life, which resonated with me on many levels.</p>
 
-<p>In Chapter 6 (Acquiring behaviour through inheritance), she describes how to extract a superclass from a group of related classes that share some behaviour by pulling methods up the inheritance chain instead of driving specializations down. This approach ensures a clean abstraction, leaving no specialized behaviour in the superclass. Where I got stuck was in the call chain that enforces the common interface:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
-</span><span class='line'>    <span class="n">baz</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">baz</span>
-</span><span class='line'>    <span class="k">raise</span> <span class="no">NotImplementedError</span><span class="o">.</span><span class="n">new</span> <span class="s2">&quot;You can&#39;t call #baz here!&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Bar</span> <span class="o">&lt;</span> <span class="no">Foo</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
-</span><span class='line'>    <span class="k">super</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">baz</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Hello, baz&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="no">Bar</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'><span class="s2">&quot;Hello, baz&quot;</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;Bar:0x007fc4f903ab90&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
+<!--more-->
 
 
-<p>I could not understand why, the <code>NotImplementedError</code> wasn&rsquo;t raised when a new <code>Bar</code> was created. This is how I imagined the call stack should work:</p>
+<p>The biologist within was fascinated by Nuland&rsquo;s ability to reduce the &ldquo;ten thousand several doors for men to take their exits&rdquo;<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup> to the same basic process of poor oxygenation and nutrition of vital tissues resulting in organ failure. Whether the process is long or slow, instigated by heart disease, Alzheimer&rsquo;s disease, AIDS, accident, or old age, the end must come when the heart stops nourishing the brain.</p>
 
+<p>As a Clinical Professor of Surgery at Yale University, Nuland became intimate with death and its increasingly dehumanizing circumstances. Life’s final chapter has become invisible to most of us. It is likely to be carried out in an intensive care unit, the person reduced to data on a screen, and the advancing disease perceived as a failure of management rather than a natural and inevitable process. He shares the lessons he learned about providing true patient care rather than solving a biological riddle (sometimes the best patient care is no care at all).</p>
+
+<p>Most importantly, he calls attention to the deplorable state of healthcare today, where the &ldquo;provider&rdquo; has usurped the role of the physician:</p>
+
+<blockquote><p>[Our] present system of in-hospital care&hellip; has simply accreted by the constant piling on or insinuation of patches of not necessarily compatible structure to an edifice already jerry-built of competing needs.</p></blockquote>
+
+<p>Sounds remarkably like a long-lived legacy application that is impossibly complex and difficult to work in. The healthcare system is in need of a great refactoring, which isn&rsquo;t without precedent (read about Abraham Flexner&rsquo;s report <a href="https://books.google.com/books?id=lxgTAAAAYAAJ&amp;printsec=frontcover&amp;dq=inauthor:%22Abraham+Flexner%22&amp;hl=en&amp;sa=X&amp;ei=rmXAVIvHLYKYoQSM5YGgDQ&amp;ved=0CCwQ6AEwAg#v=onepage&amp;q&amp;f=false">Medical Education in the United States and Canada</a> that started the movement to raise &ldquo;American medical education&hellip; to the highest [status] in the civilized world&rdquo;<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>)</p>
+
+<p><em>How We Die</em> won the National Book Award, was a finalist for the Pulitzer Prize, and perched atop the New York Times&#8217; bestseller list for more than thirty weeks. This book answers a question we have all asked at some point &mdash; what will it be like to die? A hope many of us share is to have a dignified death with little suffering for ourselves and our families, but reflecting on his many years and experiences with death, Nuland has found that</p>
+
+<blockquote><p>the greatest dignity to be found in death is the dignity of the life that preceded it. This is a form of hope we can all achieve, and it is the most abiding of all. Hope resides in the meaning of what our lives have been.</p></blockquote>
+<div class="footnotes">
+<hr/>
 <ol>
-<li><code>Bar.new</code> calls <code>Bar#initialize</code></li>
-<li><code>Bar</code> calls <code>super</code> (<code>Foo#initialize</code>)</li>
-<li><code>Foo</code> calls <code>baz</code> (<code>Foo#baz</code>)</li>
-<li>raises <code>NotImplementedError</code></li>
+<li id="fn:1">
+<p>Nuland, Sherwin B. (2014-06-25). <em>How We Die: Reflections on Life&rsquo;s Final Chapter</em>. Kindle Edition<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>Webster, John. (1612) <em>The Duchess of Malfi</em><a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<li id="fn:3">
+<p>Flenxer, Abraham. (1910). <em>Medical Education in the United States and Canada</em>.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
 </ol>
+</div>
 
-
-<p>This is how the call stack actually works</p>
-
-<ol>
-<li><code>x = Bar.new</code> calls <code>Bar#initialize</code></li>
-<li><code>x</code> receives a call to <code>super</code> (<code>Foo#initalize</code>)</li>
-<li><code>x</code> receives a call to <code>baz</code> (<code>Bar#baz</code>)</li>
-<li>says &ldquo;Hello, baz&rdquo;</li>
-</ol>
-
-
-<p>The call never comes from the context of <code>Foo</code> &mdash; the receiver is always <code>x</code>, the instance of <code>Bar</code>. Classical inheritance dictates that an object can only look to itself or further up the inheritance chain for valid method definitions, not down. <code>x</code> is reaching up to call <code>super</code> but checks itself for an answer to the question <code>#baz</code>. <code>Foo#baz</code> would only ever be called if we made a new <code>Foo</code> directly:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="no">Foo</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'><span class="ss">NotImplementedError</span><span class="p">:</span> <span class="no">You</span> <span class="n">can</span><span class="s1">&#39;t call #baz here!</span>
-</span><span class='line'><span class="s1">        from (irb):7:in `baz&#39;</span>
-</span><span class='line'>        <span class="n">from</span> <span class="p">(</span><span class="n">irb</span><span class="p">):</span><span class="mi">3</span><span class="ss">:in</span> <span class="sb">`initialize&#39;</span>
-</span><span class='line'><span class="sb">        from (irb):27:in `</span><span class="kp">new</span><span class="s1">&#39;</span>
-</span><span class='line'><span class="s1">        from (irb):27</span>
-</span><span class='line'><span class="s1">        from /usr/local/var/rbenv/versions/2.1.5/bin/irb:11:in `&lt;main&gt;&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>How ruby resolves a message (classical inheritance)</h3>
-
-<p>The search for a method begins in the class of the receiving object &mdash; in the example above, Bar is always the receiving object. If the class does not implement the message, the search proceeds up the superclass chain. If none of the superclasses contain the method definition, ruby makes a second attempt to resolve the message by sending <code>method_missing(:method_name)</code> to the original object. The search restarts from the bottom, but this time for a <code>method_missing</code> handler rather than <code>:method_name</code>.</p>
-
-<p>Occasionally refreshing the ruby basics is super-rewarding.</p>
 </div>
 
 
@@ -224,12 +157,12 @@
   
 
 
-<time datetime="2014-12-28T00:00:00-08:00" pubdate data-updated="true">Dec 28<span>th</span>, 2014</time>
+<time datetime="2015-01-20T00:00:00-08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2015</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ruby/'>ruby</a>
+    <a class='category' href='/blog/categories/read/'>read</a>
   
 </span>
 
@@ -238,7 +171,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/method-lookup-in-ruby/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/method-lookup-in-ruby/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2015/healthcare-is-a-legacy-application/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2015/healthcare-is-a-legacy-application/" >Tweet</a>
   
   
   
@@ -247,10 +180,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/compilers-an-intro/" title="Previous Post: compilers -- an intro">&laquo; compilers -- an intro</a>
+        <a class="basic-alignment left" href="/blog/2015/objects-vs-data-structures/" title="Previous Post: objects vs data structures">&laquo; objects vs data structures</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2015/the-happiness-hypothesis/" title="Next Post: the happiness hypothesis">the happiness hypothesis &raquo;</a>
       
     </p>
   </footer>
@@ -385,8 +316,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/method-lookup-in-ruby/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2014/method-lookup-in-ruby/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2015/healthcare-is-a-legacy-application/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2015/healthcare-is-a-legacy-application/';
         var disqus_script = 'embed.js';
       
     (function () {
