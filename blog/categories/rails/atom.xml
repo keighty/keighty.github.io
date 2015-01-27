@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-01-21T20:43:16-08:00</updated>
+  <updated>2015-01-27T08:27:16-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,97 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Scopes and Single Table Inheritance]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/scopes-and-single-table-inheritance/"/>
+    <updated>2015-01-22T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/scopes-and-single-table-inheritance</id>
+    <content type="html"><![CDATA[<p>Single table inheritance (STI) is a way to emulate object-oriented inheritance in a relational database<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> by storing multiple object types in one table, distinguishable by a discriminator column such as <code>type</code>. Mixing levels of abstraction may make <code>join</code> operations easier, but it also makes other queries more complicated. In Rails 3.2, a query optimization was introduced that had some unintended consequences for STI.</p>
+
+<!--more-->
+
+
+<p>A scope represents a narrowing of a database query, and a named scope is syntactic sugar for defining a class method at runtime.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Shirt</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">scope</span> <span class="ss">:in_style</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span><span class="o">&gt;</span> <span class="p">{</span> <span class="n">where</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">purchase_date</span> <span class="o">&gt;=</span> <span class="p">?</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span> <span class="mi">2</span><span class="o">.</span><span class="n">months</span><span class="p">)}</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;class PoloShirt &amp;lt; Shirt</span>
+</span><span class='line'><span class="sr">  scope :red, &amp;ndash;&gt; { where(color: &amp;lsquo;red&amp;rsquo;) }</span>
+</span><span class='line'><span class="sr">  scope :blue, &amp;ndash;&gt; { where(color: &amp;lsquo;blue&amp;rsquo;) }</span>
+</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">SweatShirt</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="no">Shirt</span>
+</span><span class='line'>  <span class="n">scope</span> <span class="ss">:logo</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span><span class="o">&gt;</span> <span class="p">{</span> <span class="n">where</span><span class="p">(</span><span class="ss">logo</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">dragon</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="p">)}</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;PoloShirt.red.in_style</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The scope <code>:in_style</code> is converted into a class method behind the scenes at runtime, and is defined on the singleton class where the scope was named, not on the caller. While this detail has no consequences for objects outside of an inheritance scheme, it means that when PoloShirt invokes the <code>:in_style</code> scope, the class method is declared on Shirt, not PoloShirt.</p>
+
+<p>Here is where the history lesson begins. Scopes have evolved in Rails, and while they remain syntactic sugar for definition class methods, the details, method signature, and sql translation have differed dramatically.</p>
+
+<p>In <a href="http://www.rubydoc.info/docs/rails/3.0.0/ActiveRecord/NamedScope/ClassMethods:scope">Rails 3.0</a>, the scope method accepts a name, scope_options, and optional block. Scopes are directly translated into class methods behind the scenes, and the consequences of chaining scopes are the same as chaining queries, just nicer looking.</p>
+
+<p>
+<code>
+PoloShirt.red.in_style.to_sql
+=&gt; SELECT * from shirts WHERE color = 'red' where type = 'PoloShirt' where purchase_date &gt;= 1417102745 where type IN ('PoloShirt', 'Sweatshirt')
+</code>
+</p>
+
+<p>Notice the implicit <code>where</code> clause in STI. The <code>:red</code> scope, declared on PoloShirt has <code>where type = 'PoloShirt'</code>, and the <code>:in_style</code> scope, declared on Shirt, has <code>where type IN ('PoloShirt', 'Sweatshirt')</code>. The second <code>where</code> clause will have no impact on the query results, because they are already scoped to &lsquo;PoloShirt&rsquo;. It is this behaviour that evolves over time.</p>
+
+<p>The first jump in <code>scope</code> evolution is in <a href="http://www.rubydoc.info/docs/rails/3.2.8/ActiveRecord/Scoping/Named/ClassMethods:scope">Rails 3.2</a>, where the scope_options can include lambdas. Passing a lambda is a big advantage in that it allows the scope to be re-evaluated each time it is called. Unfortunately the implementation also remixes the query parameters of all chained scopes before evaluation:</p>
+
+<blockquote><p>In nested scopings, all previous parameters are overwritten by the innermost rule, with the exception of <code>where</code>, <code>includes</code>, and <code>joins</code> operations in Relation, which are merged.</p></blockquote>
+
+<p>
+<code>
+PoloShirt.red.in_style.to_sql
+=&gt; SELECT * from shirts where color = 'red' where purchase_date &gt;= 1417102745 where type IN ('PoloShirt', 'Sweatshirt')
+</code>
+</p>
+
+<p>The first <code>where type =</code> clause is merged with the last <code>where type IN</code> clause. The results of this query will no longer be scoped to PoloShirts, but will return all <code>red.in_style</code> Shirts of any type. Bad news for STI.</p>
+
+<p>The good news is that this behaviour is <a href="https://github.com/rails/rails/commit/cd26b6ae">fixed</a> in <a href="http://www.rubydoc.info/docs/rails/4.0.0/ActiveRecord/Scoping/Named/ClassMethods#scope-instance_method">Rails 4.0</a>. The latest evolution of scopes no longer allow you to pass a non-callable object (like a hash), and all scopes are merged using AND.</p>
+
+<p>
+<code>
+PoloShirt.red.in_style.to_sql
+=&gt; SELECT * from shirts where color = 'red' where purchase_date &gt;= 1417102745 where type = 'PoloShirt' AND type IN ('PoloShirt', 'Sweatshirt')
+</code>
+</p>
+
+<p>Our <code>red.in_style</code> query is once again scoped to the right level of the inheritance heirarchy. Named scopes are chainable and lazy-evaluated, making them a powerful query-building tool that can be difficult to troubleshoot &mdash; especially when they are mixed with single-table inheritance.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>http://en.wikipedia.org/wiki/Single_Table_Inheritance<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Objects vs Data Structures]]></title>
@@ -454,74 +545,6 @@ end</code></pre>
 </p>
 
 <p>Voila! When you click the link in your view the partial is loaded using Ajax.</p>
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rails, You Can Depend on Javascript]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/rails-depends-on-javascript/"/>
-    <updated>2013-09-16T22:29:03-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/rails-depends-on-javascript</id>
-    <content type="html"><![CDATA[<p>I am between computers at the moment, and I really really miss my OSX development environment. Dependency installation is so smooth and painless on mac, that I had quite forgotten the complications of setting up a complete environment in linux. For instance</p>
-
-<h3>Rails requires a javascript runtime environment</h3>
-
-<p>I am running an Ubuntu 9.4 remix on my little Atom Netbook. Getting rails up and running anew is a lesson in returning to fundamentals.
-<div>
-  <pre><code class='bash'>$ gem install rails
-$ rails new testapp -T
-$ rails generate rspec:install
-&amp;hellip;
-Could not find a JavaScript runtime. See &lt;a href=&quot;https://github.com/sstephenson/execjs&quot;&gt;https://github.com/sstephenson/execjs&lt;/a&gt; for a list of available runtimes</code></pre>
-</div>
-</p>
-
-<!--more-->
-
-
-<h3>Why does rails use a javascript runtime?</h3>
-
-<p>A web application does not exist in a ruby/rails vacuum &mdash; rendering an html page requires css and javascript as well. By default, the &lsquo;rails new&rsquo; command generates a Gemfile containing a few suggested goodies, including uglifier, which compresses javascript assets. Dealing with multiple layers of javascripts can hurt application performance, which is why rails has adopted a compression strategy. Uglifier minifies your javascript by removing all the whitespace.</p>
-
-<p>From the RailsGuides:</p>
-
-<blockquote><p>You will need an ExecJS supported runtime in order to use uglifier. If you are using Mac OS X or Windows you have a JavaScript runtime installed in your operating system. Check the ExecJS documentation for information on all of the supported JavaScript runtimes.</p></blockquote>
-
-<h3>Setup Node.js on Linux</h3>
-
-<p>In Ubuntu 10.4 and above, a JavaScript runtime is included, but installing Node on an older Ubuntu distro is not as simple as
-<div>
-  <pre><code class='bash'>$ sudo apt-get nodejs</code></pre>
-</div>
-</p>
-
-<p>I found the key sequence of commands on the Node.js website. First, update your packages and install node.js dependencies: python, g++, make, etc
-<div>
-  <pre><code class='bash'>$ sudo apt-get update
-$ sudo apt-get install python-software-properties python g++ make</code></pre>
-</div>
-</p>
-
-<p>Next, add the location of the nodejs repository, update, and install.
-<div>
-  <pre><code class='bash'>$ sudo add-apt-repository ppa:chris-lea/node.js
-$ sudo apt-get update
-$ sudo apt-get install nodejs</code></pre>
-</div>
-</p>
-
-<p>Wow &mdash; with all of that done, I can finally:
-<div>
-  <pre><code class='bash'>$ rails generate rspec:install&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;  create  .rspec
-  create  spec
-  create  spec/spec_helper.rb</code></pre>
-</div>
-
-</code></pre>
 
 <p>Awesome.</p>
 ]]></content>

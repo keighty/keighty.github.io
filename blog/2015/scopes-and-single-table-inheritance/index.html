@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Fanout - keighty</title>
+  <title>Scopes and Single Table Inheritance - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Continuing my exploration of message queues&hellip; A common MQ modality is publish/subscribe. A simplistic queue model has producers publishing &hellip;">
+  <meta name="description" content="Single table inheritance (STI) is a way to emulate object-oriented inheritance in a relational database1 by storing multiple object types in one &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/fanout">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2015/scopes-and-single-table-inheritance">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">Fanout</h1>
+      <h1 class="entry-title">Scopes and Single Table Inheritance</h1>
     
     
       <p class="meta">
@@ -98,62 +98,21 @@
   
 
 
-<time datetime="2014-02-06T14:38:12-08:00" pubdate data-updated="true">Feb 6<span>th</span>, 2014</time>
+<time datetime="2015-01-22T00:00:00-08:00" pubdate data-updated="true">Jan 22<span>nd</span>, 2015</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Continuing my exploration of message queues&hellip;</p>
-
-<p>A common MQ modality is publish/subscribe. A simplistic queue model has producers publishing messages directly to a queue and consumers taking messages off a queue. In the publish/subscribe model, the producer sends messages to an <strong>exchange</strong>, who&rsquo;s only job is to publish messages to queues. In this scenario, the exchange knows to which queue(s) the message should be published according to established rules. The relationship between an exchange and a queue is called a <strong>binding</strong>.</p>
+<div class="entry-content"><p>Single table inheritance (STI) is a way to emulate object-oriented inheritance in a relational database<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> by storing multiple object types in one table, distinguishable by a discriminator column such as <code>type</code>. Mixing levels of abstraction may make <code>join</code> operations easier, but it also makes other queries more complicated. In Rails 3.2, a query optimization was introduced that had some unintended consequences for STI.</p>
 
 <!--more-->
 
 
-<h3>Types of exchanges</h3>
+<p>A scope represents a narrowing of a database query, and a named scope is syntactic sugar for defining a class method at runtime.</p>
 
-<ol>
-<li><strong>direct</strong></li>
-<li><strong>topic</strong></li>
-<li><strong>headers</strong></li>
-<li><strong>fanout</strong> &ndash; broadcasts every message it receives to all the queues it knows</li>
-</ol>
-
-
-<h3>Create a fanout exchange:</h3>
-
-<figure class='code'><figcaption><span>emit_log.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># create and start the connection</span>
-</span><span class='line'><span class="n">connection</span> <span class="o">=</span> <span class="no">Bunny</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
-</span><span class='line'><span class="n">connection</span><span class="o">.</span><span class="n">start</span>
-</span><span class='line'><span class="c1"># create and start the channel</span>
-</span><span class='line'><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">create_channel</span>
-</span><span class='line'><span class="c1"># create the exchange:</span>
-</span><span class='line'><span class="n">exchange</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">fanout</span><span class="p">(</span><span class="s1">&#39;logs&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># publish to your named exchange:</span>
-</span><span class='line'><span class="n">exchange</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># close the connection</span>
-</span><span class='line'><span class="n">connection</span><span class="o">.</span><span class="n">close</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Create a fanout worker</h3>
-
-<figure class='code'><figcaption><span>receive_log.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -167,77 +126,65 @@
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># create and start the connection</span>
-</span><span class='line'><span class="n">connection</span> <span class="o">=</span> <span class="no">Bunny</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
-</span><span class='line'><span class="n">conn</span><span class="o">.</span><span class="n">start</span>
-</span><span class='line'><span class="c1"># create and start the channel</span>
-</span><span class='line'><span class="n">channel</span>  <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">create_channel</span>
-</span><span class='line'><span class="c1"># name the exchange to listen to</span>
-</span><span class='line'><span class="n">exchange</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">fanout</span><span class="p">(</span><span class="s2">&quot;logs&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># name the queue</span>
-</span><span class='line'><span class="n">q</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">queue</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ss">:exclusive</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># bind the queue to the exchange</span>
-</span><span class='line'><span class="n">q</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">exchange</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># subscribe to the bound queue</span>
-</span><span class='line'><span class="n">q</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="ss">:block</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">delivery_info</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="o">|</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot; [x] </span><span class="si">#{</span><span class="n">body</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Shirt</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">scope</span> <span class="ss">:in_style</span><span class="p">,</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="n">where</span><span class="p">(</span><span class="s1">&#39;purchase_date &gt;= ?&#39;</span><span class="p">,</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span> <span class="o">-</span> <span class="mi">2</span><span class="o">.</span><span class="n">months</span><span class="p">)}</span>
 </span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">PoloShirt</span> <span class="o">&lt;</span> <span class="no">Shirt</span>
+</span><span class='line'>  <span class="n">scope</span> <span class="ss">:red</span><span class="p">,</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="n">where</span><span class="p">(</span><span class="ss">color</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">scope</span> <span class="ss">:blue</span><span class="p">,</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="n">where</span><span class="p">(</span><span class="ss">color</span><span class="p">:</span> <span class="s1">&#39;blue&#39;</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">SweatShirt</span> <span class="o">&lt;</span> <span class="no">Shirt</span>
+</span><span class='line'>  <span class="n">scope</span> <span class="ss">:logo</span><span class="p">,</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="n">where</span><span class="p">(</span><span class="ss">logo</span><span class="p">:</span> <span class="s1">&#39;dragon&#39;</span> <span class="p">)}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">PoloShirt</span><span class="o">.</span><span class="n">red</span><span class="o">.</span><span class="n">in_style</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h3>In action</h3>
+<p>The scope <code>:in_style</code> is converted into a class method behind the scenes at runtime, and is defined on the singleton class where the scope was named, not on the caller. While this detail has no consequences for objects outside of an inheritance scheme, it means that when PoloShirt invokes the <code>:in_style</code> scope, the class method is declared on Shirt, not PoloShirt.</p>
 
-<p>Start three terminals:</p>
+<p>Here is where the history lesson begins. Scopes have evolved in Rails, and while they remain syntactic sugar for definition class methods, the details, method signature, and sql translation have differed dramatically.</p>
 
+<p>In <a href="http://www.rubydoc.info/docs/rails/3.0.0/ActiveRecord/NamedScope/ClassMethods:scope">Rails 3.0</a>, the scope method accepts a name, scope_options, and optional block. Scopes are directly translated into class methods behind the scenes, and the consequences of chaining scopes are the same as chaining queries, just nicer looking.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>PoloShirt.red.in_style.to_sql
+</span><span class='line'>=&gt; SELECT * from shirts WHERE color = 'red' where type = 'PoloShirt' where purchase_date &gt;= 1417102745 where type IN ('PoloShirt', 'Sweatshirt')</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Notice the implicit <code>where</code> clause in STI. The <code>:red</code> scope, declared on PoloShirt has <code>where type = 'PoloShirt'</code>, and the <code>:in_style</code> scope, declared on Shirt, has <code>where type IN ('PoloShirt', 'Sweatshirt')</code>. The second <code>where</code> clause will have no impact on the query results, because they are already scoped to &lsquo;PoloShirt&rsquo;. It is this behaviour that evolves over time.</p>
+
+<p>The first jump in <code>scope</code> evolution is in <a href="http://www.rubydoc.info/docs/rails/3.2.8/ActiveRecord/Scoping/Named/ClassMethods:scope">Rails 3.2</a>, where the scope_options can include lambdas. Passing a lambda is a big advantage in that it allows the scope to be re-evaluated each time it is called. Unfortunately the implementation also remixes the query parameters of all chained scopes before evaluation:</p>
+
+<blockquote><p>In nested scopings, all previous parameters are overwritten by the innermost rule, with the exception of <code>where</code>, <code>includes</code>, and <code>joins</code> operations in Relation, which are merged.</p></blockquote>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>PoloShirt.red.in_style.to_sql
+</span><span class='line'>=&gt; SELECT * from shirts where color = 'red' where purchase_date &gt;= 1417102745 where type IN ('PoloShirt', 'Sweatshirt')</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The first <code>where type =</code> clause is merged with the last <code>where type IN</code> clause. The results of this query will no longer be scoped to PoloShirts, but will return all <code>red.in_style</code> Shirts of any type. Bad news for STI.</p>
+
+<p>The good news is that this behaviour is <a href="https://github.com/rails/rails/commit/cd26b6ae">fixed</a> in <a href="http://www.rubydoc.info/docs/rails/4.0.0/ActiveRecord/Scoping/Named/ClassMethods#scope-instance_method">Rails 4.0</a>. The latest evolution of scopes no longer allow you to pass a non-callable object (like a hash), and all scopes are merged using AND.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>PoloShirt.red.in_style.to_sql
+</span><span class='line'>=&gt; SELECT * from shirts where color = 'red' where purchase_date &gt;= 1417102745 where type = 'PoloShirt' AND type IN ('PoloShirt', 'Sweatshirt')</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Our <code>red.in_style</code> query is once again scoped to the right level of the inheritance heirarchy. Named scopes are chainable and lazy-evaluated, making them a powerful query-building tool that can be difficult to troubleshoot &mdash; especially when they are mixed with single-table inheritance.</p>
+<div class="footnotes">
+<hr/>
 <ol>
-<li><code>$ ruby -rubygems receive_logs.rb &gt; logs_from_rabbit.log</code></li>
-<li><code>$ ruby -rubygems receive_logs.rb</code></li>
-<li><code>$ ruby -rubygems emit_log.rb</code></li>
+<li id="fn:1">
+<p>http://en.wikipedia.org/wiki/Single_Table_Inheritance<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 </ol>
-
-
-<p>In the last terminal, add a few more messages:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ ruby -rubygems emit_log.rb this is a longer message
-</span><span class='line'>$ ruby -rubygems emit_log.rb this message should be logged in a file AND appear in my terminal window</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The output in terminal 2:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ ruby -rubygems receive_logs.rb
-</span><span class='line'> [*] Waiting for logs. To exit press CTRL+C
-</span><span class='line'> [x] Hello World!
-</span><span class='line'> [x] this is a longer message
-</span><span class='line'> [x] this message should be logged in a file AND appear in my terminal</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The output from the log file:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat logs_from_rabbit.log
-</span><span class='line'> [*] Waiting for logs. To exit press CTRL+C
-</span><span class='line'> [x] Hello World!
-</span><span class='line'> [x] this is a longer message
-</span><span class='line'> [x] this message should be logged in a file AND appear in my terminal</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Resources</h2>
-
-<ul>
-<li><a href="http://www.rabbitmq.com/tutorials/tutorial-three-ruby.html">RabbitMQ.com</a></li>
-</ul>
+</div>
 
 </div>
 
@@ -261,12 +208,12 @@
   
 
 
-<time datetime="2014-02-06T14:38:12-08:00" pubdate data-updated="true">Feb 6<span>th</span>, 2014</time>
+<time datetime="2015-01-22T00:00:00-08:00" pubdate data-updated="true">Jan 22<span>nd</span>, 2015</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/message-queue/'>message queue</a>
+    <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/sti/'>sti</a>
   
 </span>
 
@@ -275,7 +222,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/fanout/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/fanout/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2015/scopes-and-single-table-inheritance/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2015/scopes-and-single-table-inheritance/" >Tweet</a>
   
   
   
@@ -284,10 +231,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/first-in-first-out/" title="Previous Post: first in, first out">&laquo; first in, first out</a>
+        <a class="basic-alignment left" href="/blog/2015/healthcare-is-a-legacy-application/" title="Previous Post: Our healthcare system is a legacy application">&laquo; Our healthcare system is a legacy application</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/global-abatement/" title="Next Post: global abatement">global abatement &raquo;</a>
       
     </p>
   </footer>
@@ -422,8 +367,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/fanout/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2014/fanout/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2015/scopes-and-single-table-inheritance/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2015/scopes-and-single-table-inheritance/';
         var disqus_script = 'embed.js';
       
     (function () {
