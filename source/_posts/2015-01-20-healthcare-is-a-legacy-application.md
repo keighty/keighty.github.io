@@ -4,7 +4,6 @@ title: "Our healthcare system is a legacy application"
 date: 2015-01-20
 comments: true
 categories: [read]
-published: false
 ---
 
 One of my favourite blogs is [Brain Pickings](http://www.brainpickings.org), written by Maria Popova, which is a collection of thoughts spanning art, science, psychology, and almost every other subject I read voraciously. Recently I stumbled upon [this gem](http://www.brainpickings.org/2014/09/17/sherwin-nuland-how-we-die/), Sherwin B. Nuland's [*How We Die*](http://www.amazon.com/How-We-Die-Sherwin-Nuland-ebook/dp/B004CJ8QCE)[^1]. It is a raw look at the biological processes that occur at the end of life, which resonated with me on many levels.
