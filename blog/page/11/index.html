@@ -9,8 +9,18 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="The Passionate Programmer: Creating a Remarkable Career in Software Development (Pragmatic Life), by Chad Fowler
-(affiliate link) This book is aptly &hellip;">
+  <meta name="description" content="The for in statement can function as a quick and semantic iterator for looping over object properties. In your console, try1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +90,76 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/for-score/">For Score</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-11T00:00:00-08:00" pubdate data-updated="true">Feb 11<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The <code>for in</code> statement can function as a quick and semantic iterator for looping over object properties.</p>
+
+<figure class='code'><figcaption><span>In your console, try</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">first_name</span><span class="o">:</span> <span class="s2">&quot;Katie&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">last_name</span> <span class="o">:</span> <span class="s2">&quot;Leonard&quot;</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">name</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="k">for</span><span class="p">(</span><span class="nx">name</span> <span class="k">in</span> <span class="nx">person</span><span class="p">){</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot; : &quot;</span> <span class="o">+</span> <span class="nx">person</span><span class="p">[</span><span class="nx">name</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">)};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">first_name</span> <span class="o">:</span> <span class="nx">Katie</span>
+</span><span class='line'><span class="nx">last_name</span> <span class="o">:</span> <span class="nx">Leonard</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/for-score/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -247,49 +327,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/fanout/">Fanout</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-06T14:38:12-08:00" pubdate data-updated="true">Feb 6<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Continuing my exploration of message queues&hellip;</p>
-
-<p>A common MQ modality is publish/subscribe. A simplistic queue model has producers publishing messages directly to a queue and consumers taking messages off a queue. In the publish/subscribe model, the producer sends messages to an <strong>exchange</strong>, who&rsquo;s only job is to publish messages to queues. In this scenario, the exchange knows to which queue(s) the message should be published according to established rules. The relationship between an exchange and a queue is called a <strong>binding</strong>.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/fanout/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/12/">&larr; Older</a>
@@ -314,6 +351,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/debugging-techniques/">Debugging Techniques</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/scopes-and-single-table-inheritance/">Scopes and Single Table Inheritance</a>
       </li>
     
@@ -327,10 +368,6 @@
     
       <li class="post">
         <a href="/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails/">#dup vs #clone in Ruby and Rails</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/cleaning-the-campground/">Cleaning the Campground</a>
       </li>
     
   </ul>

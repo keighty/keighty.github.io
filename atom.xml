@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-02-07T11:40:59-08:00</updated>
+  <updated>2015-02-07T11:49:01-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,551 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Debugging Techniques]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/debugging-techniques/"/>
+    <updated>2015-02-02T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/debugging-techniques</id>
+    <content type="html"><![CDATA[<p>I am working on upgrading an application from Rails 3.0 to Rails 3.2. While the numbers tell you it is a minor version change, there are definitely some major challenges. Digging through Rails and gem internals has forced me to add new strategies to my debugging toolbox, and here are a few of the essentials&hellip;<!--more--></p>
+
+<h3><a href="https://github.com/burke/zeus">Zeus</a></h3>
+
+<p>Zeus is a gem that preloads your Rails app and keeps it loaded, making test driven development fast. Just type <code>zeus start</code> in one console window, and any of the listed commands in another console window.</p>
+
+<p><img src="http://www.katieleonard.ca/images/zeus_start.png"></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>zeus <span class="nb">test test</span>/models/user_test.rb
+</span><span class='line'>Run options: --seed 32298
+</span><span class='line'>
+</span><span class='line'><span class="c"># Running:</span>
+</span><span class='line'>
+</span><span class='line'>.
+</span><span class='line'>
+</span><span class='line'>Finished in 0.045991s, 21.7434 runs/s, 21.7434 assertions/s.
+</span><span class='line'>
+</span><span class='line'>1 runs, 1 assertions, 0 failures, 0 errors, 0 skips
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Run a specific test in a file by passing a regex argument:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>zeus <span class="nb">test test</span>/models/user_test.rb -n <span class="s2">&quot;/test_user_description_has_full_name/&quot;</span>
+</span><span class='line'>Run options: -n /test_user_description_has_full_name/ --seed 17927
+</span><span class='line'>
+</span><span class='line'><span class="c"># Running:</span>
+</span><span class='line'>
+</span><span class='line'>.
+</span><span class='line'>
+</span><span class='line'>Finished in 0.044550s, 22.4467 runs/s, 22.4467 assertions/s.
+</span><span class='line'>
+</span><span class='line'>1 runs, 1 assertions, 0 failures, 0 errors, 0 skips
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3><a href="https://github.com/pry/pry">Pry</a></h3>
+
+<p>The Pry gem allows you to set break points and open an interactive debug session at any place in your code using <code>binding.pry</code>. A great way to debug a failing test is to place a pry at the top of the test and check your setup:</p>
+
+<figure class='code'><figcaption><span>Pry into a test </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;test_helper&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">UserTest</span> <span class="o">&lt;</span> <span class="ss">ActiveSupport</span><span class="p">:</span><span class="ss">:TestCase</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">test_user_description_has_full_name</span>
+</span><span class='line'>    <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">first_name</span><span class="p">:</span> <span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="n">last_name</span><span class="p">:</span> <span class="s2">&quot;kitty&quot;</span><span class="p">,</span> <span class="ss">email</span><span class="p">:</span> <span class="s2">&quot;kitty@example.com&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">binding</span><span class="o">.</span><span class="n">pry</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">assert_equal</span> <span class="s2">&quot;hello kitty&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">full_name</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>zeus <span class="nb">test test</span>/models/user_test.rb -n <span class="s2">&quot;/test_user_description_has_full_name/&quot;</span>
+</span><span class='line'>
+</span><span class='line'>Run options: -n /test_user_description_has_full_name/ --seed 21519
+</span><span class='line'>
+</span><span class='line'><span class="c"># Running:</span>
+</span><span class='line'>
+</span><span class='line'>From: /Users/keighty/api_playground/test/models/user_test.rb @ line 7 UserTest#test_user_description_has_full_name:
+</span><span class='line'>
+</span><span class='line'>     4: def test_user_description_has_full_name
+</span><span class='line'>     5:   <span class="nv">user</span> <span class="o">=</span> User.create<span class="o">(</span>first_name: <span class="s2">&quot;hello&quot;</span>, last_name: <span class="s2">&quot;kitty&quot;</span>, email: <span class="s2">&quot;kitty@example.com&quot;</span><span class="o">)</span>
+</span><span class='line'>     6:
+</span><span class='line'> <span class="o">=</span>&gt;  7:   binding.pry
+</span><span class='line'>     8:
+</span><span class='line'>     9:   assert_equal <span class="s2">&quot;hello kitty&quot;</span>, user.full_name
+</span><span class='line'>    10: end
+</span><span class='line'>
+</span><span class='line'><span class="o">[</span>1<span class="o">]</span> pry<span class="o">(</span><span class="c">#&lt;UserTest&gt;)&gt; user</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">=</span>&gt; <span class="c">#&lt;User:0x007fa054180618</span>
+</span><span class='line'> id: 980190963,
+</span><span class='line'> first_name: <span class="s2">&quot;hello&quot;</span>,
+</span><span class='line'> last_name: <span class="s2">&quot;kitty&quot;</span>,
+</span><span class='line'> email: <span class="s2">&quot;kitty@example.com&quot;</span>,
+</span><span class='line'> created_at: Sat, 07 Feb 2015 16:52:21 UTC +00:00,
+</span><span class='line'> updated_at: Sat, 07 Feb 2015 16:52:21 UTC +00:00&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Your pry is a debug console with more than a few extra features. Here are my favourites:</p>
+
+<ul>
+<li><code>ls object</code> to see all the methods available on the object:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>3<span class="o">]</span> pry<span class="o">(</span><span class="c">#&lt;UserTest&gt;)&gt; ls user</span>
+</span><span class='line'>
+</span><span class='line'>ActiveRecord::Core#methods:
+</span><span class='line'>  &lt;<span class="o">=</span>&gt;                 eql?                          <span class="nb">hash          readonly</span>!
+</span><span class='line'>  <span class="o">==</span>                  freeze                        init_with     <span class="nb">readonly</span>?
+</span><span class='line'>  connection_handler  frozen?                       inspect       set_transaction_state
+</span><span class='line'>  encode_with         has_transactional_callbacks?  pretty_print  slice
+</span><span class='line'>ActiveRecord::Persistence#methods:
+</span><span class='line'>  becomes     delete      increment!   toggle!           update_attributes
+</span><span class='line'>  becomes!    destroy!    new_record?  update            update_attributes!
+</span><span class='line'>  decrement   destroyed?  persisted?   update!           update_column
+</span><span class='line'>  decrement!  increment   toggle       update_attribute  update_columns
+</span><span class='line'>ActiveRecord::Scoping#methods:
+</span><span class='line'>  initialize_internals_callback  populate_with_current_scope_attributes
+</span><span class='line'>...
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><code>whereami 10</code> to show 10 lines above and below your breakpoint:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>5<span class="o">]</span> pry<span class="o">(</span><span class="c">#&lt;UserTest&gt;)&gt; whereami 10</span>
+</span><span class='line'>
+</span><span class='line'>From: /Users/keighty/api_playground/test/models/user_test.rb @ line 7 UserTest#test_user_description_has_full_name:
+</span><span class='line'>
+</span><span class='line'>     1: require <span class="s1">&#39;test_helper&#39;</span>
+</span><span class='line'>     2:
+</span><span class='line'>     3: class UserTest &lt; ActiveSupport::TestCase
+</span><span class='line'>     4:   def test_user_description_has_full_name
+</span><span class='line'>     5:     <span class="nv">user</span> <span class="o">=</span> User.create<span class="o">(</span>first_name: <span class="s2">&quot;hello&quot;</span>, last_name: <span class="s2">&quot;kitty&quot;</span>, email: <span class="s2">&quot;kitty@example.com&quot;</span><span class="o">)</span>
+</span><span class='line'>     6:
+</span><span class='line'> <span class="o">=</span>&gt;  7:     binding.pry
+</span><span class='line'>     8:
+</span><span class='line'>     9:     assert_equal <span class="s2">&quot;hello kitty&quot;</span>, user.full_name
+</span><span class='line'>    10:   end
+</span><span class='line'>    11:
+</span><span class='line'>    12: end
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><code>cd object.method</code> to navigate the object stack as if it were a folder structure (and <code>ls</code> to view properites):</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>1<span class="o">]</span> pry<span class="o">(</span><span class="c">#&lt;UserTest&gt;)&gt; cd user.full_name</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">[</span>2<span class="o">]</span> pry<span class="o">(</span><span class="s2">&quot;hello kitty&quot;</span><span class="o">)</span>:1&gt; ls
+</span><span class='line'>
+</span><span class='line'>Comparable#methods: &lt;  &lt;<span class="o">=</span>  &gt;  &gt;<span class="o">=</span>  between?
+</span><span class='line'>JSON::Ext::Generator::GeneratorMethods::String#methods:
+</span><span class='line'>  to_json_raw  to_json_raw_object  to_json_without_active_support_encoder
+</span><span class='line'>String#methods:
+</span><span class='line'>  %                  downcase        lstrip!           strip_heredoc
+</span><span class='line'>  *                  downcase!       match             sub
+</span><span class='line'>  +                  dump            mb_chars          sub!
+</span><span class='line'>  <span class="s">&lt;&lt;                 each_byte       next              succ</span>
+</span><span class='line'><span class="s">  &lt;=&gt;                each_</span>char       next!             succ!
+</span><span class='line'>  <span class="o">==</span>                 each_codepoint  not_ascii_only?   <span class="nv">sum</span>
+</span><span class='line'>  <span class="o">===</span>                each_line       oct               <span class="nv">swapcase</span>
+</span><span class='line'>  <span class="o">=</span>~                 empty?          ord               swapcase!
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>These are the features I use most often, but checkout the <a href="http://pryrepl.org/">documentation</a> for more.</p>
+
+<h3>Method Method Method</h3>
+
+<p>Method name collisions can happen in a sprawling legacy codebase, so determining the source is important for debugging. The Ruby language has anticipated this difficulty, and since methods are objects themselves, they created the <a href="http://www.ruby-doc.org/core-2.2.0/Method.html">Method</a> module to access the method object. You can source, extract, unbind, and otherwise manipulate methods in a lot of ways:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[1] pry(#&lt;UserTest&gt;)&gt; method = user.method(:full_name)
+</span><span class='line'>=&gt; #&lt;Method: User#full_name&gt;
+</span><span class='line'>
+</span><span class='line'>[2] pry(#&lt;UserTest&gt;)&gt; method.owner
+</span><span class='line'>=&gt; User(id: integer, first_name: string, last_name: string, email: string, created_at: datetime, updated_at: datetime)
+</span><span class='line'>
+</span><span class='line'>[3] pry(#&lt;UserTest&gt;)&gt; method.source_location
+</span><span class='line'>=&gt; ["/Users/keighty/api_playground/app/models/user.rb", 2]</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Logger</h3>
+
+<p>Soemtimes the Rails bug you are hunting turns up in the SQL behind your query. When you are in a pry console, the SQL is not displayed by default, but you can turn on query logging by creating an <code>ActiveRecord::Base.logger</code> object:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># before the logger
+</span><span class='line'>[1] pry(#&lt;UserTest&gt;)&gt; User.find(980190963)
+</span><span class='line'>
+</span><span class='line'>=&gt; #&lt;User:0x007fa0556f4fd0
+</span><span class='line'> id: 980190963,
+</span><span class='line'> first_name: "hello",
+</span><span class='line'> last_name: "kitty",
+</span><span class='line'> email: "kitty@example.com",
+</span><span class='line'> created_at: Sat, 07 Feb 2015 16:52:21 UTC +00:00,
+</span><span class='line'> updated_at: Sat, 07 Feb 2015 16:52:21 UTC +00:00&gt;
+</span><span class='line'>
+</span><span class='line'>[2] pry(#&lt;UserTest&gt;)&gt; ActiveRecord::Base.logger = Logger.new STDOUT;
+</span><span class='line'>
+</span><span class='line'>[3] pry(#&lt;UserTest&gt;)&gt; User.find(980190963)
+</span><span class='line'>
+</span><span class='line'>D, [2015-02-07T09:28:34.892017 #10468] DEBUG -- :
+</span><span class='line'>User Load (0.1ms)  SELECT  "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1  [["id", 980190963]]
+</span><span class='line'>
+</span><span class='line'>=&gt; #&lt;User:0x007fa05c788c10
+</span><span class='line'> id: 980190963,
+</span><span class='line'> first_name: "hello",
+</span><span class='line'> last_name: "kitty",
+</span><span class='line'> email: "kitty@example.com",
+</span><span class='line'> created_at: Sat, 07 Feb 2015 16:52:21 UTC +00:00,
+</span><span class='line'> updated_at: Sat, 07 Feb 2015 16:52:21 UTC +00:00&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you find that you are always creating a logger, add these lines to a <code>.pryrc</code> file in your home directory:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="k">if </span>defined?<span class="o">(</span>Rails<span class="o">)</span> <span class="o">&amp;&amp;</span> Rails.env
+</span><span class='line'>  require <span class="s1">&#39;logger&#39;</span>
+</span><span class='line'>  ActiveRecord::Base.logger <span class="o">=</span> Logger.new<span class="o">(</span>STDOUT<span class="o">)</span>
+</span><span class='line'>  ActiveRecord::Base.clear_active_connections!
+</span><span class='line'>end%
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Globals</h3>
+
+<p>If you are bug hunting deep inside a gem or rails internals, and are trying to pry into a module that is loaded many times before it hits the buggy line of code, a simple <code>binding.pry</code> will have you stepping through an impossible amount of setup. Try setting a global variable to <code>true</code> right before the buggy line, and <code>binding.pry</code> on that condition:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>➜  api_playground  zeus <span class="nb">test</span> /Users/keighty/api_playground/test/models/user_test.rb -n <span class="s2">&quot;/test_user_description_has_full_name/&quot;</span>
+</span><span class='line'>Run options: -n /test_user_description_has_full_name/ --seed 28811
+</span><span class='line'>
+</span><span class='line'><span class="c"># Running:</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>From: /Users/keighty/api_playground/app/models/user.rb @ line 5 User#full_name:
+</span><span class='line'>
+</span><span class='line'>    2: def full_name
+</span><span class='line'>    3:   <span class="nv">$bedug</span> <span class="o">=</span> <span class="nb">true</span>
+</span><span class='line'><span class="nb">    </span>4:   <span class="s2">&quot;#{first_name} #{last_name}&quot;</span>
+</span><span class='line'>    5:   binding.pry <span class="k">if</span> <span class="nv">$bedug</span>
+</span><span class='line'>    6: end
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A global will maintain its state no matter how many times the code is loaded, so be sure to set the variable to false if you are stepping past the first break.</p>
+
+<h3>Caller</h3>
+
+<p>Calling <code>caller</code> at a pry prompt will output the current execution stack:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[1] pry(#&lt;User&gt;)&gt; caller
+</span><span class='line'>=&gt; ["/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/pry_instance.rb:355:in `eval'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/pry_instance.rb:355:in `evaluate_ruby'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/pry_instance.rb:323:in `handle_line'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/pry_instance.rb:243:in `block (2 levels) in eval'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/pry_instance.rb:242:in `catch'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/pry_instance.rb:242:in `block in eval'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/pry_instance.rb:241:in `catch'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/pry_instance.rb:241:in `eval'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/repl.rb:77:in `block in repl'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/repl.rb:67:in `loop'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/repl.rb:67:in `repl'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/repl.rb:38:in `block in start'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/input_lock.rb:61:in `call'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/input_lock.rb:61:in `__with_ownership'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/input_lock.rb:79:in `with_ownership'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/repl.rb:38:in `start'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/repl.rb:15:in `start'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/pry_class.rb:169:in `start'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/pry-0.10.1/lib/pry/core_extensions.rb:43:in `pry'",
+</span><span class='line'> "/Users/keighty/api_playground/app/models/user.rb:5:in `full_name'",
+</span><span class='line'> "/Users/keighty/api_playground/test/models/user_test.rb:6:in `test_user_description_has_full_name'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/test.rb:108:in `block (3 levels) in run'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/test.rb:206:in `capture_exceptions'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/test.rb:105:in `block (2 levels) in run'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/test.rb:258:in `time_it'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/test.rb:104:in `block in run'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest.rb:327:in `on_signal'",
+</span><span class='line'>:</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>caller</code> is a <a href="http://www.ruby-doc.org/core-2.2.0/Kernel.html#method-i-caller">Kernel method</a>. Pass a start line and a line limit to truncate the stack:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[11] pry(#&lt;User&gt;)&gt; caller(20, 5)
+</span><span class='line'>=&gt; ["/Users/keighty/api_playground/app/models/user.rb:5:in `full_name'",
+</span><span class='line'> "/Users/keighty/api_playground/test/models/user_test.rb:6:in `test_user_description_has_full_name'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/test.rb:108:in `block (3 levels) in run'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/test.rb:206:in `capture_exceptions'",
+</span><span class='line'> "/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/test.rb:105:in `block (2 levels) in run'"]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The first 20 or so lines are usually from the pry session so they are easily ignored. I can see that the User.full_name method is being called from my test &mdash; a trivial case, but it comes in very handy when debugging a deeper stack.</p>
+
+<h3>Errors</h3>
+
+<p>When models have many association dependencies, satisfying the validations of many dependencies can be tricky without descriptive errors. In Rails 3.2, the error storage was changed from an <a href="http://www.rubydoc.info/docs/rails/3.0.0/ActiveModel/Errors">OrderedHash</a> to a first class ruby object in <a href="http://www.rubydoc.info/docs/rails/3.2.8/ActiveModel/Errors">ActiveModel</a>. While the interface has changed, its value remains:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[1] pry(main)&gt; user = User.create
+</span><span class='line'>=&gt; #&lt;User:0x007fa054525318
+</span><span class='line'> id: nil,
+</span><span class='line'> first_name: nil,
+</span><span class='line'> last_name: nil,
+</span><span class='line'> email: nil,
+</span><span class='line'> created_at: nil,
+</span><span class='line'> updated_at: nil&gt;
+</span><span class='line'>
+</span><span class='line'># Why does my object not have an id?
+</span><span class='line'>
+</span><span class='line'>[2] pry(main)&gt; user.errors
+</span><span class='line'>=&gt; #&lt;ActiveModel::Errors:0x007fa05451fda0
+</span><span class='line'> @base=
+</span><span class='line'>  #&lt;User:0x007fa054525318
+</span><span class='line'>   id: nil,
+</span><span class='line'>   first_name: nil,
+</span><span class='line'>   last_name: nil,
+</span><span class='line'>   email: nil,
+</span><span class='line'>   created_at: nil,
+</span><span class='line'>   updated_at: nil&gt;,
+</span><span class='line'> @messages={:first_name=&gt;["can't be blank"], :last_name=&gt;["can't be blank"]}&gt;
+</span><span class='line'>
+</span><span class='line'>[3] pry(main)&gt; user.errors.full_messages
+</span><span class='line'>=&gt; ["First name can't be blank", "Last name can't be blank"]
+</span><span class='line'>
+</span><span class='line'># oooooh... validations
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Scopes and Single Table Inheritance]]></title>
@@ -1891,142 +2436,6 @@ Test-driven development can help you grow your career.
 <h3>Resources</h3>
 
 <p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Stringify Cyclic Structures With Censors]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/stringify-cyclic-structures-with-censors/"/>
-    <updated>2014-07-23T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/stringify-cyclic-structures-with-censors</id>
-    <content type="html"><![CDATA[<p>Troubleshooting a d3 data visualization sometimes requires visual inspection of the underlying JSON data structure. You can convert linear data structures to a JSON string using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify"><code>JSON.stringify</code></a><!--more-->:</p>
-
-<figure class='code'><figcaption><span>JSON.stringify</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">x</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;{}&quot;</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">x</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">]</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;{&quot;</span><span class="nx">y</span><span class="s2">&quot;:[&quot;</span><span class="mi">1</span><span class="s2">&quot;,&quot;</span><span class="mi">2</span><span class="s2">&quot;,&quot;</span><span class="mi">3</span><span class="s2">&quot;]}&quot;</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">x</span><span class="p">.</span><span class="nx">z</span> <span class="o">=</span> <span class="p">{</span><span class="nx">a</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">]}</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;{&quot;</span><span class="nx">y</span><span class="s2">&quot;:[&quot;</span><span class="mi">1</span><span class="s2">&quot;,&quot;</span><span class="mi">2</span><span class="s2">&quot;,&quot;</span><span class="mi">3</span><span class="s2">&quot;],&quot;</span><span class="nx">z</span><span class="s2">&quot;:{&quot;</span><span class="nx">a</span><span class="s2">&quot;:[&quot;</span><span class="nx">b</span><span class="s2">&quot;,&quot;</span><span class="nx">c</span><span class="s2">&quot;]}}&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Data structures that contain both upstream and downstream links between objects are cyclic structures. From the docs:</p>
-
-<blockquote><p>JSON does not support cyclic structures.  Attempting to convert such an object into JSON format will result in a TypeError exception.</p></blockquote>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">x</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class='line'>  <span class="nx">y</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class='line'>  <span class="nx">x</span><span class="p">.</span><span class="nx">children</span> <span class="o">=</span> <span class="p">[</span><span class="nx">y</span><span class="p">]</span>
-</span><span class='line'>  <span class="nx">y</span><span class="p">.</span><span class="nx">parent</span> <span class="o">=</span> <span class="nx">x</span>
-</span><span class='line'><span class="nb">Object</span> <span class="p">{</span><span class="nx">children</span><span class="o">:</span> <span class="p">[</span><span class="nb">Object</span><span class="p">]}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
-</span><span class='line'><span class="nx">TypeError</span><span class="o">:</span> <span class="nx">Converting</span> <span class="nx">circular</span> <span class="nx">structure</span> <span class="nx">to</span> <span class="nx">JSON</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>How can I look at a tree, or double-linked list data structure that is rife with circular links? JSON.stringify() takes a second argument called a censor in the docs. The censor is the programmatic court of appeal for whenever a cyclic structure is encountered:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">censor</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="kc">undefined</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Of course, this approach will eliminate most of the tree structure by removing all objects from the JSON. Certainly we can return something more creative than <code>undefined</code>&hellip;</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">censor</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">value</span><span class="p">.</span><span class="nx">parent</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">value</span><span class="p">.</span><span class="nx">parent</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In this censor, we replace the parent object with the parent&rsquo;s name, and JSON.stringify has no complaints:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">function</span> <span class="nx">censor</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="s2">&quot;object&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">value</span><span class="p">.</span><span class="nx">parent</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">value</span><span class="p">.</span><span class="nx">parent</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">x</span> <span class="o">=</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Theodore&quot;</span><span class="p">}</span>
-</span><span class='line'><span class="nb">Object</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Theodore&quot;</span><span class="p">}</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">y</span> <span class="o">=</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Alvin&quot;</span><span class="p">}</span>
-</span><span class='line'><span class="nb">Object</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Alvin&quot;</span><span class="p">}</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">x</span><span class="p">.</span><span class="nx">children</span> <span class="o">=</span> <span class="p">[</span><span class="nx">y</span><span class="p">]</span>
-</span><span class='line'><span class="p">[</span><span class="nb">Object</span><span class="p">]</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">y</span><span class="p">.</span><span class="nx">parent</span> <span class="o">=</span> <span class="nx">x</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nb">Object</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Theodore&quot;</span><span class="p">,</span> <span class="nx">children</span><span class="o">:</span> <span class="nb">Array</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
-</span><span class='line'><span class="nx">TypeError</span><span class="o">:</span> <span class="nx">Converting</span> <span class="nx">circular</span> <span class="nx">structure</span> <span class="nx">to</span> <span class="nx">JSON</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">censor</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;{&quot;</span><span class="nx">name</span><span class="s2">&quot;:&quot;</span><span class="nx">Theodore</span><span class="s2">&quot;,&quot;</span><span class="nx">children</span><span class="s2">&quot;:[{&quot;</span><span class="nx">name</span><span class="s2">&quot;:&quot;</span><span class="nx">Alvin</span><span class="s2">&quot;,&quot;</span><span class="nx">parent</span><span class="s2">&quot;:&quot;</span><span class="nx">Theodore</span><span class="s2">&quot;}]}&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   
