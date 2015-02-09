@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Retrieving a data dump from your meteor production database and copying it to local development is a three-step, time sensitive process. 1. Retrieve &hellip;">
+  <meta name="description" content="If you have more than one javascript running on a page, you have likely experienced the hell of trying to debug a problem caused by naming collisions &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,45 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/managing-modules/">Gaining Closure Through Modules</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-06T00:00:00-07:00" pubdate data-updated="true">Sep 6<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>If you have more than one javascript running on a page, you have likely experienced the hell of trying to debug a problem caused by naming collisions. Developing the scripts in isolation, it makes sense to assign widgetA.name dynamically using jQuery, but then why does the title of widgetGraphB disappear? Avoid the pain of unintended consequences by namespacing your scripts. </div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/managing-modules/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -690,105 +729,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/in-operator-avoid-false-falsies/">&#8216;In&#8217; Operator Avoids False Falsies</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-05T00:00:00-07:00" pubdate data-updated="true">Aug 5<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have encountered more than my share of javascript errors because I have made assumptions about the object I am working with, such as assuming that an object contains a property, and that I can call methods on that property:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</span><span class='line'><span class="nx">TypeError</span><span class="o">:</span> <span class="nx">Cannot</span> <span class="nx">read</span> <span class="nx">property</span> <span class="s1">&#39;0&#39;</span> <span class="nx">of</span> <span class="kc">undefined</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This line contains four assumptions, and therefore four places it can fail:</p>
-
-<ol>
-<li><code>myObject</code> exists</li>
-<li><code>myObject</code> contains a property called <code>data</code></li>
-<li><code>data</code> is an array</li>
-<li><code>data</code> is non-empty</li>
-</ol>
-
-
-<p>Presuming that if <code>myObject</code> does not exist means you have bigger problems, it is easy to fall into the trap of checking for the existence of a property by gating a conditional with it:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="k">if</span><span class="p">(</span><span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="c1">//do something important with the data</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This technique will work in development, but the voice of experience tells us that it will not work in production. The reason it will not work is that javascript has more falsy values than most languages. Falsy values include the number zero, empty strings, null, undefined, NaN, and of course, the boolean false. So, if it is possible <code>myObject.data</code> to contain derived information, you have signed up to troubleshoot some unexpected behaviour.</p>
-
-<p>Fortunately, javascript has provided a failsafe way to check the existence of a property, regardless of the data it contains. The <code>in</code> operator checks if the key exists in the object&rsquo;s hash table, and doesn&rsquo;t care if it is a prototype or singleton property.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">myObject</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class='line'><span class="kc">undefined</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;data&#39;</span> <span class="k">in</span> <span class="nx">myObject</span>
-</span><span class='line'><span class="kc">false</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'><span class="s2">&quot;&quot;</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;data&#39;</span> <span class="k">in</span> <span class="nx">myObject</span>
-</span><span class='line'><span class="kc">true</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span> <span class="o">==</span> <span class="kc">true</span>
-</span><span class='line'><span class="kc">false</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>('data' in myObject)</code> returns false if the property is undefined. If the property is defined, it returns true even if data contains a falsy value.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -813,6 +753,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/clean-code/">Clean Code</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/debugging-techniques/">Debugging Techniques</a>
       </li>
     
@@ -826,10 +770,6 @@
     
       <li class="post">
         <a href="/blog/2015/objects-vs-data-structures/">Objects vs Data Structures</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails/">#dup vs #clone in Ruby and Rails</a>
       </li>
     
   </ul>

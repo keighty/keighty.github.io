@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-02-07T11:49:01-08:00</updated>
+  <updated>2015-02-09T08:17:10-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,110 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Clean Code]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/clean-code/"/>
+    <updated>2015-02-07T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/clean-code</id>
+    <content type="html"><![CDATA[<p>The book club I belong to has a two-fold mission: the first is to inspire through peer pressure to read (and finish) technical books, and the second is to improve our ability to write quality, maintainable code. We started with <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330/ref=sr_1_1?ie=UTF8&amp;qid=1423423708&amp;sr=8-1&amp;keywords=practical+object-oriented+design+in+ruby"><em>Practical Object Oriented Design in Ruby</em></a> (Sandi Metz), and are now on to <a href="http://www.amazon.com/s/ref=nb_sb_ss_i_0_11?url=search-alias%3Daps&amp;field-keywords=refactoring&amp;sprefix=refactoring%2Caps%2C217"><em>Refactoring</em></a> (Martin Fowler and Kent Beck). Along the way, I found a copy of <a href="http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882/ref=sr_1_1?ie=UTF8&amp;qid=1423423781&amp;sr=8-1&amp;keywords=clean+code"><em>Clean Code</em></a> by Robert C. Martin in our work library, and dove right in. These three books tout many of the the same principles but focus on different aspects of writing quality code: POODR teaches how to identify abstractions, and to design decoupled objects; Refactoring is a deep dive into the techniques and heuristics for eliminating common code smells; and Clean Code is the intersection between them. It is a style guide, a call to action, and a cautionary tale from the voices of experience. I had several aha moments while reading Clean Code, and here are a few<!--more-->:</p>
+
+<h3>Error handling</h3>
+
+<p>When I started to anticipate <code>undefined method 'length' for nil:NilClass</code> errors, I knew I was growing as a developer.
+Having traced the source of <code>undefined is not a function</code> enough times, I came to realize that I was not sufficiently controlling the messages passing between objects.</p>
+
+<figure class='code'><figcaption><span>Could return nil </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">find_a_user</span>
+</span><span class='line'>  <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">last_name</span><span class="p">:</span> <span class="s2">&quot;Bacon&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="ss">:find_a_user</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">find_a_user</span>
+</span><span class='line'><span class="vi">@user</span><span class="o">.</span><span class="n">last_name</span>
+</span><span class='line'>
+</span><span class='line'><span class="ss">NoMethodError</span><span class="p">:</span> <span class="n">undefined</span> <span class="nb">method</span> <span class="sb">`last_name&#39; for nil:NilClass</span>
+</span><span class='line'><span class="sb">from (pry):10:in `</span><span class="n">__pry__</span><span class="err">&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This first pass seemed totally reasonable to me &mdash; find a particular user, and return it. Of course, what if the user doesn&rsquo;t exist? What if the query timed out? The code on line 7 is reasonable (wherever it may live), but if <code>@user</code> is set to nil my app will blow up. <span class='pullquote-right' data-pullquote='The problem isn&#8217;t that the code is missing a null check, but that it has too many.'>The worst part is, it will blow up at quite a distance from where the actual problem is. A naive solution would be to check if <code>@user</code> is nil before calling <code>#last_name</code> on it (<code>@user.last_name if @user</code>), but this leads to unreadable, untrustworthy code. The problem isn&rsquo;t that the code is missing a null check, but that it has too many. I have a poor contract with <code>User</code> if I have to check its validity every time I ask it a question. Martin suggests a more sustainable solution &mdash; <em>never return <code>nil</code></em>. If you never return <code>nil</code>, you don&rsquo;t have to catch <code>nil</code>.
+</span></p>
+
+<blockquote><p>If you are calling a [nil]-returning method from a third-party API, consider wrapping that method with a method that either throws an exception or returns a special case object.</p></blockquote>
+
+<figure class='code'><figcaption><span>Never returns nil </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">find_a_user</span>
+</span><span class='line'>  <span class="k">if</span> <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">last_name</span><span class="p">:</span> <span class="s2">&quot;Bacon&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+</span><span class='line'>    <span class="vi">@user</span>
+</span><span class='line'>  <span class="k">else</span>
+</span><span class='line'>    <span class="k">raise</span> <span class="no">StandardError</span><span class="o">.</span><span class="n">new</span> <span class="s2">&quot;Could not find Mr. Bacon.&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">find_a_user</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="ss">StandardError</span><span class="p">:</span> <span class="no">Could</span> <span class="ow">not</span> <span class="n">find</span> <span class="no">Mr</span><span class="o">.</span> <span class="no">Bacon</span><span class="o">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now the error occurs where it belongs &mdash; with the retrieval of the user. Throwing an error when something goes wrong is the least you can do for the consumers of your method. You could also solidify your contract by guaranteeing that you return something they expect.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">interesting_things</span>
+</span><span class='line'>  <span class="vi">@interesting_things</span> <span class="o">||</span> <span class="o">[]</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">interesting_things</span><span class="o">.</span><span class="n">length</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="mi">0</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I have guaranteed that <code>#interesting_things</code> will always return either the collection I expect or a reasonable facscimile. It is a simple enough solution, but I definitely felt that message sink into place. Methods are objects and objects have API&rsquo;s: messages in and messages out. Make those messages deliberate, because if &ldquo;returning null from methods is bad, passing null into methods is worse.&rdquo;</p>
+
+<h3>Protect Your Boundaries</h3>
+
+<p>Controlling the messages going in to and coming out of your objects is one place you need to protect your boundaries, but what about objects from 3rd party libraries or frameworks? There are consequences of relying too heavily on a library API, and in Chapter 9: Boundaries, James Grenning shares a few of them. One system he was working with collected information by passing around a Map collection, which is a standard library data structure in Java. In the next version of Java, new capabilities were added, and in order to use the new feature they had to find everywhere the object was used and make the change.</p>
+
+<blockquote><p>We&rsquo;ve seen systems that are inhibited from using [the new feature] because of the sheer magnitude of changes needed to make up for the liberal use of Maps.</p></blockquote>
+
+<p>I recently had a similar experience when upgrading an application from Rails 3.0 to Rails 3.2, where there were drastic changes to how models record errors. Errors inherited from OrderedHash in Rails 3.0 and from ActiveModel in Rails 3.2 &mdash; very different object types. Every test that looked for errors called <code>errors.on</code> &mdash; now a deprecated method. Every place that looped over the collection with <code>errors.each</code> had to be changed to <code>errors.messages.each</code>, or the logic modified altogether. It is good practice to be distrustful of APIs that are likely to change, and while I don&rsquo;t believe that the Errors object ever seemed unstable, it has certainly made me extra cautious of calling 3rd party framework methods directly.</p>
+
+<h3>Clean Code is not a &ldquo;nice-to-have&rdquo;</h3>
+
+<p>Technical debt is not a decision to be okay with untested, brittle code that is impossible to build on &mdash; it is a decision to pursue a design that may not be scalable, but it can still be clean. It is tempting to declare &ldquo;Mission Accomplished&rdquo; when you have reached the point of working code, but the job is really only half done:</p>
+
+<blockquote><p>It is not enough for code to work. Code that works is often badly broken. Programers who satisfy themselves with merely working code are behaving unprofessionally. They may fear that they don&rsquo;t have time to improve the structure and design of their code, but I disagree. Nothing has a more profound and long term degrading effect upon a development project than bad code. Bad schedules can be redone, bad requirements can be redefined. Bad team dynamics can be repaired. But bad code rots and ferments, becoming an inexorable weight that drags the team down.</p></blockquote>
+
+<p>A story cannot be declared finished until the code is ammenable to change. In order to change code, it must be comprehensible and thoroughly tested. Compromising code quality to meet the demands of a schedule will only slow things down in the long run.</p>
+
+<p><em>Clean Code</em> is a must read for all professional software developers. Leaving clean code is not just a kindness to the next developer (which is likely to be you), but is essential for growing a healthy codebase. Of course, &ldquo;to write clean code, you must first write dirty code and then clean it,&rdquo; and I look forward to learning new techniques as we tackle <em>Refactoring</em>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Debugging Techniques]]></title>
@@ -2364,78 +2468,6 @@ Test-driven development can help you grow your career.
 <p>Reduced memory consumption is one advantage of keeping a reference to a prototype instead of a complete copy. Another advantage is that if additions are made to the Prototype, the changes will be extended to all instances.</p>
 
 <p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA['In' Operator Avoids False Falsies]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/in-operator-avoid-false-falsies/"/>
-    <updated>2014-08-05T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/in-operator-avoid-false-falsies</id>
-    <content type="html"><![CDATA[<p>I have encountered more than my share of javascript errors because I have made assumptions about the object I am working with, such as assuming that an object contains a property, and that I can call methods on that property:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</span><span class='line'><span class="nx">TypeError</span><span class="o">:</span> <span class="nx">Cannot</span> <span class="nx">read</span> <span class="nx">property</span> <span class="s1">&#39;0&#39;</span> <span class="nx">of</span> <span class="kc">undefined</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This line contains four assumptions, and therefore four places it can fail:</p>
-
-<ol>
-<li><code>myObject</code> exists</li>
-<li><code>myObject</code> contains a property called <code>data</code></li>
-<li><code>data</code> is an array</li>
-<li><code>data</code> is non-empty</li>
-</ol>
-
-
-<p>Presuming that if <code>myObject</code> does not exist means you have bigger problems, it is easy to fall into the trap of checking for the existence of a property by gating a conditional with it:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="k">if</span><span class="p">(</span><span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="c1">//do something important with the data</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This technique will work in development, but the voice of experience tells us that it will not work in production. The reason it will not work is that javascript has more falsy values than most languages. Falsy values include the number zero, empty strings, null, undefined, NaN, and of course, the boolean false. So, if it is possible <code>myObject.data</code> to contain derived information, you have signed up to troubleshoot some unexpected behaviour.</p>
-
-<p>Fortunately, javascript has provided a failsafe way to check the existence of a property, regardless of the data it contains. The <code>in</code> operator checks if the key exists in the object&rsquo;s hash table, and doesn&rsquo;t care if it is a prototype or singleton property.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">myObject</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class='line'><span class="kc">undefined</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;data&#39;</span> <span class="k">in</span> <span class="nx">myObject</span>
-</span><span class='line'><span class="kc">false</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'><span class="s2">&quot;&quot;</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;data&#39;</span> <span class="k">in</span> <span class="nx">myObject</span>
-</span><span class='line'><span class="kc">true</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span> <span class="o">==</span> <span class="kc">true</span>
-</span><span class='line'><span class="kc">false</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>('data' in myObject)</code> returns false if the property is undefined. If the property is defined, it returns true even if data contains a falsy value.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
 ]]></content>
   </entry>
   

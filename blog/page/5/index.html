@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Troubleshooting a d3 data visualization sometimes requires visual inspection of the underlying JSON data structure. You can convert linear data &hellip;">
+  <meta name="description" content="I have encountered more than my share of javascript errors because I have made assumptions about the object I am working with, such as assuming that &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,105 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/in-operator-avoid-false-falsies/">&#8216;In&#8217; Operator Avoids False Falsies</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-05T00:00:00-07:00" pubdate data-updated="true">Aug 5<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have encountered more than my share of javascript errors because I have made assumptions about the object I am working with, such as assuming that an object contains a property, and that I can call methods on that property:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span class='line'><span class="nx">TypeError</span><span class="o">:</span> <span class="nx">Cannot</span> <span class="nx">read</span> <span class="nx">property</span> <span class="s1">&#39;0&#39;</span> <span class="nx">of</span> <span class="kc">undefined</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This line contains four assumptions, and therefore four places it can fail:</p>
+
+<ol>
+<li><code>myObject</code> exists</li>
+<li><code>myObject</code> contains a property called <code>data</code></li>
+<li><code>data</code> is an array</li>
+<li><code>data</code> is non-empty</li>
+</ol>
+
+
+<p>Presuming that if <code>myObject</code> does not exist means you have bigger problems, it is easy to fall into the trap of checking for the existence of a property by gating a conditional with it:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="k">if</span><span class="p">(</span><span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">//do something important with the data</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This technique will work in development, but the voice of experience tells us that it will not work in production. The reason it will not work is that javascript has more falsy values than most languages. Falsy values include the number zero, empty strings, null, undefined, NaN, and of course, the boolean false. So, if it is possible <code>myObject.data</code> to contain derived information, you have signed up to troubleshoot some unexpected behaviour.</p>
+
+<p>Fortunately, javascript has provided a failsafe way to check the existence of a property, regardless of the data it contains. The <code>in</code> operator checks if the key exists in the object&rsquo;s hash table, and doesn&rsquo;t care if it is a prototype or singleton property.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">myObject</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'><span class="kc">undefined</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;data&#39;</span> <span class="k">in</span> <span class="nx">myObject</span>
+</span><span class='line'><span class="kc">false</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span><span class='line'><span class="s2">&quot;&quot;</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;data&#39;</span> <span class="k">in</span> <span class="nx">myObject</span>
+</span><span class='line'><span class="kc">true</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span> <span class="o">==</span> <span class="kc">true</span>
+</span><span class='line'><span class="kc">false</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>('data' in myObject)</code> returns false if the property is undefined. If the property is defined, it returns true even if data contains a falsy value.</p>
+
+<h3>Resources</h3>
+
+<p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -248,85 +347,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/mongo-trouble-reset/">Mongo Trouble? Reset!</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-03T00:00:00-07:00" pubdate data-updated="true">May 3<span>rd</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Back in March I wrote about letting my computer&rsquo;s battery die in the middle of a meteor project, with the consequence being that I could not connect to the underlying mongo database:</p>
-
-<figure class='code'><figcaption><span>What&#8217;s wrong, meteor? </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor
-</span><span class='line'><span class="o">[[[[[</span> ~/project/in/progress <span class="o">]]]]]</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">=</span>&gt; Started proxy.
-</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
-</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
-</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
-</span><span class='line'>Can<span class="err">&#39;</span>t start Mongo server.
-</span><span class='line'>MongoDB had an unspecified uncaught exception.
-</span><span class='line'>This can be caused by MongoDB being unable to write to a <span class="nb">local </span>database.
-</span><span class='line'>Check that you have permissions to write to .meteor/local. MongoDB does
-</span><span class='line'>not support filesystems like NFS that <span class="k">do </span>not allow file locking.
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After much spelunking in stackoverflow and documentation, I discovered the magic of this command:</p>
-
-<figure class='code'><figcaption><span>Magic mongo reset spell %</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u mongodb mongdo --repair --dbpath /var/lib/mongodb
-</span><span class='line'><span class="nv">$ </span>sudo service mongodb start
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Repairing and restarting the mongo service seemed to do the trick, and I continued on my merry meteor way. Well, I did it again &mdash; I let my battery die in the middle of a meteor project, and with feelings of smug satisfaction, I plumbed my blog archive for the answer. Only this time the magic antidote didn&rsquo;t work</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/mongo-trouble-reset/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -351,6 +371,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/clean-code/">Clean Code</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/debugging-techniques/">Debugging Techniques</a>
       </li>
     
@@ -364,10 +388,6 @@
     
       <li class="post">
         <a href="/blog/2015/objects-vs-data-structures/">Objects vs Data Structures</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails/">#dup vs #clone in Ruby and Rails</a>
       </li>
     
   </ul>

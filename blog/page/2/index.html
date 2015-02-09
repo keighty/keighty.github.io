@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="If you work in a code base with many other contributors, you may have learned the scouting philosophy to &ldquo;leave the campground cleaner than you &hellip;">
+  <meta name="description" content="I was recently fixing a failing test and discovered that Ruby and Rails implement #clone and #dup in confusing and occasionally opposite ways. ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,47 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails/">#dup vs #clone in Ruby and Rails</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-10T00:00:00-08:00" pubdate data-updated="true">Jan 10<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was recently fixing a failing test and discovered that Ruby and Rails implement <code>#clone</code> and <code>#dup</code> in confusing and occasionally opposite ways.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -248,138 +289,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/method-lookup-in-ruby/">Method Lookup in Ruby</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-12-28T00:00:00-08:00" pubdate data-updated="true">Dec 28<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have once more been working my way through Sandi Metz&#8217; <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">Practical Object-oriented Design in Ruby</a> (POODR) for a few weeks, and developed a mental block about method lookup.</p>
-
-<p>In Chapter 6 (Acquiring behaviour through inheritance), she describes how to extract a superclass from a group of related classes that share some behaviour by pulling methods up the inheritance chain instead of driving specializations down. This approach ensures a clean abstraction, leaving no specialized behaviour in the superclass. Where I got stuck was in the call chain that enforces the common interface:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
-</span><span class='line'>    <span class="n">baz</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">baz</span>
-</span><span class='line'>    <span class="k">raise</span> <span class="no">NotImplementedError</span><span class="o">.</span><span class="n">new</span> <span class="s2">&quot;You can&#39;t call #baz here!&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Bar</span> <span class="o">&lt;</span> <span class="no">Foo</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
-</span><span class='line'>    <span class="k">super</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">baz</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Hello, baz&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="no">Bar</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'><span class="s2">&quot;Hello, baz&quot;</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;Bar:0x007fc4f903ab90&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I could not understand why, the <code>NotImplementedError</code> wasn&rsquo;t raised when a new <code>Bar</code> was created. This is how I imagined the call stack should work:</p>
-
-<ol>
-<li><code>Bar.new</code> calls <code>Bar#initialize</code></li>
-<li><code>Bar</code> calls <code>super</code> (<code>Foo#initialize</code>)</li>
-<li><code>Foo</code> calls <code>baz</code> (<code>Foo#baz</code>)</li>
-<li>raises <code>NotImplementedError</code></li>
-</ol>
-
-
-<p>This is how the call stack actually works</p>
-
-<ol>
-<li><code>x = Bar.new</code> calls <code>Bar#initialize</code></li>
-<li><code>x</code> receives a call to <code>super</code> (<code>Foo#initalize</code>)</li>
-<li><code>x</code> receives a call to <code>baz</code> (<code>Bar#baz</code>)</li>
-<li>says &ldquo;Hello, baz&rdquo;</li>
-</ol>
-
-
-<p>The call never comes from the context of <code>Foo</code> &mdash; the receiver is always <code>x</code>, the instance of <code>Bar</code>. Classical inheritance dictates that an object can only look to itself or further up the inheritance chain for valid method definitions, not down. <code>x</code> is reaching up to call <code>super</code> but checks itself for an answer to the question <code>#baz</code>. <code>Foo#baz</code> would only ever be called if we made a new <code>Foo</code> directly:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="no">Foo</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'><span class="ss">NotImplementedError</span><span class="p">:</span> <span class="no">You</span> <span class="n">can</span><span class="s1">&#39;t call #baz here!</span>
-</span><span class='line'><span class="s1">        from (irb):7:in `baz&#39;</span>
-</span><span class='line'>        <span class="n">from</span> <span class="p">(</span><span class="n">irb</span><span class="p">):</span><span class="mi">3</span><span class="ss">:in</span> <span class="sb">`initialize&#39;</span>
-</span><span class='line'><span class="sb">        from (irb):27:in `</span><span class="kp">new</span><span class="s1">&#39;</span>
-</span><span class='line'><span class="s1">        from (irb):27</span>
-</span><span class='line'><span class="s1">        from /usr/local/var/rbenv/versions/2.1.5/bin/irb:11:in `&lt;main&gt;&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>How ruby resolves a message (classical inheritance)</h3>
-
-<p>The search for a method begins in the class of the receiving object &mdash; in the example above, Bar is always the receiving object. If the class does not implement the message, the search proceeds up the superclass chain. If none of the superclasses contain the method definition, ruby makes a second attempt to resolve the message by sending <code>method_missing(:method_name)</code> to the original object. The search restarts from the bottom, but this time for a <code>method_missing</code> handler rather than <code>:method_name</code>.</p>
-
-<p>Occasionally refreshing the ruby basics is super-rewarding.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -404,6 +313,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/clean-code/">Clean Code</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/debugging-techniques/">Debugging Techniques</a>
       </li>
     
@@ -417,10 +330,6 @@
     
       <li class="post">
         <a href="/blog/2015/objects-vs-data-structures/">Objects vs Data Structures</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/number-dup-vs-number-clone-in-ruby-and-rails/">#dup vs #clone in Ruby and Rails</a>
       </li>
     
   </ul>
