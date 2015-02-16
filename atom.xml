@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-02-09T08:17:10-08:00</updated>
+  <updated>2015-02-16T11:41:52-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,74 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Everybody Writes (and Why You Should Blog)]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/everybody-writes/"/>
+    <updated>2015-02-16T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/everybody-writes</id>
+    <content type="html"><![CDATA[<p>In <em>Everybody Writes</em><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>, Ann Handley teaches content marketers how to generate &ldquo;ridiculously good&rdquo; content. Anyone who has recently enjoyed the pain of the job hunt will notice that much of the advice can be adapted to self-marketing. In my recent code school experience, developing an online presence was as important as learning web development, and since it is hard to market yourself as a web developer without developing anything for the web, a blog is a great place to start. You have picked a career where your ability to learn is one of your most marketable skills, as well as your ability to communicate &mdash; both of which you can showcase in your blog. You don&rsquo;t have to worry about having something original to say: treat it as an opportunity to organize your thoughts and to teach a beginner what you know. Handley gives great advice for people learning to blog and how to generally optimize your online presence &mdash; both are great ways to market yourself as a fresh code-school alum.</p>
+
+<!--more-->
+
+
+<h3>Show up</h3>
+
+<p>Write early, write often. If something is new to you, it will likely be new to someone else as well. The more writing practice you get, the easier it becomes &mdash; &ldquo;writing is a habit, not an art&rdquo;, and you can&rsquo;t help but improve in an art that you practice every day. Handley recommends starting with the ugly first draft<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup> &mdash; make it ugly, don&rsquo;t delete anything, don&rsquo;t rephrase or reread. Just get it out of you and on to your screen, then walk away for a day. Maybe two. If you are really stuck on how to begin, you could start with &ldquo;Dear diary&rdquo;<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>. This helps you get in the mood to write, and keeps your tone conversational. Also, if you are writing to a non-technical person, it will keep your writing clear, and inspire you to give enough back story so that they aren&rsquo;t lost.</p>
+
+<h3>Write a tight post</h3>
+
+<h4>Decide on a goal</h4>
+
+<p>Is it to teach? To share? To critique? The goal for technical blogs is not usually to obtain a following &mdash; it is to share a bit of experience that will turn up when another frustrated developer puts keywords into a search engine. An online presence is important, but it should not be a blow by blow of how hard it is to learn to code. A handy formula for creating quality content is:</p>
+
+<blockquote><p>Utility * Inspiration * Empathy = Quality Content<sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup></p></blockquote>
+
+<p>Make it useful, make it reader centric (even if that reader is you six months from now), and make it thoughtful.</p>
+
+<h4>Forget the 5 paragraph essay format from high school</h4>
+
+<p>I rarely read a long blog post from beginning to end, and the sweet spot for length is around 1500 words<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup>. Make it easy for the reader to get the gist of your post by providing sub-headings, bold text, and code samples &mdash; these are strong visual elements that can help your reader anchor what they are learning.</p>
+
+<h4>Rewrite</h4>
+
+<p>Once you have written the ugly first draft with your goal in mind, rewrite it with the reader in mind &mdash; will they understand the context of what you are trying to get across? Assume the reader knows nothing, but isn’t stupid. Find data and examples that illustrate what you are trying to share (and make sure that you give credit where credit is due<sup id="fnref:6"><a href="#fn:6" rel="footnote">6</a></sup>).</p>
+
+<h4>Work on your grammar</h4>
+
+<p>After reframing, examine your sentence structure. Are you using a passive voice? Microsoft Word grammar check hates the passive voice, but I never knew what that meant. Try <a href="https://www.grammarly.com/">grammarly</a> if you need help, and even if you think you don&rsquo;t. Editing your own work is hard, because your brain will fill in all the things you meant to say but didn&rsquo;t. Also, put the important words at the start of the sentence, just in case the reader dozes off half-way through.</p>
+
+<h3>About Me pages</h3>
+
+<p>Be intentional about the words that describe you in your About Me page<sup id="fnref:7"><a href="#fn:7" rel="footnote">7</a></sup>. Describe your accomplishments with examples, and if possible, try to mirror the language used by the companies you want to work for. Check out the keywords they use, and make sure to encorporate them in your headlines and personal summary.</p>
+
+<blockquote><p>About us pages aren’t really about the company; instead they focus on relaying who they are <em>in relation to the visitor</em>.</p></blockquote>
+
+<p>If your reader is an employer, let them know you are for hire &mdash; your posts should always be in the context of what you can do for the reader.</p>
+
+<p>Showing up can be the hardest thing &mdash; finding something original to say, or fearing a public mistake is what keeps many people from writing, but blogging shows you are interested in, well, something. Being interesting means being interested in things, and wanting to share the things you find interesting is a natural follow through. Given the right mentorship, your technical abilities will grow, but getting in the door is step one. So, if you are looking to update your web presence, or create a web presence, this book is for you.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Handley, A. (2014). <a href="http://www.amazon.com/Everybody-Writes-Go--Creating-Ridiculously-ebook/dp/B00LMB5P0G/ref=sr_1_1?ie=UTF8&amp;qid=1424115248&amp;sr=8-1&amp;keywords=everybody+writes"><em>Everybody Writes : Your Go-To Guide to Creating Ridiculously Good Content</em></a>. Wiley &amp; Sons Canada, Limited, John.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>Tip 9: &ldquo;Embrace the Ugly First Draft&rdquo;, p. 41.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+<li id="fn:3">
+<p>Tip 14: &ldquo;Start with <em>Dear Mom&hellip;</em>&rdquo;, p. 54.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
+<li id="fn:4">
+<p>&ldquo;Introduction&rdquo;, p. 7.<a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
+<li id="fn:5">
+<p>Tip 60: &ldquo;The Ideal Length for Blog Posts, Podcast, Facebook Posts, Tweets, and Other Marketing Content&rdquo;, p. 184.<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
+<li id="fn:6">
+<p>Tip 57: &ldquo;Seek Permission, Not Forgiveness&rdquo;, p. 170.<a href="#fnref:6" rev="footnote">&#8617;</a></p></li>
+<li id="fn:7">
+<p>Tip 71: &ldquo;Writing the About Us Page&rdquo;, p 244.<a href="#fnref:7" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Clean Code]]></title>
@@ -2351,123 +2419,6 @@ Test-driven development can help you grow your career.
 <h3>Resources</h3>
 
 <p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Constructors and Prototypes]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/constructors-and-prototypes/"/>
-    <updated>2014-08-07T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/constructors-and-prototypes</id>
-    <content type="html"><![CDATA[<p>Object-oriented programming (OOP) can be thought of as describing the properties and behaviour of a noun in a blueprint, which is used to create instances of an object. The blueprint is defined as a Constructor &mdash; a function that identifies a class of objects and begins with a capital letter. New objects are created by calling a Constructor with the keyword <code>new</code>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">function</span> <span class="nx">Book</span><span class="p">(</span><span class="nx">title</span><span class="p">,</span> <span class="nx">author</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">title</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="nx">author</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">listing</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">title</span><span class="p">,</span> <span class="s2">&quot;by&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">author</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">));</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">book1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span> <span class="s2">&quot;Joseph Heller&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'><span class="s2">&quot;Catch-22&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">author</span>
-</span><span class='line'><span class="s2">&quot;Joseph Heller&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">listing</span><span class="p">()</span>
-</span><span class='line'><span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span> <span class="nx">by</span> <span class="nx">Joseph</span> <span class="nx">Heller</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The Book constructor specifies two properties, <code>title</code> and <code>author</code>, and one method, <code>listing</code>. Defining a method in a constructor ensures that all instances of the Object have the same method, but it also results in duplication of the method in the memory stack for every instance of the Object. If I made 1000 instances of Book, there would be 1000 instances of the listing method, even though it is only defined once, and is the same for every object.</p>
-
-<h4>Memory stack of objects with instance methods:</h4>
-
-<p><img src="http://www.katieleonard.ca/images/post_constructor_memory_stack.png"></p>
-
-
-<p>Enter Prototypes.</p>
-
-<p>A Prototype is a property that is shared by all instances of an object. When the constructor for an object is called for the first time, all the object&rsquo;s properties are loaded onto the memory stack as well as the object&rsquo;s Prototype. All subsequent instances of that object include a pointer to the same Prototype, and they pass in a pointer to themselves as <code>this</code> whenever they call a method from the Prototype.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">Book</span><span class="p">(</span><span class="nx">title</span><span class="p">,</span> <span class="nx">author</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">title</span><span class="p">;</span>
-</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="nx">author</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">Book</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">listing</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">title</span><span class="p">,</span> <span class="s2">&quot;by&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">author</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">));</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">book1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span> <span class="s2">&quot;Joseph Heller&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">book2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;Slaughterhouse 5&quot;</span><span class="p">,</span> <span class="s2">&quot;Kurt Vonnegut&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">listing</span><span class="p">()</span>
-</span><span class='line'><span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span> <span class="nx">by</span> <span class="nx">Joseph</span> <span class="nx">Heller</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book2</span><span class="p">.</span><span class="nx">listing</span><span class="p">()</span>
-</span><span class='line'><span class="nx">Slaughterhouse</span> <span class="mi">5</span> <span class="nx">by</span> <span class="nx">Kurt</span> <span class="nx">Vonnegut</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s2">&quot;listing&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="kc">false</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;listing&#39;</span> <span class="k">in</span> <span class="nx">book1</span>
-</span><span class='line'><span class="kc">true</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Memory stack of object with prototypes:</h4>
-
-<p><img src="http://www.katieleonard.ca/images/post_prototype_memory_stack.png"></p>
-
-
-<p>Reduced memory consumption is one advantage of keeping a reference to a prototype instead of a complete copy. Another advantage is that if additions are made to the Prototype, the changes will be extended to all instances.</p>
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   

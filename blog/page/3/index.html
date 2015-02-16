@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="I have once more been working my way through Sandi Metz&#8217; Practical Object-oriented Design in Ruby (POODR) for a few weeks, and developed a &hellip;">
+  <meta name="description" content="&ldquo;Nothing is miserable unless you think it so; and on the other hand, nothing brings happiness unless you are content with it.&rdquo; &mdash; &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,49 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/the-happiness-hypothesis/">The Happiness Hypothesis</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-01T00:00:00-08:00" pubdate data-updated="true">Jan 1<span>st</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p>&ldquo;Nothing is miserable unless you think it so; and on the other hand, nothing brings happiness unless you are content with it.&rdquo; &mdash;Buddha</p></blockquote>
+
+<p>In <a href="http://www.amazon.com/Happiness-Hypothesis-Finding-Modern-Ancient/dp/0465028020/ref=sr_1_1?ie=UTF8&amp;qid=1420146441&amp;sr=8-1&amp;keywords=the+happiness+hypothesis">The Happiness Hypothesis</a>: Finding Modern Truth in Ancient Wisdom, Jonathan Haidt provides an extensive overview of the state of positive psychology today.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/the-happiness-hypothesis/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -608,69 +651,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/giving-the-cold-shoulder-with-git/">Giving the Cold Shoulder With Git</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-09-08T00:00:00-07:00" pubdate data-updated="true">Sep 8<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Some files become unnecessary to track using version control, but still belong in the repository. Compiled assets, for example may require a placeholder for a functional deploy, but don&rsquo;t need to be checked in every time a change is made.</p>
-
-<p>Adding the file to your gitignore is not enough to stop tracking file changes. You must also clear the file from your git cache:</p>
-
-<figure class='code'><figcaption><span>gitignore, this time with spite </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git rm --cached <span class="o">[</span>filename<span class="o">]</span>
-</span><span class='line'><span class="nv">$ </span>git add .
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;I really mean to ignore this file.&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To untrack everything that has been added to the .gitignore:</p>
-
-<figure class='code'><figcaption><span>For realz </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git rm -r --cached .
-</span><span class='line'><span class="nv">$ </span>git commit -a -m <span class="s2">&quot;I mean it!&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Resources</h3>
-
-<p><a href="http://stackoverflow.com/a/1139797">Here&rsquo;s where I found this gem</a>,
- <a href="http://git-scm.com/docs/gitignore">and here are the docs where I verified it</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -695,6 +675,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/everybody-writes/">Everybody Writes (and Why You Should Blog)</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/clean-code/">Clean Code</a>
       </li>
     
@@ -708,10 +692,6 @@
     
       <li class="post">
         <a href="/blog/2015/healthcare-is-a-legacy-application/">Our Healthcare System Is a Legacy Application</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/objects-vs-data-structures/">Objects vs Data Structures</a>
       </li>
     
   </ul>
