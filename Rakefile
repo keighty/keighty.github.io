@@ -108,10 +108,14 @@ task :new_post, :title do |t, args|
     post.puts "layout: post"
     post.puts "title: \"#{title.gsub(/&/,'&amp;')}\""
     post.puts "date: #{Time.now.strftime('%Y-%m-%d')}"
-    post.puts "comments: true"
+    # post.puts "comments: true"
+    post.puts "sharing: true"
     post.puts "categories: "
     post.puts "---"
-    post.puts "\n\n<!--more-->"
+    post.puts "\n<!--more-->"
+    post.puts "THESIS"
+    post.puts "OUTLINE"
+    post.puts "CONCLUSION"
   end
 end
 
@@ -135,11 +139,16 @@ task :new_draft, :title do |t, args|
     draft.puts "layout: post"
     draft.puts "title: \"#{title.gsub(/&/,'&amp;')}\""
     draft.puts "date: #{Time.now.strftime('%Y-%m-%d')}"
-    draft.puts "comments: true"
+    # draft.puts "comments: true"
+    draft.puts "sharing: true"
     draft.puts "categories: "
     draft.puts "published: false"
     draft.puts "---"
-    draft.puts "\n\n<!--more-->"
+    draft.puts "\n<!--more-->"
+    draft.puts "THESIS"
+    draft.puts "OUTLINE"
+    draft.puts "CONCLUSION"
+    draft.puts "#### RESOURCES"
   end
 end
 
