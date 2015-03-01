@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-02-24T08:26:12-08:00</updated>
+  <updated>2015-03-01T12:30:13-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,26 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Bird by Bird]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/bird-by-bird/"/>
+    <updated>2015-03-01T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/bird-by-bird</id>
+    <content type="html"><![CDATA[<p>Virtue is its own reward, and so is writing. Anne Lamott&rsquo;s <a href="http://www.amazon.com/Bird-Some-Instructions-Writing-Life/dp/0385480016/ref=sr_1_1?ie=UTF8&amp;qid=1425241344&amp;sr=8-1&amp;keywords=bird+by+bird">Bird by Bird: Some Instructions on Writing and Life</a> is full of beautiful prose, characters, and personal anecdotes, and while her advice is tuned to the creative writer, there are three useful lessons that can be applied to all writing.</p>
+
+<ol>
+<li>write short assignments</li>
+<li>write only what you can see through a 1-inch picture frame</li>
+<li>write a terrible first draft</li>
+</ol>
+
+
+<p>Blogging about what I am learning and reading forces me to think about what I experience. Almost every day I learn another 1-inch picture frame of programming, and writing it down helps me understand it better. My ugly first drafts usually consist of a question, a few links to resources, and some console output &mdash; not Pulitzer Prize winning prose, but an awesome personal resource and record of growth.</p>
+
+<blockquote><p>All you can give us is what life is about from your point of view. You are not going to be able to give us the plans to the submarine. Life is not a submarine. There are no plans.</p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Uploading Images From Node and Angular to S3]]></title>
@@ -2310,194 +2330,6 @@ Test-driven development can help you grow your career.
 
 <p>Resources:
 <a href="http://stackoverflow.com/a/12447710">stackoverflow</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Formatting Numbers the Easy Way]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/formatting-numbers-the-easy-way/"/>
-    <updated>2014-08-23T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/formatting-numbers-the-easy-way</id>
-    <content type="html"><![CDATA[<p>D3 has an awesome number formatting function that I discovered only after hacking my own. My first approach was to use string and array manipulation to convert 1234567890 to 1,234,567,890:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">numberSmoothing</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="c1">// split the number into a character array and reverse it</span>
-</span><span class='line'>  <span class="nx">reversedNumber</span> <span class="o">=</span> <span class="p">(</span><span class="nx">value</span><span class="p">).</span><span class="nx">toString</span><span class="p">().</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">reverse</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// [&quot;0&quot;, &quot;9&quot;, &quot;8&quot;, &quot;7&quot;, &quot;6&quot;, &quot;5&quot;, &quot;4&quot;, &quot;3&quot;, &quot;2&quot;, &quot;1&quot;]</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// push the numbers onto another array in groups of 3 and add a comma</span>
-</span><span class='line'>  <span class="nx">chunkedNumber</span> <span class="o">=</span> <span class="p">[];</span>
-</span><span class='line'>  <span class="k">while</span><span class="p">(</span><span class="nx">reversedNumber</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">numberChunk</span> <span class="o">=</span> <span class="nx">reversedNumber</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">chunkedNumber</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">reversedNumber</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">reversedNumber</span> <span class="o">=</span> <span class="nx">numberChunk</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// push the remaining digits onto the array</span>
-</span><span class='line'>  <span class="nx">chunkedNumber</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">reversedNumber</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">));</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// [&quot;098,&quot;, &quot;765,&quot;, &quot;432,&quot;, &quot;1&quot;]</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// reverse each of the strings in the array and rejoin them</span>
-</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">chunkedNumber</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">){</span>
-</span><span class='line'>    <span class="nx">chunkedNumber</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nx">chunkedNumber</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">reverse</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// [&quot;,890&quot;, &quot;,567&quot;, &quot;,234&quot;, &quot;1&quot;]</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">chunkedNumber</span><span class="p">.</span><span class="nx">reverse</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">numberSmoothing</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;1,234,567,890&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>While it was a fun mental exercise to implement number formatting, I stumbled across this handy d3 function after I was already done:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">);</span>
-</span><span class='line'><span class="s2">&quot;1,234,567,890&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As it turns out, any way one might want to format a number has <a href="https://github.com/mbostock/d3/wiki/Formatting#d3_format">already been implemented in d3</a>. It is similar to the mini-formatting language from python:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[​[fill]align][sign][symbol][0][width][,][.precision][type]</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// add commas for the thousands separator</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="nx">format</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;1,234,567,890&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// add a sign for positive and negative numbers</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;+,&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;+1,234,567,890&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="o">-</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;-1,234,567,890&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// add a currency sign</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;+$,&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="nx">format</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;+$1,234,567,890&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a percentage</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="nx">format</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;16.666666666666664%&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a rounded percentage</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;17%&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a percent rounded to a single sig fig</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;.1%&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;16.7%&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a rounded value</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;.2r&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mf">123.456</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;120&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span><span class="nx">format</span><span class="p">(</span><span class="mf">123456789.66</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;120000000&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a rounded, comma separated value</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;,.2r&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mf">123456789.66</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;120,000,000&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   

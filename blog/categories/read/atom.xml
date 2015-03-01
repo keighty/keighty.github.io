@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Read | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/read/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-02-24T08:26:12-08:00</updated>
+  <updated>2015-03-01T12:30:13-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,26 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Bird by Bird]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/bird-by-bird/"/>
+    <updated>2015-03-01T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/bird-by-bird</id>
+    <content type="html"><![CDATA[<p>Virtue is its own reward, and so is writing. Anne Lamott&rsquo;s <a href="http://www.amazon.com/Bird-Some-Instructions-Writing-Life/dp/0385480016/ref=sr_1_1?ie=UTF8&amp;qid=1425241344&amp;sr=8-1&amp;keywords=bird+by+bird">Bird by Bird: Some Instructions on Writing and Life</a> is full of beautiful prose, characters, and personal anecdotes, and while her advice is tuned to the creative writer, there are three useful lessons that can be applied to all writing.</p>
+
+<ol>
+<li>write short assignments</li>
+<li>write only what you can see through a 1-inch picture frame</li>
+<li>write a terrible first draft</li>
+</ol>
+
+
+<p>Blogging about what I am learning and reading forces me to think about what I experience. Almost every day I learn another 1-inch picture frame of programming, and writing it down helps me understand it better. My ugly first drafts usually consist of a question, a few links to resources, and some console output &mdash; not Pulitzer Prize winning prose, but an awesome personal resource and record of growth.</p>
+
+<blockquote><p>All you can give us is what life is about from your point of view. You are not going to be able to give us the plans to the submarine. Life is not a submarine. There are no plans.</p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Everybody Writes (and Why You Should Blog)]]></title>
@@ -232,78 +252,6 @@ Test-driven development can help you grow your career.
 4. did you know that test-driven development can help you grow your career as well?
 -->
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The Happiness Hypothesis]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/the-happiness-hypothesis/"/>
-    <updated>2015-01-01T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/the-happiness-hypothesis</id>
-    <content type="html"><![CDATA[<blockquote><p>&ldquo;Nothing is miserable unless you think it so; and on the other hand, nothing brings happiness unless you are content with it.&rdquo; &mdash;Buddha</p></blockquote>
-
-<p>In <a href="http://www.amazon.com/Happiness-Hypothesis-Finding-Modern-Ancient/dp/0465028020/ref=sr_1_1?ie=UTF8&amp;qid=1420146441&amp;sr=8-1&amp;keywords=the+happiness+hypothesis">The Happiness Hypothesis</a>: Finding Modern Truth in Ancient Wisdom, Jonathan Haidt provides an extensive overview of the state of positive psychology today.</p>
-
-<!--more-->
-
-
-<p>He uses the analogy of a rider on an elephant to describe how the mind is divided into two parts: the conscious, reasoning part (the rider), and the unconscious mind that is actually driving our behaviour (the elephant). Stepping in to the New Year, the twitter-verse is alive with resolutions to eat less, exercise more, and spend less money &mdash; all laudable goals for the rider, but unless you can re-train the elephant to want those same things, you will find yourself in line for a 16oz hot chocolate with whipped cream by the end of the week.</p>
-
-<h3>On the happiness equation: H = S + C + V</h3>
-
-<blockquote><p>The level of happiness that you actually experience (H) is determined by your biological set point (S) plus the conditions of your life &copy; plus the voluntary activities (V) you do.</p></blockquote>
-
-<p>This has certainly been true in my life. I tend towards a positive outlook (as Haidt describes it, a winner of the &lsquo;cortical lottery&rsquo;), but that doesn&rsquo;t mean I don&rsquo;t experience ups and downs brought on by circumstances and choices. Changing your level of happiness can come from changing your circumstances, or by participating in rewarding acitivites. (Out of ideas? Try <a href="http://www.bodyvox.com/classes/beginning-ballet-and-wine-tasting-0">beginning ballet and wine tasting</a>!)</p>
-
-<h3>On training the elephant</h3>
-
-<blockquote><p>&ldquo;The goal of meditation is to change automatic thought processes, thereby taming the elephant. And the proof of taming is the breaking of attachments&hellip; For Buddha, attachments are like a game of roulette in which someone else spins the wheel and the game is rigged: The more you play, the more you lose. The only way to win is to step away from the table. And the only way to step away, to make yourself not react to the ups and downs of life, is to meditate and tame the mind. Although you give up the pleasures of winning, you also give up the larger pains of losing.&rdquo;</p></blockquote>
-
-<p>I like the idea of training the elephant through meditation, but disagree with the pursuit of non-attachment. Living life without any attachments means missing out on joy as well as pain. If life is an amuzement park, is it better to spend your time on the teacups or the rollercoaster? Isn&rsquo;t it better to have loved and lost than never to have loved at all?</p>
-
-<h3>On your inner lawyer</h3>
-
-<blockquote><p>[People] are skilled at finding reasons to support their gut feelings. The rider acts like a lawyer whom the elephant has hired to represent it in the court of public opinion&hellip; Studies of everyday reasoning show that&hellip; when people are given difficult questions to think about&hellip; they generally lean one way or the other right away, and then put a call in to reasoning to see whether support for that position is forthcoming.</p></blockquote>
-
-<p>I love the idea of our conscious mind acting as a lawyer defending our actions and decisions. We only look for supporting evidence, and any data that undermines our world-view must be discredited or its importance downplayed.</p>
-
-<h3>On reciprocation and gossip</h3>
-
-<blockquote><p>A species equipped with vengeance and gratitude responses can support larger and more cooperative social groups because the payoff to cheaters is reduced by the costs they bear in making enemies&hellip; Tit for tat appears to be built into human nature as a set of moral emotions that make us want to return favor for favor, insult for insult&hellip;</p></blockquote>
-
-<p>Social groups cannot be formed without cooperation and a set of norms. Norms can be enforced through gossip:</p>
-
-<blockquote><p>Many species reciprocate, but only humans gossip, and much of what we gossip about is the value of other people as partners for reciprocal relationships&hellip; Gossip paired with reciprocity allow karma to work here on earth, not in the next life.</p></blockquote>
-
-<h3>On writing your life story</h3>
-
-<blockquote><p>The third level of personality is that of the &ldquo;life story.&rdquo; Human beings in every culture are fascinated by stories; we create them wherever we can.. It&rsquo;s no different with our own lives. We can&rsquo;t stop ourselves from creating what McAdams describes as an &ldquo;evolving story that integrates a reconstructed past, perceived present, and anticipated future into a coherent and vitalizing life myth.&rdquo; Although the lowest level of personality is mostly about the elephant, the life story is written primarily by the rider. You create your story in consciousness as you interpret your own behavior, and as you listen to other people&rsquo;s thoughts about you.</p></blockquote>
-
-<p>Every time I relate a personal anecdote to a new listener I find that I am refining the narrative &mdash; using the same words and phrases, pausing at the same moments each time. My partner and I have developed a cadence when we tell people about our drive across Canada, or our trip to the Maritimes. We are building our life story through relatable moments.</p>
-
-<h3>On growing through adversity</h3>
-
-<blockquote><p>Be sure you have done your best to answer these two questions: Why did this happen? What good might I derive from it?</p></blockquote>
-
-<p>Whatever doesn&rsquo;t kill you doesn&rsquo;t always make you stronger, but we can grow through adversity. Pain doesn&rsquo;t always equal gain, but a root cause analysis (why did this happen?), and reframing to find something positive in the experience (lessons learned), is a great approach.</p>
-
-<h3>On the ideological differences in moral ethics:</h3>
-
-<blockquote><p>The ethic of autonomy, the ethic of community, and the ethic of divinity.</p></blockquote>
-
-<p>Policial and ideological differences arise from approaching life from different moral perspectives. In the ethic of autonomy, the goal is to protect individuals from harm and interference. In the ethic of community the goal is to protect the integrity of groups, families, companies, or nations, and its virtues are obedience, and loyalty. In the ethic of divinity, the goal is to protect the sacred from the profane. They value living in a pure and holy way, free from pollutants such as lust, greed, and hatred.</p>
-
-<h3>Vital engagement (or flow)</h3>
-
-<blockquote><p>Vital engagement does not reside in the person or in the environment; it exists in the relationship between the two.</p></blockquote>
-
-<p>Memories that encorporate more than one sensation are the strongest. Similarly, finding meaning and flow in an activity requires more than just a connection through commitment. There must be connections through a community, a shared history, and a shared experience. I didn&rsquo;t come to love programming because it seemed like a rewarding career path. I built a script that was useful to a coworker, drew excitment from other programmers, and began peeling back the layers of abstraction, enjoying the &lsquo;A-ha!&rsquo; when understanding occurred.</p>
-
-<h3>On happiness and the meaning of life</h3>
-
-<blockquote><p>Happiness is not something that you can find, acquire, or achieve directly. You have to get the conidtions right and then wait.</p></blockquote>
-
-<p>This is the first book I have read that really tried to approach the meaning of life, and my inner elephant has decided that Haidt is on the right track.</p>
 ]]></content>
   </entry>
   

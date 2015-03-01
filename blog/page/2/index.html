@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="One of my favourite blogs is Brain Pickings, written by Maria Popova, which is a collection of thoughts spanning art, science, psychology, and almost &hellip;">
+  <meta name="description" content="Single table inheritance (STI) is a way to emulate object-oriented inheritance in a relational database1 by storing multiple object types in one &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,47 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/scopes-and-single-table-inheritance/">Scopes and Single Table Inheritance</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-22T00:00:00-08:00" pubdate data-updated="true">Jan 22<span>nd</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Single table inheritance (STI) is a way to emulate object-oriented inheritance in a relational database<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> by storing multiple object types in one table, distinguishable by a discriminator column such as <code>type</code>. Mixing levels of abstraction may make <code>join</code> operations easier, but it also makes other queries more complicated. In Rails 3.2, a query optimization was introduced that had some unintended consequences for STI.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/scopes-and-single-table-inheritance/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -246,47 +287,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/the-senior-software-engineer/">TDD and the Senior Software Engineer</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-01-04T00:00:00-08:00" pubdate data-updated="true">Jan 4<span>th</span>, 2015</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Many developers embrace test-driven development (TDD) as an ideal but rarely put it into practice. I often find myself writing code that works and then writing tests that exercise it to ensure that its behaviour doesn&rsquo;t break when changes are made. Writing tests first is a great way to organize your approach to solving a problem, and in <a href="http://www.amazon.com/Senior-Software-Engineer-Practices-Effective/dp/0990702804/ref=sr_1_1?ie=UTF8&amp;qid=1420403139&amp;sr=8-1&amp;keywords=on+being+a+senior+engineer"><strong>The Senior Software Engineer</strong></a>, David Copeland describes how TDD will help you grow your career as well.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2015/the-senior-software-engineer/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -311,6 +311,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/bird-by-bird/">Bird by Bird</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/uploading-images-from-node-slash-angular-to-s3/">Uploading Images From Node and Angular to S3</a>
       </li>
     
@@ -324,10 +328,6 @@
     
       <li class="post">
         <a href="/blog/2015/debugging-techniques/">Debugging Techniques</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/scopes-and-single-table-inheritance/">Scopes and Single Table Inheritance</a>
       </li>
     
   </ul>
