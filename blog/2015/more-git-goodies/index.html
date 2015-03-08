@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>First in, First Out - keighty</title>
+  <title>More Git Goodies - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Why use message queues? Message queues offer the benefits of high reliability at the cost of performance. This is particularly useful for web tasks &hellip;">
+  <meta name="description" content="Becoming a git expert is essential to efficiency and confidence as a software developer. I have evolved from someone who would re-clone the repo in &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/first-in-first-out">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2015/more-git-goodies">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">First in, First Out</h1>
+      <h1 class="entry-title">More Git Goodies</h1>
     
     
       <p class="meta">
@@ -98,49 +98,90 @@
   
 
 
-<time datetime="2014-02-05T11:14:30-08:00" pubdate data-updated="true">Feb 5<span>th</span>, 2014</time>
+<time datetime="2015-03-08T00:00:00-08:00" pubdate data-updated="true">Mar 8<span>th</span>, 2015</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h3>Why use message queues?</h3>
-
-<p>Message queues offer the benefits of high reliability at the cost of performance. This is particularly useful for web tasks that may take longer than the typical HTTP request. Requests are persisted, acknowledged, and confirmed asynchronously. They are not dropped or timed out, no matter how long they take to process.</p>
-
-<!--more-->
-
-
-<h3>Asynchronous request processing with RabbitMQ</h3>
-
-<p>A program that sends messages is a <strong>producer</strong>. A producer drops a message onto a <strong>queue</strong> (like a mailbox). A <strong>consumer</strong> is a program that mostly waits to receive messages, and processes them when they arrive.</p>
-
-<p>RabbitMQ provides message acknowledgments. An ack(nowledgement) is sent back from the consumer to tell the queue that a particular message has been received and processed, and that the queue is free to delete it</p>
-
-<h3>Lets be fair</h3>
-
-<p>By default, RabbitMQ will dispatch messages equitably to all workers, and will not check first to see if the worker is already busy. You can ask the queue to only send messages to a worker if it is available to process a message.</p>
-
-<p>Use <code>channel.prefetch(1)</code> to prevent dispatching a new message to a worker until it has processed and acknowledged the previous one. Instead, RabbitMQ will dispatch it to the next worker that is not still busy. One possible ramification of prefetching is that the queue can become backed up if all workers are busy with long processes, so watch your queue length!</p>
-
-<h3>Useful Commands</h3>
+<div class="entry-content"><p>Becoming a git expert is essential to efficiency and confidence as a software developer. I have evolved from someone who would re-clone the repo in case of a botched merge to a savvy git handler, through:</p>
 
 <ul>
-<li>list active queues: <code>sudo rabbitmqctl list_queues</code></li>
-<li>list queues along with unacknowledged messages: <code>sudo rabbitmqctl list_queues name messages_ready messages_unacknowledged</code></li>
+<li>Moving files between working directory, index, stash, and commit history</li>
+<li>Working with multiple remotes with many contributors</li>
+<li>Handling changes to forks, branches, and pull requests</li>
+<li>Accidental merges from pulling upstream, and checking out pull requests or remote branches</li>
 </ul>
 
 
-<h3>Resources</h3>
+<figure class='code'><figcaption><span>My old favourites </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git rebase -i &lt;sha&gt; <span class="c"># pick a sha from your git history and start squashing</span>
+</span><span class='line'>git clean -f <span class="c"># removes untracked files from your working directory</span>
+</span><span class='line'>git stash <span class="c"># save your idea for later</span>
+</span><span class='line'>git stash pop <span class="c"># revive your last idea</span>
+</span><span class='line'>git reflog <span class="c"># oh my goodness, what did I just do?</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<ul>
-<li><a href="http://www.amazon.com/gp/product/B00HNG8ZFQ/ref=kinw_myk_ro_title">Queue based system architecture</a></li>
-<li><a href="http://manning.com/videla/">RabbitMQ in Action: Distributed messaging for everyone</a></li>
-<li><a href="http://www.rabbitmq.com/tutorials/tutorial-one-ruby.html">RabbitMQ.com</a></li>
-<li><a href="http://www.rabbitmq.com/install-debian.html">Installation</a></li>
-</ul>
 
+
+
+<figure class='code'><figcaption><span>My alii </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Add this to your .bashrc (or .zshrc)</span>
+</span><span class='line'><span class="nb">alias </span><span class="nv">wip</span><span class="o">=</span><span class="s2">&quot;git add .; git commit -m &#39;WIP&#39;&quot;</span>  <span class="c"># saves and commits the current state</span>
+</span><span class='line'><span class="nb">alias </span><span class="nv">popwip</span><span class="o">=</span><span class="s2">&quot;git reset --soft head~1; git reset head .&quot;</span>  <span class="c"># pops the top commit off the stack</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Add this to your git config</span>
+</span><span class='line'><span class="o">[</span><span class="nb">alias</span><span class="o">]</span>
+</span><span class='line'>  <span class="nv">hist</span> <span class="o">=</span> log --pretty<span class="o">=</span>format:<span class="se">\&quot;</span>%h %ad | %s%d <span class="o">[</span>%an<span class="o">]</span><span class="se">\&quot;</span> --graph --date<span class="o">=</span>short
+</span><span class='line'>
+</span><span class='line'><span class="nv">$ </span>git hist <span class="c"># opens a human readable history -- essential for verifying where you are:</span>
+</span><span class='line'>* 2ae2be1 2015-03-08 | WIP <span class="o">(</span>HEAD, origin/source, <span class="nb">source</span><span class="o">)</span> <span class="o">[</span>keighty<span class="o">]</span>
+</span><span class='line'>* 247f86f 2015-02-16 | Change portfolio subtitle. <span class="o">[</span>keighty<span class="o">]</span>
+</span><span class='line'>* e2a4fd0 2015-02-16 | Add facebook and google+ sharing options. <span class="o">[</span>keighty<span class="o">]</span>
+</span><span class='line'>* e41ca0a 2015-02-16 | Replace comments in draft and post tasks. <span class="o">[</span>keighty<span class="o">]</span>
+</span><span class='line'>...
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>Check out a remote branch </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git checkout -b &lt;name of the <span class="nb">local </span>branch to create&gt; upstream/&lt;name of the remote branch&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>My new favourites </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git checkout - <span class="c"># checks out the last branch you were on</span>
+</span><span class='line'>git checkout -p <span class="c"># checks out changes in chunks</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I have already shared a few tools that have become so much a part of my tool box, and have developed such a muscle memory that my fingers will perform the tasks as I think them. Every time I pair with another developer I gain another shortcut! Thanks to Vince for those last two&hellip;</p>
 </div>
 
 
@@ -163,12 +204,12 @@
   
 
 
-<time datetime="2014-02-05T11:14:30-08:00" pubdate data-updated="true">Feb 5<span>th</span>, 2014</time>
+<time datetime="2015-03-08T00:00:00-08:00" pubdate data-updated="true">Mar 8<span>th</span>, 2015</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/message-queue/'>message queue</a>
+    <a class='category' href='/blog/categories/git/'>git</a>
   
 </span>
 
@@ -177,7 +218,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/first-in-first-out/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/first-in-first-out/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2015/more-git-goodies/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2015/more-git-goodies/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -190,10 +231,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/afraid-of-commitment/" title="Previous Post: Afraid of commitment">&laquo; Afraid of commitment</a>
+        <a class="basic-alignment left" href="/blog/2015/bird-by-bird/" title="Previous Post: bird by bird">&laquo; bird by bird</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/fanout/" title="Next Post: fanout">fanout &raquo;</a>
       
     </p>
   </footer>
@@ -328,8 +367,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/first-in-first-out/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2014/first-in-first-out/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2015/more-git-goodies/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2015/more-git-goodies/';
         var disqus_script = 'embed.js';
       
     (function () {

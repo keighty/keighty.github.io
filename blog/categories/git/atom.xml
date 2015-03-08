@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-03-01T12:30:13-08:00</updated>
+  <updated>2015-03-08T12:21:43-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,89 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[More Git Goodies]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/more-git-goodies/"/>
+    <updated>2015-03-08T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/more-git-goodies</id>
+    <content type="html"><![CDATA[<p>Becoming a git expert is essential to efficiency and confidence as a software developer. I have evolved from someone who would re-clone the repo in case of a botched merge to a savvy git handler, through:</p>
+
+<ul>
+<li>Moving files between working directory, index, stash, and commit history</li>
+<li>Working with multiple remotes with many contributors</li>
+<li>Handling changes to forks, branches, and pull requests</li>
+<li>Accidental merges from pulling upstream, and checking out pull requests or remote branches</li>
+</ul>
+
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>My old favourites </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git rebase -i &lt;sha&gt; <span class="c"># pick a sha from your git history and start squashing</span>
+</span><span class='line'>git clean -f <span class="c"># removes untracked files from your working directory</span>
+</span><span class='line'>git stash <span class="c"># save your idea for later</span>
+</span><span class='line'>git stash pop <span class="c"># revive your last idea</span>
+</span><span class='line'>git reflog <span class="c"># oh my goodness, what did I just do?</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>My alii </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;Add this to your .bashrc <span class="o">(</span>or .zshrc<span class="o">)</span>&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;alias <span class="nv">wip</span><span class="o">=</span>&amp;ldquo;git add .; git commit -m &amp;lsquo;WIP&amp;rsquo;&amp;rdquo;  <span class="c"># saves and commits the current state</span>
+</span><span class='line'><span class="nb">alias </span><span class="nv">popwip</span><span class="o">=</span>&amp;ldquo;git reset &amp;mdash;soft head~1; git reset head .&amp;rdquo;  <span class="c"># pops the top commit off the stack&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;Add this to your git config&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;<span class="o">[</span><span class="nb">alias</span><span class="o">]</span>
+</span><span class='line'>  <span class="nv">hist</span> <span class="o">=</span> log &amp;mdash;pretty<span class="o">=</span>format:<span class="se">\&amp;</span>ldquo;%h %ad | %s%d <span class="o">[</span>%an<span class="o">]</span><span class="se">\&amp;</span>rdquo; &amp;mdash;graph &amp;mdash;date<span class="o">=</span>short&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;<span class="nv">$ </span>git hist <span class="c"># opens a human readable history &amp;mdash; essential for verifying where you are:</span>
+</span><span class='line'>* 2ae2be1 2015-03-08 | WIP <span class="o">(</span>HEAD, origin/source, <span class="nb">source</span><span class="o">)</span> <span class="o">[</span>keighty<span class="o">]</span>
+</span><span class='line'>* 247f86f 2015-02-16 | Change portfolio subtitle. <span class="o">[</span>keighty<span class="o">]</span>
+</span><span class='line'>* e2a4fd0 2015-02-16 | Add facebook and google+ sharing options. <span class="o">[</span>keighty<span class="o">]</span>
+</span><span class='line'>* e41ca0a 2015-02-16 | Replace comments in draft and post tasks. <span class="o">[</span>keighty<span class="o">]</span>
+</span><span class='line'>&amp;hellip;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Check out a remote branch </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git checkout -b &lt;name of the <span class="nb">local </span>branch to create&gt; upstream/&lt;name of the remote branch&gt;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>My new favourites </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git checkout &amp;ndash; <span class="c"># checks out the last branch you were on</span>
+</span><span class='line'>git checkout -p <span class="c"># checks out changes in chunks</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>I have already shared a few tools that have become so much a part of my tool box, and have developed such a muscle memory that my fingers will perform the tasks as I think them. Every time I pair with another developer I gain another shortcut! Thanks to Vince for those last two&hellip;</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Giving the Cold Shoulder With Git]]></title>
@@ -217,105 +300,6 @@ $ git revert -m 1 &lt;SHA of commit to be reverted&gt;
 </code></p>
 
 <p>Warning: If you don’t make the new branch first, you will mess up your merge history on master. Trust me. Just make the branch first. Now you can ensure that your test suite will pass with the commit reverted before you do something silly, like merge even more breakage into master. Crisis averted.</p>
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Git Add -p]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/git-add-p/"/>
-    <updated>2014-02-01T20:51:09-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/git-add-p</id>
-    <content type="html"><![CDATA[<p>I learned a new tool that has quickly become an essential part of my workflow. <code>git add -p</code><!--more--> lets you add small hunks of modified code to the index from your working tree in order to prepare your next commit.</p>
-
-<p>The best refactors are small atomic changes, and while I may not always work incrementally, I still want my git history to reflect the ideal. I use <code>git add -p</code> before every commit to ensure that each code change is intentional.</p>
-
-<p>``` bash An example from my latest test project.
-$ git add -p
-diff &mdash;git a/send.rb b/send.rb
-index 5e89eaf..a0f25b6 100644
-&mdash;&ndash; a/send.rb
-+++ b/send.rb
-@@ -17,5 +17,5 @@ queue = channel.queue(&ldquo;hello&rdquo;)
- channel.default_exchange.publish(&ldquo;Hello world!&rdquo;, :routing_key => q.name)
- puts &ldquo; [x] Sent &lsquo;Hello World!&rsquo;&rdquo;</p>
-
-<p>&ndash;# close the connection
--conn.close
-\ No newline at end of file
-+#close the connection
-+connection.close
-Stage this hunk [y,n,q,a,d,/,e,?]?
-```</p>
-
-<p>Woah &mdash; that is a lot of information&hellip; lets go through by the numbers:</p>
-
-<ol>
-<li>the initial command</li>
-<li>tells me that it is showing the changes made in the send.rb file. &lsquo;a&rsquo; is the version already in the commit history, and &lsquo;b&rsquo; is the copy in the working directory.</li>
-<li>shows the commit SHA range for this branch</li>
-<li>tells me that lines marked with a &lsquo;&ndash;&rsquo; are from the committed version of send.rb</li>
-<li>tells me that lines marked with a &lsquo;+&rsquo; are from the working directory version of send.rb</li>
-<li><code>@@ -17,5 +17,5 @@</code> indicates that the hunk under scrutiny begins at line 17 of the committed version (&lsquo;-17&rsquo;) and affects 5 lines. It corresponds to the working directory version starting at line 17 (&lsquo;+17&rsquo;), also affecting 5 lines.</li>
-<li>the remaining lines contain the details of the changes in the hunk.</li>
-</ol>
-
-
-<h3>Know your options</h3>
-
-<p>Now that you have a hunk, what can you do with it?</p>
-
-<p><code>bash Type '?' to learn what you can do with your hunk
-...
-Stage this hunk [y,n,q,a,d,/,e,?] ?
-y - stage this hunk
-n - do not stage this hunk
-q - quit, do not stage this hunk nor any of the remaining ones
-a - stage this and all the remaining hunks in the file
-d - do not stage this hunk nor any of the remaining hunks in the file
-g - select a hunk to go to
-/ - search for a hunk matching the given regex
-j - leave this hunk undecided, see next undecided hunk
-J - leave this hunk undecided, see next hunk
-k - leave this hunk undecided, see previous undecided hunk
-K - leave this hunk undecided, see previous hunk
-s - split the current hunk into smaller hunks
-e - manually edit the current hunk
-? - print help
-</code></p>
-
-<p>The first few options are obvious choices &mdash; <code>y</code> (&ldquo;Yes, please!&rdquo;), and <code>n</code> (&ldquo;What was I thinking there?&rdquo;), as well as <code>q</code> (&ldquo;Hey, Jane! Get me off this crazy thing!&rdquo;).</p>
-
-<p>I haven&rsquo;t quite got a handle on the middle options, but I have skimmed down and used <code>s</code> to split the hunk into smaller pieces. Split will only divide a hunk if there is a logical place for separation, like a gap between changes. For real index-finesse and line-by-line control you have to&hellip; edit the hunk (gasp).</p>
-
-<p>Seasoned veterans may blanch at the thought of editing a hunk without a GUI, but I have discovered the secret to command-line-hunk-editing-prowess. The secret is:</p>
-
-<h2>Read the instructions</h2>
-
-<p>Revisiting the earlier example, I choose <code>e</code> to edit my hunk. I think the original comment on line 10 is better than the new one on line 13 (spacy == better). Selecting <code>e</code> opens your editor of choice with the now familiar hunk, along with&hellip;</p>
-
-<p>Lo, and behold! Instructions after the hunk!</p>
-
-<p><img src="/images/addp-hunk-edit_diff-8.png"></p>
-
-<p>Simple enough:</p>
-
-<ul>
-<li><code>-# close the connection</code> becomes <code># close the connection</code> &mdash; mind the space!</li>
-<li>remove <code>+#close the connection</code> entirely</li>
-<li>save and close.</li>
-</ul>
-
-
-<p>Success? If you have done everything right, the hunk will be staged and git will move on to the next hunk in your working directory. If you have made an error you will see the following message:</p>
-
-<p><code>
-Your edited hunk does not apply.
-Edit again (saying "no" discards!) [y/n]?
-</code></p>
-
-<p>Aw nuts. <code>y</code> will let you amend your transgressions (did you remember to save? did you forget to leave a space in place of the &lsquo;&ndash;&rsquo;?), and <code>n</code> will abandon your changes and take you back to the drawing board, where you are free to transgress anew.</p>
 
 <p>Awesome.</p>
 ]]></content>
