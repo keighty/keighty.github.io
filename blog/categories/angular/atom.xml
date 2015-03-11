@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Angular | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/angular/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-03-08T12:21:43-07:00</updated>
+  <updated>2015-03-11T07:48:59-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,166 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Troubleshooting Nested Scopes in Angular]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/troubleshooting-nested-scopes-in-angular/"/>
+    <updated>2015-03-11T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/troubleshooting-nested-scopes-in-angular</id>
+    <content type="html"><![CDATA[<p>Many beginner Angular tutorials start with a set of canned data, an input field, and a search filter, so it was a natural place to start on my side project, Virtual Playbill. With even a small data set, watching the DOM change based on search criteria was a thrilling achievement. In the intervening months, as features were added, rebuilt, or taken away, I had inadvertently broken the search box. The tutorials were still available, and still fairly basic, but I couldn&rsquo;t get it to work. Not until I found a couple of invaluable tools for troubleshooting overlapping scopes: <!--more--></p>
+
+<h4>1. Use the developer tools console</h4>
+
+<p>This handy trick will give you a console object corresponding to that element&rsquo;s scope:</p>
+
+<ul>
+<li>select a DOM element in using the chrome developer tools</li>
+<li>enter <code>angular.element($0).scope()</code> into the console pane (<code>$0</code> is a global variable holding a reference to the selected DOM element)</li>
+</ul>
+
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// with the search box selected&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">blockquote</span><span class="o">&gt;&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">angular</span><span class="p">.</span><span class="nx">element</span><span class="p">(</span><span class="nx">$0</span><span class="p">).</span><span class="nx">scope</span><span class="p">()</span><span class="o">&lt;</span><span class="err">/p&gt;&lt;/blockquote&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">$get</span><span class="p">.</span><span class="nx">h</span><span class="p">.</span><span class="nx">$new</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">.</span><span class="nx">$$ChildScope</span> <span class="p">{</span><span class="nx">$$childTail</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">$$childHead</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">$$nextSibling</span><span class="o">:</span> <span class="nx">$get</span><span class="p">.</span><span class="nx">h</span><span class="p">.</span><span class="nx">$new</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">,</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="nx">hellip</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">$parent</span><span class="o">:</span> <span class="nx">h</span>
+</span><span class='line'>  <span class="nx">playbillRows</span><span class="o">:</span> <span class="nb">Array</span><span class="p">[</span><span class="mi">23</span><span class="p">]</span>
+</span><span class='line'>  <span class="nx">playbills</span><span class="o">:</span> <span class="nb">Array</span><span class="p">[</span><span class="mi">68</span><span class="p">]</span>
+</span><span class='line'>  <span class="nx">search</span><span class="o">:</span> <span class="nb">Object</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;this is search text&quot;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="c1">// with the playbill area selected&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">blockquote</span><span class="o">&gt;&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">angular</span><span class="p">.</span><span class="nx">element</span><span class="p">(</span><span class="nx">$0</span><span class="p">).</span><span class="nx">scope</span><span class="p">()</span><span class="o">&lt;</span><span class="err">/p&gt;&lt;/blockquote&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">$get</span><span class="p">.</span><span class="nx">h</span><span class="p">.</span><span class="nx">$new</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">.</span><span class="nx">$$ChildScope</span> <span class="p">{</span> <span class="nx">$$childTail</span><span class="o">:</span> <span class="nx">$get</span><span class="p">.</span><span class="nx">h</span><span class="p">.</span><span class="nx">$new</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">,</span> <span class="nx">$$childHead</span><span class="o">:</span> <span class="nx">$get</span><span class="p">.</span><span class="nx">h</span><span class="p">.</span><span class="nx">$new</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">,</span> <span class="nx">$$nextSibling</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="nx">hellip</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">$parent</span><span class="o">:</span> <span class="nx">h</span>
+</span><span class='line'>  <span class="nx">playbillRows</span><span class="o">:</span> <span class="nb">Array</span><span class="p">[</span><span class="mi">23</span><span class="p">]</span>
+</span><span class='line'>  <span class="nx">playbills</span><span class="o">:</span> <span class="nb">Array</span><span class="p">[</span><span class="mi">68</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Things are definitely looking different between the scope containing my search box and the scope where I am laying out the view: the second scope appears to be a sibling of the first. I needed something a little more visual before it completely sunk in, though.</p>
+
+<h4>2. Use <a href="https://chrome.google.com/webstore/detail/ng-inspector-for-angularj/aadgmnobpdmgmigaicncghmmoeflnamj">ng-inspector</a></h4>
+
+<p>ng-inpector is a browser extension that allows you to navigate your angular app as if it were a file directory:</p>
+
+<p><img src="/images/vp_ng_inspector.png"></p>
+
+<p>I can see at a glance that the scope containing the search box (#2), is separate from the scope where I am laying out my view (the unnamed scope #5).</p>
+
+<p>Because of these tools, I have learned that multiple instances of the same controller do not share scope. Using ng-router, I declared the controller for the view:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'>  <span class="o">&amp;</span><span class="nx">hellip</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">when</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="err">/&amp;rsquo;, {&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;views/index.html&#39;</span><span class="p">,</span>
+</span><span class='line'><span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;PlaybillController&#39;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">});</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="nx">hellip</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>In my layout, I had declared the controller once more:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>layout.html </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>  <span class="ni">&amp;hellip;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">ng-controller=</span><span class="s">&quot;PlaybillController&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;pre&gt;&lt;code&gt;</span><span class="ni">&amp;lt;</span>form class=&quot;navbar-form navbar-left&quot; role=&quot;search&quot;<span class="ni">&amp;gt;</span>
+</span><span class='line'>  <span class="ni">&amp;lt;</span>div class=&quot;form-group&quot;<span class="ni">&amp;gt;</span>
+</span><span class='line'>    <span class="ni">&amp;lt;</span>input type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Search shows&quot; ng-model=&quot;search.title&quot;<span class="ni">&amp;gt;</span>
+</span><span class='line'>  <span class="ni">&amp;lt;</span>/div<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>/form<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="nt">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  <span class="ni">&amp;hellip;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The search box was already in the context of a Playbill Controller, and I had inadvertently put in another. The solution was to simply remove the second ng-controller:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>layout.html </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>  <span class="ni">&amp;hellip;</span>
+</span><span class='line'>  <span class="nt">&lt;div&gt;&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;pre&gt;&lt;code&gt;</span><span class="ni">&amp;lt;</span>form class=&quot;navbar-form navbar-left&quot; role=&quot;search&quot;<span class="ni">&amp;gt;</span>
+</span><span class='line'>  <span class="ni">&amp;lt;</span>div class=&quot;form-group&quot;<span class="ni">&amp;gt;</span>
+</span><span class='line'>    <span class="ni">&amp;lt;</span>input type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Search shows&quot; ng-model=&quot;search.title&quot;<span class="ni">&amp;gt;</span>
+</span><span class='line'>  <span class="ni">&amp;lt;</span>/div<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>/form<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="nt">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  <span class="ni">&amp;hellip;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>I have been growing my Ruby/Rails troubleshooting toolbox for a while now, and it is good to get one started for angular as well.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Uploading Images From Node and Angular to S3]]></title>

@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-03-08T12:21:43-07:00</updated>
+  <updated>2015-03-11T07:48:59-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,144 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Troubleshooting Nested Scopes in Angular]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/troubleshooting-nested-scopes-in-angular/"/>
+    <updated>2015-03-11T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/troubleshooting-nested-scopes-in-angular</id>
+    <content type="html"><![CDATA[<p>Many beginner Angular tutorials start with a set of canned data, an input field, and a search filter, so it was a natural place to start on my side project, Virtual Playbill. With even a small data set, watching the DOM change based on search criteria was a thrilling achievement. In the intervening months, as features were added, rebuilt, or taken away, I had inadvertently broken the search box. The tutorials were still available, and still fairly basic, but I couldn&rsquo;t get it to work. Not until I found a couple of invaluable tools for troubleshooting overlapping scopes: <!--more--></p>
+
+<h4>1. Use the developer tools console</h4>
+
+<p>This handy trick will give you a console object corresponding to that element&rsquo;s scope:</p>
+
+<ul>
+<li>select a DOM element in using the chrome developer tools</li>
+<li>enter <code>angular.element($0).scope()</code> into the console pane (<code>$0</code> is a global variable holding a reference to the selected DOM element)</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// with the search box selected</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">element</span><span class="p">(</span><span class="nx">$0</span><span class="p">).</span><span class="nx">scope</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">$get</span><span class="p">.</span><span class="nx">h</span><span class="p">.</span><span class="nx">$new</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">.</span><span class="nx">$$ChildScope</span> <span class="p">{</span><span class="nx">$$childTail</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">$$childHead</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">$$nextSibling</span><span class="o">:</span> <span class="nx">$get</span><span class="p">.</span><span class="nx">h</span><span class="p">.</span><span class="nx">$new</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'>  <span class="nx">$parent</span><span class="o">:</span> <span class="nx">h</span>
+</span><span class='line'>  <span class="nx">playbillRows</span><span class="o">:</span> <span class="nb">Array</span><span class="p">[</span><span class="mi">23</span><span class="p">]</span>
+</span><span class='line'>  <span class="nx">playbills</span><span class="o">:</span> <span class="nb">Array</span><span class="p">[</span><span class="mi">68</span><span class="p">]</span>
+</span><span class='line'>  <span class="nx">search</span><span class="o">:</span> <span class="nb">Object</span>
+</span><span class='line'>    <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;this is search text&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// with the playbill area selected</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">element</span><span class="p">(</span><span class="nx">$0</span><span class="p">).</span><span class="nx">scope</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">$get</span><span class="p">.</span><span class="nx">h</span><span class="p">.</span><span class="nx">$new</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">.</span><span class="nx">$$ChildScope</span> <span class="p">{</span> <span class="nx">$$childTail</span><span class="o">:</span> <span class="nx">$get</span><span class="p">.</span><span class="nx">h</span><span class="p">.</span><span class="nx">$new</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">,</span> <span class="nx">$$childHead</span><span class="o">:</span> <span class="nx">$get</span><span class="p">.</span><span class="nx">h</span><span class="p">.</span><span class="nx">$new</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">,</span> <span class="nx">$$nextSibling</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'>  <span class="nx">$parent</span><span class="o">:</span> <span class="nx">h</span>
+</span><span class='line'>  <span class="nx">playbillRows</span><span class="o">:</span> <span class="nb">Array</span><span class="p">[</span><span class="mi">23</span><span class="p">]</span>
+</span><span class='line'>  <span class="nx">playbills</span><span class="o">:</span> <span class="nb">Array</span><span class="p">[</span><span class="mi">68</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Things are definitely looking different between the scope containing my search box and the scope where I am laying out the view: the second scope appears to be a sibling of the first. I needed something a little more visual before it completely sunk in, though.</p>
+
+<h4>2. Use <a href="https://chrome.google.com/webstore/detail/ng-inspector-for-angularj/aadgmnobpdmgmigaicncghmmoeflnamj">ng-inspector</a></h4>
+
+<p>ng-inpector is a browser extension that allows you to navigate your angular app as if it were a file directory:</p>
+
+<p><img src="http://www.katieleonard.ca/images/vp_ng_inspector.png"></p>
+
+<p>I can see at a glance that the scope containing the search box (#2), is separate from the scope where I am laying out my view (the unnamed scope #5).</p>
+
+<p>Because of these tools, I have learned that multiple instances of the same controller do not share scope. Using ng-router, I declared the controller for the view:</p>
+
+<figure class='code'><figcaption><span>app.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'>  <span class="p">...</span>
+</span><span class='line'>  <span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;views/index.html&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;PlaybillController&#39;</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>  <span class="p">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In my layout, I had declared the controller once more:</p>
+
+<figure class='code'><figcaption><span>layout.html </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>  ...
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">ng-controller=</span><span class="s">&quot;PlaybillController&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;navbar-form navbar-left&quot;</span> <span class="na">role=</span><span class="s">&quot;search&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Search shows&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;search.title&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/form&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  ...
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The search box was already in the context of a Playbill Controller, and I had inadvertently put in another. The solution was to simply remove the second ng-controller:</p>
+
+<figure class='code'><figcaption><span>layout.html </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>  ...
+</span><span class='line'>  <span class="nt">&lt;div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;navbar-form navbar-left&quot;</span> <span class="na">role=</span><span class="s">&quot;search&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Search shows&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;search.title&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/form&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  ...
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I have been growing my Ruby/Rails troubleshooting toolbox for a while now, and it is good to get one started for angular as well.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[More Git Goodies]]></title>
@@ -2224,104 +2362,6 @@ Test-driven development can help you grow your career.
 
 <p><a href="http://stackoverflow.com/a/1139797">Here&rsquo;s where I found this gem</a>,
  <a href="http://git-scm.com/docs/gitignore">and here are the docs where I verified it</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Gaining Closure Through Modules]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/managing-modules/"/>
-    <updated>2014-09-06T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/managing-modules</id>
-    <content type="html"><![CDATA[<p>If you have more than one javascript running on a page, you have likely experienced the hell of trying to debug a problem caused by naming collisions. Developing the scripts in isolation, it makes sense to assign widgetA.name dynamically using jQuery, but then why does the title of widgetGraphB disappear? Avoid the pain of unintended consequences by namespacing your scripts. <!--more--></p>
-
-<p>Closures occur when you pass functions to variables to call at a later date. The javascript engine does all the work of compiling the script and loading the contents into the memory stack, but until the function is called the stack just sits there, sealed like a time capsule.</p>
-
-<figure class='code'><figcaption><span>Closure in the wild </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">timeCapsule</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">year</span> <span class="o">=</span> <span class="mi">1999</span><span class="p">;</span>
-</span><span class='line'>  <span class="kd">function</span> <span class="nx">party</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;We&#39;re gonna party like it&#39;s &quot;</span> <span class="o">+</span> <span class="nx">year</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">party</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">year</span> <span class="o">=</span> <span class="mi">2099</span><span class="p">;</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">tonight</span> <span class="o">=</span> <span class="nx">timeCapsule</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">tonight</span><span class="p">();</span> <span class="c1">// We&#39;re gonna party like it&#39;s 1999</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The <code>party()</code> function has a closure over <code>timeCapsule()</code>, which means all the variables and functions within timeCapsule remain unmolested by any assignments made outside of their scope.</p>
-
-<h3>Modules use closure to encapsulate scope.</h3>
-
-<p>Breaking your monolithic javascript into modules is a great way to separate concerns and create closures.</p>
-
-<figure class='code'><figcaption><span>myModule.js </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">function</span> <span class="nx">myModuleFunction</span><span class="p">()</span> <span class="p">{</span> <span class="cm">/* Do work1 */</span> <span class="p">}</span>
-</span><span class='line'><span class="kd">function</span> <span class="nx">mySecondModuleFuntion</span><span class="p">()</span> <span class="p">{</span> <span class="cm">/* Do work2 */</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">myModuleFunction</span> <span class="o">=</span> <span class="nx">myModuleFunction</span><span class="p">;</span>
-</span><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">mySecondModuleFunction</span> <span class="o">=</span> <span class="nx">mySecondModuleFunction</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>Using the module </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">myModule</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;myModule&quot;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">myModule</span><span class="p">.</span><span class="nx">myModuleFunction</span><span class="p">();</span> <span class="c1">// performs work1</span>
-</span><span class='line'><span class="nx">myModule</span><span class="p">.</span><span class="nx">mySecondModuleFunction</span><span class="p">();</span> <span class="c1">// performs work2</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Using modules will prevent naming conflicts on functions and variables:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">module1</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;myModuleName&quot;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">myModuleFunction</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;All work and no play makes module1 a dull script;&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">module1</span><span class="p">.</span><span class="nx">myModuleFunction</span><span class="p">();</span> <span class="c1">// performs work1</span>
-</span><span class='line'><span class="nx">myModuleFunction</span><span class="p">();</span> <span class="c1">// outputs snarky phrase</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Voila &mdash; no conflicts.</p>
 ]]></content>
   </entry>
   
