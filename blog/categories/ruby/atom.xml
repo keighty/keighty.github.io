@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-03-26T10:25:15-07:00</updated>
+  <updated>2015-03-26T10:26:23-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -18,10 +18,7 @@
     <link href="http://www.katieleonard.ca/blog/2015/exploring-the-stack/"/>
     <updated>2015-03-25T00:00:00-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2015/exploring-the-stack</id>
-    <content type="html"><![CDATA[<!--more-->
-
-
-<p>Another brilliant Rails troubleshooting technique I have recently added to my toolbox is <a href="https://github.com/pry/pry-stack_explorer"><code>pry-stack_explorer</code></a> as an add-on to <a href="https://github.com/pry/pry"><code>pry</code></a>.</p>
+    <content type="html"><![CDATA[<p>Another brilliant Rails troubleshooting technique I have recently added to my toolbox is <a href="https://github.com/pry/pry-stack_explorer"><code>pry-stack_explorer</code></a> as an add-on to <a href="https://github.com/pry/pry"><code>pry</code></a>.</p>
 
 <h4>1. Add <code>pry</code> and <code>pry-stack_explorer</code> to the development/test group of your gemfile:</h4>
 
