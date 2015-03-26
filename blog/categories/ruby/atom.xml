@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-03-11T07:48:59-07:00</updated>
+  <updated>2015-03-26T10:25:15-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,232 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Exploring the Stack]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/exploring-the-stack/"/>
+    <updated>2015-03-25T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/exploring-the-stack</id>
+    <content type="html"><![CDATA[<!--more-->
+
+
+<p>Another brilliant Rails troubleshooting technique I have recently added to my toolbox is <a href="https://github.com/pry/pry-stack_explorer"><code>pry-stack_explorer</code></a> as an add-on to <a href="https://github.com/pry/pry"><code>pry</code></a>.</p>
+
+<h4>1. Add <code>pry</code> and <code>pry-stack_explorer</code> to the development/test group of your gemfile:</h4>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">group</span> <span class="ss">:test</span><span class="p">,</span> <span class="ss">:development</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">pry</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">pry</span><span class="o">-</span><span class="n">stack_explorer</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h4>2. Add a binding pry anywhere in your code</h4>
+
+<p><img src="/images/150325-show-stack/binding-pry.png"></p>
+
+<h4>3. Enter <code>show-stack</code> at the pry prompt</h4>
+
+<p><img src="/images/150325-show-stack/show-stack.png"></p>
+
+<h4>4. Enter <code>up</code> or <code>down</code> to explore the state of the stack</h4>
+
+<p><img src="/images/150325-show-stack/travel-the-stack.png"></p>
+
+<h4>Other goodies</h4>
+
+<ul>
+<li>Pass a string to <code>up</code> or <code>down</code> and <code>pry-stack_explorer</code> will jump to the first frame that matches:</li>
+</ul>
+
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Frame number: 0/108&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;From: /Users/keighty/Documents/projects/api_playground/app/models/user.rb @ line 4 User#full_name:&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;3: def full_name
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt; <span class="o">=</span>&gt; 4:   binding.pry&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;5:   <span class="s2">&quot;#{first_name} #{last_name}&quot;</span>
+</span><span class='line'>6: end
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;<span class="o">[</span>6<span class="o">]</span> pry<span class="o">(</span>&lt;User&gt;<span class="o">)</span>&gt; up instrument&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;Frame number: 3/108
+</span><span class='line'>Frame <span class="nb">type</span>: method&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;From: /usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/activesupport-4.2.0/lib/active_support/notifications.rb @ line 166 ActiveSupport::Notifications.instrument:&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;162: def instrument<span class="o">(</span>name, <span class="nv">payload</span> <span class="o">=</span> <span class="o">{})</span>
+</span><span class='line'>163:   <span class="k">if </span>notifier.listening?<span class="o">(</span>name<span class="o">)</span>
+</span><span class='line'>164:     instrumenter.instrument<span class="o">(</span>name, payload<span class="o">)</span> <span class="o">{</span> yield payload <span class="k">if </span>block_given? <span class="o">}</span>
+</span><span class='line'>165:   <span class="k">else</span>
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt; <span class="o">=</span>&gt; 166:     yield payload <span class="k">if </span>block_given?&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;167:   end
+</span><span class='line'>168: end
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;<span class="o">[</span>7<span class="o">]</span> pry<span class="o">(</span>ActiveSupport::Notifications<span class="o">)</span>&gt; down view&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;Frame number: 1/108
+</span><span class='line'>Frame <span class="nb">type</span>: method&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;From: /Users/keighty/Documents/projects/api_playground/app/views/greetings/hello.html.erb @ line 1 ActionView::CompiledTemplates#&lt;em&gt;app_views_greetings_hello_html_erb&lt;/em&gt;__3157151947187763552_70316982999600:&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt; <span class="o">=</span>&gt; 1: &lt;h1&gt;Greetings, &amp;lt;%<span class="o">=</span> @person.full_name %&gt;&lt;/h1&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;2: &amp;lt;p&amp;gt;This is a greetings view!&amp;lt;/p&amp;gt;
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<ul>
+<li>Pass an integer to <code>up</code> or <code>down</code> to leap over frames</li>
+</ul>
+
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>8<span class="o">]</span> pry<span class="o">(</span>&amp;lt;Class:0x007fe7eb821330&gt;&gt;<span class="o">)</span>&gt; up 5&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;Frame number: 6/108
+</span><span class='line'>Frame <span class="nb">type</span>: block&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;From: /usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/actionview-4.2.0/lib/action_view/renderer/template_renderer.rb @ line 54 ActionView::TemplateRenderer#render_template:&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;49: def render_template<span class="o">(</span>template, <span class="nv">layout_name</span> <span class="o">=</span> nil, <span class="nv">locals</span> <span class="o">=</span> nil<span class="o">)</span> <span class="c">#:nodoc:</span>
+</span><span class='line'>50:   view, <span class="nv">locals</span> <span class="o">=</span> @view, locals <span class="o">||</span> <span class="o">{}</span>
+</span><span class='line'>51:
+</span><span class='line'>52:   render_with_layout<span class="o">(</span>layout_name, locals<span class="o">)</span> <span class="k">do</span> |layout|
+</span><span class='line'>53:     instrument<span class="o">(</span>:template, :identifier <span class="o">=</span>&amp;gt; template.identifier, :layout <span class="o">=</span>&amp;gt; layout.try<span class="o">(</span>:virtual_path<span class="o">))</span> <span class="k">do</span>
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt; <span class="o">=</span>&gt; 54:       template.render<span class="o">(</span>view, locals<span class="o">)</span> <span class="o">{</span> |&lt;em&gt;name| view._layout_for<span class="o">(</span>&lt;/em&gt;name<span class="o">)</span> <span class="o">}</span>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;55:     end
+</span><span class='line'>56:   end
+</span><span class='line'>57: end
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;<span class="o">[</span>9<span class="o">]</span> pry<span class="o">(</span>&amp;lt;ActionView::TemplateRenderer&gt;<span class="o">)</span>&gt; down 2&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;Frame number: 4/108
+</span><span class='line'>Frame <span class="nb">type</span>: method&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;From: /usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/actionview-4.2.0/lib/action_view/template.rb @ line 333 ActionView::Template#instrument:&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;331: def instrument<span class="o">(</span>action, &amp;amp;block<span class="o">)</span>
+</span><span class='line'>332:   <span class="nv">payload</span> <span class="o">=</span> <span class="o">{</span> virtual_path: @virtual_path, identifier: @identifier <span class="o">}</span>
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt; <span class="o">=</span>&gt; 333:   ActiveSupport::Notifications.instrument<span class="o">(</span>&amp;ldquo;#<span class="o">{</span>action<span class="o">}</span>.action_view&amp;rdquo;, payload, &amp;amp;block<span class="o">)</span>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;334: end
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>To learn even more awesome ways to use <code>pry</code> and <code>pry-stack_explorer</code>, check out the docs:</p>
+
+<ul>
+<li><a href="https://github.com/pry/pry">github.com/pry/pry</a>.</li>
+<li><a href="https://github.com/pry/pry-stack_explorer">github.com/pry/pry-stack_explorer</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Objects vs Data Structures]]></title>
@@ -424,174 +650,6 @@ Blocks.new.process_input</code></pre>
 <p>I liked this solution so much, I added it to my thor project setup! Oh, and if you are interested in seeing my solution for the blocks problem, checkout my <a href="https://github.com/keighty/datastructures/tree/master/ruby/blocks">github repo</a></p>
 
 <p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Thor Sets Up a Project]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/thor-sets-up-a-project/"/>
-    <updated>2013-09-08T22:29:03-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/thor-sets-up-a-project</id>
-    <content type="html"><![CDATA[<p>A few weeks ago I posted about <a href="http://www.katieleonard.ca/automation/2013/08/30/hammer-out-tasks-with-thor/">using Thor to generate system-wide notes files with a standard format</a>. Since then, I have been doing a lot of smaller code challenges, and I wanted to set up a Thor task for generating a standard project file tree.</p>
-
-<!--more-->
-
-
-<p>My Goal Tree:
-<div>
-  <pre><code class='bash'>project_name
-├── lib
-│   └── project_name.rb
-├── spec
-│   ├── project_name_spec.rb
-│   └── spec_helper.rb
-├── Gemfile
-└── README.md</code></pre>
-</div>
-</p>
-
-<p>I always begin with these files and this organization. A Gemfile and README are essential for setting up the environment and explaining the gist of the project. I am most comfortable with RSpec, and to get into the practice of TDD, setting up a testing environment right away is non-negotiable. All of these standard files contain some automatic content as well:</p>
-
-<h5>spec_helper.rb loads the library</h5>
-
-<p><div>
-  <pre><code class='ruby'>$LOAD_PATH.unshift(File.join(File.dirname(&lt;strong&gt;FILE&lt;/strong&gt;), &amp;lsquo;..&amp;rsquo;, &amp;lsquo;lib&amp;rsquo;))
-require &amp;lsquo;rspec&amp;rsquo;
-require &amp;lsquo;project_name&amp;rsquo;</code></pre>
-</div>
-</p>
-
-<h5>project_name_spec.rb sets up the first test</h5>
-
-<p><div>
-  <pre><code class='ruby'>require &amp;lsquo;spec_helper&amp;rsquo;&lt;/p&gt;
-
-&lt;p&gt;describe ProjectName do
-  before (:each) {  }
-  subject {  }&lt;/p&gt;
-
-&lt;p&gt;  it &amp;ldquo;should pass&amp;rdquo;
-end</code></pre>
-</div>
-</p>
-
-<h5>Gemfile specifies the right gems for setting up the project</h5>
-
-<p><div>
-  <pre><code class='ruby'>ruby &amp;lsquo;2.0.0&amp;rsquo;
-gem &amp;lsquo;rspec&amp;rsquo;</code></pre>
-</div>
-</p>
-
-<p>There are other files that could have auto-generated content as well, like a Rakefile, or a config.ru, but this is a good start.</p>
-
-<h4>Create a Thor task (rb_project.thor):</h4>
-
-<p><div>
-  <pre><code class='ruby'>&lt;/p&gt;
-
-&lt;h1&gt;!/usr/bin/env ruby&lt;/h1&gt;
-
-&lt;p&gt;require &amp;ldquo;rubygems&amp;rdquo;
-require &amp;ldquo;thor&amp;rdquo;&lt;/p&gt;
-
-&lt;p&gt;class RbProject &amp;lt; Thor
-  desc &amp;ldquo;init&amp;rdquo;, &amp;ldquo;creates a ruby project with rspec&amp;rdquo;&lt;/p&gt;
-
-&lt;p&gt;  def init(title=&amp;ldquo;new_project&amp;rdquo;)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Dir.mkdir(title)
-Dir.chdir(title)
-Dir.mkdir(&quot;spec&quot;)
-Dir.mkdir(&quot;lib&quot;)
-filename = &quot;#{title}&quot;
-
-open(File.new(&quot;README.md&quot;, &quot;w&quot;), &quot;w&quot;) do |note|
-  note.puts &quot;# #{title}&quot;
-end
-
-open(File.new(&quot;Gemfile&quot;, &quot;w&quot;), &quot;w&quot;) do |my_gem|
-  my_gem.puts &quot;ruby &#39;2.0.0&#39;&quot;
-  my_gem.puts &quot;gem &#39;rspec&#39;&quot;
-end
-
-open(File.new(&quot;spec/spec_helper.rb&quot;, &quot;w&quot;), &quot;w&quot;) do |spec|
-  spec.puts &quot;$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), &#39;..&#39;, &#39;lib&#39;))&quot;
-  spec.puts &quot;require &#39;rspec&#39;&quot;
-  spec.puts &quot;require &#39;#{filename}&#39;&quot;
-end
-
-open(File.new(&quot;spec/#{filename}_spec.rb&quot;, &quot;w&quot;), &quot;w&quot;) do |spec|
-  spec.puts &quot;require &#39;spec_helper&#39;&quot;
-  spec.puts &quot;&quot;
-  spec.puts &quot;describe #{camelize(filename)} do&quot;
-  spec.puts &quot;  before (:each) {  }&quot;
-  spec.puts &quot;  xit &#39;should pass&#39;&quot;
-  spec.puts &quot;end&quot;
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  end&lt;/p&gt;
-
-&lt;p&gt;  private&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;def camelize(snake)
-  title = snake.split(&#39;_&#39;).each do |word|
-    word.capitalize!
-  end
-  title.join(&#39;&#39;)
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;end</code></pre>
-</div>
-</p>
-
-<p>I created a private method camelize in order to change the snake_case project name into a CamelCase class name.</p>
-
-<p>As before, I install my thor task system wide:
-<div>
-  <pre><code class='bash'>$ thor install rb_project.thor</code></pre>
-</div>
-</p>
-
-<p>And now my project generation task can be run from any directory, anywhere on my system:
-<div>
-  <pre><code class='bash'>$ thor list&lt;/p&gt;
-
-&lt;h2&gt;note&lt;/h2&gt;
-
-&lt;p&gt;thor note:create  # creates a notes file in markdown&lt;/p&gt;
-
-&lt;h2&gt;rb_project&lt;/h2&gt;
-
-&lt;p&gt;thor rb_project:init  # creates a ruby project with rspec&lt;/p&gt;
-
-&lt;p&gt;$ thor rb_project:init test_project
-$ tree test_project/
-test_project/
-├── lib
-│   └── test_project.rb
-├── spec
-│   ├── spec_helper.rb
-│   └── test_project_spec.rb
-├── Gemfile
-├── README.md&lt;/p&gt;
-
-&lt;p&gt;2 directories, 6 files</code></pre>
-</div>
-</p>
-
-<p>Awesome.</p>
-
-<p><div>
-  <pre><code class='bash'></code></pre>
-</div>
-
-<div>
-  <pre><code class='bash'></code></pre>
-</div>
-</p>
 ]]></content>
   </entry>
   

@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Back in March I wrote about letting my computer&rsquo;s battery die in the middle of a meteor project, with the consequence being that I could not &hellip;">
+  <meta name="description" content="Rails allows you to pass messages to the user between actions (&ldquo;This ActionDispatch::Flash will self-destruct&rdquo;), and because Rails, all &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,57 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/flash-your-local-collection/">Flash Your Local Collection</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-26T00:00:00-07:00" pubdate data-updated="true">May 26<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Rails allows you to pass messages to the user between actions (&ldquo;This <a href="http://api.rubyonrails.org/classes/ActionDispatch/Flash.html">ActionDispatch::Flash</a> will self-destruct&rdquo;), and because Rails, all the message generation happens server side:</p>
+
+<figure class='code'><figcaption><span>flashy_controller.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">show</span>
+</span><span class='line'>  <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;You dropped your packet.&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Meteor is mostly a client-side application framework, and you can implement a similar message system, which will never touch the server, by defining a collection that is local to the browser.</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/flash-your-local-collection/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -278,110 +329,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/line-spline/">Line, Spline</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-20T00:00:00-07:00" pubdate data-updated="true">Mar 20<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>D3 lines are rendered using linear interpolation by default. This means that the line connecting a series of points will trace a direct path from one node to another:</p>
-
-<div id="graph-here">
-  <script src="http://mbostock.github.com/d3/d3.v2.min.js"></script>
-  <script>
-var width = 400,
-    height = 400,
-    margin = 5,
-    scalex = d3.scale.linear().domain([0, 7]).range([margin, width - margin]),
-    scaley = d3.scale.linear().domain([0, 7]).range([height - margin, margin]);
-
-var data = [
-  [
-      {x: 0, y: 5},{x: 1, y: 7},{x: 2, y: 5},
-      {x: 3, y: 5},{x: 4, y: 3},{x: 6, y: 4},
-      {x: 7, y: 2}
-  ],
-  [
-      {x: 0, y: 3},{x: 1, y: 5},{x: 2, y: 3},
-      {x: 3, y: 3},{x: 4, y: 1},{x: 6, y: 2},
-      {x: 7, y: 1}
-  ]
-];
-
-var straightLine = d3.svg.line()
-        .interpolate("linear")
-        .x(function(d){return scalex(d.x);})
-        .y(function(d){return scaley(d.y);});
-var smoothLine = d3.svg.line()
-        .interpolate("cardinal")
-        .x(function(d){return scalex(d.x);})
-        .y(function(d){return scaley(d.y);});
-
-var svg = d3.select("#graph-here").append("svg");
-
-  svg.attr("height", height)
-      .attr("width", width);
-
-   svg.selectAll("path")
-        .data(data)
-      .enter()
-        .append("path")
-        .attr("class", "line")
-        .attr("fill", "none")
-        .attr("stroke", "blue")
-        .attr("stroke-width", 2)
-        .attr("d", function(d, i){
-          if(i % 2 === 0) return straightLine(d);
-          return smoothLine(d)
-        });
-
-    svg.selectAll("textPath").data(data)
-      .enter()
-        .append("text")
-        .attr("x", function(d) { return scalex(d[d.length-2].x); })
-        .attr("y", function(d) { return scaley(d[d.length-2].y); })
-        .attr("text-anchor", "end")
-        .text(function(d, i) {
-          if(i % 2 === 0) return "Straight Lines";
-          return "Smooth Lines";
-        });
-
-  </script>
-</div>
-
-
-<p>The curved line is rendered with the cardinal interpolator, one of several options D3 provides. The curvature of the line is called a <strong>spline</strong>. Splines are tools used by architects to draw curved lines, and the term was adopted by mathematicians to describe smooth, piecewise polynomial approximation:</p>
-
-<blockquote><p>Splines are curves, which are usually required to be continuous and smooth&hellip; [The] join points are called knots. Splines with few knots are generally smoother than splines with many knots; however, increasing the number of knots usually increases the fit of the spline function to the data. Knots give the curve freedom to bend to more closely follow the data. &mdash;<a href="http://en.wikipedia.org/wiki/Spline_(mathematics">Wikipedia</a>)</p></blockquote>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -406,6 +353,10 @@ var svg = d3.select("#graph-here").append("svg");
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/exploring-the-stack/">Exploring the Stack</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/troubleshooting-nested-scopes-in-angular/">Troubleshooting Nested Scopes in Angular</a>
       </li>
     
@@ -419,10 +370,6 @@ var svg = d3.select("#graph-here").append("svg");
     
       <li class="post">
         <a href="/blog/2015/uploading-images-from-node-slash-angular-to-s3/">Uploading Images From Node and Angular to S3</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/everybody-writes/">Everybody Writes (and Why You Should Blog)</a>
       </li>
     
   </ul>
