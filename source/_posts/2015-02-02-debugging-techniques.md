@@ -3,7 +3,7 @@ layout: post
 title: "debugging techniques"
 date: 2015-02-02
 comments: true
-categories: [rails]
+categories: [rails, toolbox]
 ---
 
 I am working on upgrading an application from Rails 3.0 to Rails 3.2. While the numbers tell you it is a minor version change, there are definitely some major challenges. Digging through Rails and gem internals has forced me to add new strategies to my debugging toolbox, and here are a few of the essentials...<!--more-->
