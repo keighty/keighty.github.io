@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Programming | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/programming/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-04-11T10:22:50-07:00</updated>
+  <updated>2015-04-12T12:21:48-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Getting Your Foot in the Door]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/get-your-foot-in-the-door/"/>
+    <updated>2015-04-12T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/get-your-foot-in-the-door</id>
+    <content type="html"><![CDATA[<p>Many people have asked me what it is like on the other side of code school, and if there is any advice I would give to someone before they get their first programming job. Technical ability, problem solving, and communication skills are all essential to success as a developer, and your online presence is a way to demonstrate all three. Getting your foot in the door requires having something to show &mdash; keeping your foot in the door requires a little bit more.</p>
+
+<!--more-->
+
+
+<h3>Have something to show</h3>
+
+<p>Not every developer spends every waking moment working on open source projects or inventing the next big framework. We all have lives, families, and other pursuits that take priority; <img class="left" src="/images/150412-getting-a-job/Octocat.png" width="300" title="Octocat from www.github.com" >however, experienced programmers likely have solid work-related contributions they can point to during an interview. First-timers need some proof that they can apply what they learn. Side projects show potential employers what you are learning, and that you are interested in programming, not just the salary it comes along with.</p>
+
+<p>Create a <a href="https://github.com/">GitHub</a> account. If you are in code school, you are likely already working towards a portfolio of apps and widgets to show off during an interview. If you are considering code school, this is something you should not wait to do. When you work through a tutorial, commit it to GitHub, give it a README, and include what you are working through and why.</p>
+
+<h3>Start filling your toolbox</h3>
+
+<p>You can usually assemble a piece of Ikea furniture with only an allen key, but what about that desk drawer that suddenly calls for a screwdriver? Completing the task requires the right tools for the job, and your ability to solve a programming problem is no different. Git, Chrome Developer Tools, and Pry are part of the the Swiss Army knife for any web developer.
+<img class="right" src="/images/150412-getting-a-job/toolbox.jpg" width="300" title="Fill your toolbox." ></p>
+
+<ul>
+<li><p><a href="http://git-scm.com/"><strong>Git</strong></a> is like &ldquo;track changes&rdquo; for source code. The docs describe it as a series of snapshots of your code base. &ldquo;Every time you commit, or save the state of your project in Git, it basically takes a picture of what all your files look like at that moment and stores a reference to <a href="" title="[Getting started with git](http://git-scm.com/book/en/v2/Getting-Started-Git-Basics)">it</a>.&rdquo; Source control allows you to work in the same code base with other developers and not step on one another&rsquo;s toes. Start with <a href="http://gitimmersion.com/">Git Immersion</a> for some practical experience.</p></li>
+<li><p><a href="https://developer.chrome.com/devtools"><strong>Chrome Developer Tools</strong></a> give you access to everything that happens to your application when it is sent to the browser. Troubleshoot Javascript, CSS, and layout issues without having to refresh the page. Check out the tutorials at <a href="http://discover-devtools.codeschool.com/">discover-devtools</a> by CodeSchool.</p></li>
+<li><p><a href="https://github.com/pry/pry"><strong>Pry</strong></a> gives you an interactive debugging session wherever you put a breakpoint in a Rails application. <code>binding.pry</code> throws you down the rabbit hole into the inner workings of your program&rsquo;s psyche. Check out <a href="http://katieleonard.ca/blog/2015/exploring-the-stack/">exploring the stack</a> for more details about this powerful tool.</p></li>
+<li><p><strong>Use the docs</strong>. Knowing how to find and navigate documentation is more important than remembering how to do File I/O. If you find yourself in a technical interview where they don&rsquo;t let you search the web for help, share your thought process, imagine the solution you might have found had you performed the search, and work your way through the problem with pseudocode. Experienced developers use Google search and StackOverflow constantly, so pop that error message into the search bar to see what turns up. A word to the wise: if an answer was posted more than two years ago, it may no longer be relevant.</p></li>
+</ul>
+
+
+<h3>Get to know your community</h3>
+
+<p>Your next job in programming is more likely to come from someone in your network than from hitting the street with your resume. If you can claim an acquaintance with someone from a company you want to work for, that is one more point in your favour.</p>
+
+<p>Go to meetups. If you are shy about meeting lots of new people at once, try introducing yourself to the invited speakers at the end &mdash; they are usually well connected and respected in the community. If you approach them with your name and a question or comment about their talk, they are likely to remember you.</p>
+
+<h3>Do scary things</h3>
+
+<p>Not like skydiving, or alligator wrestling. Write blogs, contribute to open source projects, start <a href="http://createyourproglang.com/">your own programming language</a>, or become visible on social media. You don&rsquo;t need to be an expert to have an opinion. Don&rsquo;t stop taking risks after you land your first job, either.</p>
+
+<ul>
+<li><p><img class="left" src="/images/150412-getting-a-job/against-the-grain.jpg" width="300" title="Do something risky." >Find an area of your work that people are avoiding and become an expert. You will be known as the person who can do that thing we all hate, and your colleagues will value your expertise.</p></li>
+<li><p>Take the hardest ticket from the top of the stack. Don&rsquo;t sift through them until you find something you think you know how to do. Your best opportunity to stretch your skills is to do something scary and uncomfortable.</p></li>
+</ul>
+
+
+<p>I work with a lot of people who don&rsquo;t have formal computer science degrees, and while their backgrounds vary, they all share a love of problem solving and a willingness to work hard. Take responsibility for your own learning &mdash; code school will only bring you so far, and the rest is up to you.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[What's It Like to Be a Developer?]]></title>
