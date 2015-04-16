@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-04-16T07:42:04-07:00</updated>
+  <updated>2015-04-16T07:53:30-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -164,7 +164,7 @@
 </span><span class='line'> id: 980190963,
 </span><span class='line'> first_name: &amp;ldquo;hello&amp;rdquo;,
 </span><span class='line'> last_name: &amp;ldquo;kitty&amp;rdquo;,
-</span><span class='line'> email: &amp;ldquo;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;&amp;#x6d;&amp;#x61;&amp;#105;&amp;#x6c;&amp;#x74;&amp;#111;&amp;#58;&amp;#x6b;&amp;#x69;&amp;#116;&amp;#x74;&amp;#x79;&amp;#64;&amp;#101;&amp;#120;&amp;#97;&amp;#109;&amp;#112;&amp;#108;&amp;#x65;&amp;#46;&amp;#99;&amp;#111;&amp;#x6d;&quot;</span>&gt;&amp;#x6b;&amp;#x69;&amp;#116;&amp;#x74;&amp;#x79;&amp;#64;&amp;#x65;&amp;#120;&amp;#x61;&amp;#x6d;&amp;#x70;&amp;#108;&amp;#x65;&amp;#x2e;&amp;#99;&amp;#111;&amp;#x6d;&lt;/a&gt;&amp;rdquo;,
+</span><span class='line'> email: &amp;ldquo;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;&amp;#109;&amp;#x61;&amp;#x69;&amp;#x6c;&amp;#116;&amp;#x6f;&amp;#x3a;&amp;#107;&amp;#x69;&amp;#116;&amp;#116;&amp;#x79;&amp;#64;&amp;#101;&amp;#120;&amp;#x61;&amp;#x6d;&amp;#x70;&amp;#x6c;&amp;#101;&amp;#46;&amp;#99;&amp;#111;&amp;#109;&quot;</span>&gt;&amp;#x6b;&amp;#x69;&amp;#x74;&amp;#x74;&amp;#121;&amp;#64;&amp;#101;&amp;#x78;&amp;#x61;&amp;#x6d;&amp;#112;&amp;#x6c;&amp;#101;&amp;#46;&amp;#x63;&amp;#x6f;&amp;#109;&lt;/a&gt;&amp;rdquo;,
 </span><span class='line'> created_at: Sat, 07 Feb 2015 16:52:21 UTC +00:00,
 </span><span class='line'> updated_at: Sat, 07 Feb 2015 16:52:21 UTC +00:00&gt;
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
@@ -332,7 +332,7 @@
  id: 980190963,
  first_name: &ldquo;hello&rdquo;,
  last_name: &ldquo;kitty&rdquo;,
- email: &ldquo;<a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#58;&#107;&#105;&#x74;&#x74;&#121;&#x40;&#101;&#x78;&#x61;&#109;&#112;&#108;&#101;&#x2e;&#99;&#x6f;&#109;">&#x6b;&#105;&#x74;&#116;&#121;&#64;&#x65;&#x78;&#97;&#x6d;&#x70;&#108;&#x65;&#x2e;&#99;&#x6f;&#x6d;</a>&rdquo;,
+ email: &ldquo;<a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#107;&#x69;&#x74;&#116;&#x79;&#x40;&#101;&#120;&#97;&#x6d;&#112;&#x6c;&#x65;&#46;&#99;&#111;&#x6d;">&#107;&#105;&#116;&#116;&#x79;&#x40;&#101;&#x78;&#97;&#x6d;&#x70;&#x6c;&#x65;&#46;&#x63;&#111;&#x6d;</a>&rdquo;,
  created_at: Sat, 07 Feb 2015 16:52:21 UTC +00:00,
  updated_at: Sat, 07 Feb 2015 16:52:21 UTC +00:00></p>
 
@@ -347,7 +347,7 @@ User Load (0.1ms)  SELECT  &ldquo;users&rdquo;.* FROM &ldquo;users&rdquo; WHERE 
  id: 980190963,
  first_name: &ldquo;hello&rdquo;,
  last_name: &ldquo;kitty&rdquo;,
- email: &ldquo;<a href="&#x6d;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#107;&#x69;&#x74;&#x74;&#x79;&#64;&#x65;&#120;&#97;&#x6d;&#112;&#108;&#x65;&#46;&#99;&#x6f;&#x6d;">&#x6b;&#x69;&#x74;&#x74;&#x79;&#64;&#101;&#x78;&#97;&#109;&#x70;&#108;&#101;&#x2e;&#x63;&#x6f;&#109;</a>&rdquo;,
+ email: &ldquo;<a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#x3a;&#x6b;&#x69;&#116;&#x74;&#x79;&#x40;&#x65;&#120;&#x61;&#x6d;&#112;&#108;&#101;&#x2e;&#x63;&#111;&#109;">&#107;&#x69;&#x74;&#116;&#121;&#x40;&#x65;&#x78;&#97;&#x6d;&#x70;&#x6c;&#101;&#46;&#x63;&#x6f;&#109;</a>&rdquo;,
  created_at: Sat, 07 Feb 2015 16:52:21 UTC +00:00,
  updated_at: Sat, 07 Feb 2015 16:52:21 UTC +00:00>
 ```
