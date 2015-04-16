@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-04-12T12:21:48-07:00</updated>
+  <updated>2015-04-16T07:42:04-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,64 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[What Else You Can Do After Code School]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/what-else-you-can-do-after-code-school/"/>
+    <updated>2015-04-16T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/what-else-you-can-do-after-code-school</id>
+    <content type="html"><![CDATA[<p>Learning to program at a code school is a great opportunity to acquire new skills, and to make your current skills relevant in tech. Becoming a software developer is the most common goal, but there is a wide variety of roles that technical people can play in software that aren&rsquo;t about writing code. Whether you have left a job in customer service, teaching, or research, the skills you gained in your last career will help you fill a niche in your new one. Here are a few paths in tech that don&rsquo;t involve writing software, but do require some experience with coding, frameworks, and methodologies.</p>
+
+<!--more-->
+
+
+<h3>Product Manager</h3>
+
+<h5>Code School + Business Management</h5>
+
+<p>As a product manager (aka product owner), you decide what features to build by studying the market and learning your customers&#8217; needs. The result of your research is a product road map and business strategy for the next year and beyond. Field experience is essential to making good business decisions.</p>
+
+<h3>Project Manager</h3>
+
+<h5>Code School + Project Management</h5>
+
+<p>A project manager follows the product road map feature by feature. In this role you will be responsible for marshalling resources and delivering product. Excellent communication skills are a must, as is a technical familiarity with the system under construction. You need to ask the right questions, identify risks, validate estimates, and eliminate blockers.</p>
+
+<h3>Engineering Manager</h3>
+
+<h5>Code School + Project Management + People Management</h5>
+
+<p>High-functioning teams do not manifest by chance &mdash; they are the result of deliberate choices made at the intersection of project needs, culture fit, and career growth. As an engineering manager, you don&rsquo;t just assemble the team. You also schedule projects, implement (or remove) processes, grow careers, and communicate up and down the management chain. In addition to all of these tasks, you must be familiar with the job the team is performing.</p>
+
+<h3>Technical Writer</h3>
+
+<h5>Code School + Written Communication Skills</h5>
+
+<p>Writing technical specs and documentation will require all of your technical knowledge as well as language, teaching, and research skills. The technical writing field is expected to grow enormously in the next 10 years<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>, and delivering web-based product support will be par for the course. Use your new coding skills to build documentation websites and forums, as well as generate useful content.</p>
+
+<h3>Technical Support</h3>
+
+<h5>Code School + Customer Service</h5>
+
+<p>Technical support is growing at a similar pace to technical writing. Helping users interact successfully with a product is essential to their happiness, and companies have a vested interest in troubleshooting where these interactions go wrong. You act as liaison between the end user and the development and management teams by reporting and triaging bugs, working with developers to resolve issues, and communicating with internal customers as well as external ones.</p>
+
+<h3>Quality Assurance Engineer</h3>
+
+<h5>Code School + Product Knowledge</h5>
+
+<p>As a QA engineer, you are a product expert, not a tester. You understand the way users interact with the product and how the features interact with each other. You can reveal blind spots in design and edge cases of user experience that will catch a feature engineer unawares. Combining attention to detail with a holistic view of the system, QA engineers ensure that users continue to trust the product you are delivering.</p>
+
+<p>Not everyone leaves code school with a passion for building software, but everyone does leave with the skills they need to have an awesome career in tech. No education or experience is wasted, so don&rsquo;t forget to leverage your current skill set as you are learning a new one.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Bureau of Labour Statistics: <a href="http://www.bls.gov/ooh/media-and-communication/technical-writers.htm">Technical Writers</a><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Getting Your Foot in the Door]]></title>
@@ -2307,67 +2365,6 @@ Test-driven development can help you grow your career.
 <p>The search for a method begins in the class of the receiving object &mdash; in the example above, Bar is always the receiving object. If the class does not implement the message, the search proceeds up the superclass chain. If none of the superclasses contain the method definition, ruby makes a second attempt to resolve the message by sending <code>method_missing(:method_name)</code> to the original object. The search restarts from the bottom, but this time for a <code>method_missing</code> handler rather than <code>:method_name</code>.</p>
 
 <p>Occasionally refreshing the ruby basics is super-rewarding.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Compilers -- an Intro]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/compilers-an-intro/"/>
-    <updated>2014-11-08T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/compilers-an-intro</id>
-    <content type="html"><![CDATA[<p>Last year, I was wrapping up a stint at code school, and I picked up the challenge of <a href="http://katieleonard.ca/blog/2013/canadian-flair/">building a programming language</a>. It was a very large stretch-goal, and I didn&rsquo;t complete the project, but I learned a lot about how languages are designed and built. Recently, my mentor highlighted a <a href="http://online.stanford.edu/course/compilers-0">Compilers course offered through Stanford Online</a>, and suggested that it may be time to level-up my understanding of languages once again. Since I did not reach the compiler phase for <code>eh?</code>, perhaps this is an opportunity to do so.</p>
-
-<h3>Review of compilers</h3>
-
-<p>A compiler is different from an interpreter. An interpreter takes both the data and the program and produces output. A compiler takes only the program and produces an executable. Fun fact: I learned just recently that javascript is actually a &ldquo;compiled&rdquo; language &mdash; the javascript engine uses just-in-time compilation as it is executed.</p>
-
-<p>The grandfather of all compiled languages was FORTRAN, which was developed to translate formulas into a machine-readable language. Like many software projects, the initial completion date was wildly optimistic &mdash; it took 7 years longer than their original estimate &mdash; but they developed a 5-stage pattern of processing that all later compilers would follow.</p>
-
-<h3>1. Lexical analysis</h3>
-
-<p>This first step is about word and symbol recognition: breaking a stream of characters into recognizable chunks. For example a method definition:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># Ruby
-</span><span class='line'>def my_method; end
-</span><span class='line'>
-</span><span class='line'>// Java
-</span><span class='line'>public static void main() { }
-</span><span class='line'>
-</span><span class='line'># eh
-</span><span class='line'>can curl; eh?</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Recognizing white space, punctuation, and words is the first step in translating characters into actions that can be performed. The words that are recognized are usually converted into &ldquo;tokens&rdquo;, for passing in to the next stage of processing, which is why this step is occasionally called Tokenizing.</p>
-
-<h3>2. Parsing</h3>
-
-<p>After the character stream has been tokenized, doing pattern recognition on the sequence of tokens is called parsing. Returning briefly to the example of a method definition, <code>def my_method; end</code>, the lexer would recognize <code>def</code> as a key word and <code>my_method</code> as a variable, but they are grouped together by the parser as the beginning of a method block.</p>
-
-<h3>3. Semantic analysis</h3>
-
-<p>Compilers can only do a very limited amount of semantic analysis, usually limited to catching inconsistencies (such as redeclaring a variable) and ambiguities (such as type mismatches). &ldquo;A panda bear walks into a bar and eats, shoots and leaves&rdquo;, can be tokenized into component parts (verbs, nouns, articles), as well as into phrases (subject, predicate), but determining the exact meaning of the predicate requires deeper understanding of the subject. Machines do not perform well with ambiguous grammar, and developing an unambiguous language syntax is a difficult task.</p>
-
-<h3>4. Optimization</h3>
-
-<p>Optimization is where most modern language compilers spend the majority of their resources, modifying programs so that they reduce the demand for resources like memory allocation, or garbage collection. For example, the java compiler will &ldquo;unroll&rdquo; all the for loops so that they run more efficiently. Another strategy is <a href="http://en.wikipedia.org/wiki/Optimizing_compiler">peephole</a> optimization, where the compiler checks out adjacent code to see if any assignments could be reduced or replaced by simple math.</p>
-
-<p><code>x = y * 2</code> might be reduced to <code>x = y + y</code>.</p>
-
-<p><code>z = 0; x = y * z</code> might be reduced to <code>x = 0</code>, but there is a gotcha hidden there &mdash; <code>y * 0 = 0</code> is only true for integers. It results in <code>NaN</code> for floating point numbers.</p>
-
-<h3>5. Code generation</h3>
-
-<p>Code generation is the final translation of the program into an executable. The written language has been cut into tokens and parsed into phrases. It has been examined for ambiguities and inconsistencies, and optimized wherever possible. The instructions for the program are arranged neatly and must now be evaluated and scheduled. The final product is an executable program that can be run against any data of interest.</p>
-
-<p>This 5 stage pattern is followed by almost all compilers. Where they vary is in their proportions. FORTRAN spent a balanced amount of time in each of the 5 phases, while modern compilers have a much longer optimization phase than lexing or parsing.</p>
 ]]></content>
   </entry>
   

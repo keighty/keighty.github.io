@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Virtue is its own reward, and so is writing. Anne Lamott&rsquo;s Bird by Bird: Some Instructions on Writing and Life is full of beautiful prose, &hellip;">
+  <meta name="description" content="Becoming a git expert is essential to efficiency and confidence as a software developer. I have evolved from someone who would re-clone the repo in &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,118 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/more-git-goodies/">More Git Goodies</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-08T00:00:00-08:00" pubdate data-updated="true">Mar 8<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Becoming a git expert is essential to efficiency and confidence as a software developer. I have evolved from someone who would re-clone the repo in case of a botched merge to a savvy git handler, through:</p>
+
+<ul>
+<li>Moving files between working directory, index, stash, and commit history</li>
+<li>Working with multiple remotes with many contributors</li>
+<li>Handling changes to forks, branches, and pull requests</li>
+<li>Accidental merges from pulling upstream, and checking out pull requests or remote branches</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>My old favourites </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git rebase -i &lt;sha&gt; <span class="c"># pick a sha from your git history and start squashing</span>
+</span><span class='line'>git clean -f <span class="c"># removes untracked files from your working directory</span>
+</span><span class='line'>git stash <span class="c"># save your idea for later</span>
+</span><span class='line'>git stash pop <span class="c"># revive your last idea</span>
+</span><span class='line'>git reflog <span class="c"># oh my goodness, what did I just do?</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>My alii </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Add this to your .bashrc (or .zshrc)</span>
+</span><span class='line'><span class="nb">alias </span><span class="nv">wip</span><span class="o">=</span><span class="s2">&quot;git add .; git commit -m &#39;WIP&#39;&quot;</span>  <span class="c"># saves and commits the current state</span>
+</span><span class='line'><span class="nb">alias </span><span class="nv">popwip</span><span class="o">=</span><span class="s2">&quot;git reset --soft head~1; git reset head .&quot;</span>  <span class="c"># pops the top commit off the stack</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Add this to your git config</span>
+</span><span class='line'><span class="o">[</span><span class="nb">alias</span><span class="o">]</span>
+</span><span class='line'>  <span class="nv">hist</span> <span class="o">=</span> log --pretty<span class="o">=</span>format:<span class="se">\&quot;</span>%h %ad | %s%d <span class="o">[</span>%an<span class="o">]</span><span class="se">\&quot;</span> --graph --date<span class="o">=</span>short
+</span><span class='line'>
+</span><span class='line'><span class="nv">$ </span>git hist <span class="c"># opens a human readable history -- essential for verifying where you are:</span>
+</span><span class='line'>* 2ae2be1 2015-03-08 | WIP <span class="o">(</span>HEAD, origin/source, <span class="nb">source</span><span class="o">)</span> <span class="o">[</span>keighty<span class="o">]</span>
+</span><span class='line'>* 247f86f 2015-02-16 | Change portfolio subtitle. <span class="o">[</span>keighty<span class="o">]</span>
+</span><span class='line'>* e2a4fd0 2015-02-16 | Add facebook and google+ sharing options. <span class="o">[</span>keighty<span class="o">]</span>
+</span><span class='line'>* e41ca0a 2015-02-16 | Replace comments in draft and post tasks. <span class="o">[</span>keighty<span class="o">]</span>
+</span><span class='line'>...
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>Check out a remote branch </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git checkout -b &lt;name of the <span class="nb">local </span>branch to create&gt; upstream/&lt;name of the remote branch&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>My new favourites </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git checkout - <span class="c"># checks out the last branch you were on</span>
+</span><span class='line'>git checkout -p <span class="c"># checks out changes in chunks</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I have already shared a few tools that have become so much a part of my tool box, and have developed such a muscle memory that my fingers will perform the tasks as I think them. Every time I pair with another developer I gain another shortcut! Thanks to Vince for those last two&hellip;</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -249,45 +361,6 @@ Following his <a href="https://github.com/flyingsparx/NodeDirectUploader">exampl
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/debugging-techniques/">Debugging Techniques</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-02-02T00:00:00-08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2015</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I am working on upgrading an application from Rails 3.0 to Rails 3.2. While the numbers tell you it is a minor version change, there are definitely some major challenges. Digging through Rails and gem internals has forced me to add new strategies to my debugging toolbox, and here are a few of the essentials&hellip;</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2015/debugging-techniques/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -312,6 +385,10 @@ Following his <a href="https://github.com/flyingsparx/NodeDirectUploader">exampl
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/what-else-you-can-do-after-code-school/">What Else You Can Do After Code School</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/get-your-foot-in-the-door/">Getting Your Foot in the Door</a>
       </li>
     
@@ -325,10 +402,6 @@ Following his <a href="https://github.com/flyingsparx/NodeDirectUploader">exampl
     
       <li class="post">
         <a href="/blog/2015/troubleshooting-nested-scopes-in-angular/">Troubleshooting Nested Scopes in Angular</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/more-git-goodies/">More Git Goodies</a>
       </li>
     
   </ul>
