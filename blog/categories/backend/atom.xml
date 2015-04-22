@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Backend | keighty]]></title>
+  <link href="http://www.katieleonard.ca/blog/categories/backend/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2015-04-22T08:34:03-07:00</updated>
+  <id>http://www.katieleonard.ca/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Local Load Balancing]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/local-load-balancing/"/>
+    <updated>2015-04-22T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/local-load-balancing</id>
+    <content type="html"><![CDATA[<p>You can mimic the end-user&rsquo;s UI experience accurately enough by running application code locally, but what about the backend? Once your code is deployed to production, requests will be divided between dozens of servers. If there is variation in the code paths running on each server (like during a feature rollout, for example), it is useful to determine beforehand if there are any dangerous conflicts. Enter local load-balancing.</p>
+
+<!--more-->
+
+
+<p><a href="http://nginx.org/en/">NGiNX</a> is load balancing software that distributes requests across multiple servers, and it&rsquo;s easy to get running quickly.</p>
+
+<h3>Installation</h3>
+
+<p>You can download and compile from source at <a href="http://nginx.org/en/download.html">NGiNX.org</a>, or use <code>brew install nginx</code> on MacOS-X.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>➜  api_playground  brew install nginx
+</span><span class='line'>&amp;hellip;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;The default port has been <span class="nb">set </span>in /usr/local/etc/nginx/nginx.conf to 8080 so that nginx can run without sudo.&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;To have launchd start nginx at login:&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;ln -sfv /usr/local/opt/nginx/*.plist ~/Library/LaunchAgents
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;Then to load nginx now:&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;launchctl load ~/Library/LaunchAgents/homebrew.mxcl.nginx.plist
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;Or, <span class="k">if </span>you don&amp;rsquo;t want/need launchctl, you can just run:&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;nginx
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Start the server with the command <code>nginx</code>.</p>
+
+<h3>Configuration</h3>
+
+<p>Your NGiNX installation added a config file: <code>/usr/local/etc/nginx/nginx.conf</code>. It is mostly commented configuration examples, so you can simply replace the current <code>server</code> configuration block with this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>/usr/local/etc/nginx/nginx.conf </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>upstream myapp1 {
+</span><span class='line'>  server localhost:3000;
+</span><span class='line'>  server localhost:3030; #add as many servers as you want here
+</span><span class='line'>}&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;server {
+</span><span class='line'>  listen 8080;
+</span><span class='line'>  server_name localhost;
+</span><span class='line'>  location / {&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;proxy_pass http://myapp1;
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;  }
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Reload your NGiNX server with <code>nginx -s reload</code>, and hit <a href="localhost:8080">localhost:8080</a> to ensure you have configured it correctly.</p>
+
+<p><img src="/images/150421-local-loadbalancing/welcome_nginx.png"></p>
+
+<h3>Start your servers</h3>
+
+<p>NGiNX is configured and listening on ports 3000 and 3030. Now we just have to connect some servers!</p>
+
+<p><strong>Server 1</strong>: <code>bundle exec rails server -p 3030</code></p>
+
+<p><strong>Server 2</strong>: <code>bundle exec rails server -p 3000 --pid tmp/pids/server2.pid</code></p>
+
+<blockquote><p>Pro-tip: The Rails server stores its process id in a temporary file (<code>/tmp/pids/server.pid</code>), and will complain if you start another server unless you specify a new temporary pid file.</p></blockquote>
+
+<p>Check your progress by hitting localhost:8080:</p>
+
+<p><img src="/images/150421-local-loadbalancing/load_balancing.png"></p>
+
+<p>Checkout the <a href="http://nginx.org/en/docs/http/load_balancing.html">docs</a> for more examples of nginx configuration.</p>
+]]></content>
+  </entry>
+  
+</feed>
