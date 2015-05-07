@@ -445,16 +445,22 @@
         <lastmod>2015-04-22T08:32:36-07:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://www.katieleonard.ca/blog/2015/dont-count-your-chickens-if-they-are-active-record-objects/
+        </loc>
+        <lastmod>2015-05-07T08:24:08-07:00</lastmod>
+    </url>
+    <url>
         <loc>http://www.katieleonard.ca/404.html</loc>
         <lastmod>2015-01-10T15:42:05-08:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/blog/archives/</loc>
-        <lastmod>2015-04-22T08:32:36-07:00</lastmod>
+        <lastmod>2015-05-07T08:24:08-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/</loc>
-        <lastmod>2015-04-22T08:32:36-07:00</lastmod>
+        <lastmod>2015-05-07T08:24:08-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/projects/</loc>
@@ -462,7 +468,7 @@
     </url>
     <url>
         <loc>http://www.katieleonard.ca/reads/</loc>
-        <lastmod>2015-04-22T08:32:36-07:00</lastmod>
+        <lastmod>2015-05-07T08:24:08-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.katieleonard.ca/robots.txt</loc>
