@@ -11,7 +11,7 @@ Many people have asked me what it is like on the other side of code school, and 
 <!--more-->
 
 ### Have something to show
-Not every developer spends every waking moment working on open source projects or inventing the next big framework. We all have lives, families, and other pursuits that take priority; {% img left /images/150412-getting-a-job/Octocat.png 300 Octocat from www.github.com %}however, experienced programmers likely have solid work-related contributions they can point to during an interview. First-timers need some proof that they can apply what they learn. Side projects show potential employers what you are learning, and that you are interested in programming, not just the salary it comes along with.
+Not every developer spends every waking moment working on open source projects or inventing the next big framework. We all have lives, families, and other pursuits that take priority; {% img left /images/150412-getting-a-job/octocat2.png 300 Octocat from www.github.com %}however, experienced programmers likely have solid work-related contributions they can point to during an interview. First-timers need some proof that they can apply what they learn. Side projects show potential employers what you are learning, and that you are interested in programming, not just the salary it comes along with.
 
 Create a [GitHub](https://github.com/) account. If you are in code school, you are likely already working towards a portfolio of apps and widgets to show off during an interview. If you are considering code school, this is something you should not wait to do. When you work through a tutorial, commit it to GitHub, give it a README, and include what you are working through and why.
 
