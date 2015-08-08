@@ -9,7 +9,22 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Object-oriented programming (OOP) can be thought of as describing the properties and behaviour of a noun in a blueprint, which is used to create &hellip;">
+  <meta name="description" content="Getters and setters make sense in java, and I just learned that there is an equivalent pattern in javascript: 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +94,137 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/javascript-getters-and-setters/">Javascript Getters and Setters</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-09T00:00:00-07:00" pubdate data-updated="true">Aug 9<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Getters and setters make sense in java, and I just learned that there is an equivalent pattern in javascript:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">favouriteBook</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">_title</span><span class="o">:</span> <span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">get</span> <span class="nx">title</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Getting title&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_title</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="nx">set</span> <span class="nx">title</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">_title</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Setting title&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_title</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
+</span><span class='line'> <span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Slaughterhouse 5&quot;</span>
+</span><span class='line'> <span class="nx">Setting</span> <span class="nx">title</span> <span class="nx">Slaughterhouse</span> <span class="mi">5</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
+</span><span class='line'> <span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Slaughterhouse</span> <span class="mi">5</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>get</code> and <code>set</code> key words are reserved for accessing or mutating a data property (instance variable). Of course, one can get and set data properties directly:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
+</span><span class='line'><span class="s2">&quot;Catch-22&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Slaughterhouse 5&quot;</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
+</span><span class='line'><span class="s2">&quot;Slaughterhouse 5&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The advantage of using a getter and setter is that if a setter is defined without a getter, one can change the value of the data property, but can never read it. If a getter is defined without a setter, then the variable can be read but not be changed:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">favouriteBook</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">_title</span><span class="o">:</span> <span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">get</span> <span class="nx">title</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Getting title&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_title</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
+</span><span class='line'><span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Slaughterhouse 5&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
+</span><span class='line'><span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The setter function will fail silently, which makes troubleshooting difficult but ensures that the property remains undisturbed.</p>
+
+<h3>Resources</h3>
+
+<p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -401,45 +547,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/helpers-calling-helpers/">Helpers Calling Helpers</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-06-03T00:00:00-07:00" pubdate data-updated="true">Jun 3<span>rd</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Whittling away at the Discover Meteor tutorial for creating a social news sharing site, I was implementing a Comments collection and related accoutrements (templates, helpers, forms, etc.) when I uncovered a need to call one helper method from another</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/helpers-calling-helpers/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -464,6 +571,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/hunting-monkey-patches/">Hunting Monkey Patches</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/dont-count-your-chickens-if-they-are-active-record-objects/">Don&#8217;t Count Your Chickens if They Are ActiveRecord Objects</a>
       </li>
     
@@ -477,10 +588,6 @@
     
       <li class="post">
         <a href="/blog/2015/get-your-foot-in-the-door/">Getting Your Foot in the Door</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/what-is-it-like-to-be-a-programmer/">What&#8217;s It Like to Be a Developer?</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-08-08T10:31:36-07:00</updated>
+  <updated>2015-08-08T10:33:46-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,47 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Hunting Monkey Patches]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/hunting-monkey-patches/"/>
+    <updated>2015-08-08T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/hunting-monkey-patches</id>
+    <content type="html"><![CDATA[<p>Ruby monkeypatching is a dangerous, but necessary tool. It is convenient to add new behaviours to  existing classes, or to replace existing methods with more customized or secure code. Once the patch is in place, however, it is easy to forget that it is there.</p>
+
+<p>Recently, I was trying to discern the origin of such a patch, and discovered a new (to me) function in pry, my favourite Ruby debugger: <code>show-source</code>.</p>
+
+<!--more-->
+
+
+<ol>
+<li>Put a <code>binding pry</code> below the monkeypatch so that it can be caught at boot time</li>
+<li>Use <code>cd</code> to change directories into the reopened class</li>
+<li>Use <code>show-source</code> to find the exact location where the method was originally defined</li>
+<li>Use <code>show-source -a</code> to show the source and location of EVERY MONKEYPATCH</li>
+</ol>
+
+
+<p>In action:</p>
+
+<h4>1. Debug your code at boot time</h4>
+
+<p><img src="http://www.katieleonard.ca/images/150808-hunting-monkey-patches/step1-pry.png"></p>
+
+<h4>2. Reopen the class</h4>
+
+<p><img src="http://www.katieleonard.ca/images/150808-hunting-monkey-patches/step2-cd.png"></p>
+
+<h4>3. Use &lsquo;show-source&rsquo;</h4>
+
+<p><img src="http://www.katieleonard.ca/images/150808-hunting-monkey-patches/step3-show-source.png"></p>
+
+<h4>4. Use &lsquo;show-source -a&rsquo;</h4>
+
+<p><img src="http://www.katieleonard.ca/images/150808-hunting-monkey-patches/step4-show-source-a1.png">
+<img src="http://www.katieleonard.ca/images/150808-hunting-monkey-patches/step4-show-source-a2.png"></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Don't Count Your Chickens if They Are ActiveRecord Objects]]></title>
@@ -2320,85 +2361,6 @@ Test-driven development can help you grow your career.
 3. writing tests is important to delivering quality, robust code, and is essential for writing code that you ever hope to change.
 4. did you know that test-driven development can help you grow your career as well?
 -->
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Octopress Reloaded]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/octopress-reloaded/"/>
-    <updated>2015-01-03T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/octopress-reloaded</id>
-    <content type="html"><![CDATA[<p>I recently upgraded my home hardware from an <a href="http://www.amazon.com/ASUS-1000HE-10-1-Inch-Black-Netbook/dp/B001QTXL82">Asus 10.1&#8221; netbook</a> to a <a href="https://www.apple.com/macbook-pro/">15&#8221; MacBook Pro</a>, and once I adjusted to being able to open more than one window at a time, I got down to the business of loading my files and projects on the new machine. Thanks to <a href="https://www.dropbox.com/">Dropbox</a> and <a href="https://github.com/">Github</a>, most of that work happens either behind the scenes or as needed. Recreating the right environment for each project is still ongoing, and the first challenge I encountered was reloading my blog &mdash; started about two years ago using <a href="http://octopress.org/">Octopress</a>.</p>
-
-<!--more-->
-
-
-<p>Octopress is an awesome framework built on <a href="http://jekyllrb.com/">jekyll</a>. The learning curve for getting started with jekyll was a little steep (liquid layouts, yaml, not to mention design and UX were all new to me then) , and Octopress delivers on its promise to make it easy: just clone, bundle, and blog. Part of what makes Octopress so awesome is the deploy strategy: static pages are generated from yaml and markdown sources (saved in the source branch), and the pages are checked in to your github or heroku repository (as the master branch).</p>
-
-<p>When you clone the repo, you get both branches, but you have to do a little setup to ensure that master is pulling from and pushing to the right place. Borrowing some code from the <a href="https://github.com/imathis/octopress/blob/master/Rakefile#L351-L358">setup rake task</a>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone git@github.com:username/username.github.com.git my_blog
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>my_blog
-</span><span class='line'><span class="nv">$ </span>git checkout <span class="nb">source</span>
-</span><span class='line'><span class="nv">$ </span>mkdir _deploy
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>_deploy
-</span><span class='line'><span class="nv">$ </span>git init
-</span><span class='line'><span class="nv">$ </span>git remote add origin git@github.com:username/username.github.com.git
-</span><span class='line'><span class="nv">$ </span>git pull origin master
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> ..
-</span><span class='line'><span class="nv">$ </span>bundle install
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake preview
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now I have no excuses to not blog more often&hellip; well, fewer excuses (thanks to <a href="http://code.dblock.org/octopress-setting-up-a-blog-and-contributing-to-an-existing-one">Daniel Doubrovkine</a> for pointing me in the right direction).</p>
-
-<p>I briefly considered switching to a hosted blogging platform (tumblr or wordpress), so I conducted an informal survey (sample size taken from <a href="https://www.digitalocean.com/company/blog/20-developers-to-follow-in-2014/">Digital Ocean&rsquo;s 20 developers to follow</a>) to see what choices leading developers were making, and it looks like a jekyll based blog is still the most popular. What is yours?</p>
-
-
-
-<table class="tg">
-  <tr>
-    <th class="tg-031e">platform</th>
-    <th class="tg-031e">users</th>
-  </tr>
-  <tr>
-    <td class="tg-s6z2">jekyll</td>
-    <td class="tg-031e">6</td>
-  </tr>
-  <tr>
-    <td class="tg-031e">octopress</td>
-    <td class="tg-031e">3</td>
-  </tr>
-  <tr>
-    <td class="tg-031e">none</td>
-    <td class="tg-031e">3</td>
-  </tr>
-  <tr>
-    <td class="tg-031e">tumblr</td>
-    <td class="tg-031e">1</td>
-  </tr>
-  <tr>
-    <td class="tg-031e">hand-rolled</td>
-    <td class="tg-031e">6</td>
-  </tr>
-  <tr>
-    <td class="tg-031e">wordpress</td>
-    <td class="tg-031e">1</td>
-  </tr>
-</table>
 
 ]]></content>
   </entry>

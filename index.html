@@ -9,15 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="You may believe that #length, #size, and #count are fairly equivalent: 1
-2
-3
-4
-5
-6
-7
-8
-irb(main):002:0&gt; yourRubyChickens = %w{ Chantecler &hellip;">
+  <meta name="description" content="Ruby monkeypatching is a dangerous, but necessary tool. It is convenient to add new behaviours to existing classes, or to replace existing methods &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -87,6 +79,49 @@ irb(main):002:0&gt; yourRubyChickens = %w{ Chantecler &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/hunting-monkey-patches/">Hunting Monkey Patches</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-08-08T00:00:00-07:00" pubdate data-updated="true">Aug 8<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Ruby monkeypatching is a dangerous, but necessary tool. It is convenient to add new behaviours to  existing classes, or to replace existing methods with more customized or secure code. Once the patch is in place, however, it is easy to forget that it is there.</p>
+
+<p>Recently, I was trying to discern the origin of such a patch, and discovered a new (to me) function in pry, my favourite Ruby debugger: <code>show-source</code>.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/hunting-monkey-patches/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -353,47 +388,6 @@ irb(main):002:0&gt; yourRubyChickens = %w{ Chantecler &hellip;">
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/what-is-it-like-to-be-a-programmer/">What&#8217;s It Like to Be a Developer?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-04-11T00:00:00-07:00" pubdate data-updated="true">Apr 11<span>th</span>, 2015</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>My manager has invited me to help her give a talk to students in a Web Development program. I have been working in the field for about 18 months, and a lot of the uncertainty is still fresh in my mind: what is it like to be a programmer? How can I get a job as a junior? What can I do now that will help me in my first job? I didn&rsquo;t know many people in the industry, and was unaware of the vast meetup community<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. Answers to these questions were difficult to find online, so over the next few posts I will make an attempt.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2015/what-is-it-like-to-be-a-programmer/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -416,6 +410,10 @@ irb(main):002:0&gt; yourRubyChickens = %w{ Chantecler &hellip;">
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/hunting-monkey-patches/">Hunting Monkey Patches</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/dont-count-your-chickens-if-they-are-active-record-objects/">Don&#8217;t Count Your Chickens if They Are ActiveRecord Objects</a>
       </li>
     
@@ -429,10 +427,6 @@ irb(main):002:0&gt; yourRubyChickens = %w{ Chantecler &hellip;">
     
       <li class="post">
         <a href="/blog/2015/get-your-foot-in-the-door/">Getting Your Foot in the Door</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/what-is-it-like-to-be-a-programmer/">What&#8217;s It Like to Be a Developer?</a>
       </li>
     
   </ul>
