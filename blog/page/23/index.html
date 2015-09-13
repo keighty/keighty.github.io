@@ -9,8 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Building a portfolio has been a lot of fun and has required a couple of
-different technologies. A fellow PCS student has been blogging a long time, &hellip;">
+  <meta name="description" content="Following along with Rails tutorial by Michael Hartl, I built a sample app with a simple database, linking users to microposts in a twitter-like &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -86,7 +85,7 @@ different technologies. A fellow PCS student has been blogging a long time, &hel
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/blogging-with-jekyll-bootstrap/">Blogging With Jekyll Bootstrap</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/no-indexhtml-no-cry/">No index.html, No Cry</a></h1>
     
     
       <p class="meta">
@@ -102,21 +101,18 @@ different technologies. A fellow PCS student has been blogging a long time, &hel
   
 
 
-<time datetime="2013-06-15T00:00:00-07:00" pubdate data-updated="true"></time>
+<time datetime="2013-06-29T00:00:00-07:00" pubdate data-updated="true"></time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>Building a portfolio has been a lot of fun and has required a couple of
-different technologies. A fellow PCS student has been blogging a long time,
-and he suggested using Jekyll in combination with github pages. What a
-fantastic gem! I found an even more awesome one at <a href="http://jekyllbootstrap.com/">jekyll-bootstrap</a>.</div>
+  <div class="entry-content"><p>Following along with <a href="http://www.amazon.com/Ruby-Rails-Tutorial-Addison-Wesley-Professional/dp/0321832051">Rails tutorial</a> by Michael Hartl, I built a sample app with a simple database, linking users to microposts in a twitter-like manner. Everything worked well locally, but when it came time to deploy on heroku, I ran across some interesting stumbling blocks</div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2013/blogging-with-jekyll-bootstrap/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2013/no-indexhtml-no-cry/">Read on &rarr;</a>
     </footer>
   
 
@@ -128,7 +124,7 @@ fantastic gem! I found an even more awesome one at <a href="http://jekyllbootstr
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/TDD-is-the-way-to-be/">I Admit It, I Love TDD</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/hoisting-with-javascript/">Hoisting With JavaScript</a></h1>
     
     
       <p class="meta">
@@ -144,22 +140,183 @@ fantastic gem! I found an even more awesome one at <a href="http://jekyllbootstr
   
 
 
-<time datetime="2013-06-14T00:00:00-07:00" pubdate data-updated="true">Jun 14<span>th</span>, 2013</time>
+<time datetime="2013-06-26T00:00:00-07:00" pubdate data-updated="true"></time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>This week @PDXcodeschool we jumped into TDD using minitest/autorun. I have
-used RSpec in the past, and loved the way it let me manage the logic of my project.
-I love that ruby has a built in framework &mdash; so easy to use!</p>
+  <div class="entry-content"><p>I am really enjoying <a href="http://www.amazon.com/Test-Driven-JavaScript-Development-Developers-Library/dp/0321683919">Test-Driven Development</a> by Christian Johansen</p>
+
+<p>I picked up this little gem this morning as I was learning about functions and the various objects associated with them:</p>
+
+<p>You CANNOT use function declarations in conditionals. </div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/hoisting-with-javascript/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/javascript-has-spies/">Javascript Has Spies</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-25T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Spies vs Mocks vs Stubs?</h2>
+
+<p>We are covering testing frameworks at PCS this week,
+ particularly Jasmine and Sinon.</p>
+
+<p>Jasmine has a similar structure to RSpec:</p>
+
+<div>
+  <pre><code class='java'>describe(&quot;Class to describe&quot;, function() {
+  it(&quot;should have some behavior&quot;. function() {
+    //assertions
+  });
+});</code></pre>
+</div>
+
+
+<p>Also similar to RSpec, Jasmine allows you to spy on behavior.</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/javascript-has-spies/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/jquery-objects-vs-strings/">jQuery Objects vs Strings</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-19T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Object blocker!!</h2>
+
+<p>My pair was stuck for the longest time on the following code snip:</p>
+
+<div>
+  <pre><code class='javascript'>$(function(){
+  var new_square = &#39;$(&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;)&#39;;
+
+  $(&#39;body&#39;).on(&#39;click&#39;,&#39;.square&#39;, function(){
+    // var my_square = $(this);
+    $(this).toggleClass(&#39;blue&#39;);
+
+    b = $(new_square)
+      .insertAfter(this);
+    a = $(new_square)
+      .insertBefore(this);
+    b.toggleClass(&#39;blue&#39;);
+    a.toggleClass(&#39;blue&#39;);
+  });
+});</code></pre>
+</div>
+
+
+
 
 </div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2013/TDD-is-the-way-to-be/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2013/jquery-objects-vs-strings/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/solving-namespace-conflicts-with-jquery/">Namespaces and jQuery</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-18T00:00:00-07:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Namespaces in jQuery getting you down?</h3>
+
+<p>Chuck taught me a great trick today &mdash; how to avoid namespace
+conflicts in jQuery</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/solving-namespace-conflicts-with-jquery/">Read on &rarr;</a>
     </footer>
   
 
@@ -167,6 +324,8 @@ I love that ruby has a built in framework &mdash; so easy to use!</p>
     </article>
   
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/24/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     

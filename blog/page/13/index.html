@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="The arguments variable is a hidden parameter in javascript functions that contains all the arguments for the invocation in a pseudo-array (ie: it &hellip;">
+  <meta name="description" content="Primitives and object literals are not the only things you can bind to a D3 visualization. After all, aren&rsquo;t javascript functions objects as &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,7 +85,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/functional-arguing/">Functional Arguing</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/binding-functions-as-data/">Binding Functions as Data</a></h1>
     
     
       <p class="meta">
@@ -101,181 +101,16 @@
   
 
 
-<time datetime="2014-02-20T00:00:00-08:00" pubdate data-updated="true">Feb 20<span>th</span>, 2014</time>
+<time datetime="2014-02-27T00:00:00-08:00" pubdate data-updated="true">Feb 27<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>The <code>arguments</code> variable is a hidden parameter in javascript functions that contains all the arguments for the invocation in a pseudo-array (ie: it does not have array functions other than length and indexing).</p>
+  <div class="entry-content"><p>Primitives and object literals are not the only things you can bind to a D3 visualization. After all, aren&rsquo;t javascript functions objects as well?</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">instance</span><span class="p">.</span><span class="nx">headline</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">h</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="k">return</span> <span class="nx">headline</span><span class="p">;</span>
-</span><span class='line'>  <span class="nx">headline</span> <span class="o">=</span> <span class="nx">h</span><span class="p">;</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">instance</span><span class="p">;</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Even though the function specifically calls for an argument (<code>h</code>), it can still be called without one. This construction has a ruby equivalent, <code>attr_accessor :headline</code>, which behaves as a getter and a setter, depending on the arguments provided (none, or <code>headline = new_value</code>).</p>
-
-<p>This &ldquo;variable-parameter&rdquo; function design is what enables method chaining. When the function is called as a getter it returns a string, but when it is called as a setter it returns the invoking object, passing itself along to the next method:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">widget</span> <span class="o">=</span> <span class="nx">SimpleWidget</span><span class="p">({</span> <span class="nx">color</span><span class="o">:</span> <span class="s2">&quot;#6439ed&quot;</span> <span class="p">})</span>
-</span><span class='line'>                <span class="p">.</span><span class="nx">headline</span><span class="p">(</span><span class="s2">&quot;SimpleWidget&quot;</span><span class="p">)</span>
-</span><span class='line'>                <span class="p">.</span><span class="nx">description</span><span class="p">(</span><span class="s2">&quot;This is a simple widget&quot;</span><span class="p">)</span>
-</span><span class='line'>                <span class="p">.</span><span class="nx">render</span><span class="p">();</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/functional-arguing/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/how-to-live-on-24-hours-a-day/">How to Live on 24 Hours a Day</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-17T00:00:00-08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://www.gutenberg.org/files/2274/2274-h/2274-h.htm">How to Live on 24 Hours a Day</a>, by Arnold Bennett (published in 1910)</p>
-
-<h3>Arnold Bennett&rsquo;s recommendations for leading a full and happy life:</h3>
-
-<ol>
-<li>Wake up earlier</li>
-<li>Practice concentrating your mind on a single task.</li>
-<li>Don&rsquo;t try to change too much too quickly.</li>
-<li>Spend time each day reflecting on how closely your life aligns with your principles.</li>
-<li>Study the performing arts.</li>
-<li>Read poetry.</li>
-<li>Failing that, read anything except novels, and think about what you read.</li>
-<li>Don&rsquo;t be smug about it.</li>
-</ol>
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/how-to-live-on-24-hours-a-day/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/custom-asides/">Custom Asides</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-15T00:00:00-08:00" pubdate data-updated="true">Feb 15<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I was following a <a href="http://blog.jmac.org/blog/2013/03/30/putting-twitter-back-into-octopress/">tutorial</a> on how to include a twitter widget in the sidebar of my octopress site and couldn&rsquo;t figure out why my twitter content wouldn&rsquo;t render. It turns out that custom asides require an internal div. </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/custom-asides/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/for-score/">For Score</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-11T00:00:00-08:00" pubdate data-updated="true">Feb 11<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The <code>for in</code> statement can function as a quick and semantic iterator for looping over object properties.</p>
-
-<figure class='code'><figcaption><span>In your console, try</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -285,31 +120,26 @@
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">first_name</span><span class="o">:</span> <span class="s2">&quot;Katie&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">last_name</span> <span class="o">:</span> <span class="s2">&quot;Leonard&quot;</span>
-</span><span class='line'>  <span class="p">};</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">next</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">15</span> <span class="o">+</span> <span class="nx">x</span><span class="o">*</span><span class="nx">x</span> <span class="p">};</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">newData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">next</span><span class="p">);</span> <span class="k">return</span> <span class="nx">data</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">selection</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;#container&quot;</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">newData</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">name</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="k">for</span><span class="p">(</span><span class="nx">name</span> <span class="k">in</span> <span class="nx">person</span><span class="p">){</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot; : &quot;</span> <span class="o">+</span> <span class="nx">person</span><span class="p">[</span><span class="nx">name</span><span class="p">];</span>
-</span><span class='line'>  <span class="p">)};</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">first_name</span> <span class="o">:</span> <span class="nx">Katie</span>
-</span><span class='line'><span class="nx">last_name</span> <span class="o">:</span> <span class="nx">Leonard</span>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'>                  <span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;#span&quot;</span><span class="p">)</span>
+</span><span class='line'>                    <span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span> <span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>If you provide a function to the data function, D3 will simply invoke the function and use the returned value as a parameter of the data function.</p>
+
+<h3>Resources</h3>
+
+<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
 </div>
   
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/for-score/">Read on &rarr;</a>
-    </footer>
   
 
 
@@ -320,7 +150,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/the-passionate-programmer/">The Passionate Programmer</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/why-visualize/">Visualize With Purpose</a></h1>
     
     
       <p class="meta">
@@ -336,23 +166,138 @@
   
 
 
-<time datetime="2014-02-10T00:00:00-08:00" pubdate data-updated="true">Feb 10<span>th</span>, 2014</time>
+<time datetime="2014-02-26T00:00:00-08:00" pubdate data-updated="true">Feb 26<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p><a href="http://www.amazon.com/gp/product/B00AYQNR5U/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B00AYQNR5U&amp;linkCode=as2&amp;tag=bridgeforpoke-20">The Passionate Programmer: Creating a Remarkable Career in Software Development</a> (Pragmatic Life), by Chad Fowler
-(affiliate link)</p>
+  <div class="entry-content"><p>Information visualization (insight, understanding, and discovery) and information art (aesthetics) differ in their context, audience, and goals. In my exploration of D3 I came across an <a href="http://www.visualcomplexity.com/vc/blog/?p=644">Information Visualization Manifesto</a> by Manuel Lima, and this is what I have learned</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/why-visualize/">Read on &rarr;</a>
+    </footer>
+  
 
-<p>This book is aptly titled, and an awesome read. It consists of a series of tips &mdash; strategies Fowler has employed to build his own remarkable career. The most important tip is one that can&rsquo;t really be crossed off a list, and that is to build a successful career in software development one must be passionate about software development.</p>
 
-<h2>Update:</h2>
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/implied-functions-applied/">Implied Functions Applied</a></h1>
+    
+    
+      <p class="meta">
+        
 
-<p>Unbeknownst to me when I was finishing this book, but knownst to me now is that there has been a vibrant conversation occurring on the interweb about passion and programming. Check out Avdi Grimm&rsquo;s latest, <a href="http://devblog.avdi.org/2014/02/10/the-passion-gospel/">The Passion Gospel</a>.</p>
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-26T00:00:00-08:00" pubdate data-updated="true">Feb 26<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>When binding a primitive datum to a node in a D3 visualization, the callback function can be implicitly called on the datum without the typical verbosity</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/implied-functions-applied/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/enter-update-exit/">Enter Update Exit</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-25T00:00:00-08:00" pubdate data-updated="true">Feb 25<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>D3 is a data visualization tool that uses method chaining to produce big pictures with little code. The selection library performs a full Outer Join between the data (D) and the visual elements (V), and the enter-update-exit pattern performs work on subsets of this join</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/enter-update-exit/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/d3-is-selective/">D3 Is Selective</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-21T00:00:00-08:00" pubdate data-updated="true">Feb 21<span>st</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>D3 uses the W3C standard selector library, and selection modifiers work on both single and multiple element selections, and will automatically apply the modifier iteratively over the entire collection, which makes your code simpler and easier to maintain.</p>
+
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/d3-is-selective/">Read on &rarr;</a>
+    </footer>
   
 
 

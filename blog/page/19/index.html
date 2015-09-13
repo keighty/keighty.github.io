@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="On the last episode, I described how to label chunks of code for processing through a parser. Strings are labeled as &lsquo;STRING&rsquo;, class &hellip;">
+  <meta name="description" content="A few weeks ago I posted about using Thor to generate system-wide notes files with a standard format. Since then, I have been doing a lot of smaller &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,7 +85,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/parcel-parser/">Parcel Parser</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/thor-sets-up-a-project/">Thor Sets Up a Project</a></h1>
     
     
       <p class="meta">
@@ -101,26 +101,20 @@
   
 
 
-<time datetime="2013-08-16T22:29:03-07:00" pubdate data-updated="true">Aug 16<span>th</span>, 2013</time>
+<time datetime="2013-09-08T22:29:03-07:00" pubdate data-updated="true">Sep 8<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>On the last episode, I described how to label chunks of code for processing through a parser. Strings are labeled as &lsquo;STRING&rsquo;, class definitions as &lsquo;A&rsquo; + &lsquo;CONSTANT&rsquo;, etc.</p>
-
-<h2>What is a parser?</h2>
-
-<p>A parser separates and analyzes a piece of text according to a set of rules specified by a formal grammar. The analysis is performed by assembling the tokenized code into an Abstract Syntax Tree (AST) &ndash; a tree of nodes that represent what the code means to the language. The AST evaluates the nodes in a similar manner to order of operations in math: each token is placed on the evaluation tree, and expressions are evaluated by reducing each branch in order.</p>
-
-<p>The parser itself is can be written by hand, but I am using RACC: an LALR (Look Ahead, Left to right, Reverse) parser written by <a href="https://github.com/tenderlove/racc">tenderlove</a> to generate Ruby programs. How do we specify a grammar that RACC will understand?</p>
+  <div class="entry-content"><p>A few weeks ago I posted about <a href="http://www.katieleonard.ca/automation/2013/08/30/hammer-out-tasks-with-thor/">using Thor to generate system-wide notes files with a standard format</a>. Since then, I have been doing a lot of smaller code challenges, and I wanted to set up a Thor task for generating a standard project file tree.</p>
 
 </div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2013/parcel-parser/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2013/thor-sets-up-a-project/">Read on &rarr;</a>
     </footer>
   
 
@@ -132,7 +126,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/flex-your-lexer/">Flex Your Lexer</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/argf-all-you-want/">ARGF All You Want</a></h1>
     
     
       <p class="meta">
@@ -148,34 +142,20 @@
   
 
 
-<time datetime="2013-08-15T22:29:03-07:00" pubdate data-updated="true">Aug 15<span>th</span>, 2013</time>
+<time datetime="2013-09-05T22:29:03-07:00" pubdate data-updated="true">Sep 5<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>A Lexer is a ruby class with a single method: tokenize(). Its purpose is to label each chunk of code with a particular token. Strings are labeled as strings, numbers as numbers, and class names as constants. For example,</p>
-
-<div>
-  <pre><code class='ruby'>Lexer.new.tokenize(&quot;string&quot;)
-# =&gt;[[:STRING, &quot;string&quot;]]
-Lexer.new.tokenize(&quot;True&quot;)
-# =&gt;[[:CONSTANT, &quot;True&quot;]]
-Lexer.new.tokenize(&quot;a Car&quot;)
-# =&gt;[[:A, &#39;a&#39;], [:CONSTANT, &#39;Car&#39;]])
-Lexer.new.tokenize(&quot;+&quot;)
-# =&gt;[[&quot;+&quot;, &quot;+&quot;]]</code></pre>
-</div>
-
-
-<p>&ldquo;Lexing&rdquo; is accomplished using regular expressions. The lexer treats the text string of your code like a shish kabob &ndash; it slides recognizable chunks off the skewer one at a time and categorizes them (onion, pepper, method definition, etc).</p>
+  <div class="entry-content"><p>Many of the fun, junior code challenges I have encountered deal a lot with input/output of data, and I found a great ruby feature that provides flexibility at the command line.</p>
 
 </div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2013/flex-your-lexer/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2013/argf-all-you-want/">Read on &rarr;</a>
     </footer>
   
 
@@ -187,7 +167,7 @@ Lexer.new.tokenize(&quot;+&quot;)
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/canadian-flair/">Canadian Flair</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/hammer-out-tasks-with-thor/">Hammer-out Tasks With Thor</a></h1>
     
     
       <p class="meta">
@@ -203,34 +183,20 @@ Lexer.new.tokenize(&quot;+&quot;)
   
 
 
-<time datetime="2013-08-10T22:29:03-07:00" pubdate data-updated="true">Aug 10<span>th</span>, 2013</time>
+<time datetime="2013-08-30T22:29:03-07:00" pubdate data-updated="true">Aug 30<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>For my last month at code school, I have decided to learn what it takes to develop a new programming language. Having been teased for my Canadian accent, I thought it appropriate to incorporate some idiomatic Canadianisms, and call my language Eh? Deciding what actual features I want to implement in my programming language is an interesting task, and I think I have narrowed it down to a couple of standard rules and a couple wacky ones:</p>
-
-<h3>Rules for Eh?</h3>
-
-<ul>
-<li>blocks of code are delimited by &lsquo;:&rsquo; and &lsquo;eh?&rsquo;</li>
-<li>classes are declared using &ldquo;A&rdquo; keyword</li>
-<li>methods are defined using &ldquo;CAN&rdquo; keyword</li>
-<li>lowercase identifiers are local variables or method names</li>
-<li>capitalized identifiers are global variables</li>
-<li>no parens for args</li>
-<li>last value evaluated in return value</li>
-<li>everything is an object</li>
-</ul>
-
+  <div class="entry-content"><p>A few months ago I gave a small lightning talk to my code school class about automating tasks using <a href="http://rake.rubyforge.org/">Rake</a>. Before I learned ruby I used bash scripts to accomplish similar things, but was often bogged down in learning the syntax of string-processing essentials like awk or sed. I wished for the simplicity of Ruby, and thought that Rake was the bees-knees. After my talk, <a href="chuckvose.com">Chuck</a>, my PCS mentor, put together a repo of <a href="http://whatisthor.com/">Thor</a> tasks that accomplished the same tasks but could be installed system wide.</p>
 
 </div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2013/canadian-flair/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2013/hammer-out-tasks-with-thor/">Read on &rarr;</a>
     </footer>
   
 
@@ -242,7 +208,7 @@ Lexer.new.tokenize(&quot;+&quot;)
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/show-off-with-github/">Show-off With GitHub and Docco</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/serving-some-java/">Serving Some Java</a></h1>
     
     
       <p class="meta">
@@ -258,18 +224,20 @@ Lexer.new.tokenize(&quot;+&quot;)
   
 
 
-<time datetime="2013-08-06T22:29:03-07:00" pubdate data-updated="true">Aug 6<span>th</span>, 2013</time>
+<time datetime="2013-08-24T22:29:03-07:00" pubdate data-updated="true">Aug 24<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>I was experimenting with some documentation styles today and discovered two bits of gold: gh-pages and docco</div>
+  <div class="entry-content"><p>For a recent java coding challenge I was asked, among other things, to make a server. It has been several years since I last attempted it, and I had forgotten how easy it could be.</p>
+
+</div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2013/show-off-with-github/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2013/serving-some-java/">Read on &rarr;</a>
     </footer>
   
 
@@ -281,7 +249,7 @@ Lexer.new.tokenize(&quot;+&quot;)
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/state-of-the-quickunion/">State of the QuickUnion</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/runtime-for-your-life/">Runtime for Your Life</a></h1>
     
     
       <p class="meta">
@@ -297,20 +265,20 @@ Lexer.new.tokenize(&quot;+&quot;)
   
 
 
-<time datetime="2013-08-04T22:29:03-07:00" pubdate data-updated="true">Aug 4<span>th</span>, 2013</time>
+<time datetime="2013-08-19T22:29:03-07:00" pubdate data-updated="true">Aug 19<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>In my last look at the UnionFind algorithm I made a quick-find implementation &mdash; finding if two elements were connected was fast but connecting two elements was slow. The union operation is a good candidate for optimization.</p>
+  <div class="entry-content"><p>Eh? is coming along as a functioning interpreted language, but we are still missing a runtime. We have a lexer that chops and tags our code string into tokens, and a grammar that contains the rules for order of operations, and a parser that is generated by RACC from the grammar. The parser assembles the tokens into an evaluation tree (AST), but we need a runtime to do the actual evaluation.</p>
 
 </div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2013/state-of-the-quickunion/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2013/runtime-for-your-life/">Read on &rarr;</a>
     </footer>
   
 
