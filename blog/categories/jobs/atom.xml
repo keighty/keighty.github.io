@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Jobs | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/jobs/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-08-08T10:33:46-07:00</updated>
+  <updated>2015-09-13T13:10:20-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -83,14 +83,14 @@
 
 <h3>Have something to show</h3>
 
-<p>Not every developer spends every waking moment working on open source projects or inventing the next big framework. We all have lives, families, and other pursuits that take priority; <img class="left" src="/images/150412-getting-a-job/octocat2.png" width="300" title="Octocat from www.github.com" >however, experienced programmers likely have solid work-related contributions they can point to during an interview. First-timers need some proof that they can apply what they learn. Side projects show potential employers what you are learning, and that you are interested in programming, not just the salary it comes along with.</p>
+<p>Not every developer spends every waking moment working on open source projects or inventing the next big framework. We all have lives, families, and other pursuits that take priority; {% img left /images/150412-getting-a-job/octocat2.png 300 Octocat from www.github.com %}however, experienced programmers likely have solid work-related contributions they can point to during an interview. First-timers need some proof that they can apply what they learn. Side projects show potential employers what you are learning, and that you are interested in programming, not just the salary it comes along with.</p>
 
 <p>Create a <a href="https://github.com/">GitHub</a> account. If you are in code school, you are likely already working towards a portfolio of apps and widgets to show off during an interview. If you are considering code school, this is something you should not wait to do. When you work through a tutorial, commit it to GitHub, give it a README, and include what you are working through and why.</p>
 
 <h3>Start filling your toolbox</h3>
 
 <p>You can usually assemble a piece of Ikea furniture with only an allen key, but what about that desk drawer that suddenly calls for a screwdriver? Completing the task requires the right tools for the job, and your ability to solve a programming problem is no different. Git, Chrome Developer Tools, and Pry are part of the the Swiss Army knife for any web developer.
-<img class="right" src="/images/150412-getting-a-job/toolbox.jpg" width="300" title="Fill your toolbox." ></p>
+{% img right /images/150412-getting-a-job/toolbox.jpg 300 Fill your toolbox. %}</p>
 
 <ul>
 <li><p><a href="http://git-scm.com/"><strong>Git</strong></a> is like &ldquo;track changes&rdquo; for source code. The docs describe it as a series of snapshots of your code base. &ldquo;Every time you commit, or save the state of your project in Git, it basically takes a picture of what all your files look like at that moment and stores a reference to <a href="" title="[Getting started with git](http://git-scm.com/book/en/v2/Getting-Started-Git-Basics)">it</a>.&rdquo; Source control allows you to work in the same code base with other developers and not step on one another&rsquo;s toes. Start with <a href="http://gitimmersion.com/">Git Immersion</a> for some practical experience.</p></li>
@@ -111,7 +111,7 @@
 <p>Not like skydiving, or alligator wrestling. Write blogs, contribute to open source projects, start <a href="http://createyourproglang.com/">your own programming language</a>, or become visible on social media. You don&rsquo;t need to be an expert to have an opinion. Don&rsquo;t stop taking risks after you land your first job, either.</p>
 
 <ul>
-<li><p><img class="left" src="/images/150412-getting-a-job/against-the-grain.jpg" width="300" title="Do something risky." >Find an area of your work that people are avoiding and become an expert. You will be known as the person who can do that thing we all hate, and your colleagues will value your expertise.</p></li>
+<li><p>{% img left /images/150412-getting-a-job/against-the-grain.jpg 300 Do something risky. %}Find an area of your work that people are avoiding and become an expert. You will be known as the person who can do that thing we all hate, and your colleagues will value your expertise.</p></li>
 <li><p>Take the hardest ticket from the top of the stack. Don&rsquo;t sift through them until you find something you think you know how to do. Your best opportunity to stretch your skills is to do something scary and uncomfortable.</p></li>
 </ul>
 

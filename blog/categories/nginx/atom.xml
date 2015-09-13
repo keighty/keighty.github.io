@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Nginx | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/nginx/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-08-08T10:33:46-07:00</updated>
+  <updated>2015-09-13T13:10:20-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -29,49 +29,28 @@
 
 <p>You can download and compile from source at <a href="http://nginx.org/en/download.html">NGiNX.org</a>, or use <code>brew install nginx</code> on MacOS-X.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>➜  api_playground  brew install nginx
-</span><span class='line'>&amp;hellip;&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;The default port has been <span class="nb">set </span>in /usr/local/etc/nginx/nginx.conf to 8080 so that nginx can run without sudo.&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;To have launchd start nginx at login:&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;ln -sfv /usr/local/opt/nginx/*.plist ~/Library/LaunchAgents
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;Then to load nginx now:&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;launchctl load ~/Library/LaunchAgents/homebrew.mxcl.nginx.plist
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;Or, <span class="k">if </span>you don&amp;rsquo;t want/need launchctl, you can just run:&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;nginx
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:bash %}
+➜  api_playground  brew install nginx
+&hellip;</p>
+
+<p>The default port has been set in /usr/local/etc/nginx/nginx.conf to 8080 so that nginx can run without sudo.</p>
+
+<p>To have launchd start nginx at login:</p>
+
+<pre><code>ln -sfv /usr/local/opt/nginx/*.plist ~/Library/LaunchAgents
+</code></pre>
+
+<p>Then to load nginx now:</p>
+
+<pre><code>launchctl load ~/Library/LaunchAgents/homebrew.mxcl.nginx.plist
+</code></pre>
+
+<p>Or, if you don&rsquo;t want/need launchctl, you can just run:</p>
+
+<pre><code>nginx
+</code></pre>
+
+<p>{% endcodeblock %}</p>
 
 <p>Start the server with the command <code>nginx</code>.</p>
 
@@ -79,42 +58,27 @@
 
 <p>Your NGiNX installation added a config file: <code>/usr/local/etc/nginx/nginx.conf</code>. It is mostly commented configuration examples, so you can simply replace the current <code>server</code> configuration block with this:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>/usr/local/etc/nginx/nginx.conf </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='text'><span class='line'>upstream myapp1 {
-</span><span class='line'>  server localhost:3000;
-</span><span class='line'>  server localhost:3030; #add as many servers as you want here
-</span><span class='line'>}&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;server {
-</span><span class='line'>  listen 8080;
-</span><span class='line'>  server_name localhost;
-</span><span class='line'>  location / {&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;proxy_pass http://myapp1;
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;  }
-</span><span class='line'>}
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:text /usr/local/etc/nginx/nginx.conf %}
+upstream myapp1 {
+  server localhost:3000;
+  server localhost:3030; #add as many servers as you want here
+}</p>
+
+<p>server {
+  listen 8080;
+  server_name localhost;
+  location / {</p>
+
+<pre><code>proxy_pass http://myapp1;
+</code></pre>
+
+<p>  }
+}
+{% endcodeblock %}</p>
 
 <p>Reload your NGiNX server with <code>nginx -s reload</code>, and hit <a href="localhost:8080">localhost:8080</a> to ensure you have configured it correctly.</p>
 
-<p><img src="/images/150421-local-loadbalancing/welcome_nginx.png"></p>
+<p>{% img /images/150421-local-loadbalancing/welcome_nginx.png %}</p>
 
 <h3>Start your servers</h3>
 
@@ -128,7 +92,7 @@
 
 <p>Check your progress by hitting localhost:8080:</p>
 
-<p><img src="/images/150421-local-loadbalancing/load_balancing.png"></p>
+<p>{% img /images/150421-local-loadbalancing/load_balancing.png %}</p>
 
 <p>Checkout the <a href="http://nginx.org/en/docs/http/load_balancing.html">docs</a> for more examples of nginx configuration.</p>
 ]]></content>
