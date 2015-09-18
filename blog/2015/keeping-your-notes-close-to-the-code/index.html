@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Ordinal Scale - keighty</title>
+  <title>Keep Your Code Close and Your Notes Closer With a Global Gitignore - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content=" ">
+  <meta name="description" content="I like to keep my notes as close to the code as possible. When I start on a new code base, I create a folder at the top called aa_notes. Super &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/ordinal-scale">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2015/keeping-your-notes-close-to-the-code">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">Ordinal Scale</h1>
+      <h1 class="entry-title">Keep Your Code Close and Your Notes Closer With a Global Gitignore</h1>
     
     
       <p class="meta">
@@ -98,15 +98,75 @@
   
 
 
-<time datetime="2014-03-04T00:00:00-08:00" pubdate data-updated="true">Mar 4<span>th</span>, 2014</time>
+<time datetime="2015-09-18T00:00:00-07:00" pubdate data-updated="true">Sep 18<span>th</span>, 2015</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><!--more-->
+<div class="entry-content"><p>I like to keep my notes as close to the code as possible. When I start on a new code base, I create a folder at the top called <code>aa_notes</code>. Super obvious, and it makes an awesome scratch pad for things I don&rsquo;t want to lose. So, how can you do this without checking your folder in to source control? Adding it to a local .gitignore is one strategy, but that change will also need to be checked in to git.</p>
 
+<!--more-->
+
+
+<p>The answer is to use a global gitgnore.</p>
+
+<p>You can configure a global gitignore file in your home directory that will ignore items in every repo on your machine.</p>
+
+<h3>1. Add a folder to your source control</h3>
+
+<p><img src="/images/150918-keep-your-notes-close/add_note_folder.png"></p>
+
+<h3>2. Create a file and git will suggest to track it</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>➜  virtualplaybill2 git:(master) touch aa_notes/this_is_a_note_file.md
+</span><span class='line'>➜  virtualplaybill2 git:(master) ✗ git status
+</span><span class='line'>On branch master
+</span><span class='line'>Your branch is up-to-date with 'origin/master'.
+</span><span class='line'>Untracked files:
+</span><span class='line'>  (use "git add file..." to include in what will be committed)
+</span><span class='line'>
+</span><span class='line'>        aa_notes/
+</span><span class='line'>
+</span><span class='line'>nothing added to commit but untracked files present (use "git add" to track)</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>3. Set up your global gitignore</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>➜  virtualplaybill2 git:(master) ✗ git config --global core.excludesfile ~/.gitignore_global
+</span><span class='line'>➜  virtualplaybill2 git:(master) ✗ echo "aa_notes" &gt; ~/.gitignore_global</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>4. Git will ignore all folders on your machine named aa_notes</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>➜  virtualplaybill2 git:(master) ✗ git status
+</span><span class='line'>On branch master
+</span><span class='line'>Your branch is up-to-date with 'origin/master'.
+</span><span class='line'>nothing to commit, working directory clean</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This comes in super handy when you want to make clarifying notes to yourself without sharing them with all of your collaborators. Of course, if they are good things to share, you should probably add them to the project wiki.</p>
+
+<p>I keep things like daily <a href="https://www.safaribooksonline.com/blog/2014/06/26/information-flow/">infobits</a>, backdoor patches, bits of scripts, and other things. Sometimes writing a note about something helps me remember it a little better, so I still keep my own notes, even if the info is already on the wiki.</p>
+
+<p>Checkout <a href="https://help.github.com/articles/ignoring-files/">this post on GitHub</a> for this and more ideas for fine tuning what git ignores.</p>
 </div>
 
 
@@ -129,12 +189,12 @@
   
 
 
-<time datetime="2014-03-04T00:00:00-08:00" pubdate data-updated="true">Mar 4<span>th</span>, 2014</time>
+<time datetime="2015-09-18T00:00:00-07:00" pubdate data-updated="true">Sep 18<span>th</span>, 2015</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/d3/'>d3</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
+    <a class='category' href='/blog/categories/git/'>git</a>
   
 </span>
 
@@ -143,7 +203,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/ordinal-scale/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/ordinal-scale/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2015/keeping-your-notes-close-to-the-code/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2015/keeping-your-notes-close-to-the-code/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -156,10 +216,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/d3-nests-and-rollups/" title="Previous Post: d3 nests and rollups">&laquo; d3 nests and rollups</a>
+        <a class="basic-alignment left" href="/blog/2015/hunting-monkey-patches/" title="Previous Post: hunting monkey patches">&laquo; hunting monkey patches</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/scales-and-ticks/" title="Next Post: fun with ticks">fun with ticks &raquo;</a>
       
     </p>
   </footer>
@@ -192,6 +250,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/keeping-your-notes-close-to-the-code/">Keep Your Code Close and Your Notes Closer With a Global Gitignore</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/hunting-monkey-patches/">Hunting Monkey Patches</a>
       </li>
     
@@ -205,10 +267,6 @@
     
       <li class="post">
         <a href="/blog/2015/what-else-you-can-do-after-code-school/">What Else You Can Do After Code School</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/get-your-foot-in-the-door/">Getting Your Foot in the Door</a>
       </li>
     
   </ul>
@@ -299,8 +357,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/ordinal-scale/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2014/ordinal-scale/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2015/keeping-your-notes-close-to-the-code/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2015/keeping-your-notes-close-to-the-code/';
         var disqus_script = 'embed.js';
       
     (function () {

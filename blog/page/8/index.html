@@ -163,93 +163,6 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/raw-liquid-codeblocks/">Raw Liquid Codeblocks</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-27T00:00:00-07:00" pubdate data-updated="true">May 27<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I thought that using handlebars () or other special characters inside a liquid markup codeblock was impossible</p>
-
-<figure class='code'><figcaption><span>Title </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&gt;&gt;</span>
-</span><span class='line'><span class="o">&gt;&gt;</span>
-</span><span class='line'><span class="o">&gt;&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><a href="https://github.com/imathis/octopress/issues/813">https://github.com/imathis/octopress/issues/813</a></p>
-
-<figure class='code'><figcaption><span>/client/errors.html </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&lt;</span><span class="nx">template</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;errors&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;errors&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="p">{{</span><span class="err">#</span><span class="nx">each</span> <span class="nx">errors</span><span class="p">}}</span>
-</span><span class='line'>      <span class="p">{{</span><span class="o">&gt;</span> <span class="nx">error</span><span class="p">}}</span>
-</span><span class='line'>    <span class="p">{{</span><span class="err">/each}}</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="err">/div&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/template&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">template</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;alert alert-error&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;button&quot;</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&quot;close&quot;</span> <span class="nx">data</span><span class="o">-</span><span class="nx">dismiss</span><span class="o">=</span><span class="s2">&quot;alert&quot;</span><span class="o">&gt;&amp;</span><span class="nx">times</span><span class="p">;</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
-</span><span class='line'>    <span class="p">{{</span><span class="nx">message</span><span class="p">}}</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="err">/div&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/template&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/raw-liquid-codeblocks/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
       <h1 class="entry-title"><a href="/blog/2014/flash-your-local-collection/">Flash Your Local Collection</a></h1>
     
     
@@ -301,7 +214,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/slash-meteor-sessions/">Meteor Sessions</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/mongo-trouble-reset/">Mongo Trouble? Reset!</a></h1>
     
     
       <p class="meta">
@@ -317,48 +230,99 @@
   
 
 
-<time datetime="2014-05-10T00:00:00-07:00" pubdate data-updated="true">May 10<span>th</span>, 2014</time>
+<time datetime="2014-05-03T00:00:00-07:00" pubdate data-updated="true">May 3<span>rd</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><h2>Session</h2>
+  <div class="entry-content"><p>Back in March I wrote about letting my computer&rsquo;s battery die in the middle of a meteor project, with the consequence being that I could not connect to the underlying mongo database:</p>
 
-<ul>
-<li>stores information that relates to a single user&rsquo;s instance of your application</li>
-<li>&ldquo;global reactive data store&rdquo;:
-<strong> there is only one session per application instance
-</strong> the information in the session is as reactive as the database information store</li>
-</ul>
-
-
-<h2>Set a session variable</h2>
-
-<figure class='code'><figcaption><span>Setting a session variable </span></figcaption>
+<figure class='code'><figcaption><span>What&#8217;s wrong, meteor? </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&gt;</span> <span class="nx">Session</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;myVariable&#39;</span><span class="p">,</span> <span class="s1">&#39;myVariableValue&#39;</span><span class="p">);</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor
+</span><span class='line'><span class="o">[[[[[</span> ~/project/in/progress <span class="o">]]]]]</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">=</span>&gt; Started proxy.
+</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
+</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
+</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
+</span><span class='line'>Can<span class="err">&#39;</span>t start Mongo server.
+</span><span class='line'>MongoDB had an unspecified uncaught exception.
+</span><span class='line'>This can be caused by MongoDB being unable to write to a <span class="nb">local </span>database.
+</span><span class='line'>Check that you have permissions to write to .meteor/local. MongoDB does
+</span><span class='line'>not support filesystems like NFS that <span class="k">do </span>not allow file locking.
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>Retrieving a session variable</h2>
+<p>After much spelunking in stackoverflow and documentation, I discovered the magic of this command:</p>
 
-<figure class='code'><figcaption><span>Getting a session variable </span></figcaption>
+<figure class='code'><figcaption><span>Magic mongo reset spell %</span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&gt;</span> <span class="nx">Session</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;myVariable&#39;</span><span class="p">);</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u mongodb mongdo --repair --dbpath /var/lib/mongodb
+</span><span class='line'><span class="nv">$ </span>sudo service mongodb start
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>Autorun</h2>
-
-<p>Yes, the session is a reactive data store, meaning it can be altered or added to at will. Why doesn&rsquo;t it automagically update my UI? Because the <strong>context</strong> in which the Session is altered or added to may not be a reactive context. When the application is opened for the first time, the Session is read from and added to as the application code is loaded, but unless the Session changes are included in an Autorun block, meaning it is re-run every time there are changes made to it, the Session and all its fancy state-ness is only loaded the once.</p>
-
-</div>
+<p>Repairing and restarting the mongo service seemed to do the trick, and I continued on my merry meteor way. Well, I did it again &mdash; I let my battery die in the middle of a meteor project, and with feelings of smug satisfaction, I plumbed my blog archive for the answer. Only this time the magic antidote didn&rsquo;t work</div>
   
   
     <footer>
-      <a rel="full-article" href="/blog/2014/slash-meteor-sessions/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2014/mongo-trouble-reset/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/meteor-fetch/">Meteor, Fetch!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-31T00:00:00-07:00" pubdate data-updated="true">Mar 31<span>st</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>From <a href="http://book.discovermeteor.com/">Discover Meteor</a>: find() returns a cursor, which is a reactive data source.</p>
+
+<p>Data from reactive sources will be updated automatically to track changes in the data used to generate it. </div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/meteor-fetch/">Read on &rarr;</a>
     </footer>
   
 
@@ -394,6 +358,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/keeping-your-notes-close-to-the-code/">Keep Your Code Close and Your Notes Closer With a Global Gitignore</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/hunting-monkey-patches/">Hunting Monkey Patches</a>
       </li>
     
@@ -407,10 +375,6 @@
     
       <li class="post">
         <a href="/blog/2015/what-else-you-can-do-after-code-school/">What Else You Can Do After Code School</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/get-your-foot-in-the-door/">Getting Your Foot in the Door</a>
       </li>
     
   </ul>

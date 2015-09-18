@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-09-13T13:22:21-07:00</updated>
+  <updated>2015-09-18T09:06:59-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,64 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Keep Your Code Close and Your Notes Closer With a Global Gitignore]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/keeping-your-notes-close-to-the-code/"/>
+    <updated>2015-09-18T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/keeping-your-notes-close-to-the-code</id>
+    <content type="html"><![CDATA[<p>I like to keep my notes as close to the code as possible. When I start on a new code base, I create a folder at the top called <code>aa_notes</code>. Super obvious, and it makes an awesome scratch pad for things I don&rsquo;t want to lose. So, how can you do this without checking your folder in to source control? Adding it to a local .gitignore is one strategy, but that change will also need to be checked in to git.</p>
+
+<!--more-->
+
+
+<p>The answer is to use a global gitgnore.</p>
+
+<p>You can configure a global gitignore file in your home directory that will ignore items in every repo on your machine.</p>
+
+<h3>1. Add a folder to your source control</h3>
+
+<p><img src="/images/150918-keep-your-notes-close/add_note_folder.png"></p>
+
+<h3>2. Create a file and git will suggest to track it</h3>
+
+<p>```
+➜  virtualplaybill2 git:(master) touch aa_notes/this_is_a_note_file.md
+➜  virtualplaybill2 git:(master) ✗ git status
+On branch master
+Your branch is up-to-date with &lsquo;origin/master&rsquo;.
+Untracked files:
+  (use &ldquo;git add file&hellip;&rdquo; to include in what will be committed)</p>
+
+<pre><code>    aa_notes/
+</code></pre>
+
+<p>nothing added to commit but untracked files present (use &ldquo;git add&rdquo; to track)
+```</p>
+
+<h3>3. Set up your global gitignore</h3>
+
+<p><code>
+➜  virtualplaybill2 git:(master) ✗ git config --global core.excludesfile ~/.gitignore_global
+➜  virtualplaybill2 git:(master) ✗ echo "aa_notes" &gt; ~/.gitignore_global
+</code></p>
+
+<h3>4. Git will ignore all folders on your machine named aa_notes</h3>
+
+<p><code>
+➜  virtualplaybill2 git:(master) ✗ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+nothing to commit, working directory clean
+</code></p>
+
+<p>This comes in super handy when you want to make clarifying notes to yourself without sharing them with all of your collaborators. Of course, if they are good things to share, you should probably add them to the project wiki.</p>
+
+<p>I keep things like daily <a href="https://www.safaribooksonline.com/blog/2014/06/26/information-flow/">infobits</a>, backdoor patches, bits of scripts, and other things. Sometimes writing a note about something helps me remember it a little better, so I still keep my own notes, even if the info is already on the wiki.</p>
+
+<p>Checkout <a href="https://help.github.com/articles/ignoring-files/">this post on GitHub</a> for this and more ideas for fine tuning what git ignores.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[More Git Goodies]]></title>
@@ -268,38 +326,6 @@
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Hmmm&hellip; looks like my commit messages need a little work&hellip; Still, it is a great tool for catching up on the changes to a repo (especially if you haven&rsquo;t touched it in a while), finding out where the bulk of the work is happening, or just reminding yourself what you did yesterday.</p>
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Afraid of Commitment]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/afraid-of-commitment/"/>
-    <updated>2014-02-04T08:04:27-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/afraid-of-commitment</id>
-    <content type="html"><![CDATA[<h3>or, how to not fubar your git history</h3>
-
-<p>As with all the git lessons I have learned, this one started with a huge mistake. I had merged a commit to master that was breaking pages I didn&rsquo;t know existed. The sage developer sitting on my right shoulder told me that since I was unsure of how to fix the problem I should revert the offending commit forthwith. <!--more--></p>
-
-<p>I had two choices of commit to revert:</p>
-
-<ol>
-<li>remove the offending commit from the branch history</li>
-<li>remove the merge commit, where the broken code had infiltrated master</li>
-</ol>
-
-
-<p>While the former is like a surgical excision of a moment in history (eternal sunshine of a spotless git history?), the latter will preserve your branch history, and the context surrounding the changes made. I like a lot of context, so I chose to revert the merge commit.</p>
-
-<p>When you undo a merge, git doesn&rsquo;t know how to reassign the branches. Was the left one master? The right? Does git know left from right? Who is on first? Take the guesswork out of the equation</p>
-
-<p><code>bash
-$ git checkout -b revert_branch_name
-$ git revert -m 1 &lt;SHA of commit to be reverted&gt;
-</code></p>
-
-<p>Warning: If you don’t make the new branch first, you will mess up your merge history on master. Trust me. Just make the branch first. Now you can ensure that your test suite will pass with the commit reverted before you do something silly, like merge even more breakage into master. Crisis averted.</p>
 
 <p>Awesome.</p>
 ]]></content>
