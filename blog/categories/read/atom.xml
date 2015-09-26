@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Read | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/read/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-09-18T09:06:59-07:00</updated>
+  <updated>2015-09-26T11:46:20-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,72 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The Clean Coder]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/the-clean-coder/"/>
+    <updated>2015-09-26T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/the-clean-coder</id>
+    <content type="html"><![CDATA[<p>In <a href="http://www.amazon.com/Clean-Coder-Conduct-Professional-Programmers/dp/0137081073/ref=sr_1_1?ie=UTF8&amp;qid=1443288322&amp;sr=8-1&amp;keywords=the+clean+coder">The Clean Coder: A Code of Conduct for Professional Programmers</a>, Bob Martin (Uncle Bob) tells you what it means to be a professional programmer. Much of what distinguishes a professional from a non-professional can be reduced to responsibility: a professional is responsible for their project, their team, and their own career. <!--more--></p>
+
+<p><a href="http://www.amazon.com/Clean-Coder-Conduct-Professional-Programmers/dp/0137081073/ref=sr_1_1?ie=UTF8&amp;qid=1443288322&amp;sr=8-1&amp;keywords=the+clean+coder"><img class="left" src="/images/150926-clean-coder/cleancoder.jpg"></a></p>
+
+<h2>Protect your projects</h2>
+
+<p>Your first responsibility, according to Uncle Bob, is to your employer, which means doing the job that you have been hired to do.</p>
+
+<ul>
+<li><p><strong>Make reasonable estimates.</strong> Your project does not exist in isolation from other parts of the company. An estimate is a probability distribution of likely outcomes, not a single point in time. Many stakeholders rely on your estimates for coordinating marketing, sales, and other downstream tasks.</p></li>
+<li><p><strong>Meet your commitments.</strong> Estimates are different from commitments. If you have committed to delivering a feature or a product by a target date, meet that date.</p></li>
+</ul>
+
+
+<blockquote><p>If it can&rsquo;t be done, you can still commit to actions that will bring you closer to the target. Finding out if it can be done can be one of the actions to commit to!</p></blockquote>
+
+<ul>
+<li><strong>Protect your time.</strong> An easy way to ensure the success of your project is to devote the time and energy you have already promised in your estimates. Meetings can be disruptive to your workflow, and you should decline any meeting that does not move your project forward. If you can&rsquo;t decline, ask for an agenda and clear goals before you accept.</li>
+</ul>
+
+
+<blockquote><p>Sometimes the meeting will be about something that interests you, but is not immediately necessary. You will have to choose whether you can afford the time. Be careful — there may be more than enough of these meetings to consume your days.</p></blockquote>
+
+<h2>Protect your team</h2>
+
+<blockquote><p>A team-player communicates frequently, keeps an eye out for his or her teammates, and executes his or her own responsibilities as well as possible.</p></blockquote>
+
+<ul>
+<li><strong>Stand by your original estimates</strong>, and don&rsquo;t confuse them with commitments. Your estimates should protect your team from long hours, undue management pressure, and unpleasant surprises. Don&rsquo;t promise what your team can&rsquo;t deliver.</li>
+</ul>
+
+
+<blockquote><p>Business likes to view estimates as commitments. Developers like to view estimates as guesses. The difference is profound.</p></blockquote>
+
+<ul>
+<li><strong>Mentor less experienced engineers.</strong> Contributing to the growth of everyone will make your team stronger. Don&rsquo;t wear your headphones to cut yourself off from interruptions. Making yourself available as a resource will get someone else on the team unstuck, which moves your project forward (Uncle Bob recommends using TDD instead of the Zone to pick up the stack if you have to drop it). “It is unprofessional to be a loner or a recluse on a team."</li>
+</ul>
+
+
+<h2>Protect your career</h2>
+
+<p>Your employer is not responsible for keeping your skills up to date. They are not required to ensure that you are aware of cutting edge technologies and languages.</p>
+
+<blockquote><p>Your career is your responsibility. It is not your employer&rsquo;s responsibility to make sure you are marketable. It is not your employer&rsquo;s responsibility to train you, or to send you to conferences, or to buy you books. These things are your responsibility. Woe to the software developer who entrusts his career to his employer.</p></blockquote>
+
+<ul>
+<li><strong>Practice coding.</strong> Uncle Bob is a big proponent of practicing code. Performing code kata before starting work will put you in the right frame of mind.</li>
+</ul>
+
+
+<blockquote><p>Professionals practice. True professionals work hard to keep their skills sharp and ready. It is not enough to simply do your daily job and call that practice. Doing your job is daily performance, not practice. Practice is when you specifically exercise your skills outside of the performance of your job for the sole purpose of refining and enhancing those skills.</p></blockquote>
+
+<ul>
+<li><strong>Learn about the industry.</strong> Falling behind in new technologies will make you obsolete. You will not stay marketable to new employers (or even your current employer), if you do not stay current.</li>
+</ul>
+
+
+<p>Reading The Clean Coder was like sitting down with a mentor and asking how I can grow my career. I would recommend it for anyone entering the profession today!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Bird by Bird]]></title>
@@ -102,6 +168,118 @@
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[Clean Code]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/clean-code/"/>
+    <updated>2015-02-07T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/clean-code</id>
+    <content type="html"><![CDATA[<p>The book club I belong to has a two-fold mission: the first is to inspire through peer pressure to read (and finish) technical books, and the second is to improve our ability to write quality, maintainable code. We started with <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330/ref=sr_1_1?ie=UTF8&amp;qid=1423423708&amp;sr=8-1&amp;keywords=practical+object-oriented+design+in+ruby"><em>Practical Object Oriented Design in Ruby</em></a> (Sandi Metz), and are now on to <a href="http://www.amazon.com/s/ref=nb_sb_ss_i_0_11?url=search-alias%3Daps&amp;field-keywords=refactoring&amp;sprefix=refactoring%2Caps%2C217"><em>Refactoring</em></a> (Martin Fowler and Kent Beck). Along the way, I found a copy of <a href="http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882/ref=sr_1_1?ie=UTF8&amp;qid=1423423781&amp;sr=8-1&amp;keywords=clean+code"><em>Clean Code</em></a> by Robert C. Martin in our work library, and dove right in. These three books tout many of the the same principles but focus on different aspects of writing quality code: POODR teaches how to identify abstractions, and to design decoupled objects; Refactoring is a deep dive into the techniques and heuristics for eliminating common code smells; and Clean Code is the intersection between them. It is a style guide, a call to action, and a cautionary tale from the voices of experience. I had several aha moments while reading Clean Code, and here are a few<!--more-->:</p>
+
+<h3>Error handling</h3>
+
+<p>When I started to anticipate <code>undefined method 'length' for nil:NilClass</code> errors, I knew I was growing as a developer.
+Having traced the source of <code>undefined is not a function</code> enough times, I came to realize that I was not sufficiently controlling the messages passing between objects.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Could return nil </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">find_a_user</span>
+</span><span class='line'>  <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">last_name</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="no">Bacon</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span><span class="o">.</span><span class="n">first</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="ss">:find_a_user</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;find_a_user</span>
+</span><span class='line'><span class="sr">@user.last_name&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="ss">NoMethodError</span><span class="p">:</span> <span class="n">undefined</span> <span class="nb">method</span> <span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">last_name</span><span class="err">&#39;</span> <span class="k">for</span> <span class="kp">nil</span><span class="ss">:NilClass</span>
+</span><span class='line'><span class="n">from</span> <span class="p">(</span><span class="n">pry</span><span class="p">):</span><span class="mi">10</span><span class="ss">:in</span><span class="o">&lt;</span><span class="sr">/code&gt;&lt;strong&gt;pry&lt;/s</span><span class="n">trong</span><span class="o">&gt;&amp;</span><span class="n">lsquo</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>This first pass seemed totally reasonable to me &mdash; find a particular user, and return it. Of course, what if the user doesn&rsquo;t exist? What if the query timed out? The code on line 7 is reasonable (wherever it may live), but if <code>@user</code> is set to nil my app will blow up. Surround your pullquote like this {" text to be quoted "}</p>
+
+<blockquote><p>If you are calling a [nil]-returning method from a third-party API, consider wrapping that method with a method that either throws an exception or returns a special case object.</p></blockquote>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Never returns nil </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">find_a_user</span>
+</span><span class='line'>  <span class="k">if</span> <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">last_name</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="no">Bacon</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span><span class="o">.</span><span class="n">first</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;@user</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  else&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">raise</span> <span class="no">StandardError</span><span class="o">.</span><span class="n">new</span> <span class="s2">&quot;Could not find Mr. Bacon.&quot;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;find_a_user</span>
+</span><span class='line'><span class="sr">=&gt; StandardError: Could not find Mr. Bacon.</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Now the error occurs where it belongs &mdash; with the retrieval of the user. Throwing an error when something goes wrong is the least you can do for the consumers of your method. You could also solidify your contract by guaranteeing that you return something they expect.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">interesting_things</span>
+</span><span class='line'>  <span class="vi">@interesting_things</span> <span class="o">||</span> <span class="o">[]</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;interesting_things.length</span>
+</span><span class='line'><span class="sr">=&gt; 0</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>I have guaranteed that <code>#interesting_things</code> will always return either the collection I expect or a reasonable facscimile. It is a simple enough solution, but I definitely felt that message sink into place. Methods are objects and objects have API&rsquo;s: messages in and messages out. Make those messages deliberate, because if &ldquo;returning null from methods is bad, passing null into methods is worse.&rdquo;</p>
+
+<h3>Protect Your Boundaries</h3>
+
+<p>Controlling the messages going in to and coming out of your objects is one place you need to protect your boundaries, but what about objects from 3rd party libraries or frameworks? There are consequences of relying too heavily on a library API, and in Chapter 9: Boundaries, James Grenning shares a few of them. One system he was working with collected information by passing around a Map collection, which is a standard library data structure in Java. In the next version of Java, new capabilities were added, and in order to use the new feature they had to find everywhere the object was used and make the change.</p>
+
+<blockquote><p>We&rsquo;ve seen systems that are inhibited from using [the new feature] because of the sheer magnitude of changes needed to make up for the liberal use of Maps.</p></blockquote>
+
+<p>I recently had a similar experience when upgrading an application from Rails 3.0 to Rails 3.2, where there were drastic changes to how models record errors. Errors inherited from OrderedHash in Rails 3.0 and from ActiveModel in Rails 3.2 &mdash; very different object types. Every test that looked for errors called <code>errors.on</code> &mdash; now a deprecated method. Every place that looped over the collection with <code>errors.each</code> had to be changed to <code>errors.messages.each</code>, or the logic modified altogether. It is good practice to be distrustful of APIs that are likely to change, and while I don&rsquo;t believe that the Errors object ever seemed unstable, it has certainly made me extra cautious of calling 3rd party framework methods directly.</p>
+
+<h3>Clean Code is not a &ldquo;nice-to-have&rdquo;</h3>
+
+<p>Technical debt is not a decision to be okay with untested, brittle code that is impossible to build on &mdash; it is a decision to pursue a design that may not be scalable, but it can still be clean. It is tempting to declare &ldquo;Mission Accomplished&rdquo; when you have reached the point of working code, but the job is really only half done:</p>
+
+<blockquote><p>It is not enough for code to work. Code that works is often badly broken. Programers who satisfy themselves with merely working code are behaving unprofessionally. They may fear that they don&rsquo;t have time to improve the structure and design of their code, but I disagree. Nothing has a more profound and long term degrading effect upon a development project than bad code. Bad schedules can be redone, bad requirements can be redefined. Bad team dynamics can be repaired. But bad code rots and ferments, becoming an inexorable weight that drags the team down.</p></blockquote>
+
+<p>A story cannot be declared finished until the code is ammenable to change. In order to change code, it must be comprehensible and thoroughly tested. Compromising code quality to meet the demands of a schedule will only slow things down in the long run.</p>
+
+<p><em>Clean Code</em> is a must read for all professional software developers. Leaving clean code is not just a kindness to the next developer (which is likely to be you), but is essential for growing a healthy codebase. Of course, &ldquo;to write clean code, you must first write dirty code and then clean it,&rdquo; and I look forward to learning new techniques as we tackle <em>Refactoring</em>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Our Healthcare System Is a Legacy Application]]></title>
     <link href="http://www.katieleonard.ca/blog/2015/healthcare-is-a-legacy-application/"/>
     <updated>2015-01-20T00:00:00-08:00</updated>
@@ -135,122 +313,6 @@
 <p>Flenxer, Abraham. (1910). <em>Medical Education in the United States and Canada</em>.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Cleaning the Campground]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/cleaning-the-campground/"/>
-    <updated>2015-01-10T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/cleaning-the-campground</id>
-    <content type="html"><![CDATA[<p>If you work in a code base with many other contributors, you may have learned the scouting philosophy to &ldquo;leave the campground cleaner than you found it.&rdquo; Sometimes the code you are working in can seem so entangled and complex that it is hard to know where to begin, but <a href="http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882/ref=sr_1_1?ie=UTF8&amp;qid=1420928385&amp;sr=8-1&amp;keywords=clean+code">Robert C. Martin&rsquo;s foundational book, *Clean Code</a>*, tells us that very small changes can improve the readability and maintainability of a piece of code.</p>
-
-<blockquote><p>&ldquo;It is not enough to write the code well. The code has to be <em>kept clean</em> over time.&rdquo;</p></blockquote>
-
-<!--more-->
-
-
-<p><a href="http://en.wikipedia.org/wiki/Software_rot">Code rot</a> happens to every well-intentioned but long-lived code base, and it can happen either by neglect or by constant development. Surround your pullquote like this {" text to be quoted "}</p>
-
-<p>There is hope for your legacy application, as long as you establish a culture of constant small improvements:</p>
-
-<ol>
-<li>Change one variable name for the better</li>
-<li>Break one large function into two or more smaller ones.</li>
-<li>Eliminate one small bit of duplication</li>
-<li>Clean up one composite if statement.</li>
-</ol>
-
-
-<p>That last one is a bit like low-hanging fruit. Take this complex if statement in <a href="https://github.com/rack/rack/blob/rack-1.5/lib/rack/deflater.rb#L30-L33">Rack::Deflater#call</a></p>
-
-<p>```
-def call
-  &hellip;</p>
-
-<p>  # Skip compressing empty entity body responses and responses with
-  # no-transform set.
-  if Utils::STATUS_WITH_NO_ENTITY_BODY.include?(status) ||</p>
-
-<pre><code>  headers['Cache-Control'].to_s =~ /\bno-transform\b/ ||
- (headers['Content-Encoding'] &amp;&amp; headers['Content-Encoding'] !~ /\bidentity\b/)
-return [status, headers, body]
-</code></pre>
-
-<p>  end
-  &hellip;
-```</p>
-
-<p>The comment attempts to explain what the code cannot: skip response compression under certain conditions. The intention could easily be described by extracting both the comment and the if statement to a method:</p>
-
-<p>```
-def call
-  &hellip;
-  if skip_compression?</p>
-
-<pre><code>return [status, headers, body]
-</code></pre>
-
-<p>  end
-  &hellip;
-end</p>
-
-<p>private</p>
-
-<h1>Skip compressing empty entity body responses and responses with</h1>
-
-<h1>no-transform set.</h1>
-
-<p>def skip_compression?
-  Utils::STATUS_WITH_NO_ENTITY_BODY.include?(status) ||</p>
-
-<pre><code>headers['Cache-Control'].to_s =~ /\bno-transform\b/ ||
-</code></pre>
-
-<p>   (headers[&lsquo;Content-Encoding&rsquo;] &amp;&amp; headers[&lsquo;Content-Encoding&rsquo;] !~ /\bidentity\b/)
-end
-```</p>
-
-<p>While the <code>if</code> statement itself is not much better, at least <code>#call</code> is a little more readable. Fight against code rot while building new features in a legacy code base by making small improvements where you can.</p>
-
-<!-- resources
-http://en.wikipedia.org/wiki/Software_entropy
--->
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[TDD and the Senior Software Engineer]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/the-senior-software-engineer/"/>
-    <updated>2015-01-04T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/the-senior-software-engineer</id>
-    <content type="html"><![CDATA[<p>Many developers embrace test-driven development (TDD) as an ideal but rarely put it into practice. I often find myself writing code that works and then writing tests that exercise it to ensure that its behaviour doesn&rsquo;t break when changes are made. Writing tests first is a great way to organize your approach to solving a problem, and in <a href="http://www.amazon.com/Senior-Software-Engineer-Practices-Effective/dp/0990702804/ref=sr_1_1?ie=UTF8&amp;qid=1420403139&amp;sr=8-1&amp;keywords=on+being+a+senior+engineer"><strong>The Senior Software Engineer</strong></a>, David Copeland describes how TDD will help you grow your career as well.</p>
-
-<!--more-->
-
-
-<p>A senior software engineer is efficient, and delivers a quality product in a timely fashion. Surround your pullquote like this {" text to be quoted "}</p>
-
-<p>Explicitly describing your plan in a test suite has another benefit that I had not considered before, and that is making you resilient to interruption. If your plan is not layed out on paper, you are maintaining it all in your head, and you have to hold on to a lot of context in your working memory. Surround your pullquote like this {" text to be quoted "}</p>
-
-<p>Time and context management are essential skills for becoming a senior software engineer, and I am going to try using test driven development to become more interruptable and more productive.</p>
-
-<!-- RESOURCES
-* http://act-r.psy.cmu.edu/wordpress/wp-content/uploads/2012/12/448preparing.to.resume.pdf
-* http://interruptions.net/literature/Fogarty-CHI05-p331-fogarty.pdf
-* http://contenthere.net/2012/10/what-it-takes-to-be-a-senior-engineer.html
-* http://www.amazon.com/Senior-Software-Engineer-Practices-Effective/dp/0990702804/ref=sr_1_1?ie=UTF8&qid=1420403139&sr=8-1&keywords=on+being+a+senior+engineer
-* [The Senior Software Engineer](http://www.amazon.com/Senior-Software-Engineer-Practices-Effective/dp/0990702804/ref=sr_1_1?ie=UTF8&qid=1420403139&sr=8-1&keywords=on+being+a+senior+engineer) by David Bryant Copeland
-
-OUTLINE
-Test-driven development can help you grow your career.
-1. test-driven development is an ideal that many strive for and few embrace.
-2. many developers embrace the ideas of test-driven development, but few practice it rigorously.
-3. writing tests is important to delivering quality, robust code, and is essential for writing code that you ever hope to change.
-4. did you know that test-driven development can help you grow your career as well?
--->
 
 ]]></content>
   </entry>

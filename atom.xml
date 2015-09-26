@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-09-18T09:06:59-07:00</updated>
+  <updated>2015-09-26T11:46:20-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,72 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The Clean Coder]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/the-clean-coder/"/>
+    <updated>2015-09-26T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/the-clean-coder</id>
+    <content type="html"><![CDATA[<p>In <a href="http://www.amazon.com/Clean-Coder-Conduct-Professional-Programmers/dp/0137081073/ref=sr_1_1?ie=UTF8&amp;qid=1443288322&amp;sr=8-1&amp;keywords=the+clean+coder">The Clean Coder: A Code of Conduct for Professional Programmers</a>, Bob Martin (Uncle Bob) tells you what it means to be a professional programmer. Much of what distinguishes a professional from a non-professional can be reduced to responsibility: a professional is responsible for their project, their team, and their own career. <!--more--></p>
+
+<p><a href="http://www.amazon.com/Clean-Coder-Conduct-Professional-Programmers/dp/0137081073/ref=sr_1_1?ie=UTF8&amp;qid=1443288322&amp;sr=8-1&amp;keywords=the+clean+coder"><img class="left" src="http://www.katieleonard.ca/images/150926-clean-coder/cleancoder.jpg"></a></p>
+
+<h2>Protect your projects</h2>
+
+<p>Your first responsibility, according to Uncle Bob, is to your employer, which means doing the job that you have been hired to do.</p>
+
+<ul>
+<li><p><strong>Make reasonable estimates.</strong> Your project does not exist in isolation from other parts of the company. An estimate is a probability distribution of likely outcomes, not a single point in time. Many stakeholders rely on your estimates for coordinating marketing, sales, and other downstream tasks.</p></li>
+<li><p><strong>Meet your commitments.</strong> Estimates are different from commitments. If you have committed to delivering a feature or a product by a target date, meet that date.</p></li>
+</ul>
+
+
+<blockquote><p>If it can&rsquo;t be done, you can still commit to actions that will bring you closer to the target. Finding out if it can be done can be one of the actions to commit to!</p></blockquote>
+
+<ul>
+<li><strong>Protect your time.</strong> An easy way to ensure the success of your project is to devote the time and energy you have already promised in your estimates. Meetings can be disruptive to your workflow, and you should decline any meeting that does not move your project forward. If you can&rsquo;t decline, ask for an agenda and clear goals before you accept.</li>
+</ul>
+
+
+<blockquote><p>Sometimes the meeting will be about something that interests you, but is not immediately necessary. You will have to choose whether you can afford the time. Be careful — there may be more than enough of these meetings to consume your days.</p></blockquote>
+
+<h2>Protect your team</h2>
+
+<blockquote><p>A team-player communicates frequently, keeps an eye out for his or her teammates, and executes his or her own responsibilities as well as possible.</p></blockquote>
+
+<ul>
+<li><strong>Stand by your original estimates</strong>, and don&rsquo;t confuse them with commitments. Your estimates should protect your team from long hours, undue management pressure, and unpleasant surprises. Don&rsquo;t promise what your team can&rsquo;t deliver.</li>
+</ul>
+
+
+<blockquote><p>Business likes to view estimates as commitments. Developers like to view estimates as guesses. The difference is profound.</p></blockquote>
+
+<ul>
+<li><strong>Mentor less experienced engineers.</strong> Contributing to the growth of everyone will make your team stronger. Don&rsquo;t wear your headphones to cut yourself off from interruptions. Making yourself available as a resource will get someone else on the team unstuck, which moves your project forward (Uncle Bob recommends using TDD instead of the Zone to pick up the stack if you have to drop it). “It is unprofessional to be a loner or a recluse on a team.&#8221;</li>
+</ul>
+
+
+<h2>Protect your career</h2>
+
+<p>Your employer is not responsible for keeping your skills up to date. They are not required to ensure that you are aware of cutting edge technologies and languages.</p>
+
+<blockquote><p>Your career is your responsibility. It is not your employer&rsquo;s responsibility to make sure you are marketable. It is not your employer&rsquo;s responsibility to train you, or to send you to conferences, or to buy you books. These things are your responsibility. Woe to the software developer who entrusts his career to his employer.</p></blockquote>
+
+<ul>
+<li><strong>Practice coding.</strong> Uncle Bob is a big proponent of practicing code. Performing code kata before starting work will put you in the right frame of mind.</li>
+</ul>
+
+
+<blockquote><p>Professionals practice. True professionals work hard to keep their skills sharp and ready. It is not enough to simply do your daily job and call that practice. Doing your job is daily performance, not practice. Practice is when you specifically exercise your skills outside of the performance of your job for the sole purpose of refining and enhancing those skills.</p></blockquote>
+
+<ul>
+<li><strong>Learn about the industry.</strong> Falling behind in new technologies will make you obsolete. You will not stay marketable to new employers (or even your current employer), if you do not stay current.</li>
+</ul>
+
+
+<p>Reading The Clean Coder was like sitting down with a mentor and asking how I can grow my career. I would recommend it for anyone entering the profession today!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Keep Your Code Close and Your Notes Closer With a Global Gitignore]]></title>
@@ -2296,104 +2362,6 @@ http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord
 
 
 <p>There are subtle differences between <code>#clone</code> and <code>#dup</code> in Ruby, and less subtle differences in Rails (depending on your version). Take care that the object you want is the object you get.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Cleaning the Campground]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/cleaning-the-campground/"/>
-    <updated>2015-01-10T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/cleaning-the-campground</id>
-    <content type="html"><![CDATA[<p>If you work in a code base with many other contributors, you may have learned the scouting philosophy to &ldquo;leave the campground cleaner than you found it.&rdquo; Sometimes the code you are working in can seem so entangled and complex that it is hard to know where to begin, but <a href="http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882/ref=sr_1_1?ie=UTF8&amp;qid=1420928385&amp;sr=8-1&amp;keywords=clean+code">Robert C. Martin&rsquo;s foundational book, *Clean Code</a>*, tells us that very small changes can improve the readability and maintainability of a piece of code.</p>
-
-<blockquote><p>&ldquo;It is not enough to write the code well. The code has to be <em>kept clean</em> over time.&rdquo;</p></blockquote>
-
-<!--more-->
-
-
-<p><a href="http://en.wikipedia.org/wiki/Software_rot">Code rot</a> happens to every well-intentioned but long-lived code base, and it can happen either by neglect or by constant development. <span class='pullquote-right' data-pullquote='Add in more developers, each with different coding styles, and before long you will find your code to be impenetrably complex and impossible to modify.'>Neglected software will suffer a gradual deterioration in performance and responsiveness over time. Security vulnerabilities and incompatibilities aside, as new applications are built in newer and faster frameworks, your application will perform poorly in comparison. If your software is actively developed it will be modified, and as it is modified it&rsquo;s complexity will increase. Add in more developers, each with different coding styles, and before long you will find your code to be impenetrably complex and impossible to modify.
-</span></p>
-
-<p>There is hope for your legacy application, as long as you establish a culture of constant small improvements:</p>
-
-<ol>
-<li>Change one variable name for the better</li>
-<li>Break one large function into two or more smaller ones.</li>
-<li>Eliminate one small bit of duplication</li>
-<li>Clean up one composite if statement.</li>
-</ol>
-
-
-<p>That last one is a bit like low-hanging fruit. Take this complex if statement in <a href="https://github.com/rack/rack/blob/rack-1.5/lib/rack/deflater.rb#L30-L33">Rack::Deflater#call</a></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def call
-</span><span class='line'>  ...
-</span><span class='line'>
-</span><span class='line'>  # Skip compressing empty entity body responses and responses with
-</span><span class='line'>  # no-transform set.
-</span><span class='line'>  if Utils::STATUS_WITH_NO_ENTITY_BODY.include?(status) ||
-</span><span class='line'>      headers['Cache-Control'].to_s =~ /\bno-transform\b/ ||
-</span><span class='line'>     (headers['Content-Encoding'] && headers['Content-Encoding'] !~ /\bidentity\b/)
-</span><span class='line'>    return [status, headers, body]
-</span><span class='line'>  end
-</span><span class='line'>  ...</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The comment attempts to explain what the code cannot: skip response compression under certain conditions. The intention could easily be described by extracting both the comment and the if statement to a method:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def call
-</span><span class='line'>  ...
-</span><span class='line'>  if skip_compression?
-</span><span class='line'>    return [status, headers, body]
-</span><span class='line'>  end
-</span><span class='line'>  ...
-</span><span class='line'>end
-</span><span class='line'>
-</span><span class='line'>private
-</span><span class='line'>
-</span><span class='line'># Skip compressing empty entity body responses and responses with
-</span><span class='line'># no-transform set.
-</span><span class='line'>def skip_compression?
-</span><span class='line'>  Utils::STATUS_WITH_NO_ENTITY_BODY.include?(status) ||
-</span><span class='line'>    headers['Cache-Control'].to_s =~ /\bno-transform\b/ ||
-</span><span class='line'>   (headers['Content-Encoding'] && headers['Content-Encoding'] !~ /\bidentity\b/)
-</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
-
-
-<p>While the <code>if</code> statement itself is not much better, at least <code>#call</code> is a little more readable. Fight against code rot while building new features in a legacy code base by making small improvements where you can.</p>
-
-<!-- resources
-http://en.wikipedia.org/wiki/Software_entropy
--->
-
 ]]></content>
   </entry>
   

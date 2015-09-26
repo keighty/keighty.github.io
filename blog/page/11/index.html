@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="D3 provides powerful functions for manipulating raw data sets, including csv(), nest(), and rollup(). ">
+  <meta name="description" content="D3 has an awesome tick library, which makes it easy to customize an axis. I have not found any evidence of a built in function to customize tick &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,45 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/scales-and-ticks/">Fun With Ticks</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-05T00:00:00-08:00" pubdate data-updated="true">Mar 5<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>D3 has an awesome tick library, which makes it easy to customize an axis. I have not found any evidence of a built in function to customize tick rendering depending on if it is a major or a minor tick. One way to get around that is to render two axes, and only label one</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/scales-and-ticks/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -394,58 +433,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/to-i-in-javascript/">String Conversion in Javascript</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-27T00:00:00-08:00" pubdate data-updated="true">Feb 27<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Almost every day, javascript blows my mind. Today I discovered that you can convert a string to a number simply by prepending a +:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; typeof(+"this is a string")
-</span><span class='line'>"number"
-</span><span class='line'>&gt; typeof(+"100")
-</span><span class='line'>"number"
-</span><span class='line'>&gt; +"100" + 50
-</span><span class='line'>150</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/12/">&larr; Older</a>
@@ -475,6 +462,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/the-clean-coder/">The Clean Coder</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/keeping-your-notes-close-to-the-code/">Keep Your Code Close and Your Notes Closer With a Global Gitignore</a>
       </li>
     
@@ -488,10 +479,6 @@
     
       <li class="post">
         <a href="/blog/2015/local-load-balancing/">Local Load Balancing</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/what-else-you-can-do-after-code-school/">What Else You Can Do After Code School</a>
       </li>
     
   </ul>
