@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Hoisting With JavaScript - keighty</title>
+  <title>Estimate != Commitment != Target - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="">
+  <meta name="description" content="Software estimation is hard, but I didn&rsquo;t really understand why until I started reading Software Estimation: Demystifying the Black Art by &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2013/hoisting-with-javascript">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2015/software-estimation-is-hard">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">Hoisting With JavaScript</h1>
+      <h1 class="entry-title">Estimate != Commitment != Target</h1>
     
     
       <p class="meta">
@@ -98,48 +98,38 @@
   
 
 
-<time datetime="2013-06-26T00:00:00-07:00" pubdate data-updated="true"></time>
+<time datetime="2015-10-31T00:00:00-07:00" pubdate data-updated="true">Oct 31<span>st</span>, 2015</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I am really enjoying <a href="http://www.amazon.com/Test-Driven-JavaScript-Development-Developers-Library/dp/0321683919">Test-Driven Development</a> by Christian Johansen</p>
+<div class="entry-content"><p>Software estimation is hard, but I didn&rsquo;t really understand why until I started reading <a href="http://www.amazon.com/Software-Estimation-Demystifying-Developer-Practices/dp/0735605351">Software Estimation: Demystifying the Black Art</a> by Steve McConnell. It was published in 2006, and is very much still relevant &mdash; there are more ways to do estimation wrong than to do it right.</p>
 
-<p>I picked up this little gem this morning as I was learning about functions and the various objects associated with them:</p>
+<p>The biggest &ldquo;aha&rdquo; moment for me was learning the difference between estimates, targets, and commitments. <!--more-->I always thought that estimates were commitments and treated them like targets. If a task took longer than my estimate, I would worry that I had blown the project plan. The source of my stress was really semantics, and a deep misunderstanding of project plans in general.</p>
 
-<p>You CANNOT use function declarations in conditionals. <!--more-->Take this example:</p>
+<h4>1. An estimate is a range where there is a 90% chance of finding the completion date</h4>
 
-<div>
-  <pre><code class='java'>if (String.prototype.trim) {
-  function trim(str) {
-    return str.trim();
-  }
-else {
-  function trim(str){
-    return str.replace(/^\s+|\s+$/g, &quot;&quot;);
-  }
-}</code></pre>
-</div>
+<p>An estimate is not a single point in time &mdash; that is a target. There is uncertainty in software development, and uncertainty about the uncertainty.</p>
 
+<blockquote><p>There is a limit to how well a project can go but no limit to how many problems can occur.</p></blockquote>
 
-<p>What is wrong with that, you might ask? HOISTING! Both functions are hoisted up to the global variable before execution, which means that the second one always overwrites the first one.</p>
+<p>Estimates are probability distrubutions of possible outcomes:</p>
 
-<p>This is a better method:</p>
+<p><img class="left" src="/images/151031-software-estimation/estimation-chart.png"></p>
 
-<div>
-  <pre><code class='java'>if(!String.prototype.trim) {
-  String.prototype.trim = function trim() {
-    return this.replace(/^\s+|\s+$/g, &quot;&quot;)
-  }
-}</code></pre>
-</div>
+<p>Most of my experience in estimating projects has been to break a feature down into small tasks and estimate those. Tightly defined requirements for a task make it easier to estimate, but there are always complications that can throw things off track. Thinking about an estimate as a range of possibilities between the best and worst case scenarios reduces stress about being right the first time.</p>
 
+<h4>2. A commitment is a promise to deliver defined functionality at a certain level of quality at a certain date.</h4>
 
-<p>This way, we are not overwriting any browser-available Trim methods, we are declaring the method on the String.prototype, which means it is available to ALL strings in scope, AND we have named it so that it will be more visible in a stack trace in case something goes wrong.</p>
+<p>You can use estimates to plan commitments, but not the other way around. If ten features take a year to develop, but your customer needs to have something in six months, you can commit to delivering four or five features by that target, but there is no way you can deliver ten.</p>
 
-<p>AWESOME</p>
+<h4>3. A target is a single point in time, and is usually determined by business needs.</h4>
+
+<p>A target has more in common with a commitment than an estimate &mdash; it can have no bearing on the time estimated to complete a project, but will often define the envelope of time. Like in the previous example, the target for delivery to the customer was six months, but the commitment could be four or five features, depending on the estimates for each feature.</p>
+
+<p>Estimation must come before planning, and before you really understand all of the requirements for the project. More often than not, events that happen during the project will have a big impact on the assumptions made to estimate the project at the beginning. Estimates are hard, but McConnell has some awesome advice on how to get it right.</p>
 </div>
 
 
@@ -162,12 +152,12 @@ else {
   
 
 
-<time datetime="2013-06-26T00:00:00-07:00" pubdate data-updated="true"></time>
+<time datetime="2015-10-31T00:00:00-07:00" pubdate data-updated="true">Oct 31<span>st</span>, 2015</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/javascript/'>javascript</a>
+    <a class='category' href='/blog/categories/read/'>read</a>
   
 </span>
 
@@ -176,7 +166,7 @@ else {
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2013/hoisting-with-javascript/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2013/hoisting-with-javascript/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2015/software-estimation-is-hard/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2015/software-estimation-is-hard/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -189,10 +179,8 @@ else {
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/javascript-has-spies/" title="Previous Post: Javascript has spies">&laquo; Javascript has spies</a>
+        <a class="basic-alignment left" href="/blog/2015/the-clean-coder/" title="Previous Post: The Clean Coder">&laquo; The Clean Coder</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/no-indexhtml-no-cry/" title="Next Post: No index.html, no cry">No index.html, no cry &raquo;</a>
       
     </p>
   </footer>
@@ -332,8 +320,8 @@ else {
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2013/hoisting-with-javascript/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2013/hoisting-with-javascript/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2015/software-estimation-is-hard/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2015/software-estimation-is-hard/';
         var disqus_script = 'embed.js';
       
     (function () {

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Read | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/read/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-09-26T11:46:20-07:00</updated>
+  <updated>2015-10-31T10:11:19-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,39 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Estimate != Commitment != Target]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/software-estimation-is-hard/"/>
+    <updated>2015-10-31T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/software-estimation-is-hard</id>
+    <content type="html"><![CDATA[<p>Software estimation is hard, but I didn&rsquo;t really understand why until I started reading <a href="http://www.amazon.com/Software-Estimation-Demystifying-Developer-Practices/dp/0735605351">Software Estimation: Demystifying the Black Art</a> by Steve McConnell. It was published in 2006, and is very much still relevant &mdash; there are more ways to do estimation wrong than to do it right.</p>
+
+<p>The biggest &ldquo;aha&rdquo; moment for me was learning the difference between estimates, targets, and commitments. <!--more-->I always thought that estimates were commitments and treated them like targets. If a task took longer than my estimate, I would worry that I had blown the project plan. The source of my stress was really semantics, and a deep misunderstanding of project plans in general.</p>
+
+<h4>1. An estimate is a range where there is a 90% chance of finding the completion date</h4>
+
+<p>An estimate is not a single point in time &mdash; that is a target. There is uncertainty in software development, and uncertainty about the uncertainty.</p>
+
+<blockquote><p>There is a limit to how well a project can go but no limit to how many problems can occur.</p></blockquote>
+
+<p>Estimates are probability distrubutions of possible outcomes:</p>
+
+<p><img class="left" src="/images/151031-software-estimation/estimation-chart.png"></p>
+
+<p>Most of my experience in estimating projects has been to break a feature down into small tasks and estimate those. Tightly defined requirements for a task make it easier to estimate, but there are always complications that can throw things off track. Thinking about an estimate as a range of possibilities between the best and worst case scenarios reduces stress about being right the first time.</p>
+
+<h4>2. A commitment is a promise to deliver defined functionality at a certain level of quality at a certain date.</h4>
+
+<p>You can use estimates to plan commitments, but not the other way around. If ten features take a year to develop, but your customer needs to have something in six months, you can commit to delivering four or five features by that target, but there is no way you can deliver ten.</p>
+
+<h4>3. A target is a single point in time, and is usually determined by business needs.</h4>
+
+<p>A target has more in common with a commitment than an estimate &mdash; it can have no bearing on the time estimated to complete a project, but will often define the envelope of time. Like in the previous example, the target for delivery to the customer was six months, but the commitment could be four or five features, depending on the estimates for each feature.</p>
+
+<p>Estimation must come before planning, and before you really understand all of the requirements for the project. More often than not, events that happen during the project will have a big impact on the assumptions made to estimate the project at the beginning. Estimates are hard, but McConnell has some awesome advice on how to get it right.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The Clean Coder]]></title>
@@ -276,44 +309,6 @@ Having traced the source of <code>undefined is not a function</code> enough time
 <p>A story cannot be declared finished until the code is ammenable to change. In order to change code, it must be comprehensible and thoroughly tested. Compromising code quality to meet the demands of a schedule will only slow things down in the long run.</p>
 
 <p><em>Clean Code</em> is a must read for all professional software developers. Leaving clean code is not just a kindness to the next developer (which is likely to be you), but is essential for growing a healthy codebase. Of course, &ldquo;to write clean code, you must first write dirty code and then clean it,&rdquo; and I look forward to learning new techniques as we tackle <em>Refactoring</em>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Our Healthcare System Is a Legacy Application]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/healthcare-is-a-legacy-application/"/>
-    <updated>2015-01-20T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/healthcare-is-a-legacy-application</id>
-    <content type="html"><![CDATA[<p>One of my favourite blogs is <a href="http://www.brainpickings.org">Brain Pickings</a>, written by Maria Popova, which is a collection of thoughts spanning art, science, psychology, and almost every other subject I read voraciously. Recently I stumbled upon <a href="http://www.brainpickings.org/2014/09/17/sherwin-nuland-how-we-die/">this gem</a>, Sherwin B. Nuland&rsquo;s <a href="http://www.amazon.com/How-We-Die-Sherwin-Nuland-ebook/dp/B004CJ8QCE"><em>How We Die</em></a><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. It is a raw look at the biological processes that occur at the end of life, which resonated with me on many levels.</p>
-
-<!--more-->
-
-
-<p>The biologist within was fascinated by Nuland&rsquo;s ability to reduce the &ldquo;ten thousand several doors for men to take their exits&rdquo;<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup> to the same basic process of poor oxygenation and nutrition of vital tissues resulting in organ failure. Whether the process is long or slow, instigated by heart disease, Alzheimer&rsquo;s disease, AIDS, accident, or old age, the end must come when the heart stops nourishing the brain.</p>
-
-<p>As a Clinical Professor of Surgery at Yale University, Nuland became intimate with death and its increasingly dehumanizing circumstances. Life’s final chapter has become invisible to most of us. It is likely to be carried out in an intensive care unit, the person reduced to data on a screen, and the advancing disease perceived as a failure of management rather than a natural and inevitable process. He shares the lessons he learned about providing true patient care rather than solving a biological riddle (sometimes the best patient care is no care at all).</p>
-
-<p>Most importantly, he calls attention to the deplorable state of healthcare today, where the &ldquo;provider&rdquo; has usurped the role of the physician:</p>
-
-<blockquote><p>[Our] present system of in-hospital care&hellip; has simply accreted by the constant piling on or insinuation of patches of not necessarily compatible structure to an edifice already jerry-built of competing needs.</p></blockquote>
-
-<p>Sounds remarkably like a long-lived legacy application that is impossibly complex and difficult to work in. The healthcare system is in need of a great refactoring, which isn&rsquo;t without precedent (read about Abraham Flexner&rsquo;s report <a href="https://books.google.com/books?id=lxgTAAAAYAAJ&amp;printsec=frontcover&amp;dq=inauthor:%22Abraham+Flexner%22&amp;hl=en&amp;sa=X&amp;ei=rmXAVIvHLYKYoQSM5YGgDQ&amp;ved=0CCwQ6AEwAg#v=onepage&amp;q&amp;f=false">Medical Education in the United States and Canada</a> that started the movement to raise &ldquo;American medical education&hellip; to the highest [status] in the civilized world&rdquo;<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>)</p>
-
-<p><em>How We Die</em> won the National Book Award, was a finalist for the Pulitzer Prize, and perched atop the New York Times' bestseller list for more than thirty weeks. This book answers a question we have all asked at some point &mdash; what will it be like to die? A hope many of us share is to have a dignified death with little suffering for ourselves and our families, but reflecting on his many years and experiences with death, Nuland has found that</p>
-
-<blockquote><p>the greatest dignity to be found in death is the dignity of the life that preceded it. This is a form of hope we can all achieve, and it is the most abiding of all. Hope resides in the meaning of what our lives have been.</p></blockquote>
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>Nuland, Sherwin B. (2014-06-25). <em>How We Die: Reflections on Life&rsquo;s Final Chapter</em>. Kindle Edition<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-<li id="fn:2">
-<p>Webster, John. (1612) <em>The Duchess of Malfi</em><a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
-<li id="fn:3">
-<p>Flenxer, Abraham. (1910). <em>Medical Education in the United States and Canada</em>.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
 ]]></content>
   </entry>
   
