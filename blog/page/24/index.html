@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Mongod Maintenance - keighty</title>
+  <title>keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="My laptop&rsquo;s battery died, and I let it. Not a big deal, it is an old laptop and is used to being abused. Every time it does a hard shut down &hellip;">
+  <meta name="description" content="This week @PDXcodeschool we jumped into TDD using minitest/autorun. I have
+used RSpec in the past, and loved the way it let me manage the logic of my &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/maintaining-mongod">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/page/24">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -77,12 +78,15 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article class="hentry" role="article">
+      <div class="blog-index">
   
+  
+  
+    <article>
+      
   <header>
     
-      <h1 class="entry-title">Mongod Maintenance</h1>
+      <h1 class="entry-title"><a href="/blog/2013/TDD-is-the-way-to-be/">I Admit It, I Love TDD</a></h1>
     
     
       <p class="meta">
@@ -98,152 +102,36 @@
   
 
 
-<time datetime="2014-01-22T07:23:10-08:00" pubdate data-updated="true">Jan 22<span>nd</span>, 2014</time>
+<time datetime="2013-06-14T00:00:00-07:00" pubdate data-updated="true">Jun 14<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>My laptop&rsquo;s battery died, and I let it. Not a big deal, it is an old laptop and is used to being abused. Every time it does a hard shut down like that I wonder if it will recover. The laptop recovered just fine, but mongo did not. When my computer coughed back to life, I politely requested a meteor server, to which meteor replied that it could not start my server because it could not find a running mongodb. My first instinct, naturally, was to start it up again<!--more-->:</p>
+  <div class="entry-content"><p>This week @PDXcodeschool we jumped into TDD using minitest/autorun. I have
+used RSpec in the past, and loved the way it let me manage the logic of my project.
+I love that ruby has a built in framework &mdash; so easy to use!</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mongo start
-</span><span class='line'>MongoDB shell version: 2.4.6
-</span><span class='line'>connecting to: start
-</span><span class='line'>Mon Jan 20 07:42:47.289 Error: couldn<span class="err">&#39;</span>t connect to server 127.0.0.1:27017 at src/mongo/shell/mongo.js:145
-</span><span class='line'>exception: connect failed
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Followed by a trip to the logs:</p>
-
-<figure class='code'><figcaption><span>This error has been reformatted to fit your tv.</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>tail /var/log/mongodb/mongodb.log
-</span><span class='line'>*************
-</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> exception in initAndListen: 10309 Unable to create/open lock file: /var/lib/mongodb/mongod.lock errno:13 Permission denied Is a mongod instance already running?, terminating
-</span><span class='line'>dbexit:
-</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> shutdown: going to close listening sockets...
-</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> shutdown: going to flush diaglog...
-</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> shutdown: going to close sockets...
-</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> shutdown: waiting <span class="k">for </span>fs preallocator...
-</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> shutdown: closing all files...
-</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> closeAllFiles<span class="o">()</span> finished
-</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> shutdown: removing fs lock...
-</span><span class='line'><span class="o">[</span>initandlisten<span class="o">]</span> couldn<span class="err">&#39;</span>t remove fs lock errno:9 Bad file descriptor
-</span><span class='line'>dbexit: really exiting now
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>A lock file, you say? Well! I know what to do with those!</p>
-
-<figure class='code'><figcaption><span>Are you sure you want to mess with this?</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>rm /var/lib/mongodb/mongod.lock
-</span><span class='line'>rm: remove write-protected regular file <span class="sb">`</span>/var/lib/mongodb/mongod.lock<span class="err">&#39;</span>? n
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>No, I am not sure &mdash; thanks for asking! After a deep breath and a reminder that I should not be so hasty (rtfm, katie), I found this note on <a href="http://docs.mongodb.org/manual/reference/configuration-options/#repair">mongodb.org</a>:</p>
-
-<blockquote><p>Note: Because mongod rewrites all of the database files during the repair routine, if you do not run repair under the same user account as mongod usually runs, you will need to run chown on your database files to correct the permissions before starting mongod again.</p></blockquote>
-
-<p>A file rewrite will include a lock file, will it not?</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u mongodb mongod --repair --dbpath /var/lib/mongodb/
-</span><span class='line'><span class="o">[</span>sudo<span class="o">]</span> password <span class="k">for </span>keighty:
-</span><span class='line'>...
-</span><span class='line'>sudo service mongodb start
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
 </div>
-
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">katie leonard</span></span>
-
-      
-
-
-
-
-
-
-
-
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/TDD-is-the-way-to-be/">Read on &rarr;</a>
+    </footer>
   
 
 
-<time datetime="2014-01-22T07:23:10-08:00" pubdate data-updated="true">Jan 22<span>nd</span>, 2014</time>
-      
-
-<span class="categories">
+    </article>
   
-    <a class='category' href='/blog/categories/mongodb/'>mongodb</a>
-  
-</span>
-
-
-    </p>
+  <div class="pagination">
     
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/maintaining-mongod/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/maintaining-mongod/" >Tweet</a>
-  
-  
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
-</div>
-
+    <a href="/blog/archives">Blog Archives</a>
     
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2014/embrace-hrt-for-collabrative-nirvana/" title="Previous Post: embrace HRT for collabrative nirvana">&laquo; embrace HRT for collabrative nirvana</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2014/git-retrieve/" title="Next Post: git retrieve: a drama">git retrieve: a drama &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a class="next" href="/blog/page/23/">Newer &rarr;</a>
+    
+  </div>
 </div>
-  </section>
-
-</div>
-
 <aside class="sidebar">
   
     <section>
@@ -288,7 +176,7 @@
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating...</li>
+    <li class="loading">Status updating&#8230;</li>
   </ul>
   
   <script type="text/javascript">
@@ -316,7 +204,7 @@
 <section>
   <div>
     <h1>Aboot me</h1>
-    <p>I have loved programming since my first "Hello World!", and have been seeking source code enlightenment through Java, Ruby, Rails, and JavaScript. I am also a recent immigrant to Portland, Oregon - perhaps you can tell from my Canadian accent?</p>
+    <p>I have loved programming since my first &#8220;Hello World!&#8221;, and have been seeking source code enlightenment through Java, Ruby, Rails, and JavaScript. I am also a recent immigrant to Portland, Oregon - perhaps you can tell from my Canadian accent?</p>
   </div>
 </section>
 
@@ -354,7 +242,6 @@
   
 </aside>
 
-
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -369,10 +256,7 @@
       var disqus_shortname = 'keightyleonard';
       
         
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/maintaining-mongod/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2014/maintaining-mongod/';
-        var disqus_script = 'embed.js';
+        var disqus_script = 'count.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

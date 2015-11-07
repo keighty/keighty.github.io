@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-10-31T10:11:19-07:00</updated>
+  <updated>2015-11-07T10:34:32-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,101 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Javascript Object Property Meta Properties]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/javascript-object-property-meta-properties/"/>
+    <updated>2015-11-07T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/javascript-object-property-meta-properties</id>
+    <content type="html"><![CDATA[<p>JavaScript Objects are complex types, and even defined properties have a control panel of their own. You can view the content of the control panel using <code>Object.getOwnPropertyDescriptor()</code>, and flip their switches using <code>Object.defineProperty()</code>. <!--more--></p>
+
+<blockquote><p>Note: These property descriptors are for <code>own properties</code> &mdash; that is, properties that are directly defined on an object, not those that come along for the ride on the object&rsquo;s prototype chain.</p></blockquote>
+
+<h3>The property descriptor holds meta data</h3>
+
+<p>```</p>
+
+<blockquote><p>var me = {
+  name: &ldquo;Katie&rdquo;
+}</p>
+
+<p>Object.getOwnPropertyDescriptor( me, &ldquo;name&rdquo; )
+{
+  value: &ldquo;Katie&rdquo;, // the value associated with the property
+  writable: true,   // true if the value of the property can be changed
+  enumerable: true, // true if the property shows up during enumeration of the properties
+  configurable: true // true if any of these meta properties can be changed
+}
+```</p></blockquote>
+
+<h3>Change the property value</h3>
+
+<p>```
+Object.defineProperty( me, &ldquo;name&rdquo;, {
+  value: &ldquo;keighty&rdquo;
+})</p>
+
+<p>me.name // &ldquo;keighty&rdquo;
+```</p>
+
+<h3>Make the property read only</h3>
+
+<p>```
+Object.defineProperty(me, &ldquo;name&rdquo;, {
+  writable: false
+})</p>
+
+<p>me.name = &ldquo;k80&rdquo;
+me.name  //&ldquo;keighty&rdquo; &mdash; actual value of me.name did not change
+```</p>
+
+<h3>Make the property hidden from for-loops (or any enumeration)</h3>
+
+<p>```
+me.hobbies = [&ldquo;bridge&rdquo;, &ldquo;curling&rdquo;, &ldquo;tap dancing&rdquo;]
+me // Object {hobbies: Array[3], name: &ldquo;keighty&rdquo;}</p>
+
+<p>for(fact in me) {
+ console.log(fact)
+}
+// All the properties defined on me are written to the console:
+// name
+// hobbies</p>
+
+<p>Object.defineProperty(me, &ldquo;name&rdquo;, {
+ enumerable: false
+})</p>
+
+<p>for(fact in me) {
+ console.log(fact)
+}
+// Actually.. only enumerable properties are written to the console:
+// hobbies
+```</p>
+
+<h3>Freeze the property</h3>
+
+<p>```
+Object.defineProperty(me, &ldquo;name&rdquo;, {
+ configurable: false
+})</p>
+
+<p>Object.getOwnPropertyDescriptor(me, &ldquo;name&rdquo;)
+// { value: &ldquo;keighty&rdquo;,
+//   writable: false,
+//   enumerable: false,
+//   configurable: false }</p>
+
+<p>Object.defineProperty(me, &ldquo;name&rdquo;, {
+ writable: true
+})</p>
+
+<p>Uncaught TypeError: Cannot redefine property: name(…)
+```</p>
+
+<p>From <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-8.10">the docs</a>: &ldquo;The Property Descriptor type is used to explain the manipulation and reification of named property attributes. Use Object.defineProperty for fine-grained control over the visibility and mutability of your object&rsquo;s properties.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Gaining Closure Through Modules]]></title>
@@ -403,70 +498,6 @@ true
 <p>Reduced memory consumption is one advantage of keeping a reference to a prototype instead of a complete copy. Another advantage is that if additions are made to the Prototype, the changes will be extended to all instances.</p>
 
 <p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA['In' Operator Avoids False Falsies]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/in-operator-avoid-false-falsies/"/>
-    <updated>2014-08-05T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/in-operator-avoid-false-falsies</id>
-    <content type="html"><![CDATA[<p>I have encountered more than my share of javascript errors because I have made assumptions about the object I am working with, such as assuming that an object contains a property, and that I can call methods on that property:</p>
-
-<p>
-```javascript</p>
-
-<blockquote><p>myObject.data[0]
-TypeError: Cannot read property &lsquo;0&rsquo; of undefined
-```
-</p></blockquote>
-
-<p>This line contains four assumptions, and therefore four places it can fail:</p>
-
-<ol>
-<li><code>myObject</code> exists</li>
-<li><code>myObject</code> contains a property called <code>data</code></li>
-<li><code>data</code> is an array</li>
-<li><code>data</code> is non-empty</li>
-</ol>
-
-
-<p>Presuming that if <code>myObject</code> does not exist means you have bigger problems, it is easy to fall into the trap of checking for the existence of a property by gating a conditional with it:</p>
-
-<p>
-<code>javascript
-if(myObject.data) {
-  //do something important with the data
-}
-</code>
-</p>
-
-<p>This technique will work in development, but the voice of experience tells us that it will not work in production. The reason it will not work is that javascript has more falsy values than most languages. Falsy values include the number zero, empty strings, null, undefined, NaN, and of course, the boolean false. So, if it is possible <code>myObject.data</code> to contain derived information, you have signed up to troubleshoot some unexpected behaviour.</p>
-
-<p>Fortunately, javascript has provided a failsafe way to check the existence of a property, regardless of the data it contains. The <code>in</code> operator checks if the key exists in the object&rsquo;s hash table, and doesn&rsquo;t care if it is a prototype or singleton property.</p>
-
-<p>
-```javascript</p>
-
-<blockquote><p>var myObject = {}
-undefined
-&lsquo;data&rsquo; in myObject
-false</p>
-
-<p>myObject.data = &lsquo;&rsquo;
-&ldquo;&rdquo;
-&lsquo;data&rsquo; in myObject
-true
-myObject.data == true
-false
-```
-</p></blockquote>
-
-<p><code>('data' in myObject)</code> returns false if the property is undefined. If the property is defined, it returns true even if data contains a falsy value.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
 ]]></content>
   </entry>
   

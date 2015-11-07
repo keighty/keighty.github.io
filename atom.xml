@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-10-31T10:11:19-07:00</updated>
+  <updated>2015-11-07T10:34:32-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,151 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Javascript Object Property Meta Properties]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/javascript-object-property-meta-properties/"/>
+    <updated>2015-11-07T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/javascript-object-property-meta-properties</id>
+    <content type="html"><![CDATA[<p>JavaScript Objects are complex types, and even defined properties have a control panel of their own. You can view the content of the control panel using <code>Object.getOwnPropertyDescriptor()</code>, and flip their switches using <code>Object.defineProperty()</code>. <!--more--></p>
+
+<blockquote><p>Note: These property descriptors are for <code>own properties</code> &mdash; that is, properties that are directly defined on an object, not those that come along for the ride on the object&rsquo;s prototype chain.</p></blockquote>
+
+<h3>The property descriptor holds meta data</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; var me = {
+</span><span class='line'>  name: "Katie"
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>&gt; Object.getOwnPropertyDescriptor( me, "name" )
+</span><span class='line'>{
+</span><span class='line'>  value: "Katie", // the value associated with the property
+</span><span class='line'>  writable: true,   // true if the value of the property can be changed
+</span><span class='line'>  enumerable: true, // true if the property shows up during enumeration of the properties
+</span><span class='line'>  configurable: true // true if any of these meta properties can be changed
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Change the property value</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Object.defineProperty( me, "name", {
+</span><span class='line'>  value: "keighty"
+</span><span class='line'>})
+</span><span class='line'>
+</span><span class='line'>me.name // "keighty"</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Make the property read only</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Object.defineProperty(me, "name", {
+</span><span class='line'>  writable: false
+</span><span class='line'>})
+</span><span class='line'>
+</span><span class='line'>me.name = "k80"
+</span><span class='line'>me.name  //"keighty" -- actual value of me.name did not change</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Make the property hidden from for-loops (or any enumeration)</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>me.hobbies = ["bridge", "curling", "tap dancing"]
+</span><span class='line'>me // Object {hobbies: Array[3], name: "keighty"}
+</span><span class='line'>
+</span><span class='line'>for(fact in me) {
+</span><span class='line'> console.log(fact)
+</span><span class='line'>}
+</span><span class='line'>// All the properties defined on me are written to the console:
+</span><span class='line'>// name
+</span><span class='line'>// hobbies
+</span><span class='line'>
+</span><span class='line'>Object.defineProperty(me, "name", {
+</span><span class='line'> enumerable: false
+</span><span class='line'>})
+</span><span class='line'>
+</span><span class='line'>for(fact in me) {
+</span><span class='line'> console.log(fact)
+</span><span class='line'>}
+</span><span class='line'>// Actually.. only enumerable properties are written to the console:
+</span><span class='line'>// hobbies</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Freeze the property</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Object.defineProperty(me, "name", {
+</span><span class='line'> configurable: false
+</span><span class='line'>})
+</span><span class='line'>
+</span><span class='line'>Object.getOwnPropertyDescriptor(me, "name")
+</span><span class='line'>// { value: "keighty",
+</span><span class='line'>//   writable: false,
+</span><span class='line'>//   enumerable: false,
+</span><span class='line'>//   configurable: false }
+</span><span class='line'>
+</span><span class='line'>Object.defineProperty(me, "name", {
+</span><span class='line'> writable: true
+</span><span class='line'>})
+</span><span class='line'>
+</span><span class='line'>Uncaught TypeError: Cannot redefine property: name(…)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>From <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-8.10">the docs</a>: &ldquo;The Property Descriptor type is used to explain the manipulation and reification of named property attributes. Use Object.defineProperty for fine-grained control over the visibility and mutability of your object&rsquo;s properties.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Estimate != Commitment != Target]]></title>
@@ -2055,126 +2200,6 @@ Having traced the source of <code>undefined is not a function</code> enough time
 <p>Flenxer, Abraham. (1910). <em>Medical Education in the United States and Canada</em>.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Objects vs Data Structures]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/objects-vs-data-structures/"/>
-    <updated>2015-01-18T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/objects-vs-data-structures</id>
-    <content type="html"><![CDATA[<p>&ldquo;It is impossible to create an abstraction unknowingly or by accident,&rdquo; says Sandi Metz in <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330/ref=sr_1_1?ie=UTF8&amp;qid=1421723392&amp;sr=8-1&amp;keywords=practical+object+oriented+design+in+ruby"><em>Practical Object Oriented Design in Ruby</em></a>. An abstraction is a common, stable quality, such that you would find in a java interface. An interface is an idea that cannot be made concrete, but contains behaviour <a href="http://en.wikipedia.org/wiki/Interface_%28Java%29">encoding similarities</a> which objects might share. Even the definition of abstraction is abstract, and it wasn&rsquo;t until I read Robert C. Martin&rsquo;s chapter on Objects and Data Structures in <a href="http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882"><em>Clean Code</em></a> that I really started to understand them.</p>
-
-<!--more-->
-
-
-<h3>What is a data structure</h3>
-
-<p>A data structure is a class that exposes its data to the public. It should have no meaningful behaviour, and can be characterized by a set of attributes along with getters and setters.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Point1</span>
-</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:x</span><span class="p">,</span> <span class="ss">:y</span><span class="p">,</span> <span class="ss">:z</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">p</span> <span class="o">=</span> <span class="no">Point1</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'><span class="nb">p</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
-</span><span class='line'><span class="nb">p</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">1</span>
-</span><span class='line'><span class="nb">p</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="mi">1</span>
-</span><span class='line'><span class="nb">p</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In this example, a Point is defined as an object at some location on a coordinate grid of some kind. That sounds abstract enough: you can create a point, <span class='pullquote-right' data-pullquote='Hiding implementation is not about putting a layer of functions between the variables. It is about abstractions.'>access all of the point&rsquo;s data, and set its location along each axis independently. You have an instance of a point, but it is not an abstraction of a point &mdash; it is a data structure. Hiding implementation is not about putting a layer of functions between the variables. It is about abstractions.
-</span> Adding an initializer that sets each variable, or a <code>to_s</code> method for getting a pretty output, would not make the Point1 class any more an abstraction of a position in space. To make an abstraction you can&rsquo;t just use getters and setters &mdash; you have to think about how you are representing the data.</p>
-
-<h3>What is an object</h3>
-
-<p>An object hides its data behind abstractions. A Point is not defined by its <code>[@x, @y, @z]</code>, but by its location in space. If space is a coordinate system, it could be 2- or 3-dimensional.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Point2</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">set_location</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">to_s</span>
-</span><span class='line'>    <span class="s2">&quot;(</span><span class="si">#{</span><span class="o">[</span><span class="vi">@x</span><span class="p">,</span> <span class="vi">@y</span><span class="p">,</span> <span class="vi">@z</span><span class="o">].</span><span class="n">compact</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>  <span class="n">alias_method</span> <span class="ss">:location</span><span class="p">,</span> <span class="ss">:to_s</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">set_location</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
-</span><span class='line'>    <span class="vi">@x</span> <span class="o">=</span> <span class="n">x</span>
-</span><span class='line'>    <span class="vi">@y</span> <span class="o">=</span> <span class="n">y</span>
-</span><span class='line'>    <span class="vi">@z</span> <span class="o">=</span> <span class="n">z</span>
-</span><span class='line'>    <span class="n">location</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>  <span class="kp">private</span> <span class="ss">:set_location</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">alias_method</span> <span class="ss">:move_point</span><span class="p">,</span> <span class="ss">:set_location</span>
-</span><span class='line'>  <span class="kp">public</span> <span class="ss">:move_point</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">p</span> <span class="o">=</span> <span class="no">Point2</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</span><span class='line'><span class="nb">p</span><span class="o">.</span><span class="n">move_point</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-</span><span class='line'><span class="nb">p</span><span class="o">.</span><span class="n">move_point</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>A point cannot exist separate from it&rsquo;s coordinates, and coordinates cannot exist or be altered without using the abstraction of moving in space.</p>
-
-<blockquote><p>&ldquo;We do not want to expose the details of our data. Rather we want to express our data in abstract terms. This is not merely accomplished by using interfaces and/or getters and setters. Serious thought needs to be put into the best way to represent the data that an object contains.&rdquo;</p>
-
-<p>&mdash; Martin</p></blockquote>
-
-<p>This is why <a href="http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/">fat models are an anti-pattern in Rails</a>. ActiveRecord makes an object out of a data structure, and adding behaviour beyond data validation makes the model a hybrid data object. <a href="http://railscasts.com/episodes/398-service-objects">Service Objects</a> are abstractions of model behaviour (pun intended).</p>
-
-<p>Now I know what an abstraction is, and I understand that simply extracting methods into interfaces doesn&rsquo;t magically make an abstraction. As Metz says, &ldquo;good design naturally progresses toward small independent objects that rely on abstractions.&rdquo; An object is more than a data structure; it is an idea and it must be applied deliberately.</p>
-
-<!-- resources
-http://www.cgore.com/programming/ruby/public-aliases-of-private-methods.lisp
--->
-
-
-<!-- resources
-http://railscasts.com/episodes/398-service-objects
-http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/
--->
 
 ]]></content>
   </entry>

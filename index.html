@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Software estimation is hard, but I didn&rsquo;t really understand why until I started reading Software Estimation: Demystifying the Black Art by &hellip;">
+  <meta name="description" content="JavaScript Objects are complex types, and even defined properties have a control panel of their own. You can view the content of the control panel &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,45 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/javascript-object-property-meta-properties/">Javascript Object Property Meta Properties</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-11-07T00:00:00-08:00" pubdate data-updated="true">Nov 7<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>JavaScript Objects are complex types, and even defined properties have a control panel of their own. You can view the content of the control panel using <code>Object.getOwnPropertyDescriptor()</code>, and flip their switches using <code>Object.defineProperty()</code>. </div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/javascript-object-property-meta-properties/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -244,148 +283,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/dont-count-your-chickens-if-they-are-active-record-objects/">Don&#8217;t Count Your Chickens if They Are ActiveRecord Objects</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-05-07T00:00:00-07:00" pubdate data-updated="true">May 7<span>th</span>, 2015</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>You may believe that <code>#length</code>, <code>#size</code>, and <code>#count</code> are fairly equivalent:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>irb(main):002:0&gt; yourRubyChickens =  %w{ Chantecler RedShaver RhodeIslandRed }
-</span><span class='line'>=&gt; ["Chantecler", "RedShaver", "RhodeIslandRed"]
-</span><span class='line'>irb(main):003:0&gt; yourRubyChickens.length
-</span><span class='line'>=&gt; 3
-</span><span class='line'>irb(main):004:0&gt; yourRubyChickens.size
-</span><span class='line'>=&gt; 3
-</span><span class='line'>irb(main):005:0&gt; yourRubyChickens.count
-</span><span class='line'>=&gt; 3</span></code></pre></td></tr></table></div></figure>
-
-
-<p>But, beware of <code>#count</code> in Rails!</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[1] pry(main)&gt; yourRailsChickens = Chicken.all
-</span><span class='line'>  Chicken Load (2.1ms)  SELECT "chickens".* FROM "chickens"
-</span><span class='line'>=&gt; [#&lt;ChanteclerChicken:0x007f98eafcd6d8
-</span><span class='line'>  id: 1,
-</span><span class='line'>  type: "ChanteclerChicken",
-</span><span class='line'>  color: "white",
-</span><span class='line'>  created_at: Thu, 07 May 2015 14:36:36 UTC +00:00,
-</span><span class='line'>  updated_at: Thu, 07 May 2015 14:36:36 UTC +00:00&gt;,
-</span><span class='line'> #&lt;RedShaverChicken:0x007f98e63a9428
-</span><span class='line'>  id: 2,
-</span><span class='line'>  type: "RedShaverChicken",
-</span><span class='line'>  color: "white",
-</span><span class='line'>  created_at: Thu, 07 May 2015 14:37:01 UTC +00:00,
-</span><span class='line'>  updated_at: Thu, 07 May 2015 14:37:01 UTC +00:00&gt;,
-</span><span class='line'> #&lt;RedShaverChicken:0x007f98e63a9248
-</span><span class='line'>  id: 3,
-</span><span class='line'>  type: "RedShaverChicken",
-</span><span class='line'>  color: "black",
-</span><span class='line'>  created_at: Thu, 07 May 2015 14:37:25 UTC +00:00,
-</span><span class='line'>  updated_at: Thu, 07 May 2015 14:37:25 UTC +00:00&gt;,
-</span><span class='line'> #&lt;RedShaverChicken:0x007f98e63a9068
-</span><span class='line'>  id: 4,
-</span><span class='line'>  type: "RedShaverChicken",
-</span><span class='line'>  color: "red",
-</span><span class='line'>  created_at: Thu, 07 May 2015 14:37:35 UTC +00:00,
-</span><span class='line'>  updated_at: Thu, 07 May 2015 14:37:35 UTC +00:00&gt;,
-</span><span class='line'> #&lt;RedShaverChicken:0x007f98e63a8e88
-</span><span class='line'>  id: 5,
-</span><span class='line'>  type: "RedShaverChicken",
-</span><span class='line'>  color: "white",
-</span><span class='line'>  created_at: Thu, 07 May 2015 14:37:53 UTC +00:00,
-</span><span class='line'>  updated_at: Thu, 07 May 2015 14:37:53 UTC +00:00&gt;]
-</span><span class='line'>
-</span><span class='line'>[2] pry(main)&gt; yourRailsChickens.length
-</span><span class='line'>=&gt; 5
-</span><span class='line'>[3] pry(main)&gt; yourRailsChickens.size
-</span><span class='line'>=&gt; 5
-</span><span class='line'>[4] pry(main)&gt; yourRailsChickens.count
-</span><span class='line'>   (0.2ms)  SELECT COUNT(*) FROM "chickens"
-</span><span class='line'>=&gt; 5</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>#size</code> and <code>#length</code> are largely equivalent, but <code>#count</code> issues an additional query to the database that can seriously damage performance for the unsuspecting developer.</p>
-
-<p>For more info, checkout the docs for <a href="http://www.rubydoc.info/docs/rails/4.0.0/ActiveRecord/Calculations:count">count</a> and <a href="http://www.rubydoc.info/docs/rails/4.0.0/ActiveRecord/Associations/CollectionAssociation:length">length</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -413,6 +310,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/javascript-object-property-meta-properties/">Javascript Object Property Meta Properties</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/software-estimation-is-hard/">Estimate != Commitment != Target</a>
       </li>
     
@@ -426,10 +327,6 @@
     
       <li class="post">
         <a href="/blog/2015/hunting-monkey-patches/">Hunting Monkey Patches</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/dont-count-your-chickens-if-they-are-active-record-objects/">Don&#8217;t Count Your Chickens if They Are ActiveRecord Objects</a>
       </li>
     
   </ul>

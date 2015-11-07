@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Constructors and Prototypes - keighty</title>
+  <title>Javascript Object Property Meta Properties - keighty</title>
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Object-oriented programming (OOP) can be thought of as describing the properties and behaviour of a noun in a blueprint, which is used to create &hellip;">
+  <meta name="description" content="JavaScript Objects are complex types, and even defined properties have a control panel of their own. You can view the content of the control panel &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/2014/constructors-and-prototypes">
+  <link rel="canonical" href="http://www.katieleonard.ca/blog/2015/javascript-object-property-meta-properties">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">Constructors and Prototypes</h1>
+      <h1 class="entry-title">Javascript Object Property Meta Properties</h1>
     
     
       <p class="meta">
@@ -98,16 +98,20 @@
   
 
 
-<time datetime="2014-08-07T00:00:00-07:00" pubdate data-updated="true">Aug 7<span>th</span>, 2014</time>
+<time datetime="2015-11-07T00:00:00-08:00" pubdate data-updated="true">Nov 7<span>th</span>, 2015</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Object-oriented programming (OOP) can be thought of as describing the properties and behaviour of a noun in a blueprint, which is used to create instances of an object. The blueprint is defined as a Constructor &mdash; a function that identifies a class of objects and begins with a capital letter. New objects are created by calling a Constructor with the keyword <code>new</code>.</p>
+<div class="entry-content"><p>JavaScript Objects are complex types, and even defined properties have a control panel of their own. You can view the content of the control panel using <code>Object.getOwnPropertyDescriptor()</code>, and flip their switches using <code>Object.defineProperty()</code>. <!--more--></p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<blockquote><p>Note: These property descriptors are for <code>own properties</code> &mdash; that is, properties that are directly defined on an object, not those that come along for the ride on the object&rsquo;s prototype chain.</p></blockquote>
+
+<h3>The property descriptor holds meta data</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -118,46 +122,52 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">function</span> <span class="nx">Book</span><span class="p">(</span><span class="nx">title</span><span class="p">,</span> <span class="nx">author</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">title</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="nx">author</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">listing</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">title</span><span class="p">,</span> <span class="s2">&quot;by&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">author</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">));</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; var me = {
+</span><span class='line'>  name: "Katie"
+</span><span class='line'>}
 </span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">book1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span> <span class="s2">&quot;Joseph Heller&quot;</span><span class="p">)</span>
+</span><span class='line'>&gt; Object.getOwnPropertyDescriptor( me, "name" )
+</span><span class='line'>{
+</span><span class='line'>  value: "Katie", // the value associated with the property
+</span><span class='line'>  writable: true,   // true if the value of the property can be changed
+</span><span class='line'>  enumerable: true, // true if the property shows up during enumeration of the properties
+</span><span class='line'>  configurable: true // true if any of these meta properties can be changed
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Change the property value</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Object.defineProperty( me, "name", {
+</span><span class='line'>  value: "keighty"
+</span><span class='line'>})
 </span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'><span class="s2">&quot;Catch-22&quot;</span>
+</span><span class='line'>me.name // "keighty"</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Make the property read only</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Object.defineProperty(me, "name", {
+</span><span class='line'>  writable: false
+</span><span class='line'>})
 </span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">author</span>
-</span><span class='line'><span class="s2">&quot;Joseph Heller&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">listing</span><span class="p">()</span>
-</span><span class='line'><span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span> <span class="nx">by</span> <span class="nx">Joseph</span> <span class="nx">Heller</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>me.name = "k80"
+</span><span class='line'>me.name  //"keighty" -- actual value of me.name did not change</span></code></pre></td></tr></table></div></figure>
 
 
-<p>The Book constructor specifies two properties, <code>title</code> and <code>author</code>, and one method, <code>listing</code>. Defining a method in a constructor ensures that all instances of the Object have the same method, but it also results in duplication of the method in the memory stack for every instance of the Object. If I made 1000 instances of Book, there would be 1000 instances of the listing method, even though it is only defined once, and is the same for every object.</p>
+<h3>Make the property hidden from for-loops (or any enumeration)</h3>
 
-<h4>Memory stack of objects with instance methods:</h4>
-
-<p><img src="/images/post_constructor_memory_stack.png"></p>
-
-
-<p>Enter Prototypes.</p>
-
-<p>A Prototype is a property that is shared by all instances of an object. When the constructor for an object is called for the first time, all the object&rsquo;s properties are loaded onto the memory stack as well as the object&rsquo;s Prototype. All subsequent instances of that object include a pointer to the same Prototype, and they pass in a pointer to themselves as <code>this</code> whenever they call a method from the Prototype.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -176,44 +186,62 @@
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
 <span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">Book</span><span class="p">(</span><span class="nx">title</span><span class="p">,</span> <span class="nx">author</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">title</span><span class="p">;</span>
-</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="nx">author</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>me.hobbies = ["bridge", "curling", "tap dancing"]
+</span><span class='line'>me // Object {hobbies: Array[3], name: "keighty"}
 </span><span class='line'>
-</span><span class='line'><span class="nx">Book</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">listing</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">title</span><span class="p">,</span> <span class="s2">&quot;by&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">author</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">));</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
+</span><span class='line'>for(fact in me) {
+</span><span class='line'> console.log(fact)
+</span><span class='line'>}
+</span><span class='line'>// All the properties defined on me are written to the console:
+</span><span class='line'>// name
+</span><span class='line'>// hobbies
 </span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">book1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span> <span class="s2">&quot;Joseph Heller&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">book2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;Slaughterhouse 5&quot;</span><span class="p">,</span> <span class="s2">&quot;Kurt Vonnegut&quot;</span><span class="p">)</span>
+</span><span class='line'>Object.defineProperty(me, "name", {
+</span><span class='line'> enumerable: false
+</span><span class='line'>})
 </span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">listing</span><span class="p">()</span>
-</span><span class='line'><span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span> <span class="nx">by</span> <span class="nx">Joseph</span> <span class="nx">Heller</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book2</span><span class="p">.</span><span class="nx">listing</span><span class="p">()</span>
-</span><span class='line'><span class="nx">Slaughterhouse</span> <span class="mi">5</span> <span class="nx">by</span> <span class="nx">Kurt</span> <span class="nx">Vonnegut</span>
+</span><span class='line'>for(fact in me) {
+</span><span class='line'> console.log(fact)
+</span><span class='line'>}
+</span><span class='line'>// Actually.. only enumerable properties are written to the console:
+</span><span class='line'>// hobbies</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Freeze the property</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Object.defineProperty(me, "name", {
+</span><span class='line'> configurable: false
+</span><span class='line'>})
 </span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s2">&quot;listing&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="kc">false</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;listing&#39;</span> <span class="k">in</span> <span class="nx">book1</span>
-</span><span class='line'><span class="kc">true</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>Object.getOwnPropertyDescriptor(me, "name")
+</span><span class='line'>// { value: "keighty",
+</span><span class='line'>//   writable: false,
+</span><span class='line'>//   enumerable: false,
+</span><span class='line'>//   configurable: false }
+</span><span class='line'>
+</span><span class='line'>Object.defineProperty(me, "name", {
+</span><span class='line'> writable: true
+</span><span class='line'>})
+</span><span class='line'>
+</span><span class='line'>Uncaught TypeError: Cannot redefine property: name(…)</span></code></pre></td></tr></table></div></figure>
 
 
-<h4>Memory stack of object with prototypes:</h4>
-
-<p><img src="/images/post_prototype_memory_stack.png"></p>
-
-
-<p>Reduced memory consumption is one advantage of keeping a reference to a prototype instead of a complete copy. Another advantage is that if additions are made to the Prototype, the changes will be extended to all instances.</p>
-
-<p>Awesome.</p>
+<p>From <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-8.10">the docs</a>: &ldquo;The Property Descriptor type is used to explain the manipulation and reification of named property attributes. Use Object.defineProperty for fine-grained control over the visibility and mutability of your object&rsquo;s properties.</p>
 </div>
 
 
@@ -236,7 +264,7 @@
   
 
 
-<time datetime="2014-08-07T00:00:00-07:00" pubdate data-updated="true">Aug 7<span>th</span>, 2014</time>
+<time datetime="2015-11-07T00:00:00-08:00" pubdate data-updated="true">Nov 7<span>th</span>, 2015</time>
       
 
 <span class="categories">
@@ -250,7 +278,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2014/constructors-and-prototypes/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2014/constructors-and-prototypes/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.katieleonard.ca/blog/2015/javascript-object-property-meta-properties/" data-via="KeightyLeonard" data-counturl="http://www.katieleonard.ca/blog/2015/javascript-object-property-meta-properties/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -263,10 +291,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/in-operator-avoid-false-falsies/" title="Previous Post: 'in' operator avoids false falsies">&laquo; 'in' operator avoids false falsies</a>
+        <a class="basic-alignment left" href="/blog/2015/software-estimation-is-hard/" title="Previous Post: estimate != commitment != target">&laquo; estimate != commitment != target</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/javascript-getters-and-setters/" title="Next Post: javascript getters and setters">javascript getters and setters &raquo;</a>
       
     </p>
   </footer>
@@ -406,8 +432,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.katieleonard.ca/blog/2014/constructors-and-prototypes/';
-        var disqus_url = 'http://www.katieleonard.ca/blog/2014/constructors-and-prototypes/';
+        var disqus_identifier = 'http://www.katieleonard.ca/blog/2015/javascript-object-property-meta-properties/';
+        var disqus_url = 'http://www.katieleonard.ca/blog/2015/javascript-object-property-meta-properties/';
         var disqus_script = 'embed.js';
       
     (function () {

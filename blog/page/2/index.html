@@ -9,7 +9,15 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="You can mimic the end-user&rsquo;s UI experience accurately enough by running application code locally, but what about the backend? Once your code is &hellip;">
+  <meta name="description" content="You may believe that #length, #size, and #count are fairly equivalent: 1
+2
+3
+4
+5
+6
+7
+8
+irb(main):002:0&gt; yourRubyChickens = %w{ Chantecler &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +87,148 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/dont-count-your-chickens-if-they-are-active-record-objects/">Don&#8217;t Count Your Chickens if They Are ActiveRecord Objects</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-05-07T00:00:00-07:00" pubdate data-updated="true">May 7<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>You may believe that <code>#length</code>, <code>#size</code>, and <code>#count</code> are fairly equivalent:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>irb(main):002:0&gt; yourRubyChickens =  %w{ Chantecler RedShaver RhodeIslandRed }
+</span><span class='line'>=&gt; ["Chantecler", "RedShaver", "RhodeIslandRed"]
+</span><span class='line'>irb(main):003:0&gt; yourRubyChickens.length
+</span><span class='line'>=&gt; 3
+</span><span class='line'>irb(main):004:0&gt; yourRubyChickens.size
+</span><span class='line'>=&gt; 3
+</span><span class='line'>irb(main):005:0&gt; yourRubyChickens.count
+</span><span class='line'>=&gt; 3</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But, beware of <code>#count</code> in Rails!</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[1] pry(main)&gt; yourRailsChickens = Chicken.all
+</span><span class='line'>  Chicken Load (2.1ms)  SELECT "chickens".* FROM "chickens"
+</span><span class='line'>=&gt; [#&lt;ChanteclerChicken:0x007f98eafcd6d8
+</span><span class='line'>  id: 1,
+</span><span class='line'>  type: "ChanteclerChicken",
+</span><span class='line'>  color: "white",
+</span><span class='line'>  created_at: Thu, 07 May 2015 14:36:36 UTC +00:00,
+</span><span class='line'>  updated_at: Thu, 07 May 2015 14:36:36 UTC +00:00&gt;,
+</span><span class='line'> #&lt;RedShaverChicken:0x007f98e63a9428
+</span><span class='line'>  id: 2,
+</span><span class='line'>  type: "RedShaverChicken",
+</span><span class='line'>  color: "white",
+</span><span class='line'>  created_at: Thu, 07 May 2015 14:37:01 UTC +00:00,
+</span><span class='line'>  updated_at: Thu, 07 May 2015 14:37:01 UTC +00:00&gt;,
+</span><span class='line'> #&lt;RedShaverChicken:0x007f98e63a9248
+</span><span class='line'>  id: 3,
+</span><span class='line'>  type: "RedShaverChicken",
+</span><span class='line'>  color: "black",
+</span><span class='line'>  created_at: Thu, 07 May 2015 14:37:25 UTC +00:00,
+</span><span class='line'>  updated_at: Thu, 07 May 2015 14:37:25 UTC +00:00&gt;,
+</span><span class='line'> #&lt;RedShaverChicken:0x007f98e63a9068
+</span><span class='line'>  id: 4,
+</span><span class='line'>  type: "RedShaverChicken",
+</span><span class='line'>  color: "red",
+</span><span class='line'>  created_at: Thu, 07 May 2015 14:37:35 UTC +00:00,
+</span><span class='line'>  updated_at: Thu, 07 May 2015 14:37:35 UTC +00:00&gt;,
+</span><span class='line'> #&lt;RedShaverChicken:0x007f98e63a8e88
+</span><span class='line'>  id: 5,
+</span><span class='line'>  type: "RedShaverChicken",
+</span><span class='line'>  color: "white",
+</span><span class='line'>  created_at: Thu, 07 May 2015 14:37:53 UTC +00:00,
+</span><span class='line'>  updated_at: Thu, 07 May 2015 14:37:53 UTC +00:00&gt;]
+</span><span class='line'>
+</span><span class='line'>[2] pry(main)&gt; yourRailsChickens.length
+</span><span class='line'>=&gt; 5
+</span><span class='line'>[3] pry(main)&gt; yourRailsChickens.size
+</span><span class='line'>=&gt; 5
+</span><span class='line'>[4] pry(main)&gt; yourRailsChickens.count
+</span><span class='line'>   (0.2ms)  SELECT COUNT(*) FROM "chickens"
+</span><span class='line'>=&gt; 5</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>#size</code> and <code>#length</code> are largely equivalent, but <code>#count</code> issues an additional query to the database that can seriously damage performance for the unsuspecting developer.</p>
+
+<p>For more info, checkout the docs for <a href="http://www.rubydoc.info/docs/rails/4.0.0/ActiveRecord/Calculations:count">count</a> and <a href="http://www.rubydoc.info/docs/rails/4.0.0/ActiveRecord/Associations/CollectionAssociation:length">length</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -244,215 +394,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/exploring-the-stack/">Exploring the Stack</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-03-25T00:00:00-07:00" pubdate data-updated="true">Mar 25<span>th</span>, 2015</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Another brilliant Rails troubleshooting technique I have recently added to my toolbox is <a href="https://github.com/pry/pry-stack_explorer"><code>pry-stack_explorer</code></a> as an add-on to <a href="https://github.com/pry/pry"><code>pry</code></a>.</p>
-
-<h4>1. Add <code>pry</code> and <code>pry-stack_explorer</code> to the development/test group of your gemfile:</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">group</span> <span class="ss">:test</span><span class="p">,</span> <span class="ss">:development</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;pry&#39;</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;pry-stack_explorer&#39;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>2. Add a binding pry anywhere in your code</h4>
-
-<p><img src="/images/150325-show-stack/binding-pry.png"></p>
-
-<h4>3. Enter <code>show-stack</code> at the pry prompt</h4>
-
-<p><img src="/images/150325-show-stack/show-stack.png"></p>
-
-<h4>4. Enter <code>up</code> or <code>down</code> to explore the state of the stack</h4>
-
-<p><img src="/images/150325-show-stack/travel-the-stack.png"></p>
-
-<h4>Other goodies</h4>
-
-<ul>
-<li>Pass a string to <code>up</code> or <code>down</code> and <code>pry-stack_explorer</code> will jump to the first frame that matches:</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>Frame number: 0/108
-</span><span class='line'>
-</span><span class='line'>From: /Users/keighty/Documents/projects/api_playground/app/models/user.rb @ line 4 User#full_name:
-</span><span class='line'>
-</span><span class='line'>    3: def <span class="nv">full_name</span>
-</span><span class='line'> <span class="o">=</span>&gt; 4:   binding.pry
-</span><span class='line'>    5:   <span class="s2">&quot;#{first_name} #{last_name}&quot;</span>
-</span><span class='line'>    6: end
-</span><span class='line'>
-</span><span class='line'><span class="o">[</span>6<span class="o">]</span> pry<span class="o">(</span>&lt;User&gt;<span class="o">)</span>&gt; up instrument
-</span><span class='line'>
-</span><span class='line'>Frame number: 3/108
-</span><span class='line'>Frame <span class="nb">type</span>: method
-</span><span class='line'>
-</span><span class='line'>From: /usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/activesupport-4.2.0/lib/active_support/notifications.rb @ line 166 ActiveSupport::Notifications.instrument:
-</span><span class='line'>
-</span><span class='line'>    162: def instrument<span class="o">(</span>name, <span class="nv">payload</span> <span class="o">=</span> <span class="o">{})</span>
-</span><span class='line'>    163:   <span class="k">if </span>notifier.listening?<span class="o">(</span>name<span class="o">)</span>
-</span><span class='line'>    164:     instrumenter.instrument<span class="o">(</span>name, payload<span class="o">)</span> <span class="o">{</span> yield payload <span class="k">if </span>block_given? <span class="o">}</span>
-</span><span class='line'>    165:   <span class="k">else</span>
-</span><span class='line'> <span class="o">=</span>&gt; 166:     yield payload <span class="k">if </span>block_given?
-</span><span class='line'>    167:   end
-</span><span class='line'>    168: end
-</span><span class='line'>
-</span><span class='line'><span class="o">[</span>7<span class="o">]</span> pry<span class="o">(</span>ActiveSupport::Notifications<span class="o">)</span>&gt; down view
-</span><span class='line'>
-</span><span class='line'>Frame number: 1/108
-</span><span class='line'>Frame <span class="nb">type</span>: method
-</span><span class='line'>
-</span><span class='line'>From: /Users/keighty/Documents/projects/api_playground/app/views/greetings/hello.html.erb @ line 1 ActionView::CompiledTemplates#_app_views_greetings_hello_html_erb___3157151947187763552_70316982999600:
-</span><span class='line'>
-</span><span class='line'> <span class="o">=</span>&gt; 1: &lt;h1&gt;Greetings, &lt;%<span class="o">=</span> @person.full_name %&gt;&lt;/h1&gt;
-</span><span class='line'>    2: &lt;p&gt;This is a greetings view!&lt;/p&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>Pass an integer to <code>up</code> or <code>down</code> to leap over frames</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>8<span class="o">]</span> pry<span class="o">(</span>&lt;Class:0x007fe7eb821330&gt;&gt;<span class="o">)</span>&gt; up 5
-</span><span class='line'>
-</span><span class='line'>Frame number: 6/108
-</span><span class='line'>Frame <span class="nb">type</span>: block
-</span><span class='line'>
-</span><span class='line'>From: /usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/actionview-4.2.0/lib/action_view/renderer/template_renderer.rb @ line 54 ActionView::TemplateRenderer#render_template:
-</span><span class='line'>
-</span><span class='line'>    49: def render_template<span class="o">(</span>template, <span class="nv">layout_name</span> <span class="o">=</span> nil, <span class="nv">locals</span> <span class="o">=</span> nil<span class="o">)</span> <span class="c">#:nodoc:</span>
-</span><span class='line'>    50:   view, <span class="nv">locals</span> <span class="o">=</span> @view, locals <span class="o">||</span> <span class="o">{}</span>
-</span><span class='line'>    51:
-</span><span class='line'>    52:   render_with_layout<span class="o">(</span>layout_name, locals<span class="o">)</span> <span class="k">do</span> |layout|
-</span><span class='line'>    53:     instrument<span class="o">(</span>:template, :identifier <span class="o">=</span>&gt; template.identifier, :layout <span class="o">=</span>&gt; layout.try<span class="o">(</span>:virtual_path<span class="o">))</span> <span class="k">do</span>
-</span><span class='line'> <span class="o">=</span>&gt; 54:       template.render<span class="o">(</span>view, locals<span class="o">)</span> <span class="o">{</span> |*name| view._layout_for<span class="o">(</span>*name<span class="o">)</span> <span class="o">}</span>
-</span><span class='line'>    55:     end
-</span><span class='line'>    56:   end
-</span><span class='line'>    57: end
-</span><span class='line'>
-</span><span class='line'><span class="o">[</span>9<span class="o">]</span> pry<span class="o">(</span>&lt;ActionView::TemplateRenderer&gt;<span class="o">)</span>&gt; down 2
-</span><span class='line'>
-</span><span class='line'>Frame number: 4/108
-</span><span class='line'>Frame <span class="nb">type</span>: method
-</span><span class='line'>
-</span><span class='line'>From: /usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/actionview-4.2.0/lib/action_view/template.rb @ line 333 ActionView::Template#instrument:
-</span><span class='line'>
-</span><span class='line'>    331: def instrument<span class="o">(</span>action, &amp;block<span class="o">)</span>
-</span><span class='line'>    332:   <span class="nv">payload</span> <span class="o">=</span> <span class="o">{</span> virtual_path: @virtual_path, identifier: @identifier <span class="o">}</span>
-</span><span class='line'> <span class="o">=</span>&gt; 333:   ActiveSupport::Notifications.instrument<span class="o">(</span><span class="s2">&quot;#{action}.action_view&quot;</span>, payload, &amp;block<span class="o">)</span>
-</span><span class='line'>    334: end
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To learn even more awesome ways to use <code>pry</code> and <code>pry-stack_explorer</code>, check out the docs:</p>
-
-<ul>
-<li><a href="https://github.com/pry/pry">github.com/pry/pry</a>.</li>
-<li><a href="https://github.com/pry/pry-stack_explorer">github.com/pry/pry-stack_explorer</a></li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -482,6 +423,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/javascript-object-property-meta-properties/">Javascript Object Property Meta Properties</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/software-estimation-is-hard/">Estimate != Commitment != Target</a>
       </li>
     
@@ -495,10 +440,6 @@
     
       <li class="post">
         <a href="/blog/2015/hunting-monkey-patches/">Hunting Monkey Patches</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/dont-count-your-chickens-if-they-are-active-record-objects/">Don&#8217;t Count Your Chickens if They Are ActiveRecord Objects</a>
       </li>
     
   </ul>
