@@ -3,7 +3,7 @@ layout: post
 title: "clean code"
 date: 2015-02-07
 comments: true
-categories: [reads]
+categories: [read]
 ---
 
 
