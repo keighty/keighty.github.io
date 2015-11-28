@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="Team Geek: A Software Developer&rsquo;s Guide to Working Well with Others by Brian W. Fitzpatrick and Ben Collins-Sussman. With decades of collective &hellip;">
+  <meta name="description" content="My laptop&rsquo;s battery died, and I let it. Not a big deal, it is an old laptop and is used to being abused. Every time it does a hard shut down &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,45 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/maintaining-mongod/">Mongod Maintenance</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-22T07:23:10-08:00" pubdate data-updated="true">Jan 22<span>nd</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My laptop&rsquo;s battery died, and I let it. Not a big deal, it is an old laptop and is used to being abused. Every time it does a hard shut down like that I wonder if it will recover. The laptop recovered just fine, but mongo did not. When my computer coughed back to life, I politely requested a meteor server, to which meteor replied that it could not start my server because it could not find a running mongodb. My first instinct, naturally, was to start it up again</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/maintaining-mongod/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -242,68 +281,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/factoring-in-nests/">Factoring in Nests</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-29T22:29:03-07:00" pubdate data-updated="true">Oct 29<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I am building an application that uses several nested attributes: Users have many Goals (Goals belong_to Users), and Goals have many Hours (Hours belong_to Goals).</p>
-
-<p>Using <a href="https://github.com/thoughtbot/factory_girl">FactoryGirl</a> to create a User is straightforward:</p>
-
-<div>
-  <pre><code class='ruby'>FactoryGirl.define do
-  factory :user do
-    sequence :name  { |n| &quot;person#{n}&quot; }
-    sequence :email { |n| &quot;person#{n}@example.com&quot; }
-  end
-end
-
-describe User do
-  before  { @user = FactoryGirl.create(:user) }
-  subject { @user }
-  it { should respond_to(:name) }
-  ...
-end</code></pre>
-</div>
-
-
-<p>How do I create Goals that are linked to the User?</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/factoring-in-nests/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/18/">&larr; Older</a>
@@ -333,6 +310,10 @@ end</code></pre>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/faster-asset-loading-with-cache-control/">Faster Asset Loading With Cache-Control</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/javascript-object-property-meta-properties/">Javascript Object Property Meta Properties</a>
       </li>
     
@@ -346,10 +327,6 @@ end</code></pre>
     
       <li class="post">
         <a href="/blog/2015/keeping-your-notes-close-to-the-code/">Keep Your Code Close and Your Notes Closer With a Global Gitignore</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/hunting-monkey-patches/">Hunting Monkey Patches</a>
       </li>
     
   </ul>

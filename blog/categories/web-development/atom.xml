@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Web Development | keighty]]></title>
+  <link href="http://www.katieleonard.ca/blog/categories/web-development/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2015-11-28T12:59:15-08:00</updated>
+  <id>http://www.katieleonard.ca/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Faster Asset Loading With Cache-Control]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/faster-asset-loading-with-cache-control/"/>
+    <updated>2015-11-27T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/faster-asset-loading-with-cache-control</id>
+    <content type="html"><![CDATA[<p>My side project (Virtual Playbill) is an image-heavy application, and I used YSlow to find a few quick performance wins. The first &lsquo;F&rsquo; I got was for No Expires Headers:</p>
+
+<p><img src="/images/151127-cache-control/add-expires-headers.png"></p>
+
+<h3>What is an Expires Header?</h3>
+
+<p>Loading the page requires slow and expensive network calls to download all the JavaScript, CSS, and image files. If someone visits the page more than once, I can avoid using the network by storing a local copy of the files in their browser cache &mdash; temporary local storage that is designed for quick retrieval. I can tell the browser to cache a copy of files that don&rsquo;t change very often by setting Expires headers.</p>
+
+<!--more-->
+
+
+<p>When a web server receives a request it adds some metadata to the response in the form of HTTP headers. Headers are key-value pairs that tell the browser information about the file it has received, such as how big it is (<code>Content-Length</code>), what kind it is (<code>Content-Type</code>), and how long the browser should cache the response (<code>Cache-Control</code>).</p>
+
+<p>In the case of Virtual Playbill, all the images are served from AWS Simple Storage Service (S3), and there are a couple of ways to add headers.</p>
+
+<h3>1. Tedious Manual Addition</h3>
+
+<p>You can add headers manually to a single asset stored in S3 using the metadata section:
+<img src="/images/151127-cache-control/add-metadata-in-s3-0.png">
+<img src="/images/151127-cache-control/add-metadata-in-s3-1.png">
+<img src="/images/151127-cache-control/add-metadata-in-s3-2.png"></p>
+
+<p>But I have more than a hundred files to change (yawn).</p>
+
+<h3>2. Write a Nodejs Script using <code>aws-sdk</code></h3>
+
+<p>```javascript
+var aws = require(&lsquo;aws-sdk&rsquo;)
+var s3 = new aws.S3();</p>
+
+<p>var params = {
+  Bucket: &lsquo;Your_bucket_name&rsquo;,
+}</p>
+
+<p>new Promise(function (resolve, reject) {
+  s3.listObjects(params, function(err, data) {</p>
+
+<pre><code>if (err) console.log('Something went wrong when retrieving the list of objects: ' + err)
+resolve(data.Contents.map(function (image) { return image.Key }))
+</code></pre>
+
+<p>  })
+}).then(function (imageList) {
+  return collectImageParams(imageList)
+}).then(function (imageChangeParams) {
+  imageChangeParams.forEach(function (params) {</p>
+
+<pre><code>s3.copyObject(params, function (err) {
+  if (err) console.log("Oops! Something went wrong with copy/replace for " + params)
+})
+</code></pre>
+
+<p>  })
+})</p>
+
+<p>// Duplicating a file in S3 will change the metadata.
+// You can make sure the new file has the same
+// access control by passing through the right permissions
+// and ContentType along with the new CacheControl header
+function collectImageParams(imageList) {
+  return imageList.map(function (imageName) {</p>
+
+<pre><code>var imageParams = {
+  'Bucket': params.Bucket,
+  'ACL': 'public-read',
+  'MetadataDirective': 'REPLACE',
+  'CacheControl': 'max-age=2592000',
+  'ContentType': 'image/jpeg'
+}
+imageParams.Key = imageName
+imageParams.CopySource = '/' + imageParams.Bucket +'/' + imageParams.Key
+return imageParams
+</code></pre>
+
+<p>  })
+}
+```
+Still.. I don&rsquo;t want to have to run this script every time I upload a new file (yawn)&hellip;</p>
+
+<h3>3. Add Headers Every Time You Upload</h3>
+
+<p>```
+S3Upload.prototype.uploadToS3 = function(file, url, public_url) {
+  var this_s3upload, xhr;
+  this_s3upload = this;
+  xhr = this.createCORSRequest(&lsquo;PUT&rsquo;, url);
+  &hellip;
+  xhr.setRequestHeader(&lsquo;Content-Type&rsquo;, file.type);
+  xhr.setRequestHeader(&lsquo;x-amz-acl&rsquo;, &lsquo;public-read&rsquo;);</p>
+
+<p>  // Set the Cache-Control header for every file upload
+  xhr.setRequestHeader(&lsquo;Cache-Control&rsquo;, &lsquo;max-age=2592000&rsquo;);
+  return xhr.send(file);
+};
+```</p>
+
+<h3>Great Results</h3>
+
+<p>No matter how you add the Cache-Control header, the result is amazing:
+<img src="/images/151127-cache-control/cache-control.png"></p>
+
+<h3>Resources</h3>
+
+<p>For more information about HTTP headers and the browser cache, check out these useful resources:</p>
+
+<ul>
+<li><a href="http://www.mobify.com/blog/beginners-guide-to-http-cache-headers/">Beginners Guide to HTTP Cache Headers</a></li>
+<li><a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching?hl=en">Optimizing Content Efficiency Using HTTP Caching</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

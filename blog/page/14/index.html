@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="How to Live on 24 Hours a Day, by Arnold Bennett (published in 1910) Arnold Bennett&rsquo;s recommendations for leading a full and happy life: Wake &hellip;">
+  <meta name="description" content="The arguments variable is a hidden parameter in javascript functions that contains all the arguments for the invocation in a pseudo-array (ie: it &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,77 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/functional-arguing/">Functional Arguing</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-20T00:00:00-08:00" pubdate data-updated="true">Feb 20<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The <code>arguments</code> variable is a hidden parameter in javascript functions that contains all the arguments for the invocation in a pseudo-array (ie: it does not have array functions other than length and indexing).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">instance</span><span class="p">.</span><span class="nx">headline</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">h</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="k">return</span> <span class="nx">headline</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">headline</span> <span class="o">=</span> <span class="nx">h</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">instance</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Even though the function specifically calls for an argument (<code>h</code>), it can still be called without one. This construction has a ruby equivalent, <code>attr_accessor :headline</code>, which behaves as a getter and a setter, depending on the arguments provided (none, or <code>headline = new_value</code>).</p>
+
+<p>This &ldquo;variable-parameter&rdquo; function design is what enables method chaining. When the function is called as a getter it returns a string, but when it is called as a setter it returns the invoking object, passing itself along to the next method:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">widget</span> <span class="o">=</span> <span class="nx">SimpleWidget</span><span class="p">({</span> <span class="nx">color</span><span class="o">:</span> <span class="s2">&quot;#6439ed&quot;</span> <span class="p">})</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">headline</span><span class="p">(</span><span class="s2">&quot;SimpleWidget&quot;</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">description</span><span class="p">(</span><span class="s2">&quot;This is a simple widget&quot;</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/functional-arguing/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -287,47 +358,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/augmented-objects/">Augmented Objects</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-09T00:00:00-08:00" pubdate data-updated="true">Feb 9<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Because it bears repeating: javascript and ruby have many features in common, including the ability to add functionality to existing objects.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/augmented-objects/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/15/">&larr; Older</a>
@@ -357,6 +387,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/faster-asset-loading-with-cache-control/">Faster Asset Loading With Cache-Control</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/javascript-object-property-meta-properties/">Javascript Object Property Meta Properties</a>
       </li>
     
@@ -370,10 +404,6 @@
     
       <li class="post">
         <a href="/blog/2015/keeping-your-notes-close-to-the-code/">Keep Your Code Close and Your Notes Closer With a Global Gitignore</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/hunting-monkey-patches/">Hunting Monkey Patches</a>
       </li>
     
   </ul>

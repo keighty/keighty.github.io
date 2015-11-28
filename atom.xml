@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2015-11-07T10:34:32-08:00</updated>
+  <updated>2015-11-28T12:59:15-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,168 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Faster Asset Loading With Cache-Control]]></title>
+    <link href="http://www.katieleonard.ca/blog/2015/faster-asset-loading-with-cache-control/"/>
+    <updated>2015-11-27T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2015/faster-asset-loading-with-cache-control</id>
+    <content type="html"><![CDATA[<p>My side project (Virtual Playbill) is an image-heavy application, and I used YSlow to find a few quick performance wins. The first &lsquo;F&rsquo; I got was for No Expires Headers:</p>
+
+<p><img src="http://www.katieleonard.ca/images/151127-cache-control/add-expires-headers.png"></p>
+
+<h3>What is an Expires Header?</h3>
+
+<p>Loading the page requires slow and expensive network calls to download all the JavaScript, CSS, and image files. If someone visits the page more than once, I can avoid using the network by storing a local copy of the files in their browser cache &mdash; temporary local storage that is designed for quick retrieval. I can tell the browser to cache a copy of files that don&rsquo;t change very often by setting Expires headers.</p>
+
+<!--more-->
+
+
+<p>When a web server receives a request it adds some metadata to the response in the form of HTTP headers. Headers are key-value pairs that tell the browser information about the file it has received, such as how big it is (<code>Content-Length</code>), what kind it is (<code>Content-Type</code>), and how long the browser should cache the response (<code>Cache-Control</code>).</p>
+
+<p>In the case of Virtual Playbill, all the images are served from AWS Simple Storage Service (S3), and there are a couple of ways to add headers.</p>
+
+<h3>1. Tedious Manual Addition</h3>
+
+<p>You can add headers manually to a single asset stored in S3 using the metadata section:
+<img src="http://www.katieleonard.ca/images/151127-cache-control/add-metadata-in-s3-0.png">
+<img src="http://www.katieleonard.ca/images/151127-cache-control/add-metadata-in-s3-1.png">
+<img src="http://www.katieleonard.ca/images/151127-cache-control/add-metadata-in-s3-2.png"></p>
+
+<p>But I have more than a hundred files to change (yawn).</p>
+
+<h3>2. Write a Nodejs Script using <code>aws-sdk</code></h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">aws</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;aws-sdk&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">s3</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">aws</span><span class="p">.</span><span class="nx">S3</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Bucket</span><span class="o">:</span> <span class="s1">&#39;Your_bucket_name&#39;</span><span class="p">,</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">new</span> <span class="nx">Promise</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">s3</span><span class="p">.</span><span class="nx">listObjects</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Something went wrong when retrieving the list of objects: &#39;</span> <span class="o">+</span> <span class="nx">err</span><span class="p">)</span>
+</span><span class='line'>    <span class="nx">resolve</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">Contents</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">image</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">image</span><span class="p">.</span><span class="nx">Key</span> <span class="p">}))</span>
+</span><span class='line'>  <span class="p">})</span>
+</span><span class='line'><span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">imageList</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">collectImageParams</span><span class="p">(</span><span class="nx">imageList</span><span class="p">)</span>
+</span><span class='line'><span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">imageChangeParams</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">imageChangeParams</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">params</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">s3</span><span class="p">.</span><span class="nx">copyObject</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Oops! Something went wrong with copy/replace for &quot;</span> <span class="o">+</span> <span class="nx">params</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">})</span>
+</span><span class='line'>  <span class="p">})</span>
+</span><span class='line'><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Duplicating a file in S3 will change the metadata.</span>
+</span><span class='line'><span class="c1">// You can make sure the new file has the same</span>
+</span><span class='line'><span class="c1">// access control by passing through the right permissions</span>
+</span><span class='line'><span class="c1">// and ContentType along with the new CacheControl header</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">collectImageParams</span><span class="p">(</span><span class="nx">imageList</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">imageList</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">imageName</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">imageParams</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s1">&#39;Bucket&#39;</span><span class="o">:</span> <span class="nx">params</span><span class="p">.</span><span class="nx">Bucket</span><span class="p">,</span>
+</span><span class='line'>      <span class="s1">&#39;ACL&#39;</span><span class="o">:</span> <span class="s1">&#39;public-read&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s1">&#39;MetadataDirective&#39;</span><span class="o">:</span> <span class="s1">&#39;REPLACE&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s1">&#39;CacheControl&#39;</span><span class="o">:</span> <span class="s1">&#39;max-age=2592000&#39;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s1">&#39;ContentType&#39;</span><span class="o">:</span> <span class="s1">&#39;image/jpeg&#39;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">imageParams</span><span class="p">.</span><span class="nx">Key</span> <span class="o">=</span> <span class="nx">imageName</span>
+</span><span class='line'>    <span class="nx">imageParams</span><span class="p">.</span><span class="nx">CopySource</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">imageParams</span><span class="p">.</span><span class="nx">Bucket</span> <span class="o">+</span><span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">imageParams</span><span class="p">.</span><span class="nx">Key</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">imageParams</span>
+</span><span class='line'>  <span class="p">})</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Still.. I don&rsquo;t want to have to run this script every time I upload a new file (yawn)&hellip;</p>
+
+<h3>3. Add Headers Every Time You Upload</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">S3Upload</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">uploadToS3</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="nx">url</span><span class="p">,</span> <span class="nx">public_url</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">this_s3upload</span><span class="p">,</span> <span class="nx">xhr</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">this_s3upload</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">xhr</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">createCORSRequest</span><span class="p">(</span><span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="nx">url</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'>  <span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">type</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">&#39;x-amz-acl&#39;</span><span class="p">,</span> <span class="s1">&#39;public-read&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Set the Cache-Control header for every file upload</span>
+</span><span class='line'>  <span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">&#39;Cache-Control&#39;</span><span class="p">,</span> <span class="s1">&#39;max-age=2592000&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">file</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Great Results</h3>
+
+<p>No matter how you add the Cache-Control header, the result is amazing:
+<img src="http://www.katieleonard.ca/images/151127-cache-control/cache-control.png"></p>
+
+<h3>Resources</h3>
+
+<p>For more information about HTTP headers and the browser cache, check out these useful resources:</p>
+
+<ul>
+<li><a href="http://www.mobify.com/blog/beginners-guide-to-http-cache-headers/">Beginners Guide to HTTP Cache Headers</a></li>
+<li><a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching?hl=en">Optimizing Content Efficiency Using HTTP Caching</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Javascript Object Property Meta Properties]]></title>
@@ -2160,44 +2322,6 @@ Having traced the source of <code>undefined is not a function</code> enough time
 <ol>
 <li id="fn:1">
 <p>http://en.wikipedia.org/wiki/Single_Table_Inheritance<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Our Healthcare System Is a Legacy Application]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/healthcare-is-a-legacy-application/"/>
-    <updated>2015-01-20T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/healthcare-is-a-legacy-application</id>
-    <content type="html"><![CDATA[<p>One of my favourite blogs is <a href="http://www.brainpickings.org">Brain Pickings</a>, written by Maria Popova, which is a collection of thoughts spanning art, science, psychology, and almost every other subject I read voraciously. Recently I stumbled upon <a href="http://www.brainpickings.org/2014/09/17/sherwin-nuland-how-we-die/">this gem</a>, Sherwin B. Nuland&rsquo;s <a href="http://www.amazon.com/How-We-Die-Sherwin-Nuland-ebook/dp/B004CJ8QCE"><em>How We Die</em></a><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. It is a raw look at the biological processes that occur at the end of life, which resonated with me on many levels.</p>
-
-<!--more-->
-
-
-<p>The biologist within was fascinated by Nuland&rsquo;s ability to reduce the &ldquo;ten thousand several doors for men to take their exits&rdquo;<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup> to the same basic process of poor oxygenation and nutrition of vital tissues resulting in organ failure. Whether the process is long or slow, instigated by heart disease, Alzheimer&rsquo;s disease, AIDS, accident, or old age, the end must come when the heart stops nourishing the brain.</p>
-
-<p>As a Clinical Professor of Surgery at Yale University, Nuland became intimate with death and its increasingly dehumanizing circumstances. Life’s final chapter has become invisible to most of us. It is likely to be carried out in an intensive care unit, the person reduced to data on a screen, and the advancing disease perceived as a failure of management rather than a natural and inevitable process. He shares the lessons he learned about providing true patient care rather than solving a biological riddle (sometimes the best patient care is no care at all).</p>
-
-<p>Most importantly, he calls attention to the deplorable state of healthcare today, where the &ldquo;provider&rdquo; has usurped the role of the physician:</p>
-
-<blockquote><p>[Our] present system of in-hospital care&hellip; has simply accreted by the constant piling on or insinuation of patches of not necessarily compatible structure to an edifice already jerry-built of competing needs.</p></blockquote>
-
-<p>Sounds remarkably like a long-lived legacy application that is impossibly complex and difficult to work in. The healthcare system is in need of a great refactoring, which isn&rsquo;t without precedent (read about Abraham Flexner&rsquo;s report <a href="https://books.google.com/books?id=lxgTAAAAYAAJ&amp;printsec=frontcover&amp;dq=inauthor:%22Abraham+Flexner%22&amp;hl=en&amp;sa=X&amp;ei=rmXAVIvHLYKYoQSM5YGgDQ&amp;ved=0CCwQ6AEwAg#v=onepage&amp;q&amp;f=false">Medical Education in the United States and Canada</a> that started the movement to raise &ldquo;American medical education&hellip; to the highest [status] in the civilized world&rdquo;<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>)</p>
-
-<p><em>How We Die</em> won the National Book Award, was a finalist for the Pulitzer Prize, and perched atop the New York Times&#8217; bestseller list for more than thirty weeks. This book answers a question we have all asked at some point &mdash; what will it be like to die? A hope many of us share is to have a dignified death with little suffering for ourselves and our families, but reflecting on his many years and experiences with death, Nuland has found that</p>
-
-<blockquote><p>the greatest dignity to be found in death is the dignity of the life that preceded it. This is a form of hope we can all achieve, and it is the most abiding of all. Hope resides in the meaning of what our lives have been.</p></blockquote>
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>Nuland, Sherwin B. (2014-06-25). <em>How We Die: Reflections on Life&rsquo;s Final Chapter</em>. Kindle Edition<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-<li id="fn:2">
-<p>Webster, John. (1612) <em>The Duchess of Malfi</em><a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
-<li id="fn:3">
-<p>Flenxer, Abraham. (1910). <em>Medical Education in the United States and Canada</em>.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 

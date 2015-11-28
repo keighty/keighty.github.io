@@ -9,7 +9,7 @@
   <meta name="author" content="katie leonard">
 
   
-  <meta name="description" content="JavaScript Objects are complex types, and even defined properties have a control panel of their own. You can view the content of the control panel &hellip;">
+  <meta name="description" content="My side project (Virtual Playbill) is an image-heavy application, and I used YSlow to find a few quick performance wins. The first &lsquo;F&rsquo; I &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,53 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/faster-asset-loading-with-cache-control/">Faster Asset Loading With Cache-Control</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-11-27T00:00:00-08:00" pubdate data-updated="true">Nov 27<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My side project (Virtual Playbill) is an image-heavy application, and I used YSlow to find a few quick performance wins. The first &lsquo;F&rsquo; I got was for No Expires Headers:</p>
+
+<p><img src="/images/151127-cache-control/add-expires-headers.png"></p>
+
+<h3>What is an Expires Header?</h3>
+
+<p>Loading the page requires slow and expensive network calls to download all the JavaScript, CSS, and image files. If someone visits the page more than once, I can avoid using the network by storing a local copy of the files in their browser cache &mdash; temporary local storage that is designed for quick retrieval. I can tell the browser to cache a copy of files that don&rsquo;t change very often by setting Expires headers.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/faster-asset-loading-with-cache-control/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -240,49 +287,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/hunting-monkey-patches/">Hunting Monkey Patches</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-08-08T00:00:00-07:00" pubdate data-updated="true">Aug 8<span>th</span>, 2015</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Ruby monkeypatching is a dangerous, but necessary tool. It is convenient to add new behaviours to  existing classes, or to replace existing methods with more customized or secure code. Once the patch is in place, however, it is easy to forget that it is there.</p>
-
-<p>Recently, I was trying to discern the origin of such a patch, and discovered a new (to me) function in pry, my favourite Ruby debugger: <code>show-source</code>.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2015/hunting-monkey-patches/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -310,6 +314,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/faster-asset-loading-with-cache-control/">Faster Asset Loading With Cache-Control</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/javascript-object-property-meta-properties/">Javascript Object Property Meta Properties</a>
       </li>
     
@@ -323,10 +331,6 @@
     
       <li class="post">
         <a href="/blog/2015/keeping-your-notes-close-to-the-code/">Keep Your Code Close and Your Notes Closer With a Global Gitignore</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/hunting-monkey-patches/">Hunting Monkey Patches</a>
       </li>
     
   </ul>
