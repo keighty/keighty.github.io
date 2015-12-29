@@ -1,35 +1,32 @@
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>keighty</title>
-  <meta name="author" content="katie leonard">
+<!DOCTYPE HTML>
 
-  
-  <meta name="description" content="I am working with a data dump from a meteor project, and while retrieving and displaying the existing collection was no problem at all, I was stuck &hellip;">
-  
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>keighty</title>
+	<meta name="author" content="katie leonard">
+
+	
+	<meta name="description" content="May 26th, 2014 javascript, meteor Flash Your Local Collection Rails allows you to pass messages to the user between actions (&ldquo;This &hellip;">
+	
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/page/7">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
+	<link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://www.katieleonard.ca/blog/page/7/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
   
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -46,28 +43,23 @@
 
 </head>
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">keighty</a></h1>
-  
-    <h2>reading, writing, rambling</h2>
-  
-</hgroup>
 
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:www.katieleonard.ca" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.profilepic').append("<img src='http://www.gravatar.com/avatar/" + MD5("keighty.leonard@gmail.com") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
+		});
+	</script>
+	
+</div>
+
+<nav id="main-nav"><ul class="main-navigation">
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
   <li><a href="/projects/index.html">Projects</a></li>
@@ -75,671 +67,447 @@
   <li><a href="/more-about-keighty/index.html">More about keighty</a></li>
 </ul>
 
+
+<section class="aboutme">
+  <p>
+    I have loved programming since my first 'Hello World!', and have been seeking source code enlightenment through Ruby, Rails, and JavaScript.
+  </p>
+</section>
 </nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/make-meteor-minimongo-ids-play-nice/">Meteor-managed Ids Won&#8217;t Play Nicely With Others</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-10-18T00:00:00-07:00" pubdate data-updated="true">Oct 18<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I am working with a data dump from a meteor project, and while retrieving and displaying the existing collection was no problem at all, I was stuck on saving new documents to mongo.</p>
-
-<p>My schema was pretty straightforward and taken directly from an existing document:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>var postSchema = mongoose.Schema({
-</span><span class='line'>  "title" : String,
-</span><span class='line'>  "company" : String,
-</span><span class='line'>  "author" : String,
-</span><span class='line'>  "music" : String,
-</span><span class='line'>  "choreographer" : String,
-</span><span class='line'>  "showDate" : String,
-</span><span class='line'>  "image": String,
-</span><span class='line'>  "userId" : String,
-</span><span class='line'>  "postAuthor" : String,
-</span><span class='line'>  "submitted" : Number,
-</span><span class='line'>  "commentsCount" : Number,
-</span><span class='line'>  "_id":  String
-</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The problem was that last field: <code>_id</code>. If I included it in the schema then I would have the objectId available on the front end but would get an error trying to insert a new document: <code>[Error: document must have an _id before saving]</code>. If I removed <code>_id</code> from the schema I could save documents just fine but could not pass through the objectIds of already existing documents. I have learned that mongo is very flexible when it comes to assigning ids before insertion into the database.</p>
-
-<p>Mongo objects created through a meteor application are given meteor-friendly objectIds, the uniqueness of which is monitored and maintained by a meteor wrapper class. The design decision to go with ids as strings seems to be <a href="https://groups.google.com/forum/#!topic/meteor-talk/f-ljBdZOwPk">motivated by meteor&rsquo;s latency compensation feature</a> &mdash; creating documents on the client-side and then later syncing them with the server requires that they are assigned objectIds before they ever reach mongo. Mongo will accept a manually entered id, trusting that there is an entity somewhere that is managing uniqueness.</p>
-
-<p>Here was my problem: the documents created by meteor had String ids assigned by meteor. If I included <code>_id</code> in my schema, mongo would assume that I was managing id assignment manually, and wouldn&rsquo;t save the object until I did. If I did not include <code>_id</code> in my schema, mongo would assume it was responsible, and would assign a unique id accordingly.</p>
-
-<p>To make the documents created by meteor play nice with the new stack, I had to update each document&rsquo;s <code>_id</code> with one created by mongo. Unfortunately, mongo won&rsquo;t allow modification of <code>_id</code> directly, so the only choice was to recreate and insert each entry, then delete the original:</p>
-
-<ol>
-<li>Retrieve a document: <code>doc = db.posts.findOne()</code></li>
-<li>Save the title: <code>title = doc.title</code></li>
-<li>Save the document&rsquo;s string id: <code>id = doc._id</code></li>
-<li>Reassign the document id: <code>doc._id = ObjectId()</code></li>
-<li>Save the updated document: <code>db.posts.insert(doc)</code></li>
-<li>Remove the original document: <code>db.posts.remove({_id: id})</code></li>
-<li>Verify that the post exists with the new id: <code>db.posts.findOne({"title": title})</code></li>
-</ol>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; doc = db.posts.findOne()
-</span><span class='line'>{
-</span><span class='line'>  "title" : "La Cage aux Folles",
-</span><span class='line'>  "company" : "Pixie Dust Productions",
-</span><span class='line'>  "author" : "Harvey Fierstein",
-</span><span class='line'>  "music" : "Jerry Herman",
-</span><span class='line'>  "showDate" : ISODate("2014-09-21T07:00:00Z"),
-</span><span class='line'>  "dateSubmitted" : 1411346259065,
-</span><span class='line'>  "_id" : "EjzopWQa3mw5LB979"
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>&gt; title = doc.title
-</span><span class='line'>La Cage aux Folles
-</span><span class='line'>
-</span><span class='line'>&gt; id = doc._id
-</span><span class='line'>EjzopWQa3mw5LB979
-</span><span class='line'>
-</span><span class='line'>&gt; doc._id = ObjectId()
-</span><span class='line'>ObjectId("5442af27cc37fe6f03648fdd")
-</span><span class='line'>
-</span><span class='line'>&gt; db.posts.insert(doc)
-</span><span class='line'>
-</span><span class='line'>&gt; db.posts.remove({_id: id})
-</span><span class='line'>
-</span><span class='line'>&gt; db.posts.findOne({"title": title})
-</span><span class='line'>{
-</span><span class='line'>  "_id" : ObjectId("5442af27cc37fe6f03648fdd"),
-</span><span class='line'>  "title" : "La Cage aux Folles",
-</span><span class='line'>  "company" : "Pixie Dust Productions",
-</span><span class='line'>  "author" : "Harvey Fierstein",
-</span><span class='line'>  "music" : "Jerry Herman",
-</span><span class='line'>  "showDate" : ISODate("2014-09-21T07:00:00Z"),
-</span><span class='line'>  "dateSubmitted" : 1411346259065,
-</span><span class='line'>  "commentsCount" : 1
-</span><span class='line'>}
-</span><span class='line'>&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here is a handy script for changing the entire collection at once:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>db.posts.find().forEach(function(doc){ var doc = db.posts.findOne(); var title = doc.title; var id = doc._id; doc._id = ObjectId(); db.posts.insert(doc); db.posts.remove({_id: id}); })</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/sort_things_with_mongoose/">Sort All the Things With Mongo and node.js</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-10-09T00:00:00-07:00" pubdate data-updated="true">Oct 9<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Sorting shouldn&rsquo;t be difficult, but through my experience learning meteor I discovered that if mongo likes sort commands one way:</p>
-
-<p><code>db.posts.find().sort({submitted: -1})</code></p>
-
-<p>meteor would like them a different way:</p>
-
-<p><code>Posts.find({}, {sort: {submitted : -1}}</code></p>
-
-<p>I am adapting one of my meteor projects to use mongo and node.js, connected through mongoose, and fitting in the callback required for node sent me to the google. After a few stackoverflow searches I turned up a several options:</p>
-
-<figure class='code'><figcaption><span>Option 1 (spoiler.. it didn&#8217;t work) </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Post.find({}, {sort:[['submitted',-1]]}, function(err, doc) {
-</span><span class='line'>  response.send(doc);
-</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This option returned a object containing only the entry ids, not the full documents:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>0: {_id:2tcte4Srd8QMSqrKt}
-</span><span class='line'>1: {_id:5c3FdWphiYiMQzukw}
-</span><span class='line'>2: {_id:62vAt5ewucKm542DH}
-</span><span class='line'>3: {_id:AWNYsxBgFnv9Z4NSA}
-</span><span class='line'>...</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Another option suggested that converting the result to an Array would complete the query:</p>
-
-<figure class='code'><figcaption><span>Option2 (spoiler.. also didn&#8217;t work) </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Post.find({},{sort: [['submitted',-1]]}).toArray(function(e, results){
-</span><span class='line'>  response.send(results);
-</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This option resulted in <code>TypeError: Object #&lt;Query&gt; has no method 'toArray'</code>.</p>
-
-<p>Rather than continuing to search for a snippet to steal, I turned to the source, and it turns out that querying mongo from mongoose is simpler than either of these strategies.</p>
-
-<figure class='code'><figcaption><span>Option3 &#8211; just right </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Post.find()
-</span><span class='line'>  .sort("-submitted")
-</span><span class='line'>  .exec(function(err, doc) {
-</span><span class='line'>    response.send(doc);
-</span><span class='line'>  });</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Success! Why? Because while mongo itself returns a cursor object which can be transformed into documents using <code>toArray()</code>, or <code>fetch()</code> in the case of meteor, mongoose returns a <a href="http://mongoosejs.com/docs/queries.html">Query</a> object, which will return the full documents once it is passed a callback.</p>
-
-<p>A Query object can be built using <a href="https://github.com/LearnBoost/mongoose/blob/master/lib/query.js#L211-L216">method chaining</a> &mdash;
- each method (find | where | limit | select | sort) returns a new Query object, which allows you to build in stages:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Post
-</span><span class='line'>.find({ title: /the/ }) // query
-</span><span class='line'>.where('cost').gt(17).lt(66)  // query
-</span><span class='line'>.where('location').in(['Schnitz', 'Armory'])  // query
-</span><span class='line'>.limit(10)  // query
-</span><span class='line'>.sort('-ticketDate')  // query
-</span><span class='line'>.select('title company')  // query
-</span><span class='line'>.exec(callback);  // EXECUTE THE QUERY</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Another fun bit of javascript/mongoose magic, is that you can indicate <a href="https://github.com/LearnBoost/mongoose/blob/master/lib/query.js#L1295-L1297">sorting in descending order</a> by prefacing the sort string with a &ldquo;&ndash;&rdquo; :</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Post
-</span><span class='line'>.find({ title: /the/ }) // query
-</span><span class='line'>.sort('-ticketDate')  // DESC!
-</span><span class='line'>.exec(callback);  // EXECUTE THE QUERY</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://docs.mongodb.org/manual/reference/operator/meta/orderby/">mongo docs</a></p>
-
-<p><a href="http://stackoverflow.com/a/20859457">stackoverflow</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/giving-the-cold-shoulder-with-git/">Giving the Cold Shoulder With Git</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-09-08T00:00:00-07:00" pubdate data-updated="true">Sep 8<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Some files become unnecessary to track using version control, but still belong in the repository. Compiled assets, for example may require a placeholder for a functional deploy, but don&rsquo;t need to be checked in every time a change is made.</p>
-
-<p>Adding the file to your gitignore is not enough to stop tracking file changes. You must also clear the file from your git cache:</p>
-
-<figure class='code'><figcaption><span>gitignore, this time with spite </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git rm --cached <span class="o">[</span>filename<span class="o">]</span>
-</span><span class='line'><span class="nv">$ </span>git add .
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;I really mean to ignore this file.&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To untrack everything that has been added to the .gitignore:</p>
-
-<figure class='code'><figcaption><span>For realz </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git rm -r --cached .
-</span><span class='line'><span class="nv">$ </span>git commit -a -m <span class="s2">&quot;I mean it!&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Resources</h3>
-
-<p><a href="http://stackoverflow.com/a/1139797">Here&rsquo;s where I found this gem</a>,
- <a href="http://git-scm.com/docs/gitignore">and here are the docs where I verified it</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/managing-modules/">Gaining Closure Through Modules</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-09-06T00:00:00-07:00" pubdate data-updated="true">Sep 6<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>If you have more than one javascript running on a page, you have likely experienced the hell of trying to debug a problem caused by naming collisions. Developing the scripts in isolation, it makes sense to assign widgetA.name dynamically using jQuery, but then why does the title of widgetGraphB disappear? Avoid the pain of unintended consequences by namespacing your scripts. </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/managing-modules/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/backup-meteor-yes-we-can/">Backup Meteor? Yes We Can</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-24T00:00:00-07:00" pubdate data-updated="true">Aug 24<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Retrieving a data dump from your meteor production database and copying it to local development is a three-step, time sensitive process.</p>
-
-<h3>1. Retrieve your production url</h3>
-
-<p>Passing a <code>-url</code> flag to the <code>meteor mongo</code> command will return a long string of goodies:</p>
-
-<figure class='code'><figcaption><span>Dude, where&#8217;s my data? </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ meteor mongo --url my_app.meteor.com
-</span><span class='line'>
-</span><span class='line'>mongodb://client-12345678:9abcdef1-234-5678-9abc-def123456789@singularsensation-db-a3.meteor.io:12345/my_app_meteor_net</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This string contains all the information you require to access your production data:</p>
-
-<ul>
-<li>your client id (from // to :)</li>
-<li>a server password (from : to @)</li>
-<li>a server name and port number (from @ to /)</li>
-<li>the datastore identification (from / to the end)</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>mongodb://&lt;CLIENT_ID&gt;:&lt;PASSWORD_HASH&gt;@&lt;SERVER_NAME:PORT&gt;/&lt;YOUR_DATA_STORE&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Retrieving your data is time-sensitive because the password hash will expire after 60 seconds.</p>
-
-<h3>2. Retrieve your data using mongodump</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mongodump -u CLIENT_ID -h SERVER_NAME:PORT -d YOUR_DATA_STORE -p PASSWORD_HASH
-</span><span class='line'>
-</span><span class='line'>connected to: &lt;SERVER_NAME:PORT&gt;
-</span><span class='line'>Sun Aug 24 10:50:32.342 DATABASE: YOUR_DATA_STORE  to   dump/YOUR_DATA_STORE
-</span><span class='line'>Sun Aug 24 10:50:32.989   YOUR_DATA_STORE.system.indexes to dump/YOUR_DATA_STORE/system.indexes.bson
-</span><span class='line'>Sun Aug 24 10:50:34.368      14 objects
-</span><span class='line'>Sun Aug 24 10:50:34.369   YOUR_DATA_STORE.system.users to dump/YOUR_DATA_STORE/system.users.bson
-</span><span class='line'>Sun Aug 24 10:50:34.559      2 objects
-</span><span class='line'>... and on and on
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Mongodb copies your data from production into a new folder called &ldquo;dump&rdquo; in your present working directory.</p>
-
-<h3>3. Use mongorestore to copy the data from the dump into your local datastore</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ mongorestore --host 127.0.0.1 --port 3001 --db meteor --drop dump/YOUR_DATA_STORE/
-</span><span class='line'>
-</span><span class='line'>connected to: 127.0.0.1:3001
-</span><span class='line'>Sun Aug 24 11:36:54.693 dump/YOUR_DATA_STORE/users.bson
-</span><span class='line'>Sun Aug 24 11:36:54.693   going into namespace [meteor.users]
-</span><span class='line'>Sun Aug 24 11:36:54.693    dropping
-</span><span class='line'>2 objects found
-</span><span class='line'>Sun Aug 24 11:36:55.834   Creating index: { name: "_id_", key: { _id: 1 }, ns: "meteor.users" }
-</span><span class='line'>Sun Aug 24 11:36:55.993   Creating index: { name: "username_1", key: { username: 1 }, unique: true, ns: "meteor.users", sparse: 1 }
-</span><span class='line'>... and on and on</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
-
-<p>Resources:
-<a href="http://stackoverflow.com/a/12447710">stackoverflow</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-      <a class="prev" href="/blog/page/8/">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-    <a class="next" href="/blog/page/6/">Newer &rarr;</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
-  
-    <section>
-  <div class='contact'>
-    <a href='mailto:keighty.leonard@gmail.com?Subject=Hello!' rel='tooltip' title='keighty.leonard@gmail.com'><i class="fa fa-envelope fa-3x"></i></a>
-    <a href='http://twitter.com/KeightyLeonard' title='@KeightyLeonard'><i class="fa fa-twitter fa-3x"></i></a>
-    <a href='http://github.com/keighty' title='github.com/keighty'><i class="fa fa-github fa-3x"></i></a>
-    <a href='http://linkedin.com/in/katieleonard' title='linkedin/katieleonard'><i class="fa fa-linkedin fa-3x"></i></a>
-  </div>
-</section><section>
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="email" href="mailto:keighty.leonard@gmail.com" title="Email">Email</a>
+		
+		
+		
+		
+			<a class="twitter" href="http://twitter.com/KeightyLeonard" title="Twitter">Twitter</a>
+		
+		
+			<a class="github" href="https://github.com/keighty" title="GitHub">GitHub</a>
+		
+		
+			<a class="coderwall" href="https://coderwall.com/keighty" title="Coderwall">Coderwall</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>
+			</div>
+
+			<aside class="sidebar-custom">
+			  
+			    <section>
   <div>
     <h1>Check out my book!</h1>
     <a href="http://codeschoolbook.com" target="_blank"><img src="/images/code_school_book.png"></a>
   </div>
-</section><section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2015/keightys-2015-by-the-numbers/">Keighty&#8217;s 2015 - by the Numbers</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/faster-asset-loading-with-cache-control/">Faster Asset Loading With Cache-Control</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/javascript-object-property-meta-properties/">Javascript Object Property Meta Properties</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/software-estimation-is-hard/">Estimate != Commitment != Target</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/the-clean-coder/">The Clean Coder</a>
-      </li>
-    
-  </ul>
 </section>
+			  
+			</aside>
 
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
+		</div>
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
   
-  <script type="text/javascript">
-    $(document).ready(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
 
-        github.showRepos({
-            user: 'keighty',
-            count: 4,
-            skip_forks: true,
-            skip_repos: [ "keighty.github.io" ],
-            target: '#gh_repos'
+
+<time datetime="2014-05-26T00:00:00-07:00" data-updated="true" itemprop="datePublished">May 26<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/meteor/'>meteor</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/flash-your-local-collection/" itemprop="url">Flash Your Local Collection</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Rails allows you to pass messages to the user between actions (&ldquo;This <a href="http://api.rubyonrails.org/classes/ActionDispatch/Flash.html">ActionDispatch::Flash</a> will self-destruct&rdquo;), and because Rails, all the message generation happens server side:</p>
+
+<figure class='code'><figcaption><span>flashy_controller.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">show</span>
+</span><span class='line'>  <span class="n">flash</span><span class="o">[</span><span class="ss">:notice</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;You dropped your packet.&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Meteor is mostly a client-side application framework, and you can implement a similar message system, which will never touch the server, by defining a collection that is local to the browser.
+		
+		<a href="/blog/2014/flash-your-local-collection/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-03T00:00:00-07:00" data-updated="true" itemprop="datePublished">May 3<span>rd</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/meteor/'>meteor</a>, <a class='category' href='/blog/categories/ubuntu-wrestling/'>ubuntu wrestling</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/mongo-trouble-reset/" itemprop="url">Mongo Trouble? Reset!</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Back in March I wrote about letting my computer&rsquo;s battery die in the middle of a meteor project, with the consequence being that I could not connect to the underlying mongo database:</p>
+
+<figure class='code'><figcaption><span>What&#8217;s wrong, meteor? </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor
+</span><span class='line'><span class="o">[[[[[</span> ~/project/in/progress <span class="o">]]]]]</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">=</span>&gt; Started proxy.
+</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
+</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
+</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
+</span><span class='line'>Can<span class="err">&#39;</span>t start Mongo server.
+</span><span class='line'>MongoDB had an unspecified uncaught exception.
+</span><span class='line'>This can be caused by MongoDB being unable to write to a <span class="nb">local </span>database.
+</span><span class='line'>Check that you have permissions to write to .meteor/local. MongoDB does
+</span><span class='line'>not support filesystems like NFS that <span class="k">do </span>not allow file locking.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After much spelunking in stackoverflow and documentation, I discovered the magic of this command:</p>
+
+<figure class='code'><figcaption><span>Magic mongo reset spell %</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u mongodb mongdo --repair --dbpath /var/lib/mongodb
+</span><span class='line'><span class="nv">$ </span>sudo service mongodb start
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Repairing and restarting the mongo service seemed to do the trick, and I continued on my merry meteor way. Well, I did it again &mdash; I let my battery die in the middle of a meteor project, and with feelings of smug satisfaction, I plumbed my blog archive for the answer. Only this time the magic antidote didn&rsquo;t work
+		
+		<a href="/blog/2014/mongo-trouble-reset/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-31T00:00:00-07:00" data-updated="true" itemprop="datePublished">Mar 31<span>st</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/meteor/'>meteor</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/meteor-fetch/" itemprop="url">Meteor, Fetch!</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>From <a href="http://book.discovermeteor.com/">Discover Meteor</a>: find() returns a cursor, which is a reactive data source.</p>
+
+<p>Data from reactive sources will be updated automatically to track changes in the data used to generate it. 
+		
+		<a href="/blog/2014/meteor-fetch/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-28T00:00:00-07:00" data-updated="true" itemprop="datePublished">Mar 28<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/read/'>read</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/situations-matter/" itemprop="url">Situations Matter</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p><a href="http://www.amazon.com/Situations-Matter-Understanding-Context-Transforms-ebook/dp/B005ERIS5S/ref=sr_1_1?ie=UTF8&amp;qid=1396016834&amp;sr=8-1&amp;keywords=situations+matter">Situations Matter</a> by Sam Sommers is an eye-opening study of the influence of context on human interactions. Social psychologists call it &ldquo;fundamental attribution error&rdquo;, which is a tendency to interpret someone else&rsquo;s behavior as stemming from their core characteristics, rather than to external circumstances. A simplistic example of attribution error is assuming that the person driving the speeding car is a reckless speed-freak rather than someone rushing a woman in labor to the hospital. Sommers has studied the power of situations over human interactions and how the attribution error interferes with our ability to empathize with the unfamiliar. I have read similar studies of how bias infiltrates our relationships, but what surprised me the most is how it also influences our perception of the self. 
+		
+		<a href="/blog/2014/situations-matter/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-23T00:00:00-07:00" data-updated="true" itemprop="datePublished">Mar 23<span>rd</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/read/'>read</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/the-ambition-gap-lean-in/" itemprop="url">The Ambition Gap - Leaning In</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I may be a little late to the game, but I am finally reading Sheryl Sandberg&rsquo;s &ldquo;Lean In&rdquo;, and right from the introduction I can understand why it caused such a stir when it came out in 2012. Sandberg addresses the issue of why there are relatively few women in leadership roles, and ways that women have held themselves back.
+		
+		<a href="/blog/2014/the-ambition-gap-lean-in/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-20T00:00:00-07:00" data-updated="true" itemprop="datePublished">Mar 20<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/d3/'>d3</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/line-spline/" itemprop="url">Line, Spline</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>D3 lines are rendered using linear interpolation by default. This means that the line connecting a series of points will trace a direct path from one node to another:</p>
+
+<div id="graph-here">
+  <script src="http://mbostock.github.com/d3/d3.v2.min.js"></script>
+  <script>
+var width = 400,
+    height = 400,
+    margin = 5,
+    scalex = d3.scale.linear().domain([0, 7]).range([margin, width - margin]),
+    scaley = d3.scale.linear().domain([0, 7]).range([height - margin, margin]);
+
+var data = [
+  [
+      {x: 0, y: 5},{x: 1, y: 7},{x: 2, y: 5},
+      {x: 3, y: 5},{x: 4, y: 3},{x: 6, y: 4},
+      {x: 7, y: 2}
+  ],
+  [
+      {x: 0, y: 3},{x: 1, y: 5},{x: 2, y: 3},
+      {x: 3, y: 3},{x: 4, y: 1},{x: 6, y: 2},
+      {x: 7, y: 1}
+  ]
+];
+
+var straightLine = d3.svg.line()
+        .interpolate("linear")
+        .x(function(d){return scalex(d.x);})
+        .y(function(d){return scaley(d.y);});
+var smoothLine = d3.svg.line()
+        .interpolate("cardinal")
+        .x(function(d){return scalex(d.x);})
+        .y(function(d){return scaley(d.y);});
+
+var svg = d3.select("#graph-here").append("svg");
+
+  svg.attr("height", height)
+      .attr("width", width);
+
+   svg.selectAll("path")
+        .data(data)
+      .enter()
+        .append("path")
+        .attr("class", "line")
+        .attr("fill", "none")
+        .attr("stroke", "blue")
+        .attr("stroke-width", 2)
+        .attr("d", function(d, i){
+          if(i % 2 === 0) return straightLine(d);
+          return smoothLine(d)
         });
-    });
+
+    svg.selectAll("textPath").data(data)
+      .enter()
+        .append("text")
+        .attr("x", function(d) { return scalex(d[d.length-2].x); })
+        .attr("y", function(d) { return scaley(d[d.length-2].y); })
+        .attr("text-anchor", "end")
+        .text(function(d, i) {
+          if(i % 2 === 0) return "Straight Lines";
+          return "Smooth Lines";
+        });
+
   </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
-
-<section>
-  <div>
-    <h1><a href="/more-about-keighty/index.html">Aboot me</a></h1>
-    <p>I have loved programming since my first &#8220;Hello World!&#8221;, and have been seeking source code enlightenment through Java, Ruby, Rails, and JavaScript. I am also a recent immigrant to Portland, Oregon - perhaps you can tell from my Canadian accent?</p>
-  </div>
-</section>
+</div>
 
 
-<section class="well">
-  <h1><a href="http://coderwall.com/keighty">@keighty</a> on Coderwall</h1>
+<p>The curved line is rendered with the cardinal interpolator, one of several options D3 provides. The curvature of the line is called a <strong>spline</strong>. Splines are tools used by architects to draw curved lines, and the term was adopted by mathematicians to describe smooth, piecewise polynomial approximation:</p>
 
-  <div id="coderwall_badges"></div>
+<blockquote><p>Splines are curves, which are usually required to be continuous and smooth&hellip; [The] join points are called knots. Splines with few knots are generally smoother than splines with many knots; however, increasing the number of knots usually increases the fit of the spline function to the data. Knots give the curve freedom to bend to more closely follow the data. &mdash;<a href="http://en.wikipedia.org/wiki/Spline_(mathematics">Wikipedia</a>)</p></blockquote>
 
-  <script type="text/javascript">
-    $(document).ready(function(){
-      $.getJSON("http://coderwall.com/keighty.json?callback=?", function(data){
-        for(var i = 0; i < data.data.badges.length ; i++){
-          var badge = data.data.badges[i];
-          var description = badge.name + ":\n" + badge.description;
-          var badge_tag = $("<img title='" + description + "'/>");
-          badge_tag.attr("src",badge.badge);
-          badge_tag.css("width","25%");
-          $("#coderwall_badges").append(badge_tag);
-        }
-      });
-    });
-  </script>
-</section>
- <section>
-  <div>
-    <h1>Twitter</h1>
-    <a class="twitter-timeline" href="https://twitter.com/KeightyLeonard" data-widget-id="434861084550262784">Tweets by @KeightyLeonard</a>
-    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-  </div>
- </section>
+		
+		
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
 
 
 
   
-</aside>
 
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - katie leonard -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
 
-</footer>
-  
+<time datetime="2014-03-19T00:00:00-07:00" data-updated="true" itemprop="datePublished">Mar 19<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/i-didnt-know-that/'>I didn&#8217;t know that</a>, <a class='category' href='/blog/categories/git/'>git</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/multiple-remotes/" itemprop="url">Multiple Remotes</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Somehow I had worked out in my head that there could be only one remote. Origin. Turns out you can set and push to a (presumably) infinite number of remote repositories 
+		
+		<a href="/blog/2014/multiple-remotes/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/blog/page/6/" class="prev">Prev</a>
+    
+    
+        <a href="/blog/page/8/" class="next">Next</a>
+    
+    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
+</nav></div>
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2015
+
+    katie leonard
+
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+		</div>
+	</div>
+	
 
 
 
@@ -775,18 +543,6 @@
   </script>
 
 
-
-
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-41587719-1', 'katieleonard.ca');
-  ga('send', 'pageview');
-
-</script>
 
 
 </body>

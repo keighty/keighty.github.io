@@ -1,35 +1,32 @@
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>keighty</title>
-  <meta name="author" content="katie leonard">
+<!DOCTYPE HTML>
 
-  
-  <meta name="description" content="D3 has an awesome number formatting function that I discovered only after hacking my own. My first approach was to use string and array manipulation &hellip;">
-  
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>keighty</title>
+	<meta name="author" content="katie leonard">
+
+	
+	<meta name="description" content="Mar 15th, 2014 d3, javascript Delay Chained Transitions Changing an element using multiple, chained transitions requires a little troubleshooting. &hellip;">
+	
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  
-  <link rel="canonical" href="http://www.katieleonard.ca/blog/page/8">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
+	<link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://www.katieleonard.ca/blog/page/8/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
   
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -46,28 +43,23 @@
 
 </head>
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">keighty</a></h1>
-  
-    <h2>reading, writing, rambling</h2>
-  
-</hgroup>
 
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:www.katieleonard.ca" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.profilepic').append("<img src='http://www.gravatar.com/avatar/" + MD5("keighty.leonard@gmail.com") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
+		});
+	</script>
+	
+</div>
+
+<nav id="main-nav"><ul class="main-navigation">
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
   <li><a href="/projects/index.html">Projects</a></li>
@@ -75,769 +67,575 @@
   <li><a href="/more-about-keighty/index.html">More about keighty</a></li>
 </ul>
 
+
+<section class="aboutme">
+  <p>
+    I have loved programming since my first 'Hello World!', and have been seeking source code enlightenment through Ruby, Rails, and JavaScript.
+  </p>
+</section>
 </nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/formatting-numbers-the-easy-way/">Formatting Numbers the Easy Way</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-23T00:00:00-07:00" pubdate data-updated="true">Aug 23<span>rd</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>D3 has an awesome number formatting function that I discovered only after hacking my own. My first approach was to use string and array manipulation to convert 1234567890 to 1,234,567,890:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">numberSmoothing</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="c1">// split the number into a character array and reverse it</span>
-</span><span class='line'>  <span class="nx">reversedNumber</span> <span class="o">=</span> <span class="p">(</span><span class="nx">value</span><span class="p">).</span><span class="nx">toString</span><span class="p">().</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">reverse</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// [&quot;0&quot;, &quot;9&quot;, &quot;8&quot;, &quot;7&quot;, &quot;6&quot;, &quot;5&quot;, &quot;4&quot;, &quot;3&quot;, &quot;2&quot;, &quot;1&quot;]</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// push the numbers onto another array in groups of 3 and add a comma</span>
-</span><span class='line'>  <span class="nx">chunkedNumber</span> <span class="o">=</span> <span class="p">[];</span>
-</span><span class='line'>  <span class="k">while</span><span class="p">(</span><span class="nx">reversedNumber</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">numberChunk</span> <span class="o">=</span> <span class="nx">reversedNumber</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">chunkedNumber</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">reversedNumber</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">reversedNumber</span> <span class="o">=</span> <span class="nx">numberChunk</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// push the remaining digits onto the array</span>
-</span><span class='line'>  <span class="nx">chunkedNumber</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">reversedNumber</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">));</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// [&quot;098,&quot;, &quot;765,&quot;, &quot;432,&quot;, &quot;1&quot;]</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// reverse each of the strings in the array and rejoin them</span>
-</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">chunkedNumber</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">){</span>
-</span><span class='line'>    <span class="nx">chunkedNumber</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nx">chunkedNumber</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">reverse</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// [&quot;,890&quot;, &quot;,567&quot;, &quot;,234&quot;, &quot;1&quot;]</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">chunkedNumber</span><span class="p">.</span><span class="nx">reverse</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">numberSmoothing</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;1,234,567,890&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>While it was a fun mental exercise to implement number formatting, I stumbled across this handy d3 function after I was already done:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">);</span>
-</span><span class='line'><span class="s2">&quot;1,234,567,890&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As it turns out, any way one might want to format a number has <a href="https://github.com/mbostock/d3/wiki/Formatting#d3_format">already been implemented in d3</a>. It is similar to the mini-formatting language from python:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[​[fill]align][sign][symbol][0][width][,][.precision][type]</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// add commas for the thousands separator</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="nx">format</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;1,234,567,890&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// add a sign for positive and negative numbers</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;+,&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;+1,234,567,890&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="o">-</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;-1,234,567,890&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// add a currency sign</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;+$,&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="nx">format</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;+$1,234,567,890&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a percentage</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="nx">format</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;16.666666666666664%&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a rounded percentage</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;17%&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a percent rounded to a single sig fig</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;.1%&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;16.7%&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a rounded value</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;.2r&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mf">123.456</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;120&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span><span class="nx">format</span><span class="p">(</span><span class="mf">123456789.66</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;120000000&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a rounded, comma separated value</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;,.2r&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mf">123456789.66</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;120,000,000&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/javascript-getters-and-setters/">Javascript Getters and Setters</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-09T00:00:00-07:00" pubdate data-updated="true">Aug 9<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Getters and setters make sense in java, and I just learned that there is an equivalent pattern in javascript:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">favouriteBook</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">_title</span><span class="o">:</span> <span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">get</span> <span class="nx">title</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Getting title&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_title</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">},</span>
-</span><span class='line'>  <span class="nx">set</span> <span class="nx">title</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">_title</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Setting title&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_title</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'> <span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Slaughterhouse 5&quot;</span>
-</span><span class='line'> <span class="nx">Setting</span> <span class="nx">title</span> <span class="nx">Slaughterhouse</span> <span class="mi">5</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'> <span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Slaughterhouse</span> <span class="mi">5</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The <code>get</code> and <code>set</code> key words are reserved for accessing or mutating a data property (instance variable). Of course, one can get and set data properties directly:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'><span class="s2">&quot;Catch-22&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Slaughterhouse 5&quot;</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'><span class="s2">&quot;Slaughterhouse 5&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The advantage of using a getter and setter is that if a setter is defined without a getter, one can change the value of the data property, but can never read it. If a getter is defined without a setter, then the variable can be read but not be changed:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">favouriteBook</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">_title</span><span class="o">:</span> <span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">get</span> <span class="nx">title</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Getting title&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_title</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'><span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Slaughterhouse 5&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'><span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The setter function will fail silently, which makes troubleshooting difficult but ensures that the property remains undisturbed.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/constructors-and-prototypes/">Constructors and Prototypes</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-07T00:00:00-07:00" pubdate data-updated="true">Aug 7<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Object-oriented programming (OOP) can be thought of as describing the properties and behaviour of a noun in a blueprint, which is used to create instances of an object. The blueprint is defined as a Constructor &mdash; a function that identifies a class of objects and begins with a capital letter. New objects are created by calling a Constructor with the keyword <code>new</code>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">function</span> <span class="nx">Book</span><span class="p">(</span><span class="nx">title</span><span class="p">,</span> <span class="nx">author</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">title</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="nx">author</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">listing</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">title</span><span class="p">,</span> <span class="s2">&quot;by&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">author</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">));</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">book1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span> <span class="s2">&quot;Joseph Heller&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'><span class="s2">&quot;Catch-22&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">author</span>
-</span><span class='line'><span class="s2">&quot;Joseph Heller&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">listing</span><span class="p">()</span>
-</span><span class='line'><span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span> <span class="nx">by</span> <span class="nx">Joseph</span> <span class="nx">Heller</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The Book constructor specifies two properties, <code>title</code> and <code>author</code>, and one method, <code>listing</code>. Defining a method in a constructor ensures that all instances of the Object have the same method, but it also results in duplication of the method in the memory stack for every instance of the Object. If I made 1000 instances of Book, there would be 1000 instances of the listing method, even though it is only defined once, and is the same for every object.</p>
-
-<h4>Memory stack of objects with instance methods:</h4>
-
-<p><img src="/images/post_constructor_memory_stack.png"></p>
-
-
-<p>Enter Prototypes.</p>
-
-<p>A Prototype is a property that is shared by all instances of an object. When the constructor for an object is called for the first time, all the object&rsquo;s properties are loaded onto the memory stack as well as the object&rsquo;s Prototype. All subsequent instances of that object include a pointer to the same Prototype, and they pass in a pointer to themselves as <code>this</code> whenever they call a method from the Prototype.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">Book</span><span class="p">(</span><span class="nx">title</span><span class="p">,</span> <span class="nx">author</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">title</span><span class="p">;</span>
-</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">author</span> <span class="o">=</span> <span class="nx">author</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">Book</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">listing</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">title</span><span class="p">,</span> <span class="s2">&quot;by&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">author</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">));</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">book1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span> <span class="s2">&quot;Joseph Heller&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">book2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Book</span><span class="p">(</span><span class="s2">&quot;Slaughterhouse 5&quot;</span><span class="p">,</span> <span class="s2">&quot;Kurt Vonnegut&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">listing</span><span class="p">()</span>
-</span><span class='line'><span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span> <span class="nx">by</span> <span class="nx">Joseph</span> <span class="nx">Heller</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book2</span><span class="p">.</span><span class="nx">listing</span><span class="p">()</span>
-</span><span class='line'><span class="nx">Slaughterhouse</span> <span class="mi">5</span> <span class="nx">by</span> <span class="nx">Kurt</span> <span class="nx">Vonnegut</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">book1</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="s2">&quot;listing&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="kc">false</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;listing&#39;</span> <span class="k">in</span> <span class="nx">book1</span>
-</span><span class='line'><span class="kc">true</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Memory stack of object with prototypes:</h4>
-
-<p><img src="/images/post_prototype_memory_stack.png"></p>
-
-
-<p>Reduced memory consumption is one advantage of keeping a reference to a prototype instead of a complete copy. Another advantage is that if additions are made to the Prototype, the changes will be extended to all instances.</p>
-
-<p>Awesome.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/in-operator-avoid-false-falsies/">&#8216;In&#8217; Operator Avoids False Falsies</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-05T00:00:00-07:00" pubdate data-updated="true">Aug 5<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have encountered more than my share of javascript errors because I have made assumptions about the object I am working with, such as assuming that an object contains a property, and that I can call methods on that property:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</span><span class='line'><span class="nx">TypeError</span><span class="o">:</span> <span class="nx">Cannot</span> <span class="nx">read</span> <span class="nx">property</span> <span class="s1">&#39;0&#39;</span> <span class="nx">of</span> <span class="kc">undefined</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This line contains four assumptions, and therefore four places it can fail:</p>
-
-<ol>
-<li><code>myObject</code> exists</li>
-<li><code>myObject</code> contains a property called <code>data</code></li>
-<li><code>data</code> is an array</li>
-<li><code>data</code> is non-empty</li>
-</ol>
-
-
-<p>Presuming that if <code>myObject</code> does not exist means you have bigger problems, it is easy to fall into the trap of checking for the existence of a property by gating a conditional with it:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="k">if</span><span class="p">(</span><span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="c1">//do something important with the data</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This technique will work in development, but the voice of experience tells us that it will not work in production. The reason it will not work is that javascript has more falsy values than most languages. Falsy values include the number zero, empty strings, null, undefined, NaN, and of course, the boolean false. So, if it is possible <code>myObject.data</code> to contain derived information, you have signed up to troubleshoot some unexpected behaviour.</p>
-
-<p>Fortunately, javascript has provided a failsafe way to check the existence of a property, regardless of the data it contains. The <code>in</code> operator checks if the key exists in the object&rsquo;s hash table, and doesn&rsquo;t care if it is a prototype or singleton property.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">myObject</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class='line'><span class="kc">undefined</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;data&#39;</span> <span class="k">in</span> <span class="nx">myObject</span>
-</span><span class='line'><span class="kc">false</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'><span class="s2">&quot;&quot;</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;data&#39;</span> <span class="k">in</span> <span class="nx">myObject</span>
-</span><span class='line'><span class="kc">true</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span> <span class="o">==</span> <span class="kc">true</span>
-</span><span class='line'><span class="kc">false</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>('data' in myObject)</code> returns false if the property is undefined. If the property is defined, it returns true even if data contains a falsy value.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/stringify-cyclic-structures-with-censors/">Stringify Cyclic Structures With Censors</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-07-23T00:00:00-07:00" pubdate data-updated="true">Jul 23<span>rd</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Troubleshooting a d3 data visualization sometimes requires visual inspection of the underlying JSON data structure. You can convert linear data structures to a JSON string using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify"><code>JSON.stringify</code></a></div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/stringify-cyclic-structures-with-censors/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-      <a class="prev" href="/blog/page/9/">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-    <a class="next" href="/blog/page/7/">Newer &rarr;</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
-  
-    <section>
-  <div class='contact'>
-    <a href='mailto:keighty.leonard@gmail.com?Subject=Hello!' rel='tooltip' title='keighty.leonard@gmail.com'><i class="fa fa-envelope fa-3x"></i></a>
-    <a href='http://twitter.com/KeightyLeonard' title='@KeightyLeonard'><i class="fa fa-twitter fa-3x"></i></a>
-    <a href='http://github.com/keighty' title='github.com/keighty'><i class="fa fa-github fa-3x"></i></a>
-    <a href='http://linkedin.com/in/katieleonard' title='linkedin/katieleonard'><i class="fa fa-linkedin fa-3x"></i></a>
-  </div>
-</section><section>
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="email" href="mailto:keighty.leonard@gmail.com" title="Email">Email</a>
+		
+		
+		
+		
+			<a class="twitter" href="http://twitter.com/KeightyLeonard" title="Twitter">Twitter</a>
+		
+		
+			<a class="github" href="https://github.com/keighty" title="GitHub">GitHub</a>
+		
+		
+			<a class="coderwall" href="https://coderwall.com/keighty" title="Coderwall">Coderwall</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>
+			</div>
+
+			<aside class="sidebar-custom">
+			  
+			    <section>
   <div>
     <h1>Check out my book!</h1>
     <a href="http://codeschoolbook.com" target="_blank"><img src="/images/code_school_book.png"></a>
   </div>
-</section><section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2015/keightys-2015-by-the-numbers/">Keighty&#8217;s 2015 - by the Numbers</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/faster-asset-loading-with-cache-control/">Faster Asset Loading With Cache-Control</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/javascript-object-property-meta-properties/">Javascript Object Property Meta Properties</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/software-estimation-is-hard/">Estimate != Commitment != Target</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/the-clean-coder/">The Clean Coder</a>
-      </li>
-    
-  </ul>
 </section>
+			  
+			</aside>
 
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
-  
-  <script type="text/javascript">
-    $(document).ready(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
-
-        github.showRepos({
-            user: 'keighty',
-            count: 4,
-            skip_forks: true,
-            skip_repos: [ "keighty.github.io" ],
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
-
-<section>
-  <div>
-    <h1><a href="/more-about-keighty/index.html">Aboot me</a></h1>
-    <p>I have loved programming since my first &#8220;Hello World!&#8221;, and have been seeking source code enlightenment through Java, Ruby, Rails, and JavaScript. I am also a recent immigrant to Portland, Oregon - perhaps you can tell from my Canadian accent?</p>
-  </div>
-</section>
+		</div>
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
 
 
-<section class="well">
-  <h1><a href="http://coderwall.com/keighty">@keighty</a> on Coderwall</h1>
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
 
-  <div id="coderwall_badges"></div>
 
-  <script type="text/javascript">
-    $(document).ready(function(){
-      $.getJSON("http://coderwall.com/keighty.json?callback=?", function(data){
-        for(var i = 0; i < data.data.badges.length ; i++){
-          var badge = data.data.badges[i];
-          var description = badge.name + ":\n" + badge.description;
-          var badge_tag = $("<img title='" + description + "'/>");
-          badge_tag.attr("src",badge.badge);
-          badge_tag.css("width","25%");
-          $("#coderwall_badges").append(badge_tag);
-        }
-      });
-    });
-  </script>
-</section>
- <section>
-  <div>
-    <h1>Twitter</h1>
-    <a class="twitter-timeline" href="https://twitter.com/KeightyLeonard" data-widget-id="434861084550262784">Tweets by @KeightyLeonard</a>
-    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-  </div>
- </section>
+
+
+
 
 
 
   
-</aside>
 
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - katie leonard -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
 
-</footer>
+<time datetime="2014-03-15T00:00:00-07:00" data-updated="true" itemprop="datePublished">Mar 15<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/d3/'>d3</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/delay-chained-transitions/" itemprop="url">Delay Chained Transitions</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Changing an element using multiple, chained transitions requires a little troubleshooting. You would think that just chaining them one after another would suffice:</p>
+
+<figure class='code'><figcaption><span>Chained Transitions </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">doubleR</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But D3 does not wait for one transition to be complete before it begins the next one. Adding a delay will accomplish the desired transition chaining:</p>
+
+<figure class='code'><figcaption><span>ACTUAL Chained Transitions</span><a href='https://gist.github.com/keighty/9508948'>Gist </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">selection</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cx&quot;</span><span class="p">,</span><span class="nx">getX</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;cy&quot;</span><span class="p">,</span><span class="nx">getY</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">getR</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="nx">getColor</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">delay</span><span class="p">(</span><span class="mi">1700</span><span class="p">).</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1500</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="nx">doubleR</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<div id="showme">
+<style>
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+}
+</style>
+<script src="http://mbostock.github.com/d3/d3.v2.min.js"></script>
+<script>
+
+var width = 500,
+    height = 500,
+    margin = 50,
+    data,
+    dataFromCsv;
+
+var scaleX=d3.scale.linear().domain([0,10]).range([margin,width-margin]);
+var scaleY=d3.scale.linear().domain([0,10]).range([height-margin,margin]);
+
+var svg=d3.select("#showme").append("svg")
+      .attr("width",width)
+      .attr("height",height);
+
+function drawAxes() {
+  var xAxis = d3.svg.axis()
+    .scale(scaleX)
+    .orient("bottom")
+    .ticks(5)
+    .tickSubdivide(1)
+    .tickPadding(10)
+    .tickFormat(function(d) { return d + " ticks"});
+
+  var yAxis = d3.svg.axis()
+    .scale(scaleY)
+    .orient("left");
+
+  svg.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(0," + (height - margin) + ")")
+    .call(xAxis);
+  svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "middle")
+    .attr("x", width/2)
+    .attr("y", height)
+    .text("X-value");
+
+  svg.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(" + margin + ",0)")
+    .call(yAxis);
+  svg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "middle")
+    .attr("x", -height/2)
+    .attr("y", 6)
+    .attr("dy", ".75em")
+    .attr("transform", "rotate(-90)")
+    .text("Y-value");
+}
+
+dataFromCsv = [{ "Color": "#9467bd", "X": 1, "Y": 8, "Quantity": 91 },
+{ "Color": "#1f77b4", "X": 9, "Y": 1, "Quantity": 32 },
+{ "Color": "#1f77b4", "X": 3, "Y": 1, "Quantity": 67 },
+{ "Color": "#bcbd22", "X": 5, "Y": 5, "Quantity": 63 },
+{ "Color": "#9467bd", "X": 6, "Y": 6, "Quantity": 57 },
+{ "Color": "#2ca02c", "X": 5, "Y": 10, "Quantity": 65 },
+{ "Color": "#d62728", "X": 8, "Y": 2, "Quantity": 36 },
+{ "Color": "#9467bd", "X": 2, "Y": 8, "Quantity": 82 },
+{ "Color": "#bcbd22", "X": 4, "Y": 7, "Quantity": 69 },
+{ "Color": "#9467bd", "X": 5, "Y": 3, "Quantity": 88 },
+{ "Color": "#d62728", "X": 1, "Y": 5, "Quantity": 29 },
+{ "Color": "#1f77b4", "X": 10, "Y": 7, "Quantity": 60 },
+{ "Color": "#2ca02c", "X": 8, "Y": 5, "Quantity": 56 },
+{ "Color": "#bcbd22", "X": 1, "Y": 6, "Quantity": 31 },
+{ "Color": "#bcbd22", "X": 6, "Y": 5, "Quantity": 57 },
+{ "Color": "#d62728", "X": 9, "Y": 6, "Quantity": 85 },
+{ "Color": "indigo", "X": 9, "Y": 10, "Quantity": 70 },
+{ "Color": "indigo", "X": 9, "Y": 10, "Quantity": 31 },
+{ "Color": "#1f77b4", "X": 2, "Y": 4, "Quantity": 26 },
+{ "Color": "#bcbd22", "X": 10, "Y": 5, "Quantity": 61 },
+{ "Color": "#2ca02c", "X": 4, "Y": 2, "Quantity": 64 },
+{ "Color": "#1f77b4", "X": 8, "Y": 9, "Quantity": 71 }];
+function importData() {
+  data = d3.nest()
+          .key(function(d) { return d.Color; })
+          .rollup(aggregateData)
+          .entries(dataFromCsv);
+  // drawElements();
+  setInterval( drawElements, 4000 );
+}
+
+/***********************
+  Draw circles, bind data, and move elements to final location
+***********************/
+function drawElements() {
+  var selection = svg.selectAll("circle").data(data);
+
+  selection.enter()
+    .append("circle")
+    .attr("cx",scaleX(0))
+    .attr("cy",scaleY(0))
+    .attr("r", 0)
+
+  selection.transition().duration(1500)
+      .attr("cx",getX)
+      .attr("cy",getY)
+      .attr("r", getR)
+      .style("fill", getColor)
+    .transition().delay(1500+200).duration(1500)
+      .attr("r", doubleR);
+}
+
+/***********************
+  Helper functions
+***********************/
+function getX(d)     { return scaleX(d.values.X); }
+function getY(d)     { return scaleY(d.values.Y); }
+function getR(d)     { return d.values.Quantity / 10; }
+function doubleR(d)     { return d.values.Quantity / 5; }
+function getColor(d) { return d.key; }
+// Use D3 built in array functions to aggregate data
+function aggregateData(d) {
+  return {
+    "X"       : d3.mean(d, function(e) { return +e.X; }),
+    "Y"       : d3.median(d, function(e) { return +e.Y; }),
+    "Quantity": d3.max(d, function(e) { return +e.Quantity; })
+  };
+}
+
+drawAxes();
+importData();
+</script>
+</div>
+
+
+		
+		
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
   
+
+
+<time datetime="2014-03-12T00:00:00-07:00" data-updated="true" itemprop="datePublished">Mar 12<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/d3/'>d3</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/easing-does-it/" itemprop="url">Easing Does It</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>With the possible exception of UFOs, things don&rsquo;t usually switch from being stationary to moving at maximum velocity without an intervening period of acceleration or deceleration. Similarly, it can be difficult to track elements on a web page that move from one position to another with no warning, or faster than the human eye can perceive. Enter easing functions: 
+		
+		<a href="/blog/2014/easing-does-it/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-08T00:00:00-08:00" data-updated="true" itemprop="datePublished">Mar 8<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/d3/'>d3</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/read/'>read</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/the-value-of-transition/" itemprop="url">The Value of Slow Transitions</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h3>The Why</h3>
+
+<p>From <a href="http://bost.ocks.org/mike/constancy/">Object Constancy</a> by Mike Bostock:</p>
+
+<blockquote><p>Animated transitions are pretty, but they also serve a purpose: they make it easier to follow the data. This is known as <strong>object constancy</strong>: a graphical element that represents a particular data point&hellip; can be tracked visually through the transition. This lessens the cognitive burden by using <strong>preattentive processing</strong> of motion rather than sequential scanning of labels.</p></blockquote>
+
+<p>(The emphasis is mine)</p>
+
+<h3>The How</h3>
+
+<p>Object constancy is achieved through object identity: the data is bound to it&rsquo;s object by a shared unique identifier. This allows D3 to reuse the object when the data set is updated. Object identity is achieved by passing a key function to the data() method at the time of data binding:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var data = [ // &lt;-A
+</span><span class='line'>        {id: 0, value: "foo"},
+</span><span class='line'>        {id: 1, value: "bar"},
+</span><span class='line'>        {id: 2, value: "foo"},
+</span><span class='line'>        {id: 3, value: "baz"},
+</span><span class='line'>        {id: 4, value: "bar"}
+</span><span class='line'>    ];
+</span><span class='line'>d3.selectAll("svg:g")
+</span><span class='line'>    .data(data, function(d){return d.id;});</span></code></pre></td></tr></table></div></figure>
+
+
+		
+		
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-08T00:00:00-08:00" data-updated="true" itemprop="datePublished">Mar 8<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/git/'>git</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/git-what-have-i-done/" itemprop="url">Git, What Have I Done?</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Git, the superhero of version control, allows you to review all the commands that have modified the HEAD tag in a git repo: <code>git reflog</code></p>
+
+<p>The output for one of my demo apps:</p>
+
+<figure class='code'><figcaption><span>Git, you&#8217;re my hero </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>5075d26 HEAD@<span class="o">{</span>0<span class="o">}</span>: checkout: moving from master to kleonard/add_skyline_background
+</span><span class='line'>531c396 HEAD@<span class="o">{</span>1<span class="o">}</span>: pull: fast forward
+</span><span class='line'>435f6de HEAD@<span class="o">{</span>2<span class="o">}</span>: commit: Adds logic <span class="k">for </span>running and testing
+</span><span class='line'>043e35a HEAD@<span class="o">{</span>3<span class="o">}</span>: commit: Adds logic to process input
+</span><span class='line'>5155ba4 HEAD@<span class="o">{</span>4<span class="o">}</span>: commit: Adds input file
+</span><span class='line'>a629871 HEAD@<span class="o">{</span>5<span class="o">}</span>: rebase finished: returning to refs/heads/kleonard/create_input_files
+</span><span class='line'>a010021 HEAD@<span class="o">{</span>6<span class="o">}</span>: rebase: Add input file
+</span><span class='line'>b7cd86a HEAD@<span class="o">{</span>7<span class="o">}</span>: commit: Initial commit arbitrage
+</span><span class='line'>5ed00ea HEAD@<span class="o">{</span>8<span class="o">}</span>: commit: Adds launcher
+</span><span class='line'>7b2d720 HEAD@<span class="o">{</span>9<span class="o">}</span>: commit: Adds logic to find smallest number of moves
+</span><span class='line'>9c0dfce HEAD@<span class="o">{</span>10<span class="o">}</span>: commit: Adds implementation <span class="k">for </span>bin creation
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Hmmm&hellip; looks like my commit messages need a little work&hellip; Still, it is a great tool for catching up on the changes to a repo (especially if you haven&rsquo;t touched it in a while), finding out where the bulk of the work is happening, or just reminding yourself what you did yesterday.</p>
+
+<p>Awesome.</p>
+
+		
+		
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-06T00:00:00-08:00" data-updated="true" itemprop="datePublished">Mar 6<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/d3/'>d3</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/transition-with-style/" itemprop="url">Transition With Style</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Making things zoom across the page is what I used to think javascript was all about, but it wasn&rsquo;t until I started learning d3 that I found out how to make it happen.</p>
+
+
+		
+		<a href="/blog/2014/transition-with-style/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-05T00:00:00-08:00" data-updated="true" itemprop="datePublished">Mar 5<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/d3/'>d3</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/scales-and-ticks/" itemprop="url">Fun With Ticks</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>D3 has an awesome tick library, which makes it easy to customize an axis. I have not found any evidence of a built in function to customize tick rendering depending on if it is a major or a minor tick. One way to get around that is to render two axes, and only label one
+		
+		<a href="/blog/2014/scales-and-ticks/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-04T00:00:00-08:00" data-updated="true" itemprop="datePublished">Mar 4<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/d3/'>d3</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/d3-nests-and-rollups/" itemprop="url">D3 Nests and Rollups</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>D3 provides powerful functions for manipulating raw data sets, including csv(), nest(), and rollup().</p>
+
+
+		
+		<a href="/blog/2014/d3-nests-and-rollups/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/blog/page/7/" class="prev">Prev</a>
+    
+    
+        <a href="/blog/page/9/" class="next">Next</a>
+    
+    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
+</nav></div>
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2015
+
+    katie leonard
+
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+		</div>
+	</div>
+	
 
 
 
@@ -873,18 +671,6 @@
   </script>
 
 
-
-
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-41587719-1', 'katieleonard.ca');
-  ga('send', 'pageview');
-
-</script>
 
 
 </body>
