@@ -1,5 +1,13 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
-blockquote p{
-  font-style: normal;
+
+aside > section > div > a > img {
+  display: block;
+  margin: auto;
+  padding-bottom: 1.2em
+}
+
+aside > section > div > h1 {
+  font-size: 1.5em;
+  text-align: center;
 }

@@ -7,7 +7,7 @@ title: keighty
 subtitle: reading, writing, rambling
 author: katie leonard
 simple_search: http://google.com/search
-description:
+description: "I have loved programming since my first 'Hello World!', and have been seeking source code enlightenment through Ruby, Rails, and JavaScript."
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
@@ -19,7 +19,7 @@ date_format: "ordinal"
 subscribe_rss: /atom.xml
 subscribe_email:
 # RSS feeds can list your email address if you like
-email:
+email: keighty.leonard@gmail.com
 
 # ----------------------- #
 #    Jekyll & Plugins     #
@@ -41,16 +41,17 @@ rdiscount:
     - smart
 pygments: false # default python pygments have been replaced by pygments.rb
 
-paginate: 5          # Posts per page on the blog index
+paginate: 7          # Posts per page on the blog index
 pagination_dir: blog  # Directory base for pagination URLs eg. /blog/page/2/
-recent_posts: 5      # Posts in the sidebar Recent Posts section
+recent_posts:       # Posts in the sidebar Recent Posts section
 excerpt_link: "Read on &rarr;"  # "Continue reading" link text at the bottom of excerpted articles
 
 titlecase: true       # Converts page and post titles to titlecase
 
 # list each of the sidebar modules you want to include, in the order you want them to appear.
 # To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like 'custom/asides/custom_aside_name.html'
-default_asides: [custom/asides/contactme.html, custom/asides/booksite.html, asides/recent_posts.html, asides/github.html, custom/asides/aboutme.html, custom/asides/coderwall.html, custom/asides/twitter.html]
+# default_asides: [custom/asides/contactme.html, custom/asides/booksite.html, asides/recent_posts.html, asides/github.html, custom/asides/aboutme.html, custom/asides/coderwall.html, custom/asides/twitter.html]
+default_asides: [custom/asides/booksite.html]
 
 # Each layout uses the default asides, but they can have their own asides instead. Simply uncomment the lines below
 # and add an array with the asides you want to use.
@@ -64,10 +65,10 @@ default_asides: [custom/asides/contactme.html, custom/asides/booksite.html, asid
 
 # Github repositories
 github_user: keighty
-github_repo_count: 4
+# github_repo_count: 4
 github_show_profile_link: false
-github_skip_forks: true
-github_skip_repos: [keighty.github.io]
+# github_skip_forks: true
+# github_skip_repos: [keighty.github.io]
 
 # Twitter
 twitter_user: KeightyLeonard
