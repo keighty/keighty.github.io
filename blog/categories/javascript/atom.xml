@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2016-03-30T07:19:59-07:00</updated>
+  <updated>2016-03-30T22:05:58-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,104 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Preflight Check With CORS]]></title>
+    <link href="http://www.katieleonard.ca/blog/2016/preflight-check-with-cors/"/>
+    <updated>2016-03-29T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2016/preflight-check-with-cors</id>
+    <content type="html"><![CDATA[<p>Modern web applications can draw resources from anywhere on the web. Fonts, JavaScript libraries, images, and other data can be fetched from CDNs, Amazon, IMDB, or anywhere else that provides a public API. Early browsers restricted web applications to same-origin requests, which prevented the sharing of resources between applications, but also ensured that data from one application could not be tampered with by another. The thinkers at the W3C came up with a means of communicating safe cross-origin requests that would allow even destructive remote actions to be performed, as long as the server consented to receive the request. Enter CORS, and preflighting.</p>
+
+<!--more-->
+
+
+<h3>What is CORS?</h3>
+
+<p>Cross-Origin Resource Sharing occurs when JavaScript on a web page requests data from (or sends data to) a location on a different host. Any website that embeds a video from YouTube, uses a custom font, or posts to social media on your behalf, is making a CORS request. CORS is a <a href="https://www.w3.org/TR/cors/">set of web standards</a> developed to enable safe cross-domain communication.</p>
+
+<h3>What is preflighting?</h3>
+
+<p>CORS functions through the specification of new HTTP headers that allow servers to describe the origin and nature of the request. For each outgoing request to a different domain, the browser will look at the headers to determine if the request that looks like it will affect data on the receiving server. Any simple request that uses one of the common HTTP verbs and a basic Content-Type are allowed to pass without further comment. But if the request has different header values, the browser checks with the server first to make sure the request is expected. This is called a pre-flight check.</p>
+
+<h3>What does a simple CORS request look like?</h3>
+
+<p>For simple requests (no pre-flight check), the method must be one of:</p>
+
+<pre><code>- GET
+- HEAD
+- POST
+</code></pre>
+
+<p>The only extra headers allowed are:</p>
+
+<pre><code>- Accept
+- Accept-Language
+- Content-Language
+- Content-Type
+</code></pre>
+
+<p>For the Content-Type header, the only allowed values are:</p>
+
+<pre><code>- application/x-www-form-urlencoded
+- multipart/form-data
+- text/plain
+</code></pre>
+
+<p>XMLHttpRequests (aka XHRs or ajax) use CORS to mitigate the risks of pulling or pushing sensitive data across domains. For example:</p>
+
+<p><code>javascript
+var body = 'very safe, ordinary text content'
+var url = 'http://api.example.com'
+var request = new XMLHttpRequest()
+request.open('POST', url, true)
+request.setRequestHeader('Content-Type', 'text/plain')
+request.send()
+</code></p>
+
+<p><img src="/images/160329-preflight-cors/cors-without-preflight.png"></p>
+
+<p>The browser checks out the request, sees that it is unlikely to have any negative consequences, and passes it along to the requested endpoint. In the Network tab, simple CORS requests will appear by themselves:</p>
+
+<p><img src="/images/160329-preflight-cors/one-request.png"></p>
+
+<h3>What does a pre-flight CORS request look like?</h3>
+
+<p>For non-simple requests, the method could be any of the HTTP verbs along with any other combination of headers. For example:</p>
+
+<p><code>javascript
+var body = 'possibly unstable or malicious content'
+var url = 'http://api.example.com'
+var request = new XMLHttpRequest()
+request.open('POST', url, true)
+request.setRequestHeader('Content-Type', 'application/json')
+request.send()
+</code></p>
+
+<p>In this request I am trying to POST a JSON object to an API endpoint, which could potentially have destructive consequences for data on the other side of the endpoint. When the browser inspects the headers of this request it gets suspicious, and fires off a preliminary request to the endpoint with the meta data from the request:</p>
+
+<p><img src="/images/160329-preflight-cors/cors-with-preflight.png"></p>
+
+<p>The server at the endpoint responds to the pre-flight request with a list of authorized headers, including acceptable request origins, content, and actions.</p>
+
+<p>Ignoring for a moment that the requests fail (because api.example.com does not exist), the non-simple CORS request produces two requests instead of one:
+<img src="/images/160329-preflight-cors/two-requests.png"></p>
+
+<p>The result of the pre-flight OPTIONS request will determine if the second is ever sent on to the endpoint. This is how browsers keep your application data secure from malicious or unintended changes.</p>
+
+<h3>Why OPTIONS, and not POST?</h3>
+
+<p>I found <a href="http://stackoverflow.com/a/16945321">this great answer</a> on stackoverflow that explains why the creators of CORS made a new request type, <code>OPTIONS</code>. Before the CORS standards were introduced, neither browsers nor servers knew how to handle cross-domain requests. Browsers would throw an error, but servers would process the request without concern. Inventing a new method type that CORS-enabled browsers AND CORS-aware servers could handshake with ensures that both sides are sensible to the meaning of the pre-flight request.</p>
+
+<h4>RESOURCES</h4>
+
+<ul>
+<li>Learn more about the web standards at <a href="https://www.w3.org/TR/cors/">W3C</a></li>
+<li>Find out more about how CORS is <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Simple_requests:">implemented at Mozilla</a></li>
+<li>Find out what web browsers support CORS at <a href="http://caniuse.com/#search=CORS">caniuse.com</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Javascript Object Property Meta Properties]]></title>
@@ -411,93 +509,6 @@ Getting title Catch-22
 <h3>Resources</h3>
 
 <p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Constructors and Prototypes]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/constructors-and-prototypes/"/>
-    <updated>2014-08-07T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/constructors-and-prototypes</id>
-    <content type="html"><![CDATA[<p>Object-oriented programming (OOP) can be thought of as describing the properties and behaviour of a noun in a blueprint, which is used to create instances of an object. The blueprint is defined as a Constructor &mdash; a function that identifies a class of objects and begins with a capital letter. New objects are created by calling a Constructor with the keyword <code>new</code>.</p>
-
-<p>
-```javascript</p>
-
-<blockquote><p>function Book(title, author) {</p>
-
-<pre><code>this.title = title;
-this.author = author;
-this.listing = function() {
-  console.log([this.title, "by", this.author].join(' '));
-}
-</code></pre>
-
-<p>  }</p>
-
-<p>var book1 = new Book(&ldquo;Catch-22&rdquo;, &ldquo;Joseph Heller&rdquo;)</p>
-
-<p>book1.title
-&ldquo;Catch-22&rdquo;</p>
-
-<p>book1.author
-&ldquo;Joseph Heller&rdquo;</p>
-
-<p>book1.listing()
-Catch-22 by Joseph Heller
-```
-</p></blockquote>
-
-<p>The Book constructor specifies two properties, <code>title</code> and <code>author</code>, and one method, <code>listing</code>. Defining a method in a constructor ensures that all instances of the Object have the same method, but it also results in duplication of the method in the memory stack for every instance of the Object. If I made 1000 instances of Book, there would be 1000 instances of the listing method, even though it is only defined once, and is the same for every object.</p>
-
-<h4>Memory stack of objects with instance methods:</h4>
-
-<p><img src="http://www.katieleonard.ca/images/post_constructor_memory_stack.png"></p>
-
-
-<p>Enter Prototypes.</p>
-
-<p>A Prototype is a property that is shared by all instances of an object. When the constructor for an object is called for the first time, all the object&rsquo;s properties are loaded onto the memory stack as well as the object&rsquo;s Prototype. All subsequent instances of that object include a pointer to the same Prototype, and they pass in a pointer to themselves as <code>this</code> whenever they call a method from the Prototype.</p>
-
-<p>
-```javascript
-function Book(title, author) {
-  this.title = title;
-  this.author = author;
-}</p>
-
-<p>Book.prototype = {
-  listing: function() {</p>
-
-<pre><code>console.log([this.title, "by", this.author].join(' '));
-</code></pre>
-
-<p>  }
-}</p>
-
-<blockquote><p>var book1 = new Book(&ldquo;Catch-22&rdquo;, &ldquo;Joseph Heller&rdquo;)
-var book2 = new Book(&ldquo;Slaughterhouse 5&rdquo;, &ldquo;Kurt Vonnegut&rdquo;)</p>
-
-<p>book1.listing()
-Catch-22 by Joseph Heller
-book2.listing()
-Slaughterhouse 5 by Kurt Vonnegut</p>
-
-<p>book1.hasOwnProperty(&ldquo;listing&rdquo;)
-false
-&lsquo;listing&rsquo; in book1
-true
-```
-</p></blockquote>
-
-<h4>Memory stack of object with prototypes:</h4>
-
-<p><img src="http://www.katieleonard.ca/images/post_prototype_memory_stack.png"></p>
-
-
-<p>Reduced memory consumption is one advantage of keeping a reference to a prototype instead of a complete copy. Another advantage is that if additions are made to the Prototype, the changes will be extended to all instances.</p>
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   
