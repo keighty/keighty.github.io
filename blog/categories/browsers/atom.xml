@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Browsers | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/browsers/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2016-03-30T22:16:20-07:00</updated>
+  <updated>2016-04-09T11:47:49-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Preflight Check With CORS -- chainPreflight Option]]></title>
+    <link href="http://www.katieleonard.ca/blog/2016/preflight-check-with-cors-chainpreflight-option/"/>
+    <updated>2016-04-09T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2016/preflight-check-with-cors-chainpreflight-option</id>
+    <content type="html"><![CDATA[<p>I am working through setting up CORS on a web server, and <a href="http://katieleonard.ca/blog/2016/preflight-check-with-cors/">learning all about Cross-Origin Resource Sharing</a>. When I came across the <strong>chainPreflight</strong> option, I also learned that I didn&rsquo;t have a strong enough understanding of web server vocabulary.<!--more--> Here are the docs for the standard Jetty CrossOriginFilter object:</p>
+
+<p><img src="/images/160329-preflight-cors/chainPreflight-docs.png"></p>
+
+<p>Most references and docs for CORS filtering use the exact same language to describe <code>chainPreflight</code>, but what does it mean for requests to be &ldquo;chained to their target resource?&rdquo; Is this a good thing? If it defaults to true, it must be the expected behaviour&hellip; What about &ldquo;otherwise the filter will response to the preflight?&rdquo; Is that even proper grammar? I asked on <a href="http://stackoverflow.com/q/36414029/1279340">StackOverflow</a>, and five days later, still no answers.</p>
+
+<p>Luckily, I have access to an army of experts at work, and this is what I learned about <strong>chainPreflight</strong>:</p>
+
+<p><img src="/images/160329-preflight-cors/chainPreflight-seq.png"></p>
+
+<p>The &lsquo;target resource&rsquo; is the server endpoint that the request is targeting. If the preflight request is chained to the target resource, it it will pass through the filter (which adds the necessary <code>Allows-*</code> headers) all the way to the endpoint, and the endpoint must have some business logic for handling and responding to the request.</p>
+
+<p>If the preflight request is NOT chained to the target resource, then the filter will add the necessary <code>Allows-*</code> headers and send a response back directly.</p>
+
+<p>Since I don&rsquo;t want to do anything with the OPTIONS preflight request, I can confidently set this option to false, saying &ldquo;whatever you&rsquo;ve got, send it over!&rdquo;</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Preflight Check With CORS]]></title>

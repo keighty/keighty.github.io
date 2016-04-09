@@ -9,7 +9,7 @@
 	<meta name="author" content="katie leonard">
 
 	
-	<meta name="description" content="Sep 10th, 2013 ruby Ruby Execution I have started including an executable in my project setup. Many of the code challenges I have been practicing &hellip;">
+	<meta name="description" content="Sep 16th, 2013 rails Rails, You Can Depend on Javascript I am between computers at the moment, and I really really miss my OSX development &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -126,6 +126,57 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-16T22:29:03-07:00" data-updated="true" itemprop="datePublished">Sep 16<span>th</span>, 2013</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/rails/'>rails</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2013/rails-depends-on-javascript/" itemprop="url">Rails, You Can Depend on Javascript</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I am between computers at the moment, and I really really miss my OSX development environment. Dependency installation is so smooth and painless on mac, that I had quite forgotten the complications of setting up a complete environment in linux. For instance</p>
+
+<h3>Rails requires a javascript runtime environment</h3>
+
+<p>I am running an Ubuntu 9.4 remix on my little Atom Netbook. Getting rails up and running anew is a lesson in returning to fundamentals.</p>
+
+<div>
+  <pre><code class='bash'>$ gem install rails
+$ rails new testapp -T
+$ rails generate rspec:install
+...
+Could not find a JavaScript runtime. See https://github.com/sstephenson/execjs for a list of available runtimes</code></pre>
+</div>
+
+
+
+
+
+		
+		<a href="/blog/2013/rails-depends-on-javascript/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -339,48 +390,6 @@
 
 		
 		<a href="/blog/2013/runtime-for-your-life/" class="more-link">Read on &rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-16T22:29:03-07:00" data-updated="true" itemprop="datePublished">Aug 16<span>th</span>, 2013</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/eh/'>eh</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2013/parcel-parser/" itemprop="url">Parcel Parser</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>On the last episode, I described how to label chunks of code for processing through a parser. Strings are labeled as &lsquo;STRING&rsquo;, class definitions as &lsquo;A&rsquo; + &lsquo;CONSTANT&rsquo;, etc.</p>
-
-<h2>What is a parser?</h2>
-
-<p>A parser separates and analyzes a piece of text according to a set of rules specified by a formal grammar. The analysis is performed by assembling the tokenized code into an Abstract Syntax Tree (AST) &ndash; a tree of nodes that represent what the code means to the language. The AST evaluates the nodes in a similar manner to order of operations in math: each token is placed on the evaluation tree, and expressions are evaluated by reducing each branch in order.</p>
-
-<p>The parser itself is can be written by hand, but I am using RACC: an LALR (Look Ahead, Left to right, Reverse) parser written by <a href="https://github.com/tenderlove/racc">tenderlove</a> to generate Ruby programs. How do we specify a grammar that RACC will understand?</p>
-
-
-		
-		<a href="/blog/2013/parcel-parser/" class="more-link">Read on &rarr;</a>
 	</div>
 
 </article>
