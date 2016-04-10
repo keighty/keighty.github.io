@@ -4,7 +4,6 @@ title: "preflight check with CORS"
 date: 2016-03-29
 sharing: true
 categories: [javascript, browsers]
-published: false
 ---
 
 Modern web applications can draw resources from anywhere on the web. Fonts, JavaScript libraries, images, and other data can be fetched from CDNs, Amazon, IMDB, or anywhere else that provides a public API. Early browsers restricted web applications to same-origin requests, which prevented the sharing of resources between applications, but also ensured that data from one application could not be tampered with by another. The thinkers at the W3C came up with a means of communicating safe cross-origin requests that would allow even destructive remote actions to be performed, as long as the server consented to receive the request. Enter CORS, and preflighting.
