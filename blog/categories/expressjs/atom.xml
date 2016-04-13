@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Expressjs | keighty]]></title>
+  <link href="http://www.katieleonard.ca/blog/categories/expressjs/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2016-04-12T22:17:15-07:00</updated>
+  <id>http://www.katieleonard.ca/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    <email><![CDATA[keighty.leonard@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Nested Routes With Expressjs]]></title>
+    <link href="http://www.katieleonard.ca/blog/2016/nested-routes-with-expressjs/"/>
+    <updated>2016-04-12T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2016/nested-routes-with-expressjs</id>
+    <content type="html"><![CDATA[<p>Whenever I need to build a quick web application I turn to <a href="http://expressjs.com/">ExpressJS</a>. It is a fast, minimal, easy to configure web server that puts the <strong>E</strong> in <a href="http://mean.io/#!/">MEAN</a>). I wanted to build a REST API for a hobby app and found that the docs for how to nest routes are relatively few (see <a href="http://codetunnel.io/an-intuitive-way-to-organize-your-expressjs-routes/">blog</a>, <a href="http://stackoverflow.com/a/25305272/1279340">stackoverflow answer</a>). Combining these two resources, I learned a simple method for keeping your routes separate while creating a nested routing structure. <!--more--></p>
+
+<h2>The Plan</h2>
+
+<p>I want to create routes that look like these:</p>
+
+<ul>
+<li><code>/foo</code></li>
+<li><code>/foo/bar</code></li>
+<li><code>/foo/42</code></li>
+<li><code>/foo/42/baz</code></li>
+<li><code>/foo/42/baz/123</code></li>
+</ul>
+
+
+<p>Using the <a href="http://expressjs.com/en/starter/generator.html">express-generator</a> and a few simple commands, you can get your server up and running fast:</p>
+
+<p><code>
+$ npm install express-generator -g
+$ express myapp
+$ cd myapp
+$ npm install
+$ npm start
+</code></p>
+
+<p>You will end up with a working directory that looks like this:</p>
+
+<p>```
+├── app.js
+├── bin
+│   └── www
+├── node_modules
+│   ├── &hellip;
+├── package.json
+├── public
+│   ├── images
+│   ├── javascripts
+│   └── stylesheets
+│       └── style.css
+├── routes
+│   ├── index.js
+│   └── users.js
+└── views</p>
+
+<pre><code>├── error.jade
+├── index.jade
+└── layout.jade
+</code></pre>
+
+<p>```</p>
+
+<p>Go ahead and delete the <code>/routes/users.js</code> file and the following lines from <code>app.js</code></p>
+
+<p><code>javascript app.js
+...
+var users = require('./routes/users');
+...
+app.use('/users', users);
+</code></p>
+
+<p>Then create a new routes file named <code>/routes/foo.js</code> and and require it from your app server.
+<code>javascript app.js
+...
+app.use('/foo', require('./routes/foo'));
+...
+</code></p>
+
+<h2>How to <code>GET /foo</code></h2>
+
+<p>Inside <code>/routes/foo.js</code>, you need to require the router module from ExpressJS, define a route on it, and export it back out.</p>
+
+<p>```javascript /routes/foo.js
+var express = require(&lsquo;express&rsquo;)
+var router = express.Router()</p>
+
+<p>// GET /foo
+router.get(&lsquo;/&rsquo;, function (req, res, next) {
+  res.send(&lsquo;this is the index for foo&rsquo;)
+})</p>
+
+<p>module.exports = router
+```</p>
+
+<p>Everytime you change a route, you need to restart your server. Nevigating to <a href="http://localhost:3000/foo">localhost:3000/foo</a> should display the message:</p>
+
+<p><img src="/images/160412-nested-routes/foo.png"></p>
+
+<h2>How to <code>GET /foo/bar</code></h2>
+
+<p>Create simple nested routes by requiring the child route file from the parent route file.</p>
+
+<p>```javascript /routes/foo.js
+var express = require(&lsquo;express&rsquo;)
+var router = express.Router()
+var bar = require(&lsquo;./bar&rsquo;)</p>
+
+<p>// GET /foo
+router.get(&lsquo;/&rsquo;, function (req, res, next) {
+  res.send(&lsquo;this is the index for foo&rsquo;)
+});</p>
+
+<p>// GET /foo/bar
+router.use(&lsquo;/bar&rsquo;, bar) // tell the router to use bar.js for child routes</p>
+
+<p>module.exports = router
+```</p>
+
+<p>Create a new routes file named <code>/routes/bar.js</code> and define a root route the same way you did for <code>/routes/foo.js</code>:</p>
+
+<p>```javascript /routes/bar.js
+var express = require(&lsquo;express&rsquo;)
+var router = express.Router()</p>
+
+<p>// GET /foo/bar
+router.get(&lsquo;/&rsquo;, function (req, res, next) {
+  res.send(&lsquo;this is the index for bar&rsquo;)
+});</p>
+
+<p>module.exports = router
+```</p>
+
+<p>Bounce your server again and navigate to <a href="http://localhost:3000/foo/bar">localhost:3000/foo/bar</a></p>
+
+<p><img src="/images/160412-nested-routes/foobar.png"></p>
+
+<h2>How to <code>GET /foo/42</code></h2>
+
+<p>Expecting a parameter? No problem! access URL params directly from the request object: <code>req.params.nameOfParam</code>:</p>
+
+<p>```javascript /routes/foo.js
+&hellip;
+// GET /foo/42
+router.get(&lsquo;/:number&rsquo;, function (req, res, next) {
+  res.send(&lsquo;this is foo #&rsquo; + req.params.number)
+})</p>
+
+<p>module.exports = router
+```
+Navigate to <a href="http://localhost:3000/foo/42">localhost:3000/foo/42</a> to see the result.</p>
+
+<p><img src="/images/160412-nested-routes/fooNumber.png"></p>
+
+<h2>How to <code>GET /foo/42/baz</code></h2>
+
+<p>Getting a child route from a parameterized parent is where I was getting confused. It turns out that you need to configure the router a little differently when you are passing params through.</p>
+
+<p>```javascript /routes/foo.js
+&hellip;
+var baz = require(&lsquo;./baz&rsquo;)</p>
+
+<p>&hellip;
+// GET /foo/42/baz
+router.use(&lsquo;/:number/baz&rsquo;, baz)</p>
+
+<p>module.exports = router
+```</p>
+
+<p>You need to pass an options object to <code>express.Router</code> to merge the params from any parent route:</p>
+
+<p>```javascript /routes/baz.js
+var express = require(&lsquo;express&rsquo;)
+var router = express.Router({mergeParams: true}) // don&rsquo;t forget the parent params!</p>
+
+<p>// GET /foo/42/baz
+router.get(&lsquo;/&rsquo;, function (req, res, next) {
+  // the param name is from the parent as well
+  res.send(&lsquo;this is the baz for foo#&rsquo; + req.params.number);
+})</p>
+
+<p>module.exports = router
+```</p>
+
+<p>Navigate to <a href="http://localhost:3000/foo/42/baz">localhost:3000/foo/42/baz</a> to enjoy your success.</p>
+
+<p><img src="/images/160412-nested-routes/fooNumberBaz.png"></p>
+
+<h2>How to <code>GET /foo/42/baz/123</code></h2>
+
+<p>Parameterizing a child route is the same process as for the parent route:</p>
+
+<p>```javascript /routes/baz.js
+var express = require(&lsquo;express&rsquo;)
+var router = express.Router({mergeParams: true})</p>
+
+<p>// GET /foo/42/baz
+router.get(&lsquo;/&rsquo;, function (req, res, next) {
+  res.send(&lsquo;this is the baz for foo#&rsquo; + req.params.number);
+})</p>
+
+<p>// GET /foo/42/baz/123
+router.get(&lsquo;/:id&rsquo;, function (req, res, next) {
+  res.send(&lsquo;baz #&rsquo; + req.params.id + ‘ for foo #’ + req.params.number)
+})</p>
+
+<p>module.exports = router
+```</p>
+
+<p>Navigate to <a href="http://localhost:3000/foo/42/baz/123">localhost:3000/foo/42/baz/123</a> to enjoy your success.</p>
+
+<p><img src="/images/160412-nested-routes/fooNumberBazNumber.png"></p>
+
+<p>TADA! a model of nested routes that you can apply to any application.</p>
+]]></content>
+  </entry>
+  
+</feed>

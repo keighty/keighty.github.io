@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2016-04-12T22:16:05-07:00</updated>
+  <updated>2016-04-12T22:17:15-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,313 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Nested Routes With Expressjs]]></title>
+    <link href="http://www.katieleonard.ca/blog/2016/nested-routes-with-expressjs/"/>
+    <updated>2016-04-12T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2016/nested-routes-with-expressjs</id>
+    <content type="html"><![CDATA[<p>Whenever I need to build a quick web application I turn to <a href="http://expressjs.com/">ExpressJS</a>. It is a fast, minimal, easy to configure web server that puts the <strong>E</strong> in <a href="http://mean.io/#!/">MEAN</a>). I wanted to build a REST API for a hobby app and found that the docs for how to nest routes are relatively few (see <a href="http://codetunnel.io/an-intuitive-way-to-organize-your-expressjs-routes/">blog</a>, <a href="http://stackoverflow.com/a/25305272/1279340">stackoverflow answer</a>). Combining these two resources, I learned a simple method for keeping your routes separate while creating a nested routing structure. <!--more--></p>
+
+<h2>The Plan</h2>
+
+<p>I want to create routes that look like these:</p>
+
+<ul>
+<li><code>/foo</code></li>
+<li><code>/foo/bar</code></li>
+<li><code>/foo/42</code></li>
+<li><code>/foo/42/baz</code></li>
+<li><code>/foo/42/baz/123</code></li>
+</ul>
+
+
+<p>Using the <a href="http://expressjs.com/en/starter/generator.html">express-generator</a> and a few simple commands, you can get your server up and running fast:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ npm install express-generator -g
+</span><span class='line'>$ express myapp
+</span><span class='line'>$ cd myapp
+</span><span class='line'>$ npm install
+</span><span class='line'>$ npm start</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You will end up with a working directory that looks like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>├── app.js
+</span><span class='line'>├── bin
+</span><span class='line'>│   └── www
+</span><span class='line'>├── node_modules
+</span><span class='line'>│   ├── ...
+</span><span class='line'>├── package.json
+</span><span class='line'>├── public
+</span><span class='line'>│   ├── images
+</span><span class='line'>│   ├── javascripts
+</span><span class='line'>│   └── stylesheets
+</span><span class='line'>│       └── style.css
+</span><span class='line'>├── routes
+</span><span class='line'>│   ├── index.js
+</span><span class='line'>│   └── users.js
+</span><span class='line'>└── views
+</span><span class='line'>    ├── error.jade
+</span><span class='line'>    ├── index.jade
+</span><span class='line'>    └── layout.jade</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Go ahead and delete the <code>/routes/users.js</code> file and the following lines from <code>app.js</code></p>
+
+<figure class='code'><figcaption><span>app.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">users</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./routes/users&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">,</span> <span class="nx">users</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then create a new routes file named <code>/routes/foo.js</code> and and require it from your app server.</p>
+
+<figure class='code'><figcaption><span>app.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/foo&#39;</span><span class="p">,</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./routes/foo&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="p">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>How to <code>GET /foo</code></h2>
+
+<p>Inside <code>/routes/foo.js</code>, you need to require the router module from ExpressJS, define a route on it, and export it back out.</p>
+
+<figure class='code'><figcaption><span>/routes/foo.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">router</span> <span class="o">=</span> <span class="nx">express</span><span class="p">.</span><span class="nx">Router</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// GET /foo</span>
+</span><span class='line'><span class="nx">router</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;this is the index for foo&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">router</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Everytime you change a route, you need to restart your server. Nevigating to <a href="http://localhost:3000/foo">localhost:3000/foo</a> should display the message:</p>
+
+<p><img src="http://www.katieleonard.ca/images/160412-nested-routes/foo.png"></p>
+
+<h2>How to <code>GET /foo/bar</code></h2>
+
+<p>Create simple nested routes by requiring the child route file from the parent route file.</p>
+
+<figure class='code'><figcaption><span>/routes/foo.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">router</span> <span class="o">=</span> <span class="nx">express</span><span class="p">.</span><span class="nx">Router</span><span class="p">()</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">bar</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./bar&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// GET /foo</span>
+</span><span class='line'><span class="nx">router</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;this is the index for foo&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// GET /foo/bar</span>
+</span><span class='line'><span class="nx">router</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/bar&#39;</span><span class="p">,</span> <span class="nx">bar</span><span class="p">)</span> <span class="c1">// tell the router to use bar.js for child routes</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">router</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Create a new routes file named <code>/routes/bar.js</code> and define a root route the same way you did for <code>/routes/foo.js</code>:</p>
+
+<figure class='code'><figcaption><span>/routes/bar.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">router</span> <span class="o">=</span> <span class="nx">express</span><span class="p">.</span><span class="nx">Router</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// GET /foo/bar</span>
+</span><span class='line'><span class="nx">router</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;this is the index for bar&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">router</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Bounce your server again and navigate to <a href="http://localhost:3000/foo/bar">localhost:3000/foo/bar</a></p>
+
+<p><img src="http://www.katieleonard.ca/images/160412-nested-routes/foobar.png"></p>
+
+<h2>How to <code>GET /foo/42</code></h2>
+
+<p>Expecting a parameter? No problem! access URL params directly from the request object: <code>req.params.nameOfParam</code>:</p>
+
+<figure class='code'><figcaption><span>/routes/foo.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="c1">// GET /foo/42</span>
+</span><span class='line'><span class="nx">router</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/:number&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;this is foo #&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">number</span><span class="p">)</span>
+</span><span class='line'><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">router</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Navigate to <a href="http://localhost:3000/foo/42">localhost:3000/foo/42</a> to see the result.</p>
+
+<p><img src="http://www.katieleonard.ca/images/160412-nested-routes/fooNumber.png"></p>
+
+<h2>How to <code>GET /foo/42/baz</code></h2>
+
+<p>Getting a child route from a parameterized parent is where I was getting confused. It turns out that you need to configure the router a little differently when you are passing params through.</p>
+
+<figure class='code'><figcaption><span>/routes/foo.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">baz</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./baz&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="c1">// GET /foo/42/baz</span>
+</span><span class='line'><span class="nx">router</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/:number/baz&#39;</span><span class="p">,</span> <span class="nx">baz</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">router</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You need to pass an options object to <code>express.Router</code> to merge the params from any parent route:</p>
+
+<figure class='code'><figcaption><span>/routes/baz.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">router</span> <span class="o">=</span> <span class="nx">express</span><span class="p">.</span><span class="nx">Router</span><span class="p">({</span><span class="nx">mergeParams</span><span class="o">:</span> <span class="kc">true</span><span class="p">})</span> <span class="c1">// don&#39;t forget the parent params!</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// GET /foo/42/baz</span>
+</span><span class='line'><span class="nx">router</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// the param name is from the parent as well</span>
+</span><span class='line'>  <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;this is the baz for foo#&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">number</span><span class="p">);</span>
+</span><span class='line'><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">router</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Navigate to <a href="http://localhost:3000/foo/42/baz">localhost:3000/foo/42/baz</a> to enjoy your success.</p>
+
+<p><img src="http://www.katieleonard.ca/images/160412-nested-routes/fooNumberBaz.png"></p>
+
+<h2>How to <code>GET /foo/42/baz/123</code></h2>
+
+<p>Parameterizing a child route is the same process as for the parent route:</p>
+
+<figure class='code'><figcaption><span>/routes/baz.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">router</span> <span class="o">=</span> <span class="nx">express</span><span class="p">.</span><span class="nx">Router</span><span class="p">({</span><span class="nx">mergeParams</span><span class="o">:</span> <span class="kc">true</span><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// GET /foo/42/baz</span>
+</span><span class='line'><span class="nx">router</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;this is the baz for foo#&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">number</span><span class="p">);</span>
+</span><span class='line'><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// GET /foo/42/baz/123</span>
+</span><span class='line'><span class="nx">router</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/:id&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;baz #&#39;</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="err">‘</span> <span class="k">for</span> <span class="nx">foo</span> <span class="err">#’</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">number</span><span class="p">)</span>
+</span><span class='line'><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">router</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Navigate to <a href="http://localhost:3000/foo/42/baz/123">localhost:3000/foo/42/baz/123</a> to enjoy your success.</p>
+
+<p><img src="http://www.katieleonard.ca/images/160412-nested-routes/fooNumberBazNumber.png"></p>
+
+<p>TADA! a model of nested routes that you can apply to any application.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Preflight Check With CORS -- chainPreflight Option]]></title>
@@ -1669,74 +1976,6 @@ Following his <a href="https://github.com/flyingsparx/NodeDirectUploader">exampl
 <p>The last stumbling block I encountered was saving the image url into mongo. The image would upload and appear just fine, but wouldn&rsquo;t persist the url as a property of the object. I had forgotten to add the image to my mongo Schema &mdash; the schema acts a bit like a whitelist for saving attributes through mongoose into mongo. Adding the <a href="https://github.com/keighty/virtualplaybill2/blob/ad04bcde8ce00c5ce349f43d2e0cc50549c59df7/models/posts_model.js#L11">imageUrl to the schema</a> solved all my woes.</p>
 
 <p>If you are trying to accomplish something similar, Heroku has articles on <a href="https://devcenter.heroku.com/articles/s3">uploading directly to S3</a> using many different stacks.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Everybody Writes (and Why You Should Blog)]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/everybody-writes/"/>
-    <updated>2015-02-16T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/everybody-writes</id>
-    <content type="html"><![CDATA[<p>In <em>Everybody Writes</em><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>, Ann Handley teaches content marketers how to generate &ldquo;ridiculously good&rdquo; content. Anyone who has recently enjoyed the pain of the job hunt will notice that much of the advice can be adapted to self-marketing. In my recent code school experience, developing an online presence was as important as learning web development, and since it is hard to market yourself as a web developer without developing anything for the web, a blog is a great place to start. You have picked a career where your ability to learn is one of your most marketable skills, as well as your ability to communicate &mdash; both of which you can showcase in your blog. You don&rsquo;t have to worry about having something original to say: treat it as an opportunity to organize your thoughts and to teach a beginner what you know. Handley gives great advice for people learning to blog and how to generally optimize your online presence &mdash; both are great ways to market yourself as a fresh code-school alum.</p>
-
-<!--more-->
-
-
-<h3>Show up</h3>
-
-<p>Write early, write often. If something is new to you, it will likely be new to someone else as well. The more writing practice you get, the easier it becomes &mdash; &ldquo;writing is a habit, not an art&rdquo;, and you can&rsquo;t help but improve in an art that you practice every day. Handley recommends starting with the ugly first draft<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup> &mdash; make it ugly, don&rsquo;t delete anything, don&rsquo;t rephrase or reread. Just get it out of you and on to your screen, then walk away for a day. Maybe two. If you are really stuck on how to begin, you could start with &ldquo;Dear diary&rdquo;<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup>. This helps you get in the mood to write, and keeps your tone conversational. Also, if you are writing to a non-technical person, it will keep your writing clear, and inspire you to give enough back story so that they aren&rsquo;t lost.</p>
-
-<h3>Write a tight post</h3>
-
-<h4>Decide on a goal</h4>
-
-<p>Is it to teach? To share? To critique? The goal for technical blogs is not usually to obtain a following &mdash; it is to share a bit of experience that will turn up when another frustrated developer puts keywords into a search engine. An online presence is important, but it should not be a blow by blow of how hard it is to learn to code. A handy formula for creating quality content is:</p>
-
-<blockquote><p>Utility * Inspiration * Empathy = Quality Content<sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup></p></blockquote>
-
-<p>Make it useful, make it reader centric (even if that reader is you six months from now), and make it thoughtful.</p>
-
-<h4>Forget the 5 paragraph essay format from high school</h4>
-
-<p>I rarely read a long blog post from beginning to end, and the sweet spot for length is around 1500 words<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup>. Make it easy for the reader to get the gist of your post by providing sub-headings, bold text, and code samples &mdash; these are strong visual elements that can help your reader anchor what they are learning.</p>
-
-<h4>Rewrite</h4>
-
-<p>Once you have written the ugly first draft with your goal in mind, rewrite it with the reader in mind &mdash; will they understand the context of what you are trying to get across? Assume the reader knows nothing, but isn’t stupid. Find data and examples that illustrate what you are trying to share (and make sure that you give credit where credit is due<sup id="fnref:6"><a href="#fn:6" rel="footnote">6</a></sup>).</p>
-
-<h4>Work on your grammar</h4>
-
-<p>After reframing, examine your sentence structure. Are you using a passive voice? Microsoft Word grammar check hates the passive voice, but I never knew what that meant. Try <a href="https://www.grammarly.com/">grammarly</a> if you need help, and even if you think you don&rsquo;t. Editing your own work is hard, because your brain will fill in all the things you meant to say but didn&rsquo;t. Also, put the important words at the start of the sentence, just in case the reader dozes off half-way through.</p>
-
-<h3>About Me pages</h3>
-
-<p>Be intentional about the words that describe you in your About Me page<sup id="fnref:7"><a href="#fn:7" rel="footnote">7</a></sup>. Describe your accomplishments with examples, and if possible, try to mirror the language used by the companies you want to work for. Check out the keywords they use, and make sure to encorporate them in your headlines and personal summary.</p>
-
-<blockquote><p>About us pages aren’t really about the company; instead they focus on relaying who they are <em>in relation to the visitor</em>.</p></blockquote>
-
-<p>If your reader is an employer, let them know you are for hire &mdash; your posts should always be in the context of what you can do for the reader.</p>
-
-<p>Showing up can be the hardest thing &mdash; finding something original to say, or fearing a public mistake is what keeps many people from writing, but blogging shows you are interested in, well, something. Being interesting means being interested in things, and wanting to share the things you find interesting is a natural follow through. Given the right mentorship, your technical abilities will grow, but getting in the door is step one. So, if you are looking to update your web presence, or create a web presence, this book is for you.</p>
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>Handley, A. (2014). <a href="http://www.amazon.com/Everybody-Writes-Go--Creating-Ridiculously-ebook/dp/B00LMB5P0G/ref=sr_1_1?ie=UTF8&amp;qid=1424115248&amp;sr=8-1&amp;keywords=everybody+writes"><em>Everybody Writes : Your Go-To Guide to Creating Ridiculously Good Content</em></a>. Wiley &amp; Sons Canada, Limited, John.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-<li id="fn:2">
-<p>Tip 9: &ldquo;Embrace the Ugly First Draft&rdquo;, p. 41.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
-<li id="fn:3">
-<p>Tip 14: &ldquo;Start with <em>Dear Mom&hellip;</em>&rdquo;, p. 54.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
-<li id="fn:4">
-<p>&ldquo;Introduction&rdquo;, p. 7.<a href="#fnref:4" rev="footnote">&#8617;</a></p></li>
-<li id="fn:5">
-<p>Tip 60: &ldquo;The Ideal Length for Blog Posts, Podcast, Facebook Posts, Tweets, and Other Marketing Content&rdquo;, p. 184.<a href="#fnref:5" rev="footnote">&#8617;</a></p></li>
-<li id="fn:6">
-<p>Tip 57: &ldquo;Seek Permission, Not Forgiveness&rdquo;, p. 170.<a href="#fnref:6" rev="footnote">&#8617;</a></p></li>
-<li id="fn:7">
-<p>Tip 71: &ldquo;Writing the About Us Page&rdquo;, p 244.<a href="#fnref:7" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
 ]]></content>
   </entry>
   
