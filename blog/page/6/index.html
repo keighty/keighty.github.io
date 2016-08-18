@@ -9,7 +9,7 @@
 	<meta name="author" content="katie leonard">
 
 	
-	<meta name="description" content="Sep 8th, 2014 git Giving the Cold Shoulder With Git Some files become unnecessary to track using version control, but still belong in the repository &hellip;">
+	<meta name="description" content="Oct 9th, 2014 angular, mongo, node Sort All the Things With Mongo and node.js Sorting shouldn&rsquo;t be difficult, but through my experience &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -126,6 +126,143 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-09T00:00:00-07:00" data-updated="true" itemprop="datePublished">Oct 9<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/angular/'>angular</a>, <a class='category' href='/blog/categories/mongo/'>mongo</a>, <a class='category' href='/blog/categories/node/'>node</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/sort_things_with_mongoose/" itemprop="url">Sort All the Things With Mongo and node.js</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Sorting shouldn&rsquo;t be difficult, but through my experience learning meteor I discovered that if mongo likes sort commands one way:</p>
+
+<p><code>db.posts.find().sort({submitted: -1})</code></p>
+
+<p>meteor would like them a different way:</p>
+
+<p><code>Posts.find({}, {sort: {submitted : -1}}</code></p>
+
+<p>I am adapting one of my meteor projects to use mongo and node.js, connected through mongoose, and fitting in the callback required for node sent me to the google. After a few stackoverflow searches I turned up a several options:</p>
+
+<figure class='code'><figcaption><span>Option 1 (spoiler.. it didn&#8217;t work) </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Post.find({}, {sort:[['submitted',-1]]}, function(err, doc) {
+</span><span class='line'>  response.send(doc);
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This option returned a object containing only the entry ids, not the full documents:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>0: {_id:2tcte4Srd8QMSqrKt}
+</span><span class='line'>1: {_id:5c3FdWphiYiMQzukw}
+</span><span class='line'>2: {_id:62vAt5ewucKm542DH}
+</span><span class='line'>3: {_id:AWNYsxBgFnv9Z4NSA}
+</span><span class='line'>...</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Another option suggested that converting the result to an Array would complete the query:</p>
+
+<figure class='code'><figcaption><span>Option2 (spoiler.. also didn&#8217;t work) </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Post.find({},{sort: [['submitted',-1]]}).toArray(function(e, results){
+</span><span class='line'>  response.send(results);
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This option resulted in <code>TypeError: Object #&lt;Query&gt; has no method 'toArray'</code>.</p>
+
+<p>Rather than continuing to search for a snippet to steal, I turned to the source, and it turns out that querying mongo from mongoose is simpler than either of these strategies.</p>
+
+<figure class='code'><figcaption><span>Option3 &#8211; just right </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Post.find()
+</span><span class='line'>  .sort("-submitted")
+</span><span class='line'>  .exec(function(err, doc) {
+</span><span class='line'>    response.send(doc);
+</span><span class='line'>  });</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Success! Why? Because while mongo itself returns a cursor object which can be transformed into documents using <code>toArray()</code>, or <code>fetch()</code> in the case of meteor, mongoose returns a <a href="http://mongoosejs.com/docs/queries.html">Query</a> object, which will return the full documents once it is passed a callback.</p>
+
+<p>A Query object can be built using <a href="https://github.com/LearnBoost/mongoose/blob/master/lib/query.js#L211-L216">method chaining</a> &mdash;
+ each method (find | where | limit | select | sort) returns a new Query object, which allows you to build in stages:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Post
+</span><span class='line'>.find({ title: /the/ }) // query
+</span><span class='line'>.where('cost').gt(17).lt(66)  // query
+</span><span class='line'>.where('location').in(['Schnitz', 'Armory'])  // query
+</span><span class='line'>.limit(10)  // query
+</span><span class='line'>.sort('-ticketDate')  // query
+</span><span class='line'>.select('title company')  // query
+</span><span class='line'>.exec(callback);  // EXECUTE THE QUERY</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Another fun bit of javascript/mongoose magic, is that you can indicate <a href="https://github.com/LearnBoost/mongoose/blob/master/lib/query.js#L1295-L1297">sorting in descending order</a> by prefacing the sort string with a &ldquo;&ndash;&rdquo; :</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Post
+</span><span class='line'>.find({ title: /the/ }) // query
+</span><span class='line'>.sort('-ticketDate')  // DESC!
+</span><span class='line'>.exec(callback);  // EXECUTE THE QUERY</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Awesome.</p>
+
+<h3>Resources</h3>
+
+<p><a href="http://docs.mongodb.org/manual/reference/operator/meta/orderby/">mongo docs</a></p>
+
+<p><a href="http://stackoverflow.com/a/20859457">stackoverflow</a></p>
+
+		
+		
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -822,104 +959,6 @@
 <p>Reduced memory consumption is one advantage of keeping a reference to a prototype instead of a complete copy. Another advantage is that if additions are made to the Prototype, the changes will be extended to all instances.</p>
 
 <p>Awesome.</p>
-
-		
-		
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-05T00:00:00-07:00" data-updated="true" itemprop="datePublished">Aug 5<span>th</span>, 2014</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/javascript/'>javascript</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2014/in-operator-avoid-false-falsies/" itemprop="url">&#8216;In&#8217; Operator Avoids False Falsies</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I have encountered more than my share of javascript errors because I have made assumptions about the object I am working with, such as assuming that an object contains a property, and that I can call methods on that property:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</span><span class='line'><span class="nx">TypeError</span><span class="o">:</span> <span class="nx">Cannot</span> <span class="nx">read</span> <span class="nx">property</span> <span class="s1">&#39;0&#39;</span> <span class="nx">of</span> <span class="kc">undefined</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This line contains four assumptions, and therefore four places it can fail:</p>
-
-<ol>
-<li><code>myObject</code> exists</li>
-<li><code>myObject</code> contains a property called <code>data</code></li>
-<li><code>data</code> is an array</li>
-<li><code>data</code> is non-empty</li>
-</ol>
-
-
-<p>Presuming that if <code>myObject</code> does not exist means you have bigger problems, it is easy to fall into the trap of checking for the existence of a property by gating a conditional with it:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="k">if</span><span class="p">(</span><span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="c1">//do something important with the data</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This technique will work in development, but the voice of experience tells us that it will not work in production. The reason it will not work is that javascript has more falsy values than most languages. Falsy values include the number zero, empty strings, null, undefined, NaN, and of course, the boolean false. So, if it is possible <code>myObject.data</code> to contain derived information, you have signed up to troubleshoot some unexpected behaviour.</p>
-
-<p>Fortunately, javascript has provided a failsafe way to check the existence of a property, regardless of the data it contains. The <code>in</code> operator checks if the key exists in the object&rsquo;s hash table, and doesn&rsquo;t care if it is a prototype or singleton property.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">myObject</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class='line'><span class="kc">undefined</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;data&#39;</span> <span class="k">in</span> <span class="nx">myObject</span>
-</span><span class='line'><span class="kc">false</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'><span class="s2">&quot;&quot;</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="s1">&#39;data&#39;</span> <span class="k">in</span> <span class="nx">myObject</span>
-</span><span class='line'><span class="kc">true</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">myObject</span><span class="p">.</span><span class="nx">data</span> <span class="o">==</span> <span class="kc">true</span>
-</span><span class='line'><span class="kc">false</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>('data' in myObject)</code> returns false if the property is undefined. If the property is defined, it returns true even if data contains a falsy value.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
 
 		
 		

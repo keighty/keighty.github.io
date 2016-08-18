@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ES6 | keighty]]></title>
+  <link href="http://www.katieleonard.ca/blog/categories/es6/atom.xml" rel="self"/>
+  <link href="http://www.katieleonard.ca/"/>
+  <updated>2016-08-18T09:09:09-07:00</updated>
+  <id>http://www.katieleonard.ca/</id>
+  <author>
+    <name><![CDATA[katie leonard]]></name>
+    <email><![CDATA[keighty.leonard@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Importing and Exporting: Modular React]]></title>
+    <link href="http://www.katieleonard.ca/blog/2016/importing-and-exporting-modular-react/"/>
+    <updated>2016-08-18T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2016/importing-and-exporting-modular-react</id>
+    <content type="html"><![CDATA[<p>While working on rewriting my side-project (VirtualPlaybill) in React, I got hung up on a very basic plumbing concept: named exports. <!--more--></p>
+
+<p>With ES5 you can export in three ways and import in one:
+```javascript
+// EXPORT STYLE 1
+module.exports = {
+  crunchy: function () { console.log(&lsquo;CRUNCHY!&rsquo;) },
+  bacon: function () { console.log(&lsquo;BACON!&rsquo;) }
+};</p>
+
+<p>// EXPORT STYLE 2
+exports.crunchy = function() { console.log(&lsquo;CRUNCHY!&rsquo;) }
+exports.bacon = function() { console.log(&lsquo;BACON!&rsquo;) }</p>
+
+<p>// EXPORT STYLE 3 (and my personal favourite)
+var breakfast = {
+  crunchy: function () { console.log(&lsquo;CRUNCHY!&rsquo;) },
+  bacon: function () { console.log(&lsquo;BACON!&rsquo;) }
+}
+module.exports = breakfast
+```</p>
+
+<p>An export is a meaningful bundle of code. Importing takes a single form, providing a handle to the exported bundle:</p>
+
+<p>```javascript
+// IMPORT
+var breakfast = require(&lsquo;breakfast.js&rsquo;)</p>
+
+<p>breakfast.crunchy() // CRUNCHY!
+breakfast.bacon() // BACON!
+```</p>
+
+<p>In ES6 there is a lot more flexibility: exports can be named and imports can take many forms.</p>
+
+<h4>Named exports</h4>
+
+<p>Importing a named export allows you to grab only the functions you need from a module, leaving the rest behind. Use curly braces to import a named export:
+```javascript
+//&mdash;&mdash;-test.js&mdash;&mdash;&ndash;//
+export crunchy = () => { console.log(&lsquo;CRUNCHY!&rsquo;) }
+export bacon = () => { console.log(&lsquo;BACON!&rsquo;) }</p>
+
+<p>// IMPORT BY NAME
+//&mdash;&mdash;-main.js&mdash;&mdash;&ndash;//
+import { crunchy } from &lsquo;./test&rsquo;
+crunchy() // CRUNCHY!
+bacon() // Uncaught ReferenceError: bacon is not defined(…)
+```</p>
+
+<h4>Default exports</h4>
+
+<p>In addition to named exports, you can specify one <code>default</code> export per file. Simply importing that file provides a reference to the default export:</p>
+
+<p>```javascript
+//&mdash;&mdash;-test.js&mdash;&mdash;&ndash;//
+export crunchy = () => { console.log(&lsquo;CRUNCHY!&rsquo;) }
+default export bacon = () => { console.log(&lsquo;BACON!&rsquo;) }</p>
+
+<p>// IMPORT BY DEFAULT
+//&mdash;&mdash;-main.js&mdash;&mdash;&ndash;//
+import myFunc from &lsquo;./test&rsquo;
+myFunc() // BACON!
+```</p>
+
+<p>You can also import both default and named exports at the same time:
+<code>javascript
+import myFunc, { crunchy } from './test'
+crunchy() // CRUNCHY!
+myFunc() // BACON!
+</code></p>
+
+<p>For even more import options, checkout the section on imports from the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import">MDN docs</a>:</p>
+
+<p><code>javascript
+import defaultMember from "module-name";
+import * as name from "module-name";
+import { member } from "module-name";
+import { member as alias } from "module-name";
+import { member1 , member2 } from "module-name";
+import { member1 , member2 as alias2 , [...] } from "module-name";
+import defaultMember, { member [ , [...] ] } from "module-name";
+import defaultMember, * as name from "module-name";
+import "module-name"
+</code></p>
+
+<p>name</p>
+
+<blockquote><p>Name of the object that will receive the imported values.</p></blockquote>
+
+<p>member, memberN</p>
+
+<blockquote><p>Name of the exported members to be imported.</p></blockquote>
+
+<p>defaultMember</p>
+
+<blockquote><p>Name of the exported default to be imported.</p></blockquote>
+
+<p>alias, aliasN</p>
+
+<blockquote><p>Name of the object that will receive the imported property</p></blockquote>
+
+<p>module-name</p>
+
+<blockquote><p>The name of the module to import. This is a file name.</p></blockquote>
+
+<h4>What you CAN&rsquo;T do&hellip;</h4>
+
+<p>&hellip; is use ES5 syntax and expect the import to know what you mean:</p>
+
+<p>```javascript
+//&mdash;&mdash;&mdash;my-component.js&mdash;&mdash;&mdash;&ndash;//
+class MyComponent extends React.Component {
+  render() {</p>
+
+<pre><code>return &lt;p&gt;this is an awesome react component &lt;/p&gt;
+</code></pre>
+
+<p>  }
+}</p>
+
+<p>export default MyComponent</p>
+
+<p>//&mdash;&mdash;&mdash;main.js&mdash;&mdash;&mdash;&ndash;//
+import MyComponent from &lsquo;./my-component&rsquo;
+console.log(MyComponent) // undefined
+```</p>
+
+<p>I was trying to write ES5 in ES6! Without an explicit <code>export</code> in front of the class declaration, my default had no idea what I intended to export, so it did nothing. Adding <code>export</code> to the class definition, or even moving the whole <code>export default</code> to the class declaration does the job:</p>
+
+<p>```javascript
+//&mdash;&mdash;&mdash;my-component.js&mdash;&mdash;&mdash;&ndash;//
+default export class MyComponent extends React.Component {
+  render() {</p>
+
+<pre><code>return &lt;p&gt;this is an awesome react component &lt;/p&gt;
+</code></pre>
+
+<p>  }
+}</p>
+
+<p>//&mdash;&mdash;&mdash;main.js&mdash;&mdash;&mdash;&ndash;//
+import MyComponent from &lsquo;./my-component&rsquo;
+console.log(MyComponent) // function MyComponent() {&hellip;}
+```</p>
+
+<p>Thanks to <a href="http://stackoverflow.com/a/31853887">this stackoverflow answer</a> for pointing me in the right direction, and <a href="http://exploringjs.com/es6/ch_modules.html">exploringjs</a> for even greater detail!</p>
+]]></content>
+  </entry>
+  
+</feed>
