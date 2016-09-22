@@ -154,56 +154,7 @@
 	</div>
 	<h1 class="title" itemprop="name"><a href="/blog/2016/git-squash-to-speed-up-your-workflow/" itemprop="url">Git Squash to Speed Up Your Workflow</a></h1>
 	<div class="entry-content" itemprop="articleBody">
-		<p>I am a big fan of work-in-progress (WIP) commits. When I am working through a prototype or a spike, and need to do some experimentation with the code, I use WIP commits like they are save points in a game. These points act like milestones, and allow me to keep working with the confidence that I can always go back to an earlier working state. I use these aliases for the job:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># in ~/.bashrc</span>
-</span><span class='line'><span class="nv">$ </span><span class="nb">alias </span><span class="nv">wip</span><span class="o">=</span><span class="s2">&quot;git commit -am &#39;WIP&#39;&quot;</span>
-</span><span class='line'><span class="nv">$ </span><span class="nb">alias </span><span class="nv">popwip</span><span class="o">=</span><span class="s2">&quot;git reset --soft head~1; git reset head .&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>When I get the work into a good state, I <code>wip</code> it (I may even sing 🎶 <a href="https://www.youtube.com/watch?v=IIEVqFB4WUo"><em>When a problem comes along&hellip; you must whip it!</em></a> 🎶). If I want to grab the last WIP commit from the branch, I <code>popwip</code> to pop the last commit off the stack and put the last bunch of changes back into my working directory.</p>
-
-<p>However, when I have been prototyping for a while, making <code>wip</code> commits as I go, popping a bunch of commits off the stack gets a little unwieldy. Until now I used an interactive rebase to rewrite my branch&rsquo;s commit history. For example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git log --pretty<span class="o">=</span>format:<span class="se">\&quot;</span>%h %ad | %s%d <span class="o">[</span>%an<span class="o">]</span><span class="se">\&quot;</span> --graph --date<span class="o">=</span>short
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><img src="/images/160912-git-squash/githist.png"></p>
-
-<p>For this git history, I would rebase on sha 83bfc47:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git rebase -i 83bfc47
-</span><span class='line'>
-</span><span class='line'>pick 540c0fe WIP
-</span><span class='line'>pick 8af4cfe WIP
-</span><span class='line'>pick 50bd7db WIP
-</span><span class='line'>pick f90410b WIP
-</span><span class='line'>
-</span><span class='line'><span class="c"># Rebase 83bfc47..f90410b onto 83bfc47</span>
-</span><span class='line'><span class="c">#</span>
-</span><span class='line'><span class="c"># MOAR git-structions below...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I would proceed to <code>reword</code> the first and <code>fixup</code> the rest, writing a thoughtful and all-encompassing commit message to convey the intention behind this chunk of work. Then I discovered <code>git merge --squash</code></p>
-
-
+		<p>I am a big fan of work-in-progress (WIP) commits. When I am working through a prototype or a spike, and need to do some experimentation with the code, I use WIP commits like they are save points in a game. 
 		
 		<a href="/blog/2016/git-squash-to-speed-up-your-workflow/" class="more-link">Read on &rarr;</a>
 	</div>
