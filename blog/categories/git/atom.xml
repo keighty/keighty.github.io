@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2016-08-18T09:09:09-07:00</updated>
+  <updated>2016-09-21T22:22:36-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,92 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Git Squash to Speed Up Your Workflow]]></title>
+    <link href="http://www.katieleonard.ca/blog/2016/git-squash-to-speed-up-your-workflow/"/>
+    <updated>2016-09-12T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2016/git-squash-to-speed-up-your-workflow</id>
+    <content type="html"><![CDATA[<p>I am a big fan of work-in-progress (WIP) commits. When I am working through a prototype or a spike, and need to do some experimentation with the code, I use WIP commits like they are save points in a game. These points act like milestones, and allow me to keep working with the confidence that I can always go back to an earlier working state. I use these aliases for the job:</p>
+
+<p>```bash</p>
+
+<h1>in ~/.bashrc</h1>
+
+<p>$ alias wip=&ldquo;git commit -am &lsquo;WIP&rsquo;&rdquo;
+$ alias popwip=&ldquo;git reset &mdash;soft head~1; git reset head .&rdquo;
+```</p>
+
+<p>When I get the work into a good state, I <code>wip</code> it (I may even sing 🎶 <a href="https://www.youtube.com/watch?v=IIEVqFB4WUo"><em>When a problem comes along&hellip; you must whip it!</em></a> 🎶). If I want to grab the last WIP commit from the branch, I <code>popwip</code> to pop the last commit off the stack and put the last bunch of changes back into my working directory.</p>
+
+<p>However, when I have been prototyping for a while, making <code>wip</code> commits as I go, popping a bunch of commits off the stack gets a little unwieldy. Until now I used an interactive rebase to rewrite my branch&rsquo;s commit history. For example:</p>
+
+<p><code>bash
+$ git log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+</code>
+<img src="/images/160912-git-squash/githist.png"></p>
+
+<p>For this git history, I would rebase on sha 83bfc47:</p>
+
+<p>```bash
+$ git rebase -i 83bfc47</p>
+
+<p>pick 540c0fe WIP
+pick 8af4cfe WIP
+pick 50bd7db WIP
+pick f90410b WIP</p>
+
+<h1>Rebase 83bfc47..f90410b onto 83bfc47</h1>
+
+<p>#</p>
+
+<h1>MOAR git-structions below&hellip;</h1>
+
+<p>```</p>
+
+<p>I would proceed to <code>reword</code> the first and <code>fixup</code> the rest, writing a thoughtful and all-encompassing commit message to convey the intention behind this chunk of work. Then I discovered <code>git merge --squash</code></p>
+
+<!--more-->
+
+
+<p>```bash
+$ git checkout master
+Switched to branch &lsquo;master&rsquo;
+Your branch is up-to-date with &lsquo;origin/master&rsquo;.</p>
+
+<p>$ git merge &mdash;squash test_branch
+Updating 83bfc47..f90410b
+Fast-forward
+Squash commit &mdash; not updating HEAD
+ routes/performance.js                          | 3 +++
+ routes/performer.js                            | 3 +++
+ routes/user.js                                 | 2 ++
+ src/app.js                                     | 3 +++
+ src/components/performance-frame.jsx           | 3 +++
+ src/containers/filterable-performance-grid.jsx | 3 +++
+ 6 files changed, 17 insertions(+)</p>
+
+<p>$ git status
+On branch master
+Your branch is up-to-date with &lsquo;origin/master&rsquo;.
+Changes to be committed:
+  (use &ldquo;git reset HEAD <file>&hellip;&rdquo; to unstage)</p>
+
+<pre><code>modified:   routes/performance.js
+modified:   routes/performer.js
+modified:   routes/user.js
+modified:   src/app.js
+modified:   src/components/performance-frame.jsx
+modified:   src/containers/filterable-performance-grid.jsx
+</code></pre>
+
+<p>```</p>
+
+<p>All of the changes I have made on that branch since it diverged from master have been added to the index. I am free to either chunk up the changes into different commits (with commit messages that are more descriptive than WIP), or add them all to a single commit.</p>
+
+<p>GOODBYE <code>rebase -i</code>! <code>Hello merge --squash</code>!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Keep Your Code Close and Your Notes Closer With a Global Gitignore]]></title>
@@ -289,45 +375,6 @@ nothing to commit, working directory clean
 </span><span class='line'> * [new branch]      my_branch &ndash;> my_branch</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Git is so awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Git, What Have I Done?]]></title>
-    <link href="http://www.katieleonard.ca/blog/2014/git-what-have-i-done/"/>
-    <updated>2014-03-08T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2014/git-what-have-i-done</id>
-    <content type="html"><![CDATA[<p>Git, the superhero of version control, allows you to review all the commands that have modified the HEAD tag in a git repo: <code>git reflog</code></p>
-
-<p>The output for one of my demo apps:
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Git, you&rsquo;re my hero </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>5075d26 HEAD@<span class="o">{</span>0<span class="o">}</span>: checkout: moving from master to kleonard/add_skyline_background
-</span><span class='line'>531c396 HEAD@<span class="o">{</span>1<span class="o">}</span>: pull: fast forward
-</span><span class='line'>435f6de HEAD@<span class="o">{</span>2<span class="o">}</span>: commit: Adds logic <span class="k">for </span>running and testing
-</span><span class='line'>043e35a HEAD@<span class="o">{</span>3<span class="o">}</span>: commit: Adds logic to process input
-</span><span class='line'>5155ba4 HEAD@<span class="o">{</span>4<span class="o">}</span>: commit: Adds input file
-</span><span class='line'>a629871 HEAD@<span class="o">{</span>5<span class="o">}</span>: rebase finished: returning to refs/heads/kleonard/create_input_files
-</span><span class='line'>a010021 HEAD@<span class="o">{</span>6<span class="o">}</span>: rebase: Add input file
-</span><span class='line'>b7cd86a HEAD@<span class="o">{</span>7<span class="o">}</span>: commit: Initial commit arbitrage
-</span><span class='line'>5ed00ea HEAD@<span class="o">{</span>8<span class="o">}</span>: commit: Adds launcher
-</span><span class='line'>7b2d720 HEAD@<span class="o">{</span>9<span class="o">}</span>: commit: Adds logic to find smallest number of moves
-</span><span class='line'>9c0dfce HEAD@<span class="o">{</span>10<span class="o">}</span>: commit: Adds implementation <span class="k">for </span>bin creation
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Hmmm&hellip; looks like my commit messages need a little work&hellip; Still, it is a great tool for catching up on the changes to a repo (especially if you haven&rsquo;t touched it in a while), finding out where the bulk of the work is happening, or just reminding yourself what you did yesterday.</p>
-
-<p>Awesome.</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2016-08-18T09:09:09-07:00</updated>
+  <updated>2016-09-21T22:22:36-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,130 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Git Squash to Speed Up Your Workflow]]></title>
+    <link href="http://www.katieleonard.ca/blog/2016/git-squash-to-speed-up-your-workflow/"/>
+    <updated>2016-09-12T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2016/git-squash-to-speed-up-your-workflow</id>
+    <content type="html"><![CDATA[<p>I am a big fan of work-in-progress (WIP) commits. When I am working through a prototype or a spike, and need to do some experimentation with the code, I use WIP commits like they are save points in a game. These points act like milestones, and allow me to keep working with the confidence that I can always go back to an earlier working state. I use these aliases for the job:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># in ~/.bashrc</span>
+</span><span class='line'><span class="nv">$ </span><span class="nb">alias </span><span class="nv">wip</span><span class="o">=</span><span class="s2">&quot;git commit -am &#39;WIP&#39;&quot;</span>
+</span><span class='line'><span class="nv">$ </span><span class="nb">alias </span><span class="nv">popwip</span><span class="o">=</span><span class="s2">&quot;git reset --soft head~1; git reset head .&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When I get the work into a good state, I <code>wip</code> it (I may even sing 🎶 <a href="https://www.youtube.com/watch?v=IIEVqFB4WUo"><em>When a problem comes along&hellip; you must whip it!</em></a> 🎶). If I want to grab the last WIP commit from the branch, I <code>popwip</code> to pop the last commit off the stack and put the last bunch of changes back into my working directory.</p>
+
+<p>However, when I have been prototyping for a while, making <code>wip</code> commits as I go, popping a bunch of commits off the stack gets a little unwieldy. Until now I used an interactive rebase to rewrite my branch&rsquo;s commit history. For example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git log --pretty<span class="o">=</span>format:<span class="se">\&quot;</span>%h %ad | %s%d <span class="o">[</span>%an<span class="o">]</span><span class="se">\&quot;</span> --graph --date<span class="o">=</span>short
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://www.katieleonard.ca/images/160912-git-squash/githist.png"></p>
+
+<p>For this git history, I would rebase on sha 83bfc47:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git rebase -i 83bfc47
+</span><span class='line'>
+</span><span class='line'>pick 540c0fe WIP
+</span><span class='line'>pick 8af4cfe WIP
+</span><span class='line'>pick 50bd7db WIP
+</span><span class='line'>pick f90410b WIP
+</span><span class='line'>
+</span><span class='line'><span class="c"># Rebase 83bfc47..f90410b onto 83bfc47</span>
+</span><span class='line'><span class="c">#</span>
+</span><span class='line'><span class="c"># MOAR git-structions below...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I would proceed to <code>reword</code> the first and <code>fixup</code> the rest, writing a thoughtful and all-encompassing commit message to convey the intention behind this chunk of work. Then I discovered <code>git merge --squash</code></p>
+
+<!--more-->
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git checkout master
+</span><span class='line'>Switched to branch <span class="s1">&#39;master&#39;</span>
+</span><span class='line'>Your branch is up-to-date with <span class="s1">&#39;origin/master&#39;</span>.
+</span><span class='line'>
+</span><span class='line'><span class="nv">$ </span>git merge --squash test_branch
+</span><span class='line'>Updating 83bfc47..f90410b
+</span><span class='line'>Fast-forward
+</span><span class='line'>Squash commit -- not updating HEAD
+</span><span class='line'> routes/performance.js                          | 3 +++
+</span><span class='line'> routes/performer.js                            | 3 +++
+</span><span class='line'> routes/user.js                                 | 2 ++
+</span><span class='line'> src/app.js                                     | 3 +++
+</span><span class='line'> src/components/performance-frame.jsx           | 3 +++
+</span><span class='line'> src/containers/filterable-performance-grid.jsx | 3 +++
+</span><span class='line'> 6 files changed, 17 insertions<span class="o">(</span>+<span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$ </span>git status
+</span><span class='line'>On branch master
+</span><span class='line'>Your branch is up-to-date with <span class="s1">&#39;origin/master&#39;</span>.
+</span><span class='line'>Changes to be committed:
+</span><span class='line'>  <span class="o">(</span>use <span class="s2">&quot;git reset HEAD &lt;file&gt;...&quot;</span> to unstage<span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  modified:   routes/performance.js
+</span><span class='line'>  modified:   routes/performer.js
+</span><span class='line'>  modified:   routes/user.js
+</span><span class='line'>  modified:   src/app.js
+</span><span class='line'>  modified:   src/components/performance-frame.jsx
+</span><span class='line'>  modified:   src/containers/filterable-performance-grid.jsx
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>All of the changes I have made on that branch since it diverged from master have been added to the index. I am free to either chunk up the changes into different commits (with commit messages that are more descriptive than WIP), or add them all to a single commit.</p>
+
+<p>GOODBYE <code>rebase -i</code>! <code>Hello merge --squash</code>!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Importing and Exporting: Modular React]]></title>
@@ -1996,26 +2120,6 @@
 
 
 <p>I have already shared a few tools that have become so much a part of my tool box, and have developed such a muscle memory that my fingers will perform the tasks as I think them. Every time I pair with another developer I gain another shortcut! Thanks to Vince for those last two&hellip;</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Bird by Bird]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/bird-by-bird/"/>
-    <updated>2015-03-01T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/bird-by-bird</id>
-    <content type="html"><![CDATA[<p>Virtue is its own reward, and so is writing. Anne Lamott&rsquo;s <a href="http://www.amazon.com/Bird-Some-Instructions-Writing-Life/dp/0385480016/ref=sr_1_1?ie=UTF8&amp;qid=1425241344&amp;sr=8-1&amp;keywords=bird+by+bird">Bird by Bird: Some Instructions on Writing and Life</a> is full of beautiful prose, characters, and personal anecdotes, and while her advice is tuned to the creative writer, there are three useful lessons that can be applied to all writing.</p>
-
-<ol>
-<li>write short assignments</li>
-<li>write only what you can see through a 1-inch picture frame</li>
-<li>write a terrible first draft</li>
-</ol>
-
-
-<p>Blogging about what I am learning and reading forces me to think about what I experience. Almost every day I learn another 1-inch picture frame of programming, and writing it down helps me understand it better. My ugly first drafts usually consist of a question, a few links to resources, and some console output &mdash; not Pulitzer Prize winning prose, but an awesome personal resource and record of growth.</p>
-
-<blockquote><p>All you can give us is what life is about from your point of view. You are not going to be able to give us the plans to the submarine. Life is not a submarine. There are no plans.</p></blockquote>
 ]]></content>
   </entry>
   
