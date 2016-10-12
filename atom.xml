@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2016-09-21T22:25:17-07:00</updated>
+  <updated>2016-10-12T13:02:52-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,134 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Callbacks and the Event Loop]]></title>
+    <link href="http://www.katieleonard.ca/blog/2016/clarified-callbacks/"/>
+    <updated>2016-10-12T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2016/clarified-callbacks</id>
+    <content type="html"><![CDATA[<p>When I started writing javascript in earnest a couple of years ago, I was stuck in a very procedural way of thinking &mdash; all of my functions executed synchronously. If you replaced <code>function</code> with <code>def</code> and removed all <code>var</code> keywords, you would be reading Ruby (true story: yesterday I was debugging an issue with a React module and put in a <code>binding.pry</code> instead of <code>debugger</code> :facepalm: Old habits die hard).</p>
+
+<p>Last year, I joined a team that writes javascript in the Node.js style, using callbacks for flow control. While I became familiar with the pattern pretty quickly, the whys and wherefores were missing from my understanding. Today I am filling in the gaps by reading <a href="https://www.amazon.com/Node-js-Design-Patterns-Mario-Casciaro/dp/1785885588/ref=sr_1_1/161-7210115-5247461?ie=UTF8&amp;qid=1476284148&amp;sr=8-1&amp;keywords=node.js+design+patterns">Node.js Design Patterns</a> by Mario Casciaro and Luciano Mammino.<!--more--></p>
+
+<h3>The Event Loop</h3>
+
+<p>The first step to understanding asynchronous javascript is to understand the event loop. It is a single thread that processes one message at a time, as they appear in the FIFO event queue.</p>
+
+<p><img src="http://www.katieleonard.ca/images/161012-callbacks/event-loop.png">
+<em>image credit: Mario Casciaro and Luciano Mammino from Node.js Design Patterns. Colour notations are mine.</em></p>
+
+<ol>
+<li>An I/O request is sent to the event demultiplexer.</li>
+<li>The event demultiplexer queues the I/O instructions along with the context and a callback function that contains the instructions for what do to with the result once it is received.</li>
+<li>When the I/O order is filled, the event demultiplexer pops an event on to the event queue, with the filled I/O request, and the callback handler.</li>
+<li>The event loop pulls the event off of the event queue and applies the result to the callback function.</li>
+<li>The event loop either sends the result of the callback operation to the application, or generates more I/O work for the event demultiplexer.</li>
+</ol>
+
+
+<p>When I check my email in the morning, I go through a similar process:</p>
+
+<ul>
+<li>My inbox is the event demultiplexer, where requests for resources are made.</li>
+<li>I (as the event loop) process emails from in the queue from oldest to newest, and I only process one at at time.</li>
+<li>For each message I read the context and perform one of two actions (callback):
+
+<ul>
+<li>Process the message and return to the queue to pick up another message.</li>
+<li>Add a new action to my todo list event queue along with the a reminder to attach the result of the new action to the email when I respond (callback).</li>
+</ul>
+</li>
+</ul>
+
+
+<p>When I am finished with my email inbox I start on my todo list, performing the actions required and responding to the email. Sometimes the action will generate additional actions, which I append to the end of my todo list. While the idea of an infinite todo list is a little disheartening to a human, this is how the V8 javascript engine was designed: it performs the work with maximum efficiency, and can do so with only a single thread.</p>
+
+<h3>The difference between synchronous and asynchronous javascript</h3>
+
+<p>Synchronous javascript can be easily identified by the use of a <code>return</code> statement, which returns control back to the caller.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">introduction</span> <span class="p">(</span><span class="nx">firstName</span><span class="p">,</span> <span class="nx">lastName</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="s1">&#39;Hello, my name is &#39;</span> <span class="o">+</span> <span class="nx">firstName</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nx">lastName</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">introduction</span><span class="p">(</span><span class="s1">&#39;Keighty&#39;</span><span class="p">,</span> <span class="s1">&#39;Leonard&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="c1">// &quot;hello! my name is Keighty Leonard&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Asynchronous javascript uses a &lsquo;continuous passing pattern&rsquo;, where the result of a function is passed to a handler for further processing.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">createEmailAddress</span> <span class="p">(</span><span class="nx">firstName</span><span class="p">,</span> <span class="nx">lastName</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// create asynchronous call</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;before the async&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// do some work</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">email</span> <span class="o">=</span> <span class="nx">firstName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nx">lastName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;@example.com&#39;</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;during the async&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1">// pass the result of the work to the callback</span>
+</span><span class='line'>    <span class="nx">callback</span><span class="p">(</span><span class="nx">email</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">},</span> <span class="mi">2000</span><span class="p">)</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;after the async&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">cb</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">createEmailAddress</span><span class="p">(</span><span class="s1">&#39;Keighty&#39;</span><span class="p">,</span> <span class="s1">&#39;Leonard&#39;</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// &gt; before the async</span>
+</span><span class='line'><span class="c1">// &gt; after the async</span>
+</span><span class='line'><span class="c1">// &gt; during the async</span>
+</span><span class='line'><span class="c1">// &gt; keighty.leonard@example.com</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>createEmailAddress</code> is called. When execution reaches the setTimeout function, and the 2000ms have elapsed, the callback passed to setTimeout is placed in the event queue, awaiting its turn for execution. The thread is release and does not have to wait for the setTimeout period to elapse before continuing execution &mdash; it continues with the second console statement (&lsquo;after the async&rsquo;). When the setTimeout callback is finally processed, the <code>firstName</code> and <code>lastName</code> variables are still accessible because they exist in the function closure.</p>
+
+<p>Javascript has many features that make the continuous passing pattern easy:</p>
+
+<ul>
+<li>Closures allow you to access the environment on which a function was created, no matter when the callback is invoked.</li>
+<li>Functions are first class data types, meaning they can be assigned to variables, passed as parameters, and stored in data structures.</li>
+</ul>
+
+
+<hr />
+
+<p>More on the event loop and event-emitter observer pattern to come!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Git Squash to Speed Up Your Workflow]]></title>
@@ -2030,91 +2158,6 @@
 
 
 <p>I have been growing my Ruby/Rails troubleshooting toolbox for a while now, and it is good to get one started for angular as well.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[More Git Goodies]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/more-git-goodies/"/>
-    <updated>2015-03-08T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/more-git-goodies</id>
-    <content type="html"><![CDATA[<p>Becoming a git expert is essential to efficiency and confidence as a software developer. I have evolved from someone who would re-clone the repo in case of a botched merge to a savvy git handler, through:</p>
-
-<ul>
-<li>Moving files between working directory, index, stash, and commit history</li>
-<li>Working with multiple remotes with many contributors</li>
-<li>Handling changes to forks, branches, and pull requests</li>
-<li>Accidental merges from pulling upstream, and checking out pull requests or remote branches</li>
-</ul>
-
-
-<figure class='code'><figcaption><span>My old favourites </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>git rebase -i &lt;sha&gt; <span class="c"># pick a sha from your git history and start squashing</span>
-</span><span class='line'>git clean -f <span class="c"># removes untracked files from your working directory</span>
-</span><span class='line'>git stash <span class="c"># save your idea for later</span>
-</span><span class='line'>git stash pop <span class="c"># revive your last idea</span>
-</span><span class='line'>git reflog <span class="c"># oh my goodness, what did I just do?</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>My alii </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Add this to your .bashrc (or .zshrc)</span>
-</span><span class='line'><span class="nb">alias </span><span class="nv">wip</span><span class="o">=</span><span class="s2">&quot;git add .; git commit -m &#39;WIP&#39;&quot;</span>  <span class="c"># saves and commits the current state</span>
-</span><span class='line'><span class="nb">alias </span><span class="nv">popwip</span><span class="o">=</span><span class="s2">&quot;git reset --soft head~1; git reset head .&quot;</span>  <span class="c"># pops the top commit off the stack</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># Add this to your git config</span>
-</span><span class='line'><span class="o">[</span><span class="nb">alias</span><span class="o">]</span>
-</span><span class='line'>  <span class="nv">hist</span> <span class="o">=</span> log --pretty<span class="o">=</span>format:<span class="se">\&quot;</span>%h %ad | %s%d <span class="o">[</span>%an<span class="o">]</span><span class="se">\&quot;</span> --graph --date<span class="o">=</span>short
-</span><span class='line'>
-</span><span class='line'><span class="nv">$ </span>git hist <span class="c"># opens a human readable history -- essential for verifying where you are:</span>
-</span><span class='line'>* 2ae2be1 2015-03-08 | WIP <span class="o">(</span>HEAD, origin/source, <span class="nb">source</span><span class="o">)</span> <span class="o">[</span>keighty<span class="o">]</span>
-</span><span class='line'>* 247f86f 2015-02-16 | Change portfolio subtitle. <span class="o">[</span>keighty<span class="o">]</span>
-</span><span class='line'>* e2a4fd0 2015-02-16 | Add facebook and google+ sharing options. <span class="o">[</span>keighty<span class="o">]</span>
-</span><span class='line'>* e41ca0a 2015-02-16 | Replace comments in draft and post tasks. <span class="o">[</span>keighty<span class="o">]</span>
-</span><span class='line'>...
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>Check out a remote branch </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>git checkout -b &lt;name of the <span class="nb">local </span>branch to create&gt; upstream/&lt;name of the remote branch&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>My new favourites </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>git checkout - <span class="c"># checks out the last branch you were on</span>
-</span><span class='line'>git checkout -p <span class="c"># checks out changes in chunks</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I have already shared a few tools that have become so much a part of my tool box, and have developed such a muscle memory that my fingers will perform the tasks as I think them. Every time I pair with another developer I gain another shortcut! Thanks to Vince for those last two&hellip;</p>
 ]]></content>
   </entry>
   

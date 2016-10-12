@@ -1,0 +1,319 @@
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>callbacks and the event loop - keighty</title>
+	<meta name="author" content="katie leonard">
+
+	
+	<meta name="description" content="Callbacks and the Event Loop When I started writing javascript in earnest a couple of years ago, I was stuck in a very procedural way of thinking & &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="keighty" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://www.katieleonard.ca/blog/2016/clarified-callbacks/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-41587719-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.profilepic').append("<img src='http://www.gravatar.com/avatar/" + MD5("keighty.leonard@gmail.com") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
+		});
+	</script>
+	
+</div>
+
+<nav id="main-nav"><ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects/index.html">Projects</a></li>
+  <li><a href="/reads/index.html">Reads</a></li>
+  <li><a href="/more-about-keighty/index.html">More about keighty</a></li>
+</ul>
+
+
+<section class="aboutme">
+  <p>
+    I have loved programming since my first 'Hello World!', and have been seeking source code enlightenment through Ruby, Rails, and JavaScript.
+  </p>
+</section>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="email" href="mailto:keighty.leonard@gmail.com" title="Email">Email</a>
+		
+		
+		
+		
+			<a class="twitter" href="http://twitter.com/KeightyLeonard" title="Twitter">Twitter</a>
+		
+		
+			<a class="github" href="https://github.com/keighty" title="GitHub">GitHub</a>
+		
+		
+			<a class="coderwall" href="https://coderwall.com/keighty" title="Coderwall">Coderwall</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+</header>
+			</div>
+
+			<aside class="sidebar-custom">
+			  
+			    <section>
+  <div>
+    <h1>Check out my book!</h1>
+    <a href="http://codeschoolbook.com" target="_blank"><img src="/images/code_school_book.png"></a>
+  </div>
+</section>
+			  
+			</aside>
+
+		</div>
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Callbacks and the Event Loop</h1>
+	<div class="entry-content" itemprop="articleBody"><p>When I started writing javascript in earnest a couple of years ago, I was stuck in a very procedural way of thinking &mdash; all of my functions executed synchronously. If you replaced <code>function</code> with <code>def</code> and removed all <code>var</code> keywords, you would be reading Ruby (true story: yesterday I was debugging an issue with a React module and put in a <code>binding.pry</code> instead of <code>debugger</code> :facepalm: Old habits die hard).</p>
+
+<p>Last year, I joined a team that writes javascript in the Node.js style, using callbacks for flow control. While I became familiar with the pattern pretty quickly, the whys and wherefores were missing from my understanding. Today I am filling in the gaps by reading <a href="https://www.amazon.com/Node-js-Design-Patterns-Mario-Casciaro/dp/1785885588/ref=sr_1_1/161-7210115-5247461?ie=UTF8&amp;qid=1476284148&amp;sr=8-1&amp;keywords=node.js+design+patterns">Node.js Design Patterns</a> by Mario Casciaro and Luciano Mammino.<!--more--></p>
+
+<h3>The Event Loop</h3>
+
+<p>The first step to understanding asynchronous javascript is to understand the event loop. It is a single thread that processes one message at a time, as they appear in the FIFO event queue.</p>
+
+<p><img src="/images/161012-callbacks/event-loop.png">
+<em>image credit: Mario Casciaro and Luciano Mammino from Node.js Design Patterns. Colour notations are mine.</em></p>
+
+<ol>
+<li>An I/O request is sent to the event demultiplexer.</li>
+<li>The event demultiplexer queues the I/O instructions along with the context and a callback function that contains the instructions for what do to with the result once it is received.</li>
+<li>When the I/O order is filled, the event demultiplexer pops an event on to the event queue, with the filled I/O request, and the callback handler.</li>
+<li>The event loop pulls the event off of the event queue and applies the result to the callback function.</li>
+<li>The event loop either sends the result of the callback operation to the application, or generates more I/O work for the event demultiplexer.</li>
+</ol>
+
+
+<p>When I check my email in the morning, I go through a similar process:</p>
+
+<ul>
+<li>My inbox is the event demultiplexer, where requests for resources are made.</li>
+<li>I (as the event loop) process emails from in the queue from oldest to newest, and I only process one at at time.</li>
+<li>For each message I read the context and perform one of two actions (callback):
+
+<ul>
+<li>Process the message and return to the queue to pick up another message.</li>
+<li>Add a new action to my todo list event queue along with the a reminder to attach the result of the new action to the email when I respond (callback).</li>
+</ul>
+</li>
+</ul>
+
+
+<p>When I am finished with my email inbox I start on my todo list, performing the actions required and responding to the email. Sometimes the action will generate additional actions, which I append to the end of my todo list. While the idea of an infinite todo list is a little disheartening to a human, this is how the V8 javascript engine was designed: it performs the work with maximum efficiency, and can do so with only a single thread.</p>
+
+<h3>The difference between synchronous and asynchronous javascript</h3>
+
+<p>Synchronous javascript can be easily identified by the use of a <code>return</code> statement, which returns control back to the caller.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">introduction</span> <span class="p">(</span><span class="nx">firstName</span><span class="p">,</span> <span class="nx">lastName</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="s1">&#39;Hello, my name is &#39;</span> <span class="o">+</span> <span class="nx">firstName</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nx">lastName</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">introduction</span><span class="p">(</span><span class="s1">&#39;Keighty&#39;</span><span class="p">,</span> <span class="s1">&#39;Leonard&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="c1">// &quot;hello! my name is Keighty Leonard&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Asynchronous javascript uses a &lsquo;continuous passing pattern&rsquo;, where the result of a function is passed to a handler for further processing.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">createEmailAddress</span> <span class="p">(</span><span class="nx">firstName</span><span class="p">,</span> <span class="nx">lastName</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// create asynchronous call</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;before the async&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// do some work</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">email</span> <span class="o">=</span> <span class="nx">firstName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nx">lastName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;@example.com&#39;</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;during the async&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1">// pass the result of the work to the callback</span>
+</span><span class='line'>    <span class="nx">callback</span><span class="p">(</span><span class="nx">email</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">},</span> <span class="mi">2000</span><span class="p">)</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;after the async&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">cb</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">createEmailAddress</span><span class="p">(</span><span class="s1">&#39;Keighty&#39;</span><span class="p">,</span> <span class="s1">&#39;Leonard&#39;</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// &gt; before the async</span>
+</span><span class='line'><span class="c1">// &gt; after the async</span>
+</span><span class='line'><span class="c1">// &gt; during the async</span>
+</span><span class='line'><span class="c1">// &gt; keighty.leonard@example.com</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>createEmailAddress</code> is called. When execution reaches the setTimeout function, and the 2000ms have elapsed, the callback passed to setTimeout is placed in the event queue, awaiting its turn for execution. The thread is release and does not have to wait for the setTimeout period to elapse before continuing execution &mdash; it continues with the second console statement (&lsquo;after the async&rsquo;). When the setTimeout callback is finally processed, the <code>firstName</code> and <code>lastName</code> variables are still accessible because they exist in the function closure.</p>
+
+<p>Javascript has many features that make the continuous passing pattern easy:</p>
+
+<ul>
+<li>Closures allow you to access the environment on which a function was created, no matter when the callback is invoked.</li>
+<li>Functions are first class data types, meaning they can be assigned to variables, passed as parameters, and stored in data structures.</li>
+</ul>
+
+
+<hr />
+
+<p>More on the event loop and event-emitter observer pattern to come!</p>
+</div>
+
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2016
+
+    katie leonard
+
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+		</div>
+	</div>
+	
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+</body>
+</html>

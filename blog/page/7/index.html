@@ -9,7 +9,7 @@
 	<meta name="author" content="katie leonard">
 
 	
-	<meta name="description" content="Aug 7th, 2014 javascript Constructors and Prototypes Object-oriented programming (OOP) can be thought of as describing the properties and behaviour &hellip;">
+	<meta name="description" content="Aug 9th, 2014 javascript Javascript Getters and Setters Getters and setters make sense in java, and I just learned that there is an equivalent &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -126,6 +126,136 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-09T00:00:00-07:00" data-updated="true" itemprop="datePublished">Aug 9<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/javascript/'>javascript</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/javascript-getters-and-setters/" itemprop="url">Javascript Getters and Setters</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Getters and setters make sense in java, and I just learned that there is an equivalent pattern in javascript:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">favouriteBook</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">_title</span><span class="o">:</span> <span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">get</span> <span class="nx">title</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Getting title&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_title</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="nx">set</span> <span class="nx">title</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">_title</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Setting title&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_title</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
+</span><span class='line'> <span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Slaughterhouse 5&quot;</span>
+</span><span class='line'> <span class="nx">Setting</span> <span class="nx">title</span> <span class="nx">Slaughterhouse</span> <span class="mi">5</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
+</span><span class='line'> <span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Slaughterhouse</span> <span class="mi">5</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>get</code> and <code>set</code> key words are reserved for accessing or mutating a data property (instance variable). Of course, one can get and set data properties directly:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
+</span><span class='line'><span class="s2">&quot;Catch-22&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Slaughterhouse 5&quot;</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
+</span><span class='line'><span class="s2">&quot;Slaughterhouse 5&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The advantage of using a getter and setter is that if a setter is defined without a getter, one can change the value of the data property, but can never read it. If a getter is defined without a setter, then the variable can be read but not be changed:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">favouriteBook</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">_title</span><span class="o">:</span> <span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">get</span> <span class="nx">title</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Getting title&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_title</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
+</span><span class='line'><span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Slaughterhouse 5&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
+</span><span class='line'><span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The setter function will fail silently, which makes troubleshooting difficult but ensures that the property remains undisturbed.</p>
+
+<h3>Resources</h3>
+
+<p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
+
+		
+		
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -512,80 +642,6 @@
 <p>Meteor is mostly a client-side application framework, and you can implement a similar message system, which will never touch the server, by defining a collection that is local to the browser.
 		
 		<a href="/blog/2014/flash-your-local-collection/" class="more-link">Read on &rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-03T00:00:00-07:00" data-updated="true" itemprop="datePublished">May 3<span>rd</span>, 2014</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/meteor/'>meteor</a>, <a class='category' href='/blog/categories/ubuntu-wrestling/'>ubuntu wrestling</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2014/mongo-trouble-reset/" itemprop="url">Mongo Trouble? Reset!</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Back in March I wrote about letting my computer&rsquo;s battery die in the middle of a meteor project, with the consequence being that I could not connect to the underlying mongo database:</p>
-
-<figure class='code'><figcaption><span>What&#8217;s wrong, meteor? </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>meteor
-</span><span class='line'><span class="o">[[[[[</span> ~/project/in/progress <span class="o">]]]]]</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">=</span>&gt; Started proxy.
-</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
-</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
-</span><span class='line'>Unexpected mongo <span class="nb">exit </span>code 100. Restarting.
-</span><span class='line'>Can<span class="err">&#39;</span>t start Mongo server.
-</span><span class='line'>MongoDB had an unspecified uncaught exception.
-</span><span class='line'>This can be caused by MongoDB being unable to write to a <span class="nb">local </span>database.
-</span><span class='line'>Check that you have permissions to write to .meteor/local. MongoDB does
-</span><span class='line'>not support filesystems like NFS that <span class="k">do </span>not allow file locking.
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After much spelunking in stackoverflow and documentation, I discovered the magic of this command:</p>
-
-<figure class='code'><figcaption><span>Magic mongo reset spell %</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo -u mongodb mongdo --repair --dbpath /var/lib/mongodb
-</span><span class='line'><span class="nv">$ </span>sudo service mongodb start
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Repairing and restarting the mongo service seemed to do the trick, and I continued on my merry meteor way. Well, I did it again &mdash; I let my battery die in the middle of a meteor project, and with feelings of smug satisfaction, I plumbed my blog archive for the answer. Only this time the magic antidote didn&rsquo;t work
-		
-		<a href="/blog/2014/mongo-trouble-reset/" class="more-link">Read on &rarr;</a>
 	</div>
 
 </article>

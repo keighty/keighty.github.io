@@ -9,7 +9,7 @@
 	<meta name="author" content="katie leonard">
 
 	
-	<meta name="description" content="Oct 18th, 2014 meteor, mongo, node Meteor-managed Ids Won&#8217;t Play Nicely With Others I am working with a data dump from a meteor project, and &hellip;">
+	<meta name="description" content="Nov 8th, 2014 cs, languages Compilers &#8211; an Intro Last year, I was wrapping up a stint at code school, and I picked up the challenge of &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -126,6 +126,93 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-08T00:00:00-08:00" data-updated="true" itemprop="datePublished">Nov 8<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/cs/'>cs</a>, <a class='category' href='/blog/categories/languages/'>languages</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/compilers-an-intro/" itemprop="url">Compilers &#8211; an Intro</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Last year, I was wrapping up a stint at code school, and I picked up the challenge of <a href="http://katieleonard.ca/blog/2013/canadian-flair/">building a programming language</a>. It was a very large stretch-goal, and I didn&rsquo;t complete the project, but I learned a lot about how languages are designed and built. Recently, my mentor highlighted a <a href="http://online.stanford.edu/course/compilers-0">Compilers course offered through Stanford Online</a>, and suggested that it may be time to level-up my understanding of languages once again. Since I did not reach the compiler phase for <code>eh?</code>, perhaps this is an opportunity to do so.</p>
+
+<h3>Review of compilers</h3>
+
+<p>A compiler is different from an interpreter. An interpreter takes both the data and the program and produces output. A compiler takes only the program and produces an executable. Fun fact: I learned just recently that javascript is actually a &ldquo;compiled&rdquo; language &mdash; the javascript engine uses just-in-time compilation as it is executed.</p>
+
+<p>The grandfather of all compiled languages was FORTRAN, which was developed to translate formulas into a machine-readable language. Like many software projects, the initial completion date was wildly optimistic &mdash; it took 7 years longer than their original estimate &mdash; but they developed a 5-stage pattern of processing that all later compilers would follow.</p>
+
+<h3>1. Lexical analysis</h3>
+
+<p>This first step is about word and symbol recognition: breaking a stream of characters into recognizable chunks. For example a method definition:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Ruby
+</span><span class='line'>def my_method; end
+</span><span class='line'>
+</span><span class='line'>// Java
+</span><span class='line'>public static void main() { }
+</span><span class='line'>
+</span><span class='line'># eh
+</span><span class='line'>can curl; eh?</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Recognizing white space, punctuation, and words is the first step in translating characters into actions that can be performed. The words that are recognized are usually converted into &ldquo;tokens&rdquo;, for passing in to the next stage of processing, which is why this step is occasionally called Tokenizing.</p>
+
+<h3>2. Parsing</h3>
+
+<p>After the character stream has been tokenized, doing pattern recognition on the sequence of tokens is called parsing. Returning briefly to the example of a method definition, <code>def my_method; end</code>, the lexer would recognize <code>def</code> as a key word and <code>my_method</code> as a variable, but they are grouped together by the parser as the beginning of a method block.</p>
+
+<h3>3. Semantic analysis</h3>
+
+<p>Compilers can only do a very limited amount of semantic analysis, usually limited to catching inconsistencies (such as redeclaring a variable) and ambiguities (such as type mismatches). &ldquo;A panda bear walks into a bar and eats, shoots and leaves&rdquo;, can be tokenized into component parts (verbs, nouns, articles), as well as into phrases (subject, predicate), but determining the exact meaning of the predicate requires deeper understanding of the subject. Machines do not perform well with ambiguous grammar, and developing an unambiguous language syntax is a difficult task.</p>
+
+<h3>4. Optimization</h3>
+
+<p>Optimization is where most modern language compilers spend the majority of their resources, modifying programs so that they reduce the demand for resources like memory allocation, or garbage collection. For example, the java compiler will &ldquo;unroll&rdquo; all the for loops so that they run more efficiently. Another strategy is <a href="http://en.wikipedia.org/wiki/Optimizing_compiler">peephole</a> optimization, where the compiler checks out adjacent code to see if any assignments could be reduced or replaced by simple math.</p>
+
+<p><code>x = y * 2</code> might be reduced to <code>x = y + y</code>.</p>
+
+<p><code>z = 0; x = y * z</code> might be reduced to <code>x = 0</code>, but there is a gotcha hidden there &mdash; <code>y * 0 = 0</code> is only true for integers. It results in <code>NaN</code> for floating point numbers.</p>
+
+<h3>5. Code generation</h3>
+
+<p>Code generation is the final translation of the program into an executable. The written language has been cut into tokens and parsed into phrases. It has been examined for ambiguities and inconsistencies, and optimized wherever possible. The instructions for the program are arranged neatly and must now be evaluated and scheduled. The final product is an executable program that can be run against any data of interest.</p>
+
+<p>This 5 stage pattern is followed by almost all compilers. Where they vary is in their proportions. FORTRAN spent a balanced amount of time in each of the 5 phases, while modern compilers have a much longer optimization phase than lexing or parsing.</p>
+
+		
+		
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -855,136 +942,6 @@
 
 
 <p>Awesome.</p>
-
-		
-		
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-09T00:00:00-07:00" data-updated="true" itemprop="datePublished">Aug 9<span>th</span>, 2014</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/javascript/'>javascript</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2014/javascript-getters-and-setters/" itemprop="url">Javascript Getters and Setters</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Getters and setters make sense in java, and I just learned that there is an equivalent pattern in javascript:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">favouriteBook</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">_title</span><span class="o">:</span> <span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">get</span> <span class="nx">title</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Getting title&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_title</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">},</span>
-</span><span class='line'>  <span class="nx">set</span> <span class="nx">title</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">_title</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Setting title&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_title</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'> <span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Slaughterhouse 5&quot;</span>
-</span><span class='line'> <span class="nx">Setting</span> <span class="nx">title</span> <span class="nx">Slaughterhouse</span> <span class="mi">5</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'> <span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Slaughterhouse</span> <span class="mi">5</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The <code>get</code> and <code>set</code> key words are reserved for accessing or mutating a data property (instance variable). Of course, one can get and set data properties directly:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'><span class="s2">&quot;Catch-22&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Slaughterhouse 5&quot;</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'><span class="s2">&quot;Slaughterhouse 5&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The advantage of using a getter and setter is that if a setter is defined without a getter, one can change the value of the data property, but can never read it. If a getter is defined without a setter, then the variable can be read but not be changed:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">favouriteBook</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">_title</span><span class="o">:</span> <span class="s2">&quot;Catch-22&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">get</span> <span class="nx">title</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Getting title&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">_title</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'><span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">&quot;Slaughterhouse 5&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">favouriteBook</span><span class="p">.</span><span class="nx">title</span>
-</span><span class='line'><span class="nx">Getting</span> <span class="nx">title</span> <span class="nx">Catch</span><span class="o">-</span><span class="mi">22</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The setter function will fail silently, which makes troubleshooting difficult but ensures that the property remains undisturbed.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://www.amazon.com/Principles-Object-Oriented-JavaScript-Nicholas-Zakas/dp/1593275404/ref=sr_1_1?ie=UTF8&amp;qid=1407339036&amp;sr=8-1&amp;keywords=principles+of+object+oriented+javascript">The principles of object-oriented javascript</a></p>
 
 		
 		
