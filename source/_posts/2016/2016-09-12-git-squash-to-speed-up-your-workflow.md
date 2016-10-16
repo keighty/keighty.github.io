@@ -5,7 +5,7 @@ date: 2016-09-12
 categories: [git]
 ---
 
-I am a big fan of work-in-progress (WIP) commits. When I am working through a prototype or a spike, and need to do some experimentation with the code, I use WIP commits like they are save points in a game. These points act like milestones, and allow me to keep working with the confidence that I can always go back to an earlier working state. I use these aliases for the job:
+I am a big fan of work-in-progress (WIP) commits. When I am working through a prototype or a spike, and need to do some experimentation with the code, I use WIP commits like they are save points in a game. <!--more-->These points act like milestones, and allow me to keep working with the confidence that I can always go back to an earlier working state. I use these aliases for the job:
 
 ```bash
 # in ~/.bashrc
@@ -38,8 +38,6 @@ pick f90410b WIP
 ```
 
 I would proceed to `reword` the first and `fixup` the rest, writing a thoughtful and all-encompassing commit message to convey the intention behind this chunk of work. Then I discovered `git merge --squash`
-
-<!--more-->
 
 ```bash
 $ git checkout master
