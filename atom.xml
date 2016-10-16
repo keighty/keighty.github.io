@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2016-10-16T11:45:13-07:00</updated>
+  <updated>2016-10-16T11:46:17-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -190,10 +190,7 @@
     <link href="http://www.katieleonard.ca/blog/2016/event-emitter-and-event-loop/"/>
     <updated>2016-10-14T00:00:00-07:00</updated>
     <id>http://www.katieleonard.ca/blog/2016/event-emitter-and-event-loop</id>
-    <content type="html"><![CDATA[<!--more-->
-
-
-<p>The EventEmitter pattern is a derivative of the Observer pattern: an object can notify a set of observers when a change in its state occurs. Consider the following example using the EventEmitter pattern:</p>
+    <content type="html"><![CDATA[<p>The EventEmitter pattern is a derivative of the Observer pattern: an object can notify a set of observers when a change in its state occurs.<!--more--> Consider the following example using the EventEmitter pattern:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
