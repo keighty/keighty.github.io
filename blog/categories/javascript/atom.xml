@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2016-10-15T17:28:18-07:00</updated>
+  <updated>2016-10-16T11:45:13-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -157,6 +157,130 @@ External: http://10.0.0.8:3000
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[The EventEmitter Pattern and the Event Loop -- a Timeline]]></title>
+    <link href="http://www.katieleonard.ca/blog/2016/event-emitter-and-event-loop/"/>
+    <updated>2016-10-14T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2016/event-emitter-and-event-loop</id>
+    <content type="html"><![CDATA[<!--more-->
+
+
+<p>The EventEmitter pattern is a derivative of the Observer pattern: an object can notify a set of observers when a change in its state occurs. Consider the following example using the EventEmitter pattern:</p>
+
+<p>```javascript
+const EventEmitter = require(&lsquo;events&rsquo;).EventEmitter
+const fs = require(&lsquo;fs&rsquo;)</p>
+
+<p>const findPattern = (files, regex) => {
+  const emitter = new EventEmitter()</p>
+
+<p>  files.forEach(file => {</p>
+
+<pre><code>fs.readFile(file, 'utf8', (err, content) =&gt; {
+  if (err) return emitter.emit('error', err)
+
+  emitter.emit('fileread', file)
+
+  let match
+  if (match = content.match(regex)) {
+    match.forEach(elem =&gt; {
+      emitter.emit('found', file, elem)
+    })
+  }
+})
+</code></pre>
+
+<p>  })
+  return emitter
+}</p>
+
+<p>// fileA.txt contains the words &ldquo;hello blah blah blah&rdquo;
+// fileB.json is empty
+// fileC.md does not exist
+const files = [&lsquo;fileA.txt&rsquo;, &lsquo;fileB.json&rsquo;, &lsquo;fileC.md&rsquo;]</p>
+
+<p>findPattern(files, /hello \w+/g)
+  .on(&lsquo;fileread&rsquo;, file => {console.log(<code>${file} was read</code>)})
+  .on(&lsquo;found&rsquo;, (file, match) => {console.log(<code>Matched ${match} in file ${file}</code>)})
+  .on(&lsquo;error&rsquo;, err => {console.log(<code>Error emitted: ${err.message}</code>)})
+```</p>
+
+<p>Some of the script is executed synchronously, but the real work is done asynchronously. The EventEmitter pattern takes advantage of the event loop to work efficiently.</p>
+
+<p>Keep the following schematic in mind as you parse through the execution of this script:</p>
+
+<p><img src="/images/161012-callbacks/event-loop.png"></p>
+
+<p><em>image credit: Mario Casciaro and Luciano Mammino from Node.js Design Patterns. Colour notations are mine.</em></p>
+
+<p>The first set of operations happen synchronously:</p>
+
+<ul>
+<li>call <code>findPattern</code> with the file list and regex pattern</li>
+<li>create a new event emitter</li>
+<li>submit <code>readFile</code> I/O request for fileA.txt to the event demultiplexer</li>
+<li>submit <code>readFile</code> I/O request for fileB.json to the event demultiplexer</li>
+<li>submit <code>readFile</code> I/O request for fileC.md to the event demultiplexer</li>
+<li>return the event emitter</li>
+<li>register <code>fileread</code> listener on the event emitter</li>
+<li>register <code>found</code> listener on the event emitter</li>
+<li>register <code>error</code> listener on the event emitter</li>
+</ul>
+
+
+<p><img src="/images/161014-event-emitter/event-emitter-1.png"></p>
+
+<p>Once the I/O operations are submitted to the event demultiplexer, they will return in the order in which the requests are fulfilled. In this example, fileC.md does not exist, so the event demultiplexer submits the result along with the handler to the Event loop.</p>
+
+<ul>
+<li>The event loop runs the result through the callback for fileC.md, which <strong>emits an error event</strong> (line 9)! The EventEmitter adds the error handler to the event loop.</li>
+</ul>
+
+
+<p><img src="/images/161014-event-emitter/event-emitter-2.png"></p>
+
+<p>In the meantime, the event demultiplexer has fulfilled the I/O request for fileB.json, and added the result and the callback to the event loop.</p>
+
+<ul>
+<li>The event loop runs the result through the callback for fileB, which emits a <code>fileread</code> event (line 11). The EventEmitter adds the <code>fileread</code> handler to the event loop.</li>
+</ul>
+
+
+<p>The event demultiplexer also fulfills the I/O request for fileA.txt and adds the result and the callback to the event loop.</p>
+
+<ul>
+<li>The event loop runs the result through the callback for fileA, which emits a <code>fileread</code> event (line 11) AND a <code>found</code> event (line 16). The EventEmitter adds the <code>fileread</code> and <code>found</code> handlers to the event loop.</li>
+</ul>
+
+
+<p>The event loop is busily processing all of these events in the order of arrival:</p>
+
+<ul>
+<li>run the listener callback for the <code>error</code> event (fileC)</li>
+<li>run the listener callback for the <code>fileread</code> event (fileB)</li>
+<li>run the listener callback for the <code>fileread</code> event (fileA)</li>
+<li>FINALLY &mdash; run the listener callback for the <code>found</code> event (fileA)</li>
+</ul>
+
+
+<p>The result of running this script on the command line:</p>
+
+<p><code>text
+$ node --use_strict events.js
+Error emitted: ENOENT: no such file or directory, open 'fileC.md'
+fileB.json was read
+fileA.txt was read
+Matched hello blah in file fileA.txt
+</code></p>
+
+<p><em>Side note: set the flag <code>--use-strict</code> to run scripts using ES6 syntax</em></p>
+
+<p>Why did the files process in what seems to be reverse order? The event demultiplexer adds work to the event loop as it fulfills I/O requests. When <code>readfile()</code> is given three files &mdash; a file with content (fileA), an empty file (fileB), and a non-existent file (fileC) &mdash; it is reasonable to assume that the I/O request for a non-existent file will return first, as there is no file to read. It is also reasonable that an empty file will  return next, as there is very little work to be done reading an empty file. Finally, the I/O request for the file with content returns &mdash; it requires more work to read a file with content than an empty file.</p>
+
+<p>For more about the event emitter pattern in Node, check out <a href="https://www.amazon.com/Node-js-Design-Patterns-Mario-Casciaro/dp/1785885588/ref=sr_1_1/161-7210115-5247461?ie=UTF8&amp;qid=1476284148&amp;sr=8-1&amp;keywords=node.js+design+patterns">Node.js Design Patterns</a> by Mario Casciaro and Luciano Mammino.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Callbacks and the Event Loop]]></title>
     <link href="http://www.katieleonard.ca/blog/2016/clarified-callbacks/"/>
     <updated>2016-10-12T00:00:00-07:00</updated>
@@ -239,7 +363,7 @@ callback(email)
 <p>// > before the async
 // > after the async
 // > during the async
-// > <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#x3a;&#x6b;&#101;&#x69;&#103;&#x68;&#x74;&#x79;&#x2e;&#108;&#x65;&#111;&#x6e;&#97;&#114;&#x64;&#64;&#x65;&#120;&#x61;&#x6d;&#x70;&#x6c;&#x65;&#x2e;&#x63;&#111;&#109;">&#107;&#x65;&#105;&#x67;&#x68;&#x74;&#121;&#x2e;&#108;&#x65;&#111;&#x6e;&#x61;&#114;&#100;&#64;&#101;&#120;&#x61;&#109;&#112;&#x6c;&#x65;&#x2e;&#99;&#x6f;&#109;</a>
+// > <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#107;&#101;&#105;&#103;&#104;&#116;&#121;&#46;&#x6c;&#x65;&#111;&#110;&#x61;&#114;&#100;&#64;&#101;&#x78;&#x61;&#109;&#x70;&#x6c;&#x65;&#x2e;&#99;&#111;&#x6d;">&#x6b;&#101;&#x69;&#x67;&#104;&#116;&#x79;&#46;&#108;&#101;&#111;&#110;&#x61;&#x72;&#100;&#x40;&#101;&#x78;&#97;&#x6d;&#x70;&#x6c;&#101;&#x2e;&#99;&#x6f;&#109;</a>
 ```</p>
 
 <p><code>createEmailAddress</code> is called. When execution reaches the setTimeout function, and the 2000ms have elapsed, the callback passed to setTimeout is placed in the event queue, awaiting its turn for execution. The thread is release and does not have to wait for the setTimeout period to elapse before continuing execution &mdash; it continues with the second console statement (&lsquo;after the async&rsquo;). When the setTimeout callback is finally processed, the <code>firstName</code> and <code>lastName</code> variables are still accessible because they exist in the function closure.</p>
@@ -619,104 +743,6 @@ router.get(&lsquo;/:id&rsquo;, function (req, res, next) {
 <p><img src="/images/160412-nested-routes/fooNumberBazNumber.png"></p>
 
 <p>TADA! a model of nested routes that you can apply to any application.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Preflight Check With CORS]]></title>
-    <link href="http://www.katieleonard.ca/blog/2016/preflight-check-with-cors/"/>
-    <updated>2016-03-29T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2016/preflight-check-with-cors</id>
-    <content type="html"><![CDATA[<p>Modern web applications can draw resources from anywhere on the web. Fonts, JavaScript libraries, images, and other data can be fetched from CDNs, Amazon, IMDB, or anywhere else that provides a public API. Early browsers restricted web applications to same-origin requests, which prevented the sharing of resources between applications, but also ensured that data from one application could not be tampered with by another. The thinkers at the W3C came up with a means of communicating safe cross-origin requests that would allow even destructive remote actions to be performed, as long as the server consented to receive the request. Enter CORS, and preflighting.</p>
-
-<!--more-->
-
-
-<h3>What is CORS?</h3>
-
-<p>Cross-Origin Resource Sharing occurs when JavaScript on a web page requests data from (or sends data to) a location on a different host. Any website that embeds a video from YouTube, uses a custom font, or posts to social media on your behalf, is making a CORS request. CORS is a <a href="https://www.w3.org/TR/cors/">set of web standards</a> developed to enable safe cross-domain communication.</p>
-
-<h3>What is preflighting?</h3>
-
-<p>CORS functions through the specification of new HTTP headers that allow servers to describe the origin and nature of the request. For each outgoing request to a different domain, the browser will look at the headers to determine if the request that looks like it will affect data on the receiving server. Any simple request that uses one of the common HTTP verbs and a basic Content-Type are allowed to pass without further comment. But if the request has different header values, the browser checks with the server first to make sure the request is expected. This is called a pre-flight check.</p>
-
-<h3>What does a simple CORS request look like?</h3>
-
-<p>For simple requests (no pre-flight check), the method must be one of:</p>
-
-<pre><code>- GET
-- HEAD
-- POST
-</code></pre>
-
-<p>The only extra headers allowed are:</p>
-
-<pre><code>- Accept
-- Accept-Language
-- Content-Language
-- Content-Type
-</code></pre>
-
-<p>For the Content-Type header, the only allowed values are:</p>
-
-<pre><code>- application/x-www-form-urlencoded
-- multipart/form-data
-- text/plain
-</code></pre>
-
-<p>XMLHttpRequests (aka XHRs or ajax) use CORS to mitigate the risks of pulling or pushing sensitive data across domains. For example:</p>
-
-<p><code>javascript
-var body = 'very safe, ordinary text content'
-var url = 'http://api.example.com'
-var request = new XMLHttpRequest()
-request.open('POST', url, true)
-request.setRequestHeader('Content-Type', 'text/plain')
-request.send()
-</code></p>
-
-<p><img src="/images/160329-preflight-cors/cors-without-preflight.png"></p>
-
-<p>The browser checks out the request, sees that it is unlikely to have any negative consequences, and passes it along to the requested endpoint. In the Network tab, simple CORS requests will appear by themselves:</p>
-
-<p><img src="/images/160329-preflight-cors/one-request.png"></p>
-
-<h3>What does a pre-flight CORS request look like?</h3>
-
-<p>For non-simple requests, the method could be any of the HTTP verbs along with any other combination of headers. For example:</p>
-
-<p><code>javascript
-var body = 'possibly unstable or malicious content'
-var url = 'http://api.example.com'
-var request = new XMLHttpRequest()
-request.open('POST', url, true)
-request.setRequestHeader('Content-Type', 'application/json')
-request.send()
-</code></p>
-
-<p>In this request I am trying to POST a JSON object to an API endpoint, which could potentially have destructive consequences for data on the other side of the endpoint. When the browser inspects the headers of this request it gets suspicious, and fires off a preliminary request to the endpoint with the meta data from the request:</p>
-
-<p><img src="/images/160329-preflight-cors/cors-with-preflight.png"></p>
-
-<p>The server at the endpoint responds to the pre-flight request with a list of authorized headers, including acceptable request origins, content, and actions.</p>
-
-<p>Ignoring for a moment that the requests fail (because api.example.com does not exist), the non-simple CORS request produces two requests instead of one:
-<img src="/images/160329-preflight-cors/two-requests.png"></p>
-
-<p>The result of the pre-flight OPTIONS request will determine if the second is ever sent on to the endpoint. This is how browsers keep your application data secure from malicious or unintended changes.</p>
-
-<h3>Why OPTIONS, and not POST?</h3>
-
-<p>I found <a href="http://stackoverflow.com/a/16945321">this great answer</a> on stackoverflow that explains why the creators of CORS made a new request type, <code>OPTIONS</code>. Before the CORS standards were introduced, neither browsers nor servers knew how to handle cross-domain requests. Browsers would throw an error, but servers would process the request without concern. Inventing a new method type that CORS-enabled browsers AND CORS-aware servers could handshake with ensures that both sides are sensible to the meaning of the pre-flight request.</p>
-
-<h4>RESOURCES</h4>
-
-<ul>
-<li>Learn more about the web standards at <a href="https://www.w3.org/TR/cors/">W3C</a></li>
-<li>Find out more about how CORS is <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Simple_requests:">implemented at Mozilla</a></li>
-<li>Find out what web browsers support CORS at <a href="http://caniuse.com/#search=CORS">caniuse.com</a></li>
-</ul>
-
 ]]></content>
   </entry>
   

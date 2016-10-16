@@ -9,7 +9,7 @@
 	<meta name="author" content="katie leonard">
 
 	
-	<meta name="description" content="Dec 28th, 2014 ruby Method Lookup in Ruby I have once more been working my way through Sandi Metz&#8217; Practical Object-oriented Design in Ruby ( &hellip;">
+	<meta name="description" content="Jan 1st, 2015 read The Happiness Hypothesis &ldquo;Nothing is miserable unless you think it so; and on the other hand, nothing brings happiness &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -126,6 +126,44 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-01T00:00:00-08:00" data-updated="true" itemprop="datePublished">Jan 1<span>st</span>, 2015</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/read/'>read</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2015/the-happiness-hypothesis/" itemprop="url">The Happiness Hypothesis</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<blockquote><p>&ldquo;Nothing is miserable unless you think it so; and on the other hand, nothing brings happiness unless you are content with it.&rdquo; &mdash;Buddha</p></blockquote>
+
+<p>In <a href="http://www.amazon.com/Happiness-Hypothesis-Finding-Modern-Ancient/dp/0465028020/ref=sr_1_1?ie=UTF8&amp;qid=1420146441&amp;sr=8-1&amp;keywords=the+happiness+hypothesis">The Happiness Hypothesis</a>: Finding Modern Truth in Ancient Wisdom, Jonathan Haidt provides an extensive overview of the state of positive psychology today.</p>
+
+
+		
+		<a href="/blog/2015/the-happiness-hypothesis/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -743,125 +781,6 @@
 		<p>If you have more than one javascript running on a page, you have likely experienced the hell of trying to debug a problem caused by naming collisions. Developing the scripts in isolation, it makes sense to assign widgetA.name dynamically using jQuery, but then why does the title of widgetGraphB disappear? Avoid the pain of unintended consequences by namespacing your scripts. 
 		
 		<a href="/blog/2014/managing-modules/" class="more-link">Read on &rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-24T00:00:00-07:00" data-updated="true" itemprop="datePublished">Aug 24<span>th</span>, 2014</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/meteor/'>meteor</a>, <a class='category' href='/blog/categories/mongo/'>mongo</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2014/backup-meteor-yes-we-can/" itemprop="url">Backup Meteor? Yes We Can</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Retrieving a data dump from your meteor production database and copying it to local development is a three-step, time sensitive process.</p>
-
-<h3>1. Retrieve your production url</h3>
-
-<p>Passing a <code>-url</code> flag to the <code>meteor mongo</code> command will return a long string of goodies:</p>
-
-<figure class='code'><figcaption><span>Dude, where&#8217;s my data? </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ meteor mongo --url my_app.meteor.com
-</span><span class='line'>
-</span><span class='line'>mongodb://client-12345678:9abcdef1-234-5678-9abc-def123456789@singularsensation-db-a3.meteor.io:12345/my_app_meteor_net</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This string contains all the information you require to access your production data:</p>
-
-<ul>
-<li>your client id (from // to :)</li>
-<li>a server password (from : to @)</li>
-<li>a server name and port number (from @ to /)</li>
-<li>the datastore identification (from / to the end)</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>mongodb://&lt;CLIENT_ID&gt;:&lt;PASSWORD_HASH&gt;@&lt;SERVER_NAME:PORT&gt;/&lt;YOUR_DATA_STORE&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Retrieving your data is time-sensitive because the password hash will expire after 60 seconds.</p>
-
-<h3>2. Retrieve your data using mongodump</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mongodump -u CLIENT_ID -h SERVER_NAME:PORT -d YOUR_DATA_STORE -p PASSWORD_HASH
-</span><span class='line'>
-</span><span class='line'>connected to: &lt;SERVER_NAME:PORT&gt;
-</span><span class='line'>Sun Aug 24 10:50:32.342 DATABASE: YOUR_DATA_STORE  to   dump/YOUR_DATA_STORE
-</span><span class='line'>Sun Aug 24 10:50:32.989   YOUR_DATA_STORE.system.indexes to dump/YOUR_DATA_STORE/system.indexes.bson
-</span><span class='line'>Sun Aug 24 10:50:34.368      14 objects
-</span><span class='line'>Sun Aug 24 10:50:34.369   YOUR_DATA_STORE.system.users to dump/YOUR_DATA_STORE/system.users.bson
-</span><span class='line'>Sun Aug 24 10:50:34.559      2 objects
-</span><span class='line'>... and on and on
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Mongodb copies your data from production into a new folder called &ldquo;dump&rdquo; in your present working directory.</p>
-
-<h3>3. Use mongorestore to copy the data from the dump into your local datastore</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ mongorestore --host 127.0.0.1 --port 3001 --db meteor --drop dump/YOUR_DATA_STORE/
-</span><span class='line'>
-</span><span class='line'>connected to: 127.0.0.1:3001
-</span><span class='line'>Sun Aug 24 11:36:54.693 dump/YOUR_DATA_STORE/users.bson
-</span><span class='line'>Sun Aug 24 11:36:54.693   going into namespace [meteor.users]
-</span><span class='line'>Sun Aug 24 11:36:54.693    dropping
-</span><span class='line'>2 objects found
-</span><span class='line'>Sun Aug 24 11:36:55.834   Creating index: { name: "_id_", key: { _id: 1 }, ns: "meteor.users" }
-</span><span class='line'>Sun Aug 24 11:36:55.993   Creating index: { name: "username_1", key: { username: 1 }, unique: true, ns: "meteor.users", sparse: 1 }
-</span><span class='line'>... and on and on</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
-
-<p>Resources:
-<a href="http://stackoverflow.com/a/12447710">stackoverflow</a></p>
-
-		
-		
 	</div>
 
 </article>
