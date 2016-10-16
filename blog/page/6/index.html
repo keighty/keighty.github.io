@@ -9,7 +9,7 @@
 	<meta name="author" content="katie leonard">
 
 	
-	<meta name="description" content="Nov 8th, 2014 cs, languages Compilers &#8211; an Intro Last year, I was wrapping up a stint at code school, and I picked up the challenge of &hellip;">
+	<meta name="description" content="Dec 28th, 2014 ruby Method Lookup in Ruby I have once more been working my way through Sandi Metz&#8217; Practical Object-oriented Design in Ruby ( &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -126,6 +126,137 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-28T00:00:00-08:00" data-updated="true" itemprop="datePublished">Dec 28<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/ruby/'>ruby</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/method-lookup-in-ruby/" itemprop="url">Method Lookup in Ruby</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I have once more been working my way through Sandi Metz&#8217; <a href="http://www.amazon.com/Practical-Object-Oriented-Design-Ruby-Addison-Wesley/dp/0321721330">Practical Object-oriented Design in Ruby</a> (POODR) for a few weeks, and developed a mental block about method lookup.</p>
+
+<p>In Chapter 6 (Acquiring behaviour through inheritance), she describes how to extract a superclass from a group of related classes that share some behaviour by pulling methods up the inheritance chain instead of driving specializations down. This approach ensures a clean abstraction, leaving no specialized behaviour in the superclass. Where I got stuck was in the call chain that enforces the common interface:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>    <span class="n">baz</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">baz</span>
+</span><span class='line'>    <span class="k">raise</span> <span class="no">NotImplementedError</span><span class="o">.</span><span class="n">new</span> <span class="s2">&quot;You can&#39;t call #baz here!&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Bar</span> <span class="o">&lt;</span> <span class="no">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>    <span class="k">super</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">baz</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Hello, baz&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="no">Bar</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="s2">&quot;Hello, baz&quot;</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;Bar:0x007fc4f903ab90&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I could not understand why, the <code>NotImplementedError</code> wasn&rsquo;t raised when a new <code>Bar</code> was created. This is how I imagined the call stack should work:</p>
+
+<ol>
+<li><code>Bar.new</code> calls <code>Bar#initialize</code></li>
+<li><code>Bar</code> calls <code>super</code> (<code>Foo#initialize</code>)</li>
+<li><code>Foo</code> calls <code>baz</code> (<code>Foo#baz</code>)</li>
+<li>raises <code>NotImplementedError</code></li>
+</ol>
+
+
+<p>This is how the call stack actually works</p>
+
+<ol>
+<li><code>x = Bar.new</code> calls <code>Bar#initialize</code></li>
+<li><code>x</code> receives a call to <code>super</code> (<code>Foo#initalize</code>)</li>
+<li><code>x</code> receives a call to <code>baz</code> (<code>Bar#baz</code>)</li>
+<li>says &ldquo;Hello, baz&rdquo;</li>
+</ol>
+
+
+<p>The call never comes from the context of <code>Foo</code> &mdash; the receiver is always <code>x</code>, the instance of <code>Bar</code>. Classical inheritance dictates that an object can only look to itself or further up the inheritance chain for valid method definitions, not down. <code>x</code> is reaching up to call <code>super</code> but checks itself for an answer to the question <code>#baz</code>. <code>Foo#baz</code> would only ever be called if we made a new <code>Foo</code> directly:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="no">Foo</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="ss">NotImplementedError</span><span class="p">:</span> <span class="no">You</span> <span class="n">can</span><span class="s1">&#39;t call #baz here!</span>
+</span><span class='line'><span class="s1">        from (irb):7:in `baz&#39;</span>
+</span><span class='line'>        <span class="n">from</span> <span class="p">(</span><span class="n">irb</span><span class="p">):</span><span class="mi">3</span><span class="ss">:in</span> <span class="sb">`initialize&#39;</span>
+</span><span class='line'><span class="sb">        from (irb):27:in `</span><span class="kp">new</span><span class="s1">&#39;</span>
+</span><span class='line'><span class="s1">        from (irb):27</span>
+</span><span class='line'><span class="s1">        from /usr/local/var/rbenv/versions/2.1.5/bin/irb:11:in `&lt;main&gt;&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>How ruby resolves a message (classical inheritance)</h3>
+
+<p>The search for a method begins in the class of the receiving object &mdash; in the example above, Bar is always the receiving object. If the class does not implement the message, the search proceeds up the superclass chain. If none of the superclasses contain the method definition, ruby makes a second attempt to resolve the message by sending <code>method_missing(:method_name)</code> to the original object. The search restarts from the bottom, but this time for a <code>method_missing</code> handler rather than <code>:method_name</code>.</p>
+
+<p>Occasionally refreshing the ruby basics is super-rewarding.</p>
+
+		
+		
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -728,220 +859,6 @@
 
 <p>Resources:
 <a href="http://stackoverflow.com/a/12447710">stackoverflow</a></p>
-
-		
-		
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-23T00:00:00-07:00" data-updated="true" itemprop="datePublished">Aug 23<span>rd</span>, 2014</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/d3/'>d3</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2014/formatting-numbers-the-easy-way/" itemprop="url">Formatting Numbers the Easy Way</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>D3 has an awesome number formatting function that I discovered only after hacking my own. My first approach was to use string and array manipulation to convert 1234567890 to 1,234,567,890:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">numberSmoothing</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="c1">// split the number into a character array and reverse it</span>
-</span><span class='line'>  <span class="nx">reversedNumber</span> <span class="o">=</span> <span class="p">(</span><span class="nx">value</span><span class="p">).</span><span class="nx">toString</span><span class="p">().</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">reverse</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// [&quot;0&quot;, &quot;9&quot;, &quot;8&quot;, &quot;7&quot;, &quot;6&quot;, &quot;5&quot;, &quot;4&quot;, &quot;3&quot;, &quot;2&quot;, &quot;1&quot;]</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// push the numbers onto another array in groups of 3 and add a comma</span>
-</span><span class='line'>  <span class="nx">chunkedNumber</span> <span class="o">=</span> <span class="p">[];</span>
-</span><span class='line'>  <span class="k">while</span><span class="p">(</span><span class="nx">reversedNumber</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">numberChunk</span> <span class="o">=</span> <span class="nx">reversedNumber</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">chunkedNumber</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">reversedNumber</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">reversedNumber</span> <span class="o">=</span> <span class="nx">numberChunk</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// push the remaining digits onto the array</span>
-</span><span class='line'>  <span class="nx">chunkedNumber</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">reversedNumber</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">));</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// [&quot;098,&quot;, &quot;765,&quot;, &quot;432,&quot;, &quot;1&quot;]</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// reverse each of the strings in the array and rejoin them</span>
-</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">chunkedNumber</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">){</span>
-</span><span class='line'>    <span class="nx">chunkedNumber</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nx">chunkedNumber</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">reverse</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// [&quot;,890&quot;, &quot;,567&quot;, &quot;,234&quot;, &quot;1&quot;]</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">chunkedNumber</span><span class="p">.</span><span class="nx">reverse</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">numberSmoothing</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;1,234,567,890&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>While it was a fun mental exercise to implement number formatting, I stumbled across this handy d3 function after I was already done:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">);</span>
-</span><span class='line'><span class="s2">&quot;1,234,567,890&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As it turns out, any way one might want to format a number has <a href="https://github.com/mbostock/d3/wiki/Formatting#d3_format">already been implemented in d3</a>. It is similar to the mini-formatting language from python:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[​[fill]align][sign][symbol][0][width][,][.precision][type]</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// add commas for the thousands separator</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="nx">format</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;1,234,567,890&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// add a sign for positive and negative numbers</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;+,&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;+1,234,567,890&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="o">-</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;-1,234,567,890&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// add a currency sign</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;+$,&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="nx">format</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;+$1,234,567,890&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a percentage</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="nx">format</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;16.666666666666664%&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a rounded percentage</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;17%&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a percent rounded to a single sig fig</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;.1%&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;16.7%&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a rounded value</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;.2r&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mf">123.456</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;120&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&gt;</span><span class="nx">format</span><span class="p">(</span><span class="mf">123456789.66</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;120000000&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// as a rounded, comma separated value</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;,.2r&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">format</span><span class="p">(</span><span class="mf">123456789.66</span><span class="p">)</span>
-</span><span class='line'><span class="s2">&quot;120,000,000&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
 
 		
 		

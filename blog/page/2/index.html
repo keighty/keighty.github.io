@@ -9,7 +9,7 @@
 	<meta name="author" content="katie leonard">
 
 	
-	<meta name="description" content="Nov 27th, 2015 web development Faster Asset Loading With Cache-Control My side project (Virtual Playbill) is an image-heavy application, and I used &hellip;">
+	<meta name="description" content="Dec 26th, 2015 Keighty&#8217;s 2015 - by the Numbers 2015 has been a very eventful year. Not only did I write and launch an ebook about my code &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -126,6 +126,36 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-26T00:00:00-08:00" data-updated="true" itemprop="datePublished">Dec 26<span>th</span>, 2015</time></div>
+		<div class="tags">
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2015/keightys-2015-by-the-numbers/" itemprop="url">Keighty&#8217;s 2015 - by the Numbers</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>2015 has been a very eventful year. Not only did I write and launch an ebook about my code school experience, but I have also built and launched a book site, competed in a national <a href="acbl.com">Bridge</a> tournament in New Orleans, celebrated 10 years of wedded bliss with <a href="http://virtual-playbill.herokuapp.com/about">Krista Garver</a>, spent 3 weeks traveling in the Mediterranean, and joined a new team at work where I get to deep-dive into JavaScript and browsers. Checkout my <a href="http://katieleonard.ca/images/151226-year-in-review/2015-year-in-review-infographic.png">infographic</a> for more!
+		
+		<a href="/blog/2015/keightys-2015-by-the-numbers/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -343,147 +373,6 @@
 
 		
 		<a href="/blog/2015/hunting-monkey-patches/" class="more-link">Read on &rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-05-07T00:00:00-07:00" data-updated="true" itemprop="datePublished">May 7<span>th</span>, 2015</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/rails/'>rails</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2015/dont-count-your-chickens-if-they-are-active-record-objects/" itemprop="url">Don&#8217;t Count Your Chickens if They Are ActiveRecord Objects</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>You may believe that <code>#length</code>, <code>#size</code>, and <code>#count</code> are fairly equivalent:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>irb(main):002:0&gt; yourRubyChickens =  %w{ Chantecler RedShaver RhodeIslandRed }
-</span><span class='line'>=&gt; ["Chantecler", "RedShaver", "RhodeIslandRed"]
-</span><span class='line'>irb(main):003:0&gt; yourRubyChickens.length
-</span><span class='line'>=&gt; 3
-</span><span class='line'>irb(main):004:0&gt; yourRubyChickens.size
-</span><span class='line'>=&gt; 3
-</span><span class='line'>irb(main):005:0&gt; yourRubyChickens.count
-</span><span class='line'>=&gt; 3</span></code></pre></td></tr></table></div></figure>
-
-
-<p>But, beware of <code>#count</code> in Rails!</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[1] pry(main)&gt; yourRailsChickens = Chicken.all
-</span><span class='line'>  Chicken Load (2.1ms)  SELECT "chickens".* FROM "chickens"
-</span><span class='line'>=&gt; [#&lt;ChanteclerChicken:0x007f98eafcd6d8
-</span><span class='line'>  id: 1,
-</span><span class='line'>  type: "ChanteclerChicken",
-</span><span class='line'>  color: "white",
-</span><span class='line'>  created_at: Thu, 07 May 2015 14:36:36 UTC +00:00,
-</span><span class='line'>  updated_at: Thu, 07 May 2015 14:36:36 UTC +00:00&gt;,
-</span><span class='line'> #&lt;RedShaverChicken:0x007f98e63a9428
-</span><span class='line'>  id: 2,
-</span><span class='line'>  type: "RedShaverChicken",
-</span><span class='line'>  color: "white",
-</span><span class='line'>  created_at: Thu, 07 May 2015 14:37:01 UTC +00:00,
-</span><span class='line'>  updated_at: Thu, 07 May 2015 14:37:01 UTC +00:00&gt;,
-</span><span class='line'> #&lt;RedShaverChicken:0x007f98e63a9248
-</span><span class='line'>  id: 3,
-</span><span class='line'>  type: "RedShaverChicken",
-</span><span class='line'>  color: "black",
-</span><span class='line'>  created_at: Thu, 07 May 2015 14:37:25 UTC +00:00,
-</span><span class='line'>  updated_at: Thu, 07 May 2015 14:37:25 UTC +00:00&gt;,
-</span><span class='line'> #&lt;RedShaverChicken:0x007f98e63a9068
-</span><span class='line'>  id: 4,
-</span><span class='line'>  type: "RedShaverChicken",
-</span><span class='line'>  color: "red",
-</span><span class='line'>  created_at: Thu, 07 May 2015 14:37:35 UTC +00:00,
-</span><span class='line'>  updated_at: Thu, 07 May 2015 14:37:35 UTC +00:00&gt;,
-</span><span class='line'> #&lt;RedShaverChicken:0x007f98e63a8e88
-</span><span class='line'>  id: 5,
-</span><span class='line'>  type: "RedShaverChicken",
-</span><span class='line'>  color: "white",
-</span><span class='line'>  created_at: Thu, 07 May 2015 14:37:53 UTC +00:00,
-</span><span class='line'>  updated_at: Thu, 07 May 2015 14:37:53 UTC +00:00&gt;]
-</span><span class='line'>
-</span><span class='line'>[2] pry(main)&gt; yourRailsChickens.length
-</span><span class='line'>=&gt; 5
-</span><span class='line'>[3] pry(main)&gt; yourRailsChickens.size
-</span><span class='line'>=&gt; 5
-</span><span class='line'>[4] pry(main)&gt; yourRailsChickens.count
-</span><span class='line'>   (0.2ms)  SELECT COUNT(*) FROM "chickens"
-</span><span class='line'>=&gt; 5</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>#size</code> and <code>#length</code> are largely equivalent, but <code>#count</code> issues an additional query to the database that can seriously damage performance for the unsuspecting developer.</p>
-
-<p>For more info, checkout the docs for <a href="http://www.rubydoc.info/docs/rails/4.0.0/ActiveRecord/Calculations:count">count</a> and <a href="http://www.rubydoc.info/docs/rails/4.0.0/ActiveRecord/Associations/CollectionAssociation:length">length</a>.</p>
-
-		
-		
 	</div>
 
 </article>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2016-10-12T13:02:52-07:00</updated>
+  <updated>2016-10-15T17:28:18-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,149 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Service Workers]]></title>
+    <link href="http://www.katieleonard.ca/blog/2016/service-workers/"/>
+    <updated>2016-10-15T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2016/service-workers</id>
+    <content type="html"><![CDATA[<p>A service worker is a script that sits between a web page and the network, acting as a proxy for network requests: if the network is available, the request is passed on to the target url; if the network is not available, the service worker will handle the request itself by checking cached responses or or queuing the request for synchronization once the network is available. Service workers are bridging the gap between native mobile applications and traditional web applications that require a network connection to function. Sometimes called progressive web apps, these applications enable a seamless offline experience when the user is not connected to a network.</p>
+
+<!--more-->
+
+
+<p>Service workers can be used for data synchronization in the background, but data fetching and sync-ing are only one of the ways we can leverage this API. We can:</p>
+
+<ul>
+<li>use background resources to perform client-side compilation of assets  (useful for web development)</li>
+<li>pre-fetch data that the user is likely going to need in the near future (think photo albums or playlists)</li>
+<li>share large data sets between multiple pages</li>
+<li>notify mobile users of updates via push notifications</li>
+</ul>
+
+
+<p>For example, <a href="https://www.washingtonpost.com/">The Washington Post</a> uses service workers to send push notifications of breaking news content to users of their web application on android.</p>
+
+<h2>How do they work?</h2>
+
+<p>Service workers rely on the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise API</a> &mdash; a Promise is a proxy for &ldquo;a value that may be  available now, or in the future, or never.&rdquo; They also use the event emitter pattern, where listeners are registered to handle specific events, such as <code>fetch</code> requests.</p>
+
+<p>To employ a service worker you must first register a script with the service worker API: <code>navigator.serviceWorker.register('./sw.js')</code>. Checkout the following example (<a href="https://gist.github.com/keighty/ec1a37a0f6475d7cdf2db64b01eff445.js">get the gist</a>):</p>
+
+<p>```html</p>
+
+<!-- index.html references the javascript application -->
+
+
+<p><html>
+  <body></p>
+
+<pre><code>&lt;h1&gt;Service worker test app&lt;/h1&gt;
+&lt;script src="./app.js"&gt;&lt;/script&gt;
+</code></pre>
+
+<p>  </body>
+</html>
+<code>
+</code>javascript
+// app.js
+.register(&lsquo;sw.js&rsquo;) // register a worker script with the service
+navigator.serviceWorker
+  .then(function(reg) {</p>
+
+<pre><code>// do the following if registration is successful
+if(reg.installing) {
+  // first visit or fresh reload of the worker
+  console.log('Service worker installing on registration.');
+} else if(reg.waiting) {
+  // a worker may be installed but waiting for another worker to stop
+  console.log('Service worker already installed on registration.');
+} else if(reg.active) {
+  // pages from the same origin may share a service worker
+  console.log('Service worker already active on registration.');
+}
+</code></pre>
+
+<p>  }).catch(function(error) {</p>
+
+<pre><code>// if registration is unsuccessful, tell us why
+console.log('Registration failed with ' + error);
+</code></pre>
+
+<p>  });
+<code>
+</code>javascript
+// sw.js
+console.log(&lsquo;inside registration script&rsquo;)</p>
+
+<p>this.addEventListener(&lsquo;install&rsquo;, function(event) {
+  console.log(&lsquo;Service worker installed.&rsquo;)
+});</p>
+
+<p>this.addEventListener(&lsquo;activate&rsquo;, function (event) {
+  console.log(&lsquo;Service worker activated.&rsquo;)
+})
+```</p>
+
+<p>Service workers can be registered with a specific origin and path to watch. Since they run in a background thread with a context separate from the application javascript, service workers have no DOM access. So don&rsquo;t try to perform synchronous work (like accessing LocalStorage) or update the DOM from a service worker.</p>
+
+<p>Running this example code sends some output to the console:
+<img src="/images/161015-service-workers/service-worker-demo1.png"></p>
+
+<h4>NOTE: A single service worker can control many pages (so be careful with global variables).</h4>
+
+<p><img src="/images/161015-service-workers/service-worker-demo2.png"></p>
+
+<h2>Developing with service workers</h2>
+
+<p>Service workers can only function in a secure context, which means that you can only register a service worker from a web application that is served over <code>https</code>. One option is to use <a href="https://pages.github.com/">GitHub pages</a> to deploy your application, as these pages are generally served over <code>https</code>. Another option is to use a local web server (<code>localhost</code> is considered semi-secure).</p>
+
+<p>I use <a href="https://www.browsersync.io/">Browser-sync</a>, a super light-weight easy to start web server. In my project directory, I start the browser-sync server and set it to watch my javascript files:</p>
+
+<p>```bash
+$ npm install -g browser-sync
+$ browser-sync start &mdash;server &mdash;files *.js
+[BS] Access URLs:</p>
+
+<hr />
+
+<pre><code>   Local: http://localhost:3000
+External: http://10.0.0.8:3000
+</code></pre>
+
+<hr />
+
+<pre><code>      UI: http://localhost:3001
+</code></pre>
+
+<p> UI External: <a href="http://10.0.0.8:3001">http://10.0.0.8:3001</a></p>
+
+<hr />
+
+<p>[BS] Serving files from: ./
+[BS] Watching files&hellip;
+```</p>
+
+<p>Browser-sync is so helpful, it will even open a browser window for you. :awthanks:</p>
+
+<p>Don&rsquo;t forget to checkout the Chrome developer tools, which can be super helpful in creating different states for your service worker</p>
+
+<p><img src="/images/161015-service-workers/service-worker-dev-tools.png"></p>
+
+<hr />
+
+<h2>MOAR Resources</h2>
+
+<p>For more about the service worker API, checkout these resources:</p>
+
+<ul>
+<li>the <a href="https://www.w3.org/TR/service-workers/">W3C spec</a></li>
+<li>the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API">MDN docs</a></li>
+<li>and the <a href="https://github.com/mdn/sw-test/">example</a> <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers">https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Callbacks and the Event Loop]]></title>
@@ -96,7 +239,7 @@ callback(email)
 <p>// > before the async
 // > after the async
 // > during the async
-// > <a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#107;&#x65;&#x69;&#x67;&#104;&#116;&#121;&#x2e;&#x6c;&#101;&#111;&#x6e;&#97;&#114;&#x64;&#64;&#101;&#120;&#97;&#x6d;&#x70;&#x6c;&#x65;&#46;&#x63;&#x6f;&#x6d;">&#x6b;&#x65;&#x69;&#x67;&#104;&#116;&#121;&#x2e;&#108;&#101;&#111;&#110;&#97;&#114;&#100;&#x40;&#101;&#120;&#97;&#x6d;&#112;&#x6c;&#x65;&#46;&#99;&#111;&#x6d;</a>
+// > <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#x3a;&#x6b;&#101;&#x69;&#103;&#x68;&#x74;&#x79;&#x2e;&#108;&#x65;&#111;&#x6e;&#97;&#114;&#x64;&#64;&#x65;&#120;&#x61;&#x6d;&#x70;&#x6c;&#x65;&#x2e;&#x63;&#111;&#109;">&#107;&#x65;&#105;&#x67;&#x68;&#x74;&#121;&#x2e;&#108;&#x65;&#111;&#x6e;&#x61;&#114;&#100;&#64;&#101;&#120;&#x61;&#109;&#112;&#x6c;&#x65;&#x2e;&#99;&#x6f;&#109;</a>
 ```</p>
 
 <p><code>createEmailAddress</code> is called. When execution reaches the setTimeout function, and the 2000ms have elapsed, the callback passed to setTimeout is placed in the event queue, awaiting its turn for execution. The thread is release and does not have to wait for the setTimeout period to elapse before continuing execution &mdash; it continues with the second console statement (&lsquo;after the async&rsquo;). When the setTimeout callback is finally processed, the <code>firstName</code> and <code>lastName</code> variables are still accessible because they exist in the function closure.</p>
@@ -574,101 +717,6 @@ request.send()
 <li>Find out what web browsers support CORS at <a href="http://caniuse.com/#search=CORS">caniuse.com</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Javascript Object Property Meta Properties]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/javascript-object-property-meta-properties/"/>
-    <updated>2015-11-07T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/javascript-object-property-meta-properties</id>
-    <content type="html"><![CDATA[<p>JavaScript Objects are complex types, and even defined properties have a control panel of their own. You can view the content of the control panel using <code>Object.getOwnPropertyDescriptor()</code>, and flip their switches using <code>Object.defineProperty()</code>. <!--more--></p>
-
-<blockquote><p>Note: These property descriptors are for <code>own properties</code> &mdash; that is, properties that are directly defined on an object, not those that come along for the ride on the object&rsquo;s prototype chain.</p></blockquote>
-
-<h3>The property descriptor holds meta data</h3>
-
-<p>```</p>
-
-<blockquote><p>var me = {
-  name: &ldquo;Katie&rdquo;
-}</p>
-
-<p>Object.getOwnPropertyDescriptor( me, &ldquo;name&rdquo; )
-{
-  value: &ldquo;Katie&rdquo;, // the value associated with the property
-  writable: true,   // true if the value of the property can be changed
-  enumerable: true, // true if the property shows up during enumeration of the properties
-  configurable: true // true if any of these meta properties can be changed
-}
-```</p></blockquote>
-
-<h3>Change the property value</h3>
-
-<p>```
-Object.defineProperty( me, &ldquo;name&rdquo;, {
-  value: &ldquo;keighty&rdquo;
-})</p>
-
-<p>me.name // &ldquo;keighty&rdquo;
-```</p>
-
-<h3>Make the property read only</h3>
-
-<p>```
-Object.defineProperty(me, &ldquo;name&rdquo;, {
-  writable: false
-})</p>
-
-<p>me.name = &ldquo;k80&rdquo;
-me.name  //&ldquo;keighty&rdquo; &mdash; actual value of me.name did not change
-```</p>
-
-<h3>Make the property hidden from for-loops (or any enumeration)</h3>
-
-<p>```
-me.hobbies = [&ldquo;bridge&rdquo;, &ldquo;curling&rdquo;, &ldquo;tap dancing&rdquo;]
-me // Object {hobbies: Array[3], name: &ldquo;keighty&rdquo;}</p>
-
-<p>for(fact in me) {
- console.log(fact)
-}
-// All the properties defined on me are written to the console:
-// name
-// hobbies</p>
-
-<p>Object.defineProperty(me, &ldquo;name&rdquo;, {
- enumerable: false
-})</p>
-
-<p>for(fact in me) {
- console.log(fact)
-}
-// Actually.. only enumerable properties are written to the console:
-// hobbies
-```</p>
-
-<h3>Freeze the property</h3>
-
-<p>```
-Object.defineProperty(me, &ldquo;name&rdquo;, {
- configurable: false
-})</p>
-
-<p>Object.getOwnPropertyDescriptor(me, &ldquo;name&rdquo;)
-// { value: &ldquo;keighty&rdquo;,
-//   writable: false,
-//   enumerable: false,
-//   configurable: false }</p>
-
-<p>Object.defineProperty(me, &ldquo;name&rdquo;, {
- writable: true
-})</p>
-
-<p>Uncaught TypeError: Cannot redefine property: name(…)
-```</p>
-
-<p>From <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-8.10">the docs</a>: &ldquo;The Property Descriptor type is used to explain the manipulation and reification of named property attributes. Use Object.defineProperty for fine-grained control over the visibility and mutability of your object&rsquo;s properties.</p>
 ]]></content>
   </entry>
   

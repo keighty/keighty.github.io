@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2016-10-12T13:02:52-07:00</updated>
+  <updated>2016-10-15T17:28:18-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,178 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Service Workers]]></title>
+    <link href="http://www.katieleonard.ca/blog/2016/service-workers/"/>
+    <updated>2016-10-15T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2016/service-workers</id>
+    <content type="html"><![CDATA[<p>A service worker is a script that sits between a web page and the network, acting as a proxy for network requests: if the network is available, the request is passed on to the target url; if the network is not available, the service worker will handle the request itself by checking cached responses or or queuing the request for synchronization once the network is available. Service workers are bridging the gap between native mobile applications and traditional web applications that require a network connection to function. Sometimes called progressive web apps, these applications enable a seamless offline experience when the user is not connected to a network.</p>
+
+<!--more-->
+
+
+<p>Service workers can be used for data synchronization in the background, but data fetching and sync-ing are only one of the ways we can leverage this API. We can:</p>
+
+<ul>
+<li>use background resources to perform client-side compilation of assets  (useful for web development)</li>
+<li>pre-fetch data that the user is likely going to need in the near future (think photo albums or playlists)</li>
+<li>share large data sets between multiple pages</li>
+<li>notify mobile users of updates via push notifications</li>
+</ul>
+
+
+<p>For example, <a href="https://www.washingtonpost.com/">The Washington Post</a> uses service workers to send push notifications of breaking news content to users of their web application on android.</p>
+
+<h2>How do they work?</h2>
+
+<p>Service workers rely on the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise API</a> &mdash; a Promise is a proxy for &ldquo;a value that may be  available now, or in the future, or never.&rdquo; They also use the event emitter pattern, where listeners are registered to handle specific events, such as <code>fetch</code> requests.</p>
+
+<p>To employ a service worker you must first register a script with the service worker API: <code>navigator.serviceWorker.register('./sw.js')</code>. Checkout the following example (<a href="https://gist.github.com/keighty/ec1a37a0f6475d7cdf2db64b01eff445.js">get the gist</a>):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="c">&lt;!-- index.html references the javascript application --&gt;</span>
+</span><span class='line'><span class="nt">&lt;html&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;body&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;h1&gt;</span>Service worker test app<span class="nt">&lt;/h1&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./app.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/body&gt;</span>
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// app.js</span>
+</span><span class='line'><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s1">&#39;sw.js&#39;</span><span class="p">)</span> <span class="c1">// register a worker script with the service</span>
+</span><span class='line'><span class="nx">navigator</span><span class="p">.</span><span class="nx">serviceWorker</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">reg</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// do the following if registration is successful</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nx">reg</span><span class="p">.</span><span class="nx">installing</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// first visit or fresh reload of the worker</span>
+</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Service worker installing on registration.&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">reg</span><span class="p">.</span><span class="nx">waiting</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// a worker may be installed but waiting for another worker to stop</span>
+</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Service worker already installed on registration.&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">reg</span><span class="p">.</span><span class="nx">active</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// pages from the same origin may share a service worker</span>
+</span><span class='line'>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Service worker already active on registration.&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}).</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// if registration is unsuccessful, tell us why</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Registration failed with &#39;</span> <span class="o">+</span> <span class="nx">error</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// sw.js</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;inside registration script&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">this</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;install&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Service worker installed.&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">this</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;activate&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Service worker activated.&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Service workers can be registered with a specific origin and path to watch. Since they run in a background thread with a context separate from the application javascript, service workers have no DOM access. So don&rsquo;t try to perform synchronous work (like accessing LocalStorage) or update the DOM from a service worker.</p>
+
+<p>Running this example code sends some output to the console:
+<img src="http://www.katieleonard.ca/images/161015-service-workers/service-worker-demo1.png"></p>
+
+<h4>NOTE: A single service worker can control many pages (so be careful with global variables).</h4>
+
+<p><img src="http://www.katieleonard.ca/images/161015-service-workers/service-worker-demo2.png"></p>
+
+<h2>Developing with service workers</h2>
+
+<p>Service workers can only function in a secure context, which means that you can only register a service worker from a web application that is served over <code>https</code>. One option is to use <a href="https://pages.github.com/">GitHub pages</a> to deploy your application, as these pages are generally served over <code>https</code>. Another option is to use a local web server (<code>localhost</code> is considered semi-secure).</p>
+
+<p>I use <a href="https://www.browsersync.io/">Browser-sync</a>, a super light-weight easy to start web server. In my project directory, I start the browser-sync server and set it to watch my javascript files:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>npm install -g browser-sync
+</span><span class='line'><span class="nv">$ </span>browser-sync start --server --files *.js
+</span><span class='line'><span class="o">[</span>BS<span class="o">]</span> Access URLs:
+</span><span class='line'> ----------------------------------
+</span><span class='line'>       Local: http://localhost:3000
+</span><span class='line'>    External: http://10.0.0.8:3000
+</span><span class='line'> ----------------------------------
+</span><span class='line'>          UI: http://localhost:3001
+</span><span class='line'> UI External: http://10.0.0.8:3001
+</span><span class='line'> ----------------------------------
+</span><span class='line'><span class="o">[</span>BS<span class="o">]</span> Serving files from: ./
+</span><span class='line'><span class="o">[</span>BS<span class="o">]</span> Watching files...
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Browser-sync is so helpful, it will even open a browser window for you. :awthanks:</p>
+
+<p>Don&rsquo;t forget to checkout the Chrome developer tools, which can be super helpful in creating different states for your service worker</p>
+
+<p><img src="http://www.katieleonard.ca/images/161015-service-workers/service-worker-dev-tools.png"></p>
+
+<hr />
+
+<h2>MOAR Resources</h2>
+
+<p>For more about the service worker API, checkout these resources:</p>
+
+<ul>
+<li>the <a href="https://www.w3.org/TR/service-workers/">W3C spec</a></li>
+<li>the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API">MDN docs</a></li>
+<li>and the <a href="https://github.com/mdn/sw-test/">example</a> <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers">https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Callbacks and the Event Loop]]></title>
@@ -2020,144 +2192,6 @@
 <li><a href="https://github.com/pry/pry-stack_explorer">github.com/pry/pry-stack_explorer</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Troubleshooting Nested Scopes in Angular]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/troubleshooting-nested-scopes-in-angular/"/>
-    <updated>2015-03-11T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/troubleshooting-nested-scopes-in-angular</id>
-    <content type="html"><![CDATA[<p>Many beginner Angular tutorials start with a set of canned data, an input field, and a search filter, so it was a natural place to start on my side project, Virtual Playbill. With even a small data set, watching the DOM change based on search criteria was a thrilling achievement. In the intervening months, as features were added, rebuilt, or taken away, I had inadvertently broken the search box. The tutorials were still available, and still fairly basic, but I couldn&rsquo;t get it to work. Not until I found a couple of invaluable tools for troubleshooting overlapping scopes: <!--more--></p>
-
-<h4>1. Use the developer tools console</h4>
-
-<p>This handy trick will give you a console object corresponding to that element&rsquo;s scope:</p>
-
-<ul>
-<li>select a DOM element in using the chrome developer tools</li>
-<li>enter <code>angular.element($0).scope()</code> into the console pane (<code>$0</code> is a global variable holding a reference to the selected DOM element)</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// with the search box selected</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">element</span><span class="p">(</span><span class="nx">$0</span><span class="p">).</span><span class="nx">scope</span><span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">$get</span><span class="p">.</span><span class="nx">h</span><span class="p">.</span><span class="nx">$new</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">.</span><span class="nx">$$ChildScope</span> <span class="p">{</span><span class="nx">$$childTail</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">$$childHead</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">$$nextSibling</span><span class="o">:</span> <span class="nx">$get</span><span class="p">.</span><span class="nx">h</span><span class="p">.</span><span class="nx">$new</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">,</span>
-</span><span class='line'>  <span class="p">...</span>
-</span><span class='line'>  <span class="nx">$parent</span><span class="o">:</span> <span class="nx">h</span>
-</span><span class='line'>  <span class="nx">playbillRows</span><span class="o">:</span> <span class="nb">Array</span><span class="p">[</span><span class="mi">23</span><span class="p">]</span>
-</span><span class='line'>  <span class="nx">playbills</span><span class="o">:</span> <span class="nb">Array</span><span class="p">[</span><span class="mi">68</span><span class="p">]</span>
-</span><span class='line'>  <span class="nx">search</span><span class="o">:</span> <span class="nb">Object</span>
-</span><span class='line'>    <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;this is search text&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// with the playbill area selected</span>
-</span><span class='line'><span class="o">&gt;</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">element</span><span class="p">(</span><span class="nx">$0</span><span class="p">).</span><span class="nx">scope</span><span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">$get</span><span class="p">.</span><span class="nx">h</span><span class="p">.</span><span class="nx">$new</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">.</span><span class="nx">$$ChildScope</span> <span class="p">{</span> <span class="nx">$$childTail</span><span class="o">:</span> <span class="nx">$get</span><span class="p">.</span><span class="nx">h</span><span class="p">.</span><span class="nx">$new</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">,</span> <span class="nx">$$childHead</span><span class="o">:</span> <span class="nx">$get</span><span class="p">.</span><span class="nx">h</span><span class="p">.</span><span class="nx">$new</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">.</span><span class="nx">$$ChildScope</span><span class="p">,</span> <span class="nx">$$nextSibling</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
-</span><span class='line'>  <span class="p">...</span>
-</span><span class='line'>  <span class="nx">$parent</span><span class="o">:</span> <span class="nx">h</span>
-</span><span class='line'>  <span class="nx">playbillRows</span><span class="o">:</span> <span class="nb">Array</span><span class="p">[</span><span class="mi">23</span><span class="p">]</span>
-</span><span class='line'>  <span class="nx">playbills</span><span class="o">:</span> <span class="nb">Array</span><span class="p">[</span><span class="mi">68</span><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Things are definitely looking different between the scope containing my search box and the scope where I am laying out the view: the second scope appears to be a sibling of the first. I needed something a little more visual before it completely sunk in, though.</p>
-
-<h4>2. Use <a href="https://chrome.google.com/webstore/detail/ng-inspector-for-angularj/aadgmnobpdmgmigaicncghmmoeflnamj">ng-inspector</a></h4>
-
-<p>ng-inpector is a browser extension that allows you to navigate your angular app as if it were a file directory:</p>
-
-<p><img src="http://www.katieleonard.ca/images/vp_ng_inspector.png"></p>
-
-<p>I can see at a glance that the scope containing the search box (#2), is separate from the scope where I am laying out my view (the unnamed scope #5).</p>
-
-<p>Because of these tools, I have learned that multiple instances of the same controller do not share scope. Using ng-router, I declared the controller for the view:</p>
-
-<figure class='code'><figcaption><span>app.js </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'>  <span class="p">...</span>
-</span><span class='line'>  <span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;views/index.html&#39;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;PlaybillController&#39;</span>
-</span><span class='line'>  <span class="p">});</span>
-</span><span class='line'>  <span class="p">...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In my layout, I had declared the controller once more:</p>
-
-<figure class='code'><figcaption><span>layout.html </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>  ...
-</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">ng-controller=</span><span class="s">&quot;PlaybillController&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;navbar-form navbar-left&quot;</span> <span class="na">role=</span><span class="s">&quot;search&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Search shows&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;search.title&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/form&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>  ...
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The search box was already in the context of a Playbill Controller, and I had inadvertently put in another. The solution was to simply remove the second ng-controller:</p>
-
-<figure class='code'><figcaption><span>layout.html </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>  ...
-</span><span class='line'>  <span class="nt">&lt;div&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;form</span> <span class="na">class=</span><span class="s">&quot;navbar-form navbar-left&quot;</span> <span class="na">role=</span><span class="s">&quot;search&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">class=</span><span class="s">&quot;form-control&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Search shows&quot;</span> <span class="na">ng-model=</span><span class="s">&quot;search.title&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/form&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>  ...
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I have been growing my Ruby/Rails troubleshooting toolbox for a while now, and it is good to get one started for angular as well.</p>
 ]]></content>
   </entry>
   
