@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2016-10-16T11:46:17-07:00</updated>
+  <updated>2016-10-23T12:38:48-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,257 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Browser-sync Is the Easiest Webserver EVER]]></title>
+    <link href="http://www.katieleonard.ca/blog/2016/browser-sync-webserver/"/>
+    <updated>2016-10-23T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2016/browser-sync-webserver</id>
+    <content type="html"><![CDATA[<p><a href="https://www.browsersync.io/">Browser-sync</a> is the fastest way to spin up a local web server. It will even open your default browser with the entry point you specify, and live-reload your changes as you make them. It couldn&rsquo;t possibly be any simpler to test out a site you&rsquo;re developing locally.</p>
+
+<!--more-->
+
+
+<h2>1. Install browser-sync</h2>
+
+<p>To get started, install the browser-sync package from npm:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>npm install -g browser-sync
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>2. Configure the server</h2>
+
+<p>Setup a simple static project folder like this (<a href="https://gist.github.com/keighty/9e5eb136c27b6a4f98f7c4f49d749256">gist</a>):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>.
+</span><span class='line'>├── bs-config.js
+</span><span class='line'>├── foo
+</span><span class='line'>│   └── index.html
+</span><span class='line'>└── index.html
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In your bs-config.js file, list the configuration options for how browser-sync should serve your files, including which file extensions it should watch for changes (<code>"*html","*js","*css"</code>), and what resources should be served by a new route name (<code>"/foo": "foo"</code>).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// bs-config.js</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="s2">&quot;files&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;*html&quot;</span><span class="p">,</span><span class="s2">&quot;*js&quot;</span><span class="p">,</span><span class="s2">&quot;*css&quot;</span><span class="p">],</span>
+</span><span class='line'>    <span class="s2">&quot;server&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;port&quot;</span><span class="o">:</span> <span class="mi">3000</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;routes&quot;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s2">&quot;/foo&quot;</span><span class="o">:</span> <span class="s2">&quot;foo&quot;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p> Checkout all the options available in the <a href="https://www.browsersync.io/docs/options"> docs</a>.</p>
+
+<p> For this example, I have also included an entry point at index.html, and an additional html file to try a new route:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="c">&lt;!-- index.html --&gt;</span>
+</span><span class='line'><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span><span class='line'><span class="nt">&lt;html&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;head&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;title&gt;</span>INDEX<span class="nt">&lt;/title&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/head&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;body&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;p&gt;</span>
+</span><span class='line'>      This is the index
+</span><span class='line'>    <span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/body&gt;</span>
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="c">&lt;!-- foo/index.html --&gt;</span>
+</span><span class='line'><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span><span class='line'><span class="nt">&lt;html&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;head&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;title&gt;</span>FOO<span class="nt">&lt;/title&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/head&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;body&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;p&gt;</span>
+</span><span class='line'>      This is a foo
+</span><span class='line'>    <span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/body&gt;</span>
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that you have a sample project outlined, start the server.</p>
+
+<h2>3. Start the web server</h2>
+
+<p><code>$ browser-sync start --config bs-config.js</code></p>
+
+<p>Browser-sync will open your default web browser and load the index.html file:</p>
+
+<p><img src="http://www.katieleonard.ca/images/161023-browser-sync/https2.png"></p>
+
+<p>Test out the router by navigating to <code>localhost:3000/foo</code>, and you should see the content of <code>foo/index.html</code></p>
+
+<p><img src="http://www.katieleonard.ca/images/161023-browser-sync/routes.png"></p>
+
+<p>Serving a local site is just that quick. If you don&rsquo;t know where to start with your bs-config.js file, you can have browser-sync generate one for you:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir testserver <span class="o">&amp;&amp;</span> <span class="nb">cd </span>testserver
+</span><span class='line'><span class="nv">$ </span>browser-sync init
+</span><span class='line'><span class="o">[</span>BS<span class="o">]</span> Config file created bs-config.js
+</span><span class='line'><span class="o">[</span>BS<span class="o">]</span> To use it, in the same directory run: browser-sync start --config bs-config.js
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the generated config file, you find all the options that are used internally, but there are many more described on the <a href="http://www.browsersync.io/docs/options/">website</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="s2">&quot;ui&quot;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="s2">&quot;port&quot;</span><span class="o">:</span> <span class="mi">3001</span><span class="p">,</span>
+</span><span class='line'>        <span class="s2">&quot;weinre&quot;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>            <span class="s2">&quot;port&quot;</span><span class="o">:</span> <span class="mi">8080</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="s2">&quot;files&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;watchOptions&quot;</span><span class="o">:</span> <span class="p">{},</span>
+</span><span class='line'>    <span class="s2">&quot;server&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;proxy&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;port&quot;</span><span class="o">:</span> <span class="mi">3000</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;middleware&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;serveStatic&quot;</span><span class="o">:</span> <span class="p">[],</span>
+</span><span class='line'>    <span class="s2">&quot;ghostMode&quot;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="s2">&quot;clicks&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>        <span class="s2">&quot;scroll&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>        <span class="s2">&quot;forms&quot;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>            <span class="s2">&quot;submit&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>            <span class="s2">&quot;inputs&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>            <span class="s2">&quot;toggles&quot;</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="s2">&quot;logLevel&quot;</span><span class="o">:</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;logPrefix&quot;</span><span class="o">:</span> <span class="s2">&quot;BS&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;logConnections&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;logFileChanges&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;logSnippet&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;rewriteRules&quot;</span><span class="o">:</span> <span class="p">[],</span>
+</span><span class='line'>    <span class="s2">&quot;open&quot;</span><span class="o">:</span> <span class="s2">&quot;local&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;browser&quot;</span><span class="o">:</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;cors&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;xip&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;hostnameSuffix&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;reloadOnRestart&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;notify&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;scrollProportionally&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;scrollThrottle&quot;</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;scrollRestoreTechnique&quot;</span><span class="o">:</span> <span class="s2">&quot;window.name&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;scrollElements&quot;</span><span class="o">:</span> <span class="p">[],</span>
+</span><span class='line'>    <span class="s2">&quot;scrollElementMapping&quot;</span><span class="o">:</span> <span class="p">[],</span>
+</span><span class='line'><span class="p">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For example: to <a href="https://www.browsersync.io/docs/options#option-https">test your application over https</a>, set <code>"https": true</code> right beneath your server options. When browser-sync opens the browser with your entry point, the browser should warn you that the connection isn&rsquo;t safe:</p>
+
+<p><img src="http://www.katieleonard.ca/images/161023-browser-sync/https.png"></p>
+
+<p>Click on <code>Proceed to localhost (unsafe)</code> to load your content.</p>
+
+<p>Easy peasy.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Service Workers]]></title>
@@ -2100,71 +2351,6 @@
 
 
 <p>I work with a lot of people who don&rsquo;t have formal computer science degrees, and while their backgrounds vary, they all share a love of problem solving and a willingness to work hard. Take responsibility for your own learning &mdash; code school will only bring you so far, and the rest is up to you.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[What's It Like to Be a Developer?]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/what-is-it-like-to-be-a-programmer/"/>
-    <updated>2015-04-11T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/what-is-it-like-to-be-a-programmer</id>
-    <content type="html"><![CDATA[<p>My manager has invited me to help her give a talk to students in a Web Development program. I have been working in the field for about 18 months, and a lot of the uncertainty is still fresh in my mind: what is it like to be a programmer? How can I get a job as a junior? What can I do now that will help me in my first job? I didn&rsquo;t know many people in the industry, and was unaware of the vast meetup community<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. Answers to these questions were difficult to find online, so over the next few posts I will make an attempt.</p>
-
-<!--more-->
-
-
-<hr>
-
-
-<h3>Meetings: Important communication tools.</h3>
-
-<p>Programming is mostly about decision making, and not all decisions can be made alone. Questions like, what technologies to use, how you should spend your time, and how to scale, require meetings with managers and other teams.</p>
-
-<ul>
-<li><p><strong>Sprint planning</strong> is a weekly meeting where the team gets together with managers to prioritize tasks for the week. You look back on last week, and either carry over tasks you didn&rsquo;t accomplish, or re-prioritize based on what has arisen in the meantime.</p></li>
-<li><p><strong>Standups</strong> happen daily, and should only last around 10 minutes. You each take a turn sharing what you worked on yesterday, what you are working on today, and whether you are blocked by anything. It is important to speak up when you are stuck! Sharing your blockers will usually result in help; someone may have encountered this problem before, have a new approach to suggest, or have insider information that can get you to a solution.</p></li>
-<li><p><strong>Demos</strong> will happen on a weekly or bi-weekly basis, and are an opportunity to share your accomplishments. While many stakeholders are involved in the project and sprint planning, they are often disconnected from the work as it is being performed. Regular demos help to keep them in the loop, and are an opportunity to explain both progress and unexpected delays.</p></li>
-<li><p><strong>Code reviews</strong> can be formal or informal, and allow your team to gain consensus on style, design, performance, and testing. Your code design decisions will have an impact on the project as a whole, so it never hurts to get feedback from a teammate before you ship it. Readability is more important than cleverness, and is a kindness to future maintainers.</p></li>
-</ul>
-
-
-<p>A portion of your week will always be spent in meetings. Try to identify when your most productive hours are in the day, and keep that time free. For example, if you lump meetings around lunch (none before 11am or after 2pm) you have a solid chunk of time in the morning and the afternoon to focus effectively.</p>
-
-<h3>Stories: How big ideas are turned into actions.</h3>
-
-<p>An idea like &ldquo;improve the user&rsquo;s experience of widget B&rdquo; is a goal, not a task. It can be broken down into <strong>stories</strong> such as: <em>identify the problem</em>, <em>brainstorm solutions</em>, <em>design the new widget</em>, and <em>implement the new widget</em>. Each of these stories are actionable: there is a clear path from start to finish. Use the <a href="http://en.wikipedia.org/wiki/Single_responsibility_principle">single-responsibility principle</a> in your stories as well as in your code: if you use the word AND to describe the task, that is a hint that you should have two stories instead of one. Most companies will use a task management, or <strong>ticket</strong> system such as Pivotal Tracker or Jira, where you can see what work is assigned to you, and where managers can check in on your progress.</p>
-
-<h3>Feature Work: What should be built?</h3>
-
-<p>Product managers have their eye on the market. They know what features our customers want, and they know what our competitors offer. A product manager will build a product road-map with a long schedule (think months and years, not weeks). The team will sit down with the feature requirements and a first-draft design, break it down into stories, and estimate the time/complexity of each story. Managers then apportion those estimates into chunks of work &mdash; in <strong>Agile</strong>, these chunks are laid out in <strong>sprints<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup></strong>.</p>
-
-<p>Defining work in this way lets you identify what can be done in parallel and what needs to be in place before the next task can be accomplished. It also gives project managers the information they need to make decisions about what to sacrifice in order to meet a deadline. If the project is over the time budget, and gold-plated widget A needs features 1, 2, and 3, then maybe you can ship the widget with only 1 and 2, but save 3 for later. Sometimes you have to compromise on feature completeness just to get it out the door.</p>
-
-<h3>Troubleshooting and Maintenance: Detective work.</h3>
-
-<p>Finding a bug is like being a detective: you gather clues, follow leads, and occasionally end up lost in a blind alley. A single line of code can hold multiple bugs (Pro tip: watch out for Regexes<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup> &mdash; they are a great place for bugs to hide). In a code base with hundreds of thousands of lines, you will inevitably spend more time hunting and fixing bugs than writing new code.</p>
-
-<h3>Deploying code: Sending it into the wild.</h3>
-
-<p>Running an application in production is not the same as running it on your computer. Your application may need to serve thousands of requests per second, and a single instance running on a single server won&rsquo;t cut it. There is a whole stack of management software that you would do well to be familiar with, and having at least a passing familiarity with <a href="https://jenkins-ci.org/">Jenkins</a>, <a href="http://capistranorb.com/">Capistrano</a>, and <a href="http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html">bash scripting</a> will help you when it is your turn to carry the pager.</p>
-
-<h3>Pager duty: Evil alarm clock.</h3>
-
-<p>When you write software that your customers use around the clock, you have to be there when things break, no matter what time. Most companies will institute a rotation to share the burden of vigilence around the team. Having great documentation about what to do in an emergency is essential to finding a clear path of action at 3am. As with anything, the more you prepare, the higher your confidence level will be.</p>
-
-<p>The job is far from routine because of the diverse set of problems to solve. I have become comfortable grabbing a story without already knowing the answer, partly from knowing that if I get stuck I am no more than a &ldquo;Hey Bryan,&rdquo; or &ldquo;Hey KWu,&rdquo; away from someone who wants to help, even if it is at 3am (thanks again, Vince!).</p>
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>If you are in Portland, Oregon, checkout <a href="http://calagator.org/">Calagator</a>. Otherwise, try <a href="http://www.meetup.com/">Meetup.com</a><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-<li id="fn:2">
-<p>Read more about <a href="http://en.wikipedia.org/wiki/Agile_software_development">Agile methodology</a><a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
-<li id="fn:3">
-<p>Regex (short for regular expression) is a search pattern based on a sequence of characters.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
 ]]></content>
   </entry>
   

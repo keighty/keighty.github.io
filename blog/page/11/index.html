@@ -9,7 +9,7 @@
 	<meta name="author" content="katie leonard">
 
 	
-	<meta name="description" content="Feb 26th, 2014 design Visualize With Purpose Information visualization (insight, understanding, and discovery) and information art (aesthetics) &hellip;">
+	<meta name="description" content="Feb 27th, 2014 d3, javascript Binding Functions as Data Primitives and object literals are not the only things you can bind to a D3 visualization. &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -126,6 +126,70 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-27T00:00:00-08:00" data-updated="true" itemprop="datePublished">Feb 27<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/d3/'>d3</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/binding-functions-as-data/" itemprop="url">Binding Functions as Data</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Primitives and object literals are not the only things you can bind to a D3 visualization. After all, aren&rsquo;t javascript functions objects as well?</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">next</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">15</span> <span class="o">+</span> <span class="nx">x</span><span class="o">*</span><span class="nx">x</span> <span class="p">};</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">newData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">next</span><span class="p">);</span> <span class="k">return</span> <span class="nx">data</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">selection</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;#container&quot;</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">newData</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'>                  <span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;#span&quot;</span><span class="p">)</span>
+</span><span class='line'>                    <span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span> <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you provide a function to the data function, D3 will simply invoke the function and use the returned value as a parameter of the data function.</p>
+
+<h3>Resources</h3>
+
+<p><a href="http://www.amazon.com/gp/product/178216216X/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=178216216X&amp;linkCode=as2&amp;tag=bridgeforpoke-20">Data Visualization with D3.js Cookbook</a> (affiliate link)</p>
+
+		
+		
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -377,40 +441,6 @@
 
 		
 		<a href="/blog/2014/how-to-live-on-24-hours-a-day/" class="more-link">Read on &rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-15T00:00:00-08:00" data-updated="true" itemprop="datePublished">Feb 15<span>th</span>, 2014</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/jekyll/'>jekyll</a>, <a class='category' href='/blog/categories/octopress/'>octopress</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2014/custom-asides/" itemprop="url">Custom Asides</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I was following a <a href="http://blog.jmac.org/blog/2013/03/30/putting-twitter-back-into-octopress/">tutorial</a> on how to include a twitter widget in the sidebar of my octopress site and couldn&rsquo;t figure out why my twitter content wouldn&rsquo;t render. It turns out that custom asides require an internal div. 
-		
-		<a href="/blog/2014/custom-asides/" class="more-link">Read on &rarr;</a>
 	</div>
 
 </article>

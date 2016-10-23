@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2016-10-16T11:46:17-07:00</updated>
+  <updated>2016-10-23T12:38:48-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,190 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Browser-sync Is the Easiest Webserver EVER]]></title>
+    <link href="http://www.katieleonard.ca/blog/2016/browser-sync-webserver/"/>
+    <updated>2016-10-23T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2016/browser-sync-webserver</id>
+    <content type="html"><![CDATA[<p><a href="https://www.browsersync.io/">Browser-sync</a> is the fastest way to spin up a local web server. It will even open your default browser with the entry point you specify, and live-reload your changes as you make them. It couldn&rsquo;t possibly be any simpler to test out a site you&rsquo;re developing locally.</p>
+
+<!--more-->
+
+
+<h2>1. Install browser-sync</h2>
+
+<p>To get started, install the browser-sync package from npm:</p>
+
+<p><code>bash
+$ npm install -g browser-sync
+</code></p>
+
+<h2>2. Configure the server</h2>
+
+<p>Setup a simple static project folder like this (<a href="https://gist.github.com/keighty/9e5eb136c27b6a4f98f7c4f49d749256">gist</a>):</p>
+
+<p><code>bash
+.
+├── bs-config.js
+├── foo
+│   └── index.html
+└── index.html
+</code></p>
+
+<p>In your bs-config.js file, list the configuration options for how browser-sync should serve your files, including which file extensions it should watch for changes (<code>"*html","*js","*css"</code>), and what resources should be served by a new route name (<code>"/foo": "foo"</code>).</p>
+
+<p>```javascript
+// bs-config.js</p>
+
+<p>module.exports = {</p>
+
+<pre><code>"files": ["*html","*js","*css"],
+"server": true,
+"port": 3000,
+"routes": {
+  "/foo": "foo"
+}
+</code></pre>
+
+<p>};
+```
+ Checkout all the options available in the <a href="https://www.browsersync.io/docs/options"> docs</a>.</p>
+
+<p> For this example, I have also included an entry point at index.html, and an additional html file to try a new route:</p>
+
+<p>```html</p>
+
+<!-- index.html -->
+
+
+<p>&lt;!DOCTYPE html>
+<html>
+  <head></p>
+
+<pre><code>&lt;meta charset="utf-8"&gt;
+&lt;title&gt;INDEX&lt;/title&gt;
+</code></pre>
+
+<p>  </head>
+  <body></p>
+
+<pre><code>&lt;p&gt;
+  This is the index
+&lt;/p&gt;
+</code></pre>
+
+<p>  </body>
+</html>
+```</p>
+
+<p>```html</p>
+
+<!-- foo/index.html -->
+
+
+<p>&lt;!DOCTYPE html>
+<html>
+  <head></p>
+
+<pre><code>&lt;meta charset="utf-8"&gt;
+&lt;title&gt;FOO&lt;/title&gt;
+</code></pre>
+
+<p>  </head>
+  <body></p>
+
+<pre><code>&lt;p&gt;
+  This is a foo
+&lt;/p&gt;
+</code></pre>
+
+<p>  </body>
+</html>
+```</p>
+
+<p>Now that you have a sample project outlined, start the server.</p>
+
+<h2>3. Start the web server</h2>
+
+<p><code>$ browser-sync start --config bs-config.js</code></p>
+
+<p>Browser-sync will open your default web browser and load the index.html file:</p>
+
+<p><img src="/images/161023-browser-sync/https2.png"></p>
+
+<p>Test out the router by navigating to <code>localhost:3000/foo</code>, and you should see the content of <code>foo/index.html</code></p>
+
+<p><img src="/images/161023-browser-sync/routes.png"></p>
+
+<p>Serving a local site is just that quick. If you don&rsquo;t know where to start with your bs-config.js file, you can have browser-sync generate one for you:</p>
+
+<p><code>bash
+$ mkdir testserver &amp;&amp; cd testserver
+$ browser-sync init
+[BS] Config file created bs-config.js
+[BS] To use it, in the same directory run: browser-sync start --config bs-config.js
+</code></p>
+
+<p>In the generated config file, you find all the options that are used internally, but there are many more described on the <a href="http://www.browsersync.io/docs/options/">website</a>:</p>
+
+<p>```javascript
+module.exports = {</p>
+
+<pre><code>"ui": {
+    "port": 3001,
+    "weinre": {
+        "port": 8080
+    }
+},
+"files": false,
+"watchOptions": {},
+"server": false,
+"proxy": false,
+"port": 3000,
+"middleware": false,
+"serveStatic": [],
+"ghostMode": {
+    "clicks": true,
+    "scroll": true,
+    "forms": {
+        "submit": true,
+        "inputs": true,
+        "toggles": true
+    }
+},
+"logLevel": "info",
+"logPrefix": "BS",
+"logConnections": false,
+"logFileChanges": true,
+"logSnippet": true,
+"rewriteRules": [],
+"open": "local",
+"browser": "default",
+"cors": false,
+"xip": false,
+"hostnameSuffix": false,
+"reloadOnRestart": false,
+"notify": true,
+"scrollProportionally": true,
+"scrollThrottle": 0,
+"scrollRestoreTechnique": "window.name",
+"scrollElements": [],
+"scrollElementMapping": [],
+</code></pre>
+
+<p>&hellip;
+```</p>
+
+<p>For example: to <a href="https://www.browsersync.io/docs/options#option-https">test your application over https</a>, set <code>"https": true</code> right beneath your server options. When browser-sync opens the browser with your entry point, the browser should warn you that the connection isn&rsquo;t safe:</p>
+
+<p><img src="/images/161023-browser-sync/https.png"></p>
+
+<p>Click on <code>Proceed to localhost (unsafe)</code> to load your content.</p>
+
+<p>Easy peasy.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Service Workers]]></title>
@@ -360,7 +544,7 @@ callback(email)
 <p>// > before the async
 // > after the async
 // > during the async
-// > <a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#x6b;&#101;&#x69;&#103;&#104;&#116;&#121;&#46;&#x6c;&#x65;&#x6f;&#110;&#x61;&#114;&#100;&#x40;&#101;&#120;&#x61;&#109;&#112;&#x6c;&#101;&#46;&#99;&#x6f;&#x6d;">&#x6b;&#x65;&#105;&#x67;&#104;&#116;&#x79;&#46;&#x6c;&#x65;&#x6f;&#x6e;&#x61;&#114;&#x64;&#x40;&#x65;&#x78;&#97;&#109;&#112;&#108;&#x65;&#46;&#99;&#111;&#x6d;</a>
+// > <a href="&#x6d;&#x61;&#105;&#108;&#x74;&#111;&#x3a;&#107;&#x65;&#105;&#x67;&#104;&#x74;&#x79;&#46;&#x6c;&#x65;&#x6f;&#110;&#97;&#x72;&#100;&#x40;&#101;&#x78;&#97;&#x6d;&#112;&#108;&#x65;&#46;&#x63;&#111;&#109;">&#107;&#101;&#105;&#x67;&#104;&#x74;&#x79;&#46;&#x6c;&#x65;&#x6f;&#x6e;&#97;&#x72;&#x64;&#64;&#x65;&#120;&#97;&#109;&#x70;&#108;&#101;&#46;&#99;&#111;&#x6d;</a>
 ```</p>
 
 <p><code>createEmailAddress</code> is called. When execution reaches the setTimeout function, and the 2000ms have elapsed, the callback passed to setTimeout is placed in the event queue, awaiting its turn for execution. The thread is release and does not have to wait for the setTimeout period to elapse before continuing execution &mdash; it continues with the second console statement (&lsquo;after the async&rsquo;). When the setTimeout callback is finally processed, the <code>firstName</code> and <code>lastName</code> variables are still accessible because they exist in the function closure.</p>
@@ -530,216 +714,6 @@ console.log(MyComponent) // function MyComponent() {&hellip;}
 ```</p>
 
 <p>Thanks to <a href="http://stackoverflow.com/a/31853887">this stackoverflow answer</a> for pointing me in the right direction, and <a href="http://exploringjs.com/es6/ch_modules.html">exploringjs</a> for even greater detail!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Nested Routes With Expressjs]]></title>
-    <link href="http://www.katieleonard.ca/blog/2016/nested-routes-with-expressjs/"/>
-    <updated>2016-04-12T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2016/nested-routes-with-expressjs</id>
-    <content type="html"><![CDATA[<p>Whenever I need to build a quick web application I turn to <a href="http://expressjs.com/">ExpressJS</a>. It is a fast, minimal, easy to configure web server that puts the <strong>E</strong> in <a href="http://mean.io/#!/">MEAN</a>). I wanted to build a REST API for a hobby app and found that the docs for how to nest routes are relatively few (see <a href="http://codetunnel.io/an-intuitive-way-to-organize-your-expressjs-routes/">blog</a>, <a href="http://stackoverflow.com/a/25305272/1279340">stackoverflow answer</a>). Combining these two resources, I learned a simple method for keeping your routes separate while creating a nested routing structure. <!--more--></p>
-
-<h2>The Plan</h2>
-
-<p>I want to create routes that look like these:</p>
-
-<ul>
-<li><code>/foo</code></li>
-<li><code>/foo/bar</code></li>
-<li><code>/foo/42</code></li>
-<li><code>/foo/42/baz</code></li>
-<li><code>/foo/42/baz/123</code></li>
-</ul>
-
-
-<p>Using the <a href="http://expressjs.com/en/starter/generator.html">express-generator</a> and a few simple commands, you can get your server up and running fast:</p>
-
-<p><code>
-$ npm install express-generator -g
-$ express myapp
-$ cd myapp
-$ npm install
-$ npm start
-</code></p>
-
-<p>You will end up with a working directory that looks like this:</p>
-
-<p>```
-├── app.js
-├── bin
-│   └── www
-├── node_modules
-│   ├── &hellip;
-├── package.json
-├── public
-│   ├── images
-│   ├── javascripts
-│   └── stylesheets
-│       └── style.css
-├── routes
-│   ├── index.js
-│   └── users.js
-└── views</p>
-
-<pre><code>├── error.jade
-├── index.jade
-└── layout.jade
-</code></pre>
-
-<p>```</p>
-
-<p>Go ahead and delete the <code>/routes/users.js</code> file and the following lines from <code>app.js</code></p>
-
-<p><code>javascript app.js
-...
-var users = require('./routes/users');
-...
-app.use('/users', users);
-</code></p>
-
-<p>Then create a new routes file named <code>/routes/foo.js</code> and and require it from your app server.
-<code>javascript app.js
-...
-app.use('/foo', require('./routes/foo'));
-...
-</code></p>
-
-<h2>How to <code>GET /foo</code></h2>
-
-<p>Inside <code>/routes/foo.js</code>, you need to require the router module from ExpressJS, define a route on it, and export it back out.</p>
-
-<p>```javascript /routes/foo.js
-var express = require(&lsquo;express&rsquo;)
-var router = express.Router()</p>
-
-<p>// GET /foo
-router.get(&lsquo;/&rsquo;, function (req, res, next) {
-  res.send(&lsquo;this is the index for foo&rsquo;)
-})</p>
-
-<p>module.exports = router
-```</p>
-
-<p>Everytime you change a route, you need to restart your server. Nevigating to <a href="http://localhost:3000/foo">localhost:3000/foo</a> should display the message:</p>
-
-<p><img src="/images/160412-nested-routes/foo.png"></p>
-
-<h2>How to <code>GET /foo/bar</code></h2>
-
-<p>Create simple nested routes by requiring the child route file from the parent route file.</p>
-
-<p>```javascript /routes/foo.js
-var express = require(&lsquo;express&rsquo;)
-var router = express.Router()
-var bar = require(&lsquo;./bar&rsquo;)</p>
-
-<p>// GET /foo
-router.get(&lsquo;/&rsquo;, function (req, res, next) {
-  res.send(&lsquo;this is the index for foo&rsquo;)
-});</p>
-
-<p>// GET /foo/bar
-router.use(&lsquo;/bar&rsquo;, bar) // tell the router to use bar.js for child routes</p>
-
-<p>module.exports = router
-```</p>
-
-<p>Create a new routes file named <code>/routes/bar.js</code> and define a root route the same way you did for <code>/routes/foo.js</code>:</p>
-
-<p>```javascript /routes/bar.js
-var express = require(&lsquo;express&rsquo;)
-var router = express.Router()</p>
-
-<p>// GET /foo/bar
-router.get(&lsquo;/&rsquo;, function (req, res, next) {
-  res.send(&lsquo;this is the index for bar&rsquo;)
-});</p>
-
-<p>module.exports = router
-```</p>
-
-<p>Bounce your server again and navigate to <a href="http://localhost:3000/foo/bar">localhost:3000/foo/bar</a></p>
-
-<p><img src="/images/160412-nested-routes/foobar.png"></p>
-
-<h2>How to <code>GET /foo/42</code></h2>
-
-<p>Expecting a parameter? No problem! access URL params directly from the request object: <code>req.params.nameOfParam</code>:</p>
-
-<p>```javascript /routes/foo.js
-&hellip;
-// GET /foo/42
-router.get(&lsquo;/:number&rsquo;, function (req, res, next) {
-  res.send(&lsquo;this is foo #&rsquo; + req.params.number)
-})</p>
-
-<p>module.exports = router
-```
-Navigate to <a href="http://localhost:3000/foo/42">localhost:3000/foo/42</a> to see the result.</p>
-
-<p><img src="/images/160412-nested-routes/fooNumber.png"></p>
-
-<h2>How to <code>GET /foo/42/baz</code></h2>
-
-<p>Getting a child route from a parameterized parent is where I was getting confused. It turns out that you need to configure the router a little differently when you are passing params through.</p>
-
-<p>```javascript /routes/foo.js
-&hellip;
-var baz = require(&lsquo;./baz&rsquo;)</p>
-
-<p>&hellip;
-// GET /foo/42/baz
-router.use(&lsquo;/:number/baz&rsquo;, baz)</p>
-
-<p>module.exports = router
-```</p>
-
-<p>You need to pass an options object to <code>express.Router</code> to merge the params from any parent route:</p>
-
-<p>```javascript /routes/baz.js
-var express = require(&lsquo;express&rsquo;)
-var router = express.Router({mergeParams: true}) // don&rsquo;t forget the parent params!</p>
-
-<p>// GET /foo/42/baz
-router.get(&lsquo;/&rsquo;, function (req, res, next) {
-  // the param name is from the parent as well
-  res.send(&lsquo;this is the baz for foo#&rsquo; + req.params.number);
-})</p>
-
-<p>module.exports = router
-```</p>
-
-<p>Navigate to <a href="http://localhost:3000/foo/42/baz">localhost:3000/foo/42/baz</a> to enjoy your success.</p>
-
-<p><img src="/images/160412-nested-routes/fooNumberBaz.png"></p>
-
-<h2>How to <code>GET /foo/42/baz/123</code></h2>
-
-<p>Parameterizing a child route is the same process as for the parent route:</p>
-
-<p>```javascript /routes/baz.js
-var express = require(&lsquo;express&rsquo;)
-var router = express.Router({mergeParams: true})</p>
-
-<p>// GET /foo/42/baz
-router.get(&lsquo;/&rsquo;, function (req, res, next) {
-  res.send(&lsquo;this is the baz for foo#&rsquo; + req.params.number);
-})</p>
-
-<p>// GET /foo/42/baz/123
-router.get(&lsquo;/:id&rsquo;, function (req, res, next) {
-  res.send(&lsquo;baz #&rsquo; + req.params.id + ‘ for foo #’ + req.params.number)
-})</p>
-
-<p>module.exports = router
-```</p>
-
-<p>Navigate to <a href="http://localhost:3000/foo/42/baz/123">localhost:3000/foo/42/baz/123</a> to enjoy your success.</p>
-
-<p><img src="/images/160412-nested-routes/fooNumberBazNumber.png"></p>
-
-<p>TADA! a model of nested routes that you can apply to any application.</p>
 ]]></content>
   </entry>
   
