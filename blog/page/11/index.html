@@ -9,7 +9,7 @@
 	<meta name="author" content="katie leonard">
 
 	
-	<meta name="description" content="Feb 27th, 2014 read The Neuroscience of Programming Scientists Begin Looking at Programmers&#8217; Brains: The Neuroscience of Programming from The &hellip;">
+	<meta name="description" content="Feb 27th, 2014 I didn&#8217;t know that, javascript String Conversion in Javascript Almost every day, javascript blows my mind. Today I discovered &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -126,6 +126,57 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-27T00:00:00-08:00" data-updated="true" itemprop="datePublished">Feb 27<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/i-didnt-know-that/'>I didn&#8217;t know that</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/to-i-in-javascript/" itemprop="url">String Conversion in Javascript</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Almost every day, javascript blows my mind. Today I discovered that you can convert a string to a number simply by prepending a +:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; typeof(+"this is a string")
+</span><span class='line'>"number"
+</span><span class='line'>&gt; typeof(+"100")
+</span><span class='line'>"number"
+</span><span class='line'>&gt; +"100" + 50
+</span><span class='line'>150</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Awesome.</p>
+
+		
+		
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -369,72 +420,6 @@
 
 		
 		<a href="/blog/2014/d3-is-selective/" class="more-link">Read on &rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-20T00:00:00-08:00" data-updated="true" itemprop="datePublished">Feb 20<span>th</span>, 2014</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/d3/'>d3</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2014/functional-arguing/" itemprop="url">Functional Arguing</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>The <code>arguments</code> variable is a hidden parameter in javascript functions that contains all the arguments for the invocation in a pseudo-array (ie: it does not have array functions other than length and indexing).</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">instance</span><span class="p">.</span><span class="nx">headline</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">h</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="k">return</span> <span class="nx">headline</span><span class="p">;</span>
-</span><span class='line'>  <span class="nx">headline</span> <span class="o">=</span> <span class="nx">h</span><span class="p">;</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">instance</span><span class="p">;</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Even though the function specifically calls for an argument (<code>h</code>), it can still be called without one. This construction has a ruby equivalent, <code>attr_accessor :headline</code>, which behaves as a getter and a setter, depending on the arguments provided (none, or <code>headline = new_value</code>).</p>
-
-<p>This &ldquo;variable-parameter&rdquo; function design is what enables method chaining. When the function is called as a getter it returns a string, but when it is called as a setter it returns the invoking object, passing itself along to the next method:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">widget</span> <span class="o">=</span> <span class="nx">SimpleWidget</span><span class="p">({</span> <span class="nx">color</span><span class="o">:</span> <span class="s2">&quot;#6439ed&quot;</span> <span class="p">})</span>
-</span><span class='line'>                <span class="p">.</span><span class="nx">headline</span><span class="p">(</span><span class="s2">&quot;SimpleWidget&quot;</span><span class="p">)</span>
-</span><span class='line'>                <span class="p">.</span><span class="nx">description</span><span class="p">(</span><span class="s2">&quot;This is a simple widget&quot;</span><span class="p">)</span>
-</span><span class='line'>                <span class="p">.</span><span class="nx">render</span><span class="p">();</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-
-		
-		<a href="/blog/2014/functional-arguing/" class="more-link">Read on &rarr;</a>
 	</div>
 
 </article>
