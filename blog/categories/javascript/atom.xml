@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2017-01-08T13:22:00-08:00</updated>
+  <updated>2017-01-08T14:40:25-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -544,7 +544,7 @@ callback(email)
 <p>// > before the async
 // > after the async
 // > during the async
-// > <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x6b;&#x65;&#105;&#x67;&#x68;&#x74;&#121;&#46;&#x6c;&#x65;&#x6f;&#x6e;&#x61;&#x72;&#100;&#64;&#x65;&#120;&#97;&#x6d;&#112;&#108;&#x65;&#46;&#x63;&#x6f;&#109;">&#x6b;&#x65;&#105;&#103;&#104;&#x74;&#121;&#x2e;&#108;&#101;&#111;&#x6e;&#x61;&#x72;&#100;&#x40;&#101;&#120;&#x61;&#109;&#x70;&#x6c;&#x65;&#x2e;&#99;&#x6f;&#109;</a>
+// > <a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#111;&#x3a;&#x6b;&#101;&#105;&#103;&#104;&#x74;&#x79;&#46;&#108;&#101;&#x6f;&#110;&#x61;&#114;&#100;&#x40;&#101;&#120;&#x61;&#x6d;&#112;&#x6c;&#x65;&#x2e;&#99;&#x6f;&#109;">&#x6b;&#101;&#105;&#103;&#104;&#x74;&#121;&#46;&#x6c;&#x65;&#x6f;&#x6e;&#97;&#114;&#100;&#64;&#x65;&#120;&#97;&#109;&#112;&#108;&#x65;&#x2e;&#99;&#x6f;&#109;</a>
 ```</p>
 
 <p><code>createEmailAddress</code> is called. When execution reaches the setTimeout function, and the 2000ms have elapsed, the callback passed to setTimeout is placed in the event queue, awaiting its turn for execution. The thread is release and does not have to wait for the setTimeout period to elapse before continuing execution &mdash; it continues with the second console statement (&lsquo;after the async&rsquo;). When the setTimeout callback is finally processed, the <code>firstName</code> and <code>lastName</code> variables are still accessible because they exist in the function closure.</p>
