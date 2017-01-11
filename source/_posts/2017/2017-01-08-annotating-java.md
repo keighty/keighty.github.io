@@ -3,8 +3,7 @@ layout: post
 title: "annotating java"
 date: 2017-01-08
 sharing: true
-categories: []
-published: false
+categories: [java]
 ---
 
 Annotations are a means of adding metadata to Java source code. They can be applied to declarations of classes, fields, methods, and types (as of Java8) in order to pass instructions to the compiler. Annotations can even be evaluated at Runtime.  <!--more-->For example, `@Inject` is an annotation from the Dagger dependency injection library used to indicate which constructor should be used to instantiate a class. `@Inject` also tells Dagger to create the dependencies identified in the constructor parameter list.
