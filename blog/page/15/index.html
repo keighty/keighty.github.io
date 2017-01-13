@@ -9,7 +9,7 @@
 	<meta name="author" content="katie leonard">
 
 	
-	<meta name="description" content="Oct 20th, 2013 javascript Meatier Apps With Meteor Meteor is a framework that allows you to write web applications using only javascript. All the &hellip;">
+	<meta name="description" content="Oct 29th, 2013 rails Factoring in Nests I am building an application that uses several nested attributes: Users have many Goals (Goals belong_to &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -126,6 +126,63 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-29T22:29:03-07:00" data-updated="true" itemprop="datePublished">Oct 29<span>th</span>, 2013</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/rails/'>rails</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2013/factoring-in-nests/" itemprop="url">Factoring in Nests</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I am building an application that uses several nested attributes: Users have many Goals (Goals belong_to Users), and Goals have many Hours (Hours belong_to Goals).</p>
+
+<p>Using <a href="https://github.com/thoughtbot/factory_girl">FactoryGirl</a> to create a User is straightforward:</p>
+
+<div>
+  <pre><code class='ruby'>FactoryGirl.define do
+  factory :user do
+    sequence :name  { |n| &quot;person#{n}&quot; }
+    sequence :email { |n| &quot;person#{n}@example.com&quot; }
+  end
+end
+
+describe User do
+  before  { @user = FactoryGirl.create(:user) }
+  subject { @user }
+  it { should respond_to(:name) }
+  ...
+end</code></pre>
+</div>
+
+
+<p>How do I create Goals that are linked to the User?</p>
+
+
+		
+		<a href="/blog/2013/factoring-in-nests/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -354,42 +411,6 @@ Could not find a JavaScript runtime. See https://github.com/sstephenson/execjs f
 
 		
 		<a href="/blog/2013/argf-all-you-want/" class="more-link">Read on &rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-30T22:29:03-07:00" data-updated="true" itemprop="datePublished">Aug 30<span>th</span>, 2013</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/ruby/'>ruby</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2013/hammer-out-tasks-with-thor/" itemprop="url">Hammer-out Tasks With Thor</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>A few months ago I gave a small lightning talk to my code school class about automating tasks using <a href="http://rake.rubyforge.org/">Rake</a>. Before I learned ruby I used bash scripts to accomplish similar things, but was often bogged down in learning the syntax of string-processing essentials like awk or sed. I wished for the simplicity of Ruby, and thought that Rake was the bees-knees. After my talk, <a href="chuckvose.com">Chuck</a>, my PCS mentor, put together a repo of <a href="http://whatisthor.com/">Thor</a> tasks that accomplished the same tasks but could be installed system wide.</p>
-
-
-		
-		<a href="/blog/2013/hammer-out-tasks-with-thor/" class="more-link">Read on &rarr;</a>
 	</div>
 
 </article>

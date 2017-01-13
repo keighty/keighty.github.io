@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2017-01-08T14:42:53-08:00</updated>
+  <updated>2017-01-12T19:47:51-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,270 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Effectively Final]]></title>
+    <link href="http://www.katieleonard.ca/blog/2017/effectively-final/"/>
+    <updated>2017-01-11T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2017/effectively-final</id>
+    <content type="html"><![CDATA[<p>I have been working on a Java concurrency bug at work for the last few weeks, and the intertwining concepts of immutability and publication have recurred several times. With the help of <a href="https://www.amazon.com/Java-Concurrency-Practice-Brian-Goetz/dp/0321349601">&ldquo;Java Concurrency in Practice,&rdquo; by Brian Goetz</a>, I am starting to make sense of these concepts, and why these kinds of bugs can be difficult to reproduce.<!--more--></p>
+
+<h3>What does it mean to publish an object?</h3>
+
+<p>&ldquo;Publishing an object means making it available to code outside of its current scope, such as by storing a reference to it where other code can find it, returning it from a nonprivate method, or passing it to a method in another class.&rdquo; (Goetz et al.)</p>
+
+<p>An object that is published is available for use outside of its declared context. Publication can be direct or indirect. Storing a reference to an object in a public static field, directly publishes that object to any client of the class.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PublishedObject</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">DirectlyPublishedObject</span><span class="o">.</span><span class="na">stringArray</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">DirectlyPublishedObject</span><span class="o">.</span><span class="na">stringArray</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="s">&quot;changed&quot;</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">DirectlyPublishedObject</span><span class="o">.</span><span class="na">stringArray</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">DirectlyPublishedObject</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span><span class="o">[]</span> <span class="n">stringArray</span> <span class="o">=</span> <span class="o">{</span><span class="s">&quot;gotcha&quot;</span><span class="o">};</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*</span>
+</span><span class='line'><span class="cm">* Console output:</span>
+</span><span class='line'><span class="cm">* gotcha</span>
+</span><span class='line'><span class="cm">* changed</span>
+</span><span class='line'><span class="cm">*/</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>DirectlyPublishedObject.stringArray</code> can be retrieved and modified by any client that has access to the class (in this case, <code>PublishedObject#main</code> is the client). An object can also be indirectly published if it is a visible member of another object that is published:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PublishedObject</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">IndirectlyPublishedObject</span> <span class="n">ipo</span> <span class="o">=</span> <span class="k">new</span> <span class="n">IndirectlyPublishedObject</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">String</span><span class="o">[]</span> <span class="n">myPersonalStringArray</span> <span class="o">=</span> <span class="n">ipo</span><span class="o">.</span><span class="na">getStringArray</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">myPersonalStringArray</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+</span><span class='line'>        <span class="n">myPersonalStringArray</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="s">&quot;changed again&quot;</span><span class="o">;</span>
+</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">myPersonalStringArray</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">IndirectlyPublishedObject</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kd">private</span> <span class="n">String</span><span class="o">[]</span> <span class="n">stringArray</span> <span class="o">=</span> <span class="o">{</span><span class="s">&quot;gotcha&quot;</span><span class="o">};</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="kd">public</span> <span class="n">String</span><span class="o">[]</span> <span class="nf">getStringArray</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">stringArray</span><span class="o">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*</span>
+</span><span class='line'><span class="cm">* Console output:</span>
+</span><span class='line'><span class="cm">* gotcha</span>
+</span><span class='line'><span class="cm">* changed again</span>
+</span><span class='line'><span class="cm">*/</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If ObjectA obtains a reference to ObjectB, it doesn&rsquo;t matter if ObjectB is declared private, it has now been publicly published.</p>
+
+<p>Why does publication matter? Shared objects have different publication requirements depending on whether they are mutable. From Goetz:</p>
+
+<ul>
+<li>&ldquo;Immutable objects can be published through any mechanism;</li>
+<li>Effectively immutable objects must be safely published;</li>
+<li>Mutable objects must be safely published, and must be either thread safe or guarded by a lock.&#8221;</li>
+</ul>
+
+
+<h3>What does it mean to for an object to be immutable?</h3>
+
+<p>An immutable object must satisfy these criteria:</p>
+
+<ul>
+<li>The class is not extensible (no methods can be overridden)</li>
+<li>All fields are marked final</li>
+<li>All fields are assigned in the constructor</li>
+<li>No internal state is modifiable by the client of the class (ie: no setters)</li>
+<li>No fields that reference mutable objects are made available to clients of the class</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">ImmutableObject</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="nf">ImmutableObject</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="kc">null</span> <span class="o">==</span> <span class="n">name</span><span class="o">)</span>
+</span><span class='line'>            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;Must supply a valid name.&quot;</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">ImmutableObject</span> <span class="n">io</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ImmutableObject</span><span class="o">(</span><span class="s">&quot;keighty&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;name = &quot;</span> <span class="o">+</span> <span class="n">io</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The ImmutableObject will not have any state other than a single field <code>name</code> that is initialized to the String value passed to its constructor. Because <code>name</code> is marked <code>final</code> and initialized in the constructor, there is no danger of encountering an instance of ImmutableObject in the wild whose name is not initialized.</p>
+
+<p>If an object violates <em>some</em> of the requirements for immutability, but its state will never be modified after publication, it will still be treated as immutable by the compiler and JVM &mdash; it is <strong>effectively immutable</strong>.</p>
+
+<h3>The String class is &ldquo;effectively immutable&rdquo;</h3>
+
+<p>In Java, an instance of the String class is not technically immutable, even though Strings are constant and cannot be modified after creation. They have another property (a private hash) that is lazy loaded only as it is needed:</p>
+
+<p><img src="http://www.katieleonard.ca/images/170111-effectively-final/string_constructor.png">
+<img src="http://www.katieleonard.ca/images/170111-effectively-final/string_lazy_hash.png"></p>
+
+<p>A String is considered effectively immutable because its internal state is completely encapsulated and its external state isn&rsquo;t changed after it has been published. Even though the hash field is not final, and is only assigned as it is required (a performance optimization), it is not modifiable by any client. The program can treat Strings as if they are immutable, even if they don&rsquo;t strictly fit all of the criteria.</p>
+
+<h3>How can I make my objects effectively immutable?</h3>
+
+<p>By ensuring that the internal state is completely encapsulated, and any mutable internal objects returned by a public method are copies, not references, you too can enjoy the benefits of at-will publication.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ImmutableObject</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">EffectivelyImmutableObject</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">String</span><span class="o">[]</span> <span class="n">stringArray</span> <span class="o">=</span> <span class="o">{</span><span class="s">&quot;gotcha&quot;</span><span class="o">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">String</span><span class="o">[]</span> <span class="nf">getStringArray</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="c1">// return a COPY of the mutable object, not a reference</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">copyOf</span><span class="o">(</span><span class="n">stringArray</span><span class="o">,</span> <span class="n">stringArray</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">EffectivelyImmutableObject</span> <span class="n">eio</span> <span class="o">=</span> <span class="k">new</span> <span class="n">EffectivelyImmutableObject</span><span class="o">();</span>
+</span><span class='line'>      <span class="n">String</span><span class="o">[]</span> <span class="n">myPersonalStringArray</span> <span class="o">=</span> <span class="n">eio</span><span class="o">.</span><span class="na">getStringArray</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">eio</span><span class="o">.</span><span class="na">getStringArray</span><span class="o">()[</span><span class="mi">0</span><span class="o">]);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">myPersonalStringArray</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="s">&quot;changed a copy only&quot;</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">myPersonalStringArray</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">eio</span><span class="o">.</span><span class="na">getStringArray</span><span class="o">()[</span><span class="mi">0</span><span class="o">]);</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="cm">/*</span>
+</span><span class='line'><span class="cm">* Console output:</span>
+</span><span class='line'><span class="cm">* gotcha</span>
+</span><span class='line'><span class="cm">* changed a copy only</span>
+</span><span class='line'><span class="cm">* gotcha</span>
+</span><span class='line'><span class="cm">*/</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>RESOURCES</h4>
+
+<ul>
+<li><p>Peierls, Tim; Goetz, Brian; Bloch, Joshua; Bowbeer, Joseph; Lea, Doug; Holmes, David (2006-05-09). Java Concurrency in Practice. Pearson Education. Kindle Edition.</p></li>
+<li><p><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html">javadoc for String</a></p></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Annotating Java]]></title>
@@ -2284,103 +2548,6 @@
 <p><code>#size</code> and <code>#length</code> are largely equivalent, but <code>#count</code> issues an additional query to the database that can seriously damage performance for the unsuspecting developer.</p>
 
 <p>For more info, checkout the docs for <a href="http://www.rubydoc.info/docs/rails/4.0.0/ActiveRecord/Calculations:count">count</a> and <a href="http://www.rubydoc.info/docs/rails/4.0.0/ActiveRecord/Associations/CollectionAssociation:length">length</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Local Load Balancing]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/local-load-balancing/"/>
-    <updated>2015-04-22T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/local-load-balancing</id>
-    <content type="html"><![CDATA[<p>You can mimic the end-user&rsquo;s UI experience accurately enough by running application code locally, but what about the backend? Once your code is deployed to production, requests will be divided between dozens of servers. If there is variation in the code paths running on each server (like during a feature rollout, for example), it is useful to determine beforehand if there are any dangerous conflicts. Enter local load-balancing.</p>
-
-<!--more-->
-
-
-<p><a href="http://nginx.org/en/">NGiNX</a> is load balancing software that distributes requests across multiple servers, and it&rsquo;s easy to get running quickly.</p>
-
-<h3>Installation</h3>
-
-<p>You can download and compile from source at <a href="http://nginx.org/en/download.html">NGiNX.org</a>, or use <code>brew install nginx</code> on MacOS-X.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>➜  api_playground  brew install nginx
-</span><span class='line'>...
-</span><span class='line'>
-</span><span class='line'>The default port has been <span class="nb">set </span>in /usr/local/etc/nginx/nginx.conf to 8080 so that nginx can run without sudo.
-</span><span class='line'>
-</span><span class='line'>To have launchd start nginx at login:
-</span><span class='line'>    ln -sfv /usr/local/opt/nginx/*.plist ~/Library/LaunchAgents
-</span><span class='line'>Then to load nginx now:
-</span><span class='line'>    launchctl load ~/Library/LaunchAgents/homebrew.mxcl.nginx.plist
-</span><span class='line'>Or, <span class="k">if </span>you don<span class="err">&#39;</span>t want/need launchctl, you can just run:
-</span><span class='line'>    nginx
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Start the server with the command <code>nginx</code>.</p>
-
-<h3>Configuration</h3>
-
-<p>Your NGiNX installation added a config file: <code>/usr/local/etc/nginx/nginx.conf</code>. It is mostly commented configuration examples, so you can simply replace the current <code>server</code> configuration block with this:</p>
-
-<figure class='code'><figcaption><span>/usr/local/etc/nginx/nginx.conf </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='text'><span class='line'>upstream myapp1 {
-</span><span class='line'>  server localhost:3000;
-</span><span class='line'>  server localhost:3030; #add as many servers as you want here
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>server {
-</span><span class='line'>  listen 8080;
-</span><span class='line'>  server_name localhost;
-</span><span class='line'>  location / {
-</span><span class='line'>    proxy_pass http://myapp1;
-</span><span class='line'>  }
-</span><span class='line'>}
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Reload your NGiNX server with <code>nginx -s reload</code>, and hit <a href="localhost:8080">localhost:8080</a> to ensure you have configured it correctly.</p>
-
-<p><img src="http://www.katieleonard.ca/images/150421-local-loadbalancing/welcome_nginx.png"></p>
-
-<h3>Start your servers</h3>
-
-<p>NGiNX is configured and listening on ports 3000 and 3030. Now we just have to connect some servers!</p>
-
-<p><strong>Server 1</strong>: <code>bundle exec rails server -p 3030</code></p>
-
-<p><strong>Server 2</strong>: <code>bundle exec rails server -p 3000 --pid tmp/pids/server2.pid</code></p>
-
-<blockquote><p>Pro-tip: The Rails server stores its process id in a temporary file (<code>/tmp/pids/server.pid</code>), and will complain if you start another server unless you specify a new temporary pid file.</p></blockquote>
-
-<p>Check your progress by hitting localhost:8080:</p>
-
-<p><img src="http://www.katieleonard.ca/images/150421-local-loadbalancing/load_balancing.png"></p>
-
-<p>Checkout the <a href="http://nginx.org/en/docs/http/load_balancing.html">docs</a> for more examples of nginx configuration.</p>
 ]]></content>
   </entry>
   

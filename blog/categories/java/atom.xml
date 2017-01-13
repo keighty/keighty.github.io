@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2017-01-08T14:42:53-08:00</updated>
+  <updated>2017-01-12T19:47:51-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,292 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Effectively Final]]></title>
+    <link href="http://www.katieleonard.ca/blog/2017/effectively-final/"/>
+    <updated>2017-01-11T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2017/effectively-final</id>
+    <content type="html"><![CDATA[<p>I have been working on a Java concurrency bug at work for the last few weeks, and the intertwining concepts of immutability and publication have recurred several times. With the help of <a href="https://www.amazon.com/Java-Concurrency-Practice-Brian-Goetz/dp/0321349601">&ldquo;Java Concurrency in Practice,&rdquo; by Brian Goetz</a>, I am starting to make sense of these concepts, and why these kinds of bugs can be difficult to reproduce.<!--more--></p>
+
+<h3>What does it mean to publish an object?</h3>
+
+<p>&ldquo;Publishing an object means making it available to code outside of its current scope, such as by storing a reference to it where other code can find it, returning it from a nonprivate method, or passing it to a method in another class.&rdquo; (Goetz et al.)</p>
+
+<p>An object that is published is available for use outside of its declared context. Publication can be direct or indirect. Storing a reference to an object in a public static field, directly publishes that object to any client of the class.</p>
+
+<p>```java
+public class PublishedObject {</p>
+
+<pre><code>public static void main(String[] args) {
+    System.out.println(DirectlyPublishedObject.stringArray[0]);
+
+    DirectlyPublishedObject.stringArray[0] = "changed";
+
+    System.out.println(DirectlyPublishedObject.stringArray[0]);
+}
+
+public static class DirectlyPublishedObject {
+    public static String[] stringArray = {"gotcha"};
+}
+</code></pre>
+
+<p>}</p>
+
+<p>/<em>
+* Console output:
+* gotcha
+* changed
+</em>/
+```</p>
+
+<p><code>DirectlyPublishedObject.stringArray</code> can be retrieved and modified by any client that has access to the class (in this case, <code>PublishedObject#main</code> is the client). An object can also be indirectly published if it is a visible member of another object that is published:</p>
+
+<p>```java
+public class PublishedObject {</p>
+
+<pre><code>public static void main(String[] args) {
+    IndirectlyPublishedObject ipo = new IndirectlyPublishedObject();
+    String[] myPersonalStringArray = ipo.getStringArray();
+
+    System.out.println(myPersonalStringArray[0]);
+    myPersonalStringArray[0] = "changed again";
+    System.out.println(myPersonalStringArray[0]);
+}
+
+public static class IndirectlyPublishedObject {
+    private String[] stringArray = {"gotcha"};
+
+    public String[] getStringArray() {
+        return stringArray;
+    }
+}
+</code></pre>
+
+<p>}</p>
+
+<p>/<em>
+* Console output:
+* gotcha
+* changed again
+</em>/
+```</p>
+
+<p>If ObjectA obtains a reference to ObjectB, it doesn&rsquo;t matter if ObjectB is declared private, it has now been publicly published.</p>
+
+<p>Why does publication matter? Shared objects have different publication requirements depending on whether they are mutable. From Goetz:</p>
+
+<ul>
+<li>&ldquo;Immutable objects can be published through any mechanism;</li>
+<li>Effectively immutable objects must be safely published;</li>
+<li>Mutable objects must be safely published, and must be either thread safe or guarded by a lock."</li>
+</ul>
+
+
+<h3>What does it mean to for an object to be immutable?</h3>
+
+<p>An immutable object must satisfy these criteria:</p>
+
+<ul>
+<li>The class is not extensible (no methods can be overridden)</li>
+<li>All fields are marked final</li>
+<li>All fields are assigned in the constructor</li>
+<li>No internal state is modifiable by the client of the class (ie: no setters)</li>
+<li>No fields that reference mutable objects are made available to clients of the class</li>
+</ul>
+
+
+<p>```java
+public final class ImmutableObject {</p>
+
+<pre><code>private final String name;
+
+public ImmutableObject(String name) {
+    if (null == name)
+        throw new IllegalArgumentException("Must supply a valid name.");
+
+    this.name = name;
+}
+
+public String getName() {
+    return name;
+}
+
+public static void main(String[] args) {
+    ImmutableObject io = new ImmutableObject("keighty");
+    System.out.println("name = " + io.getName());
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>The ImmutableObject will not have any state other than a single field <code>name</code> that is initialized to the String value passed to its constructor. Because <code>name</code> is marked <code>final</code> and initialized in the constructor, there is no danger of encountering an instance of ImmutableObject in the wild whose name is not initialized.</p>
+
+<p>If an object violates <em>some</em> of the requirements for immutability, but its state will never be modified after publication, it will still be treated as immutable by the compiler and JVM &mdash; it is <strong>effectively immutable</strong>.</p>
+
+<h3>The String class is &ldquo;effectively immutable&rdquo;</h3>
+
+<p>In Java, an instance of the String class is not technically immutable, even though Strings are constant and cannot be modified after creation. They have another property (a private hash) that is lazy loaded only as it is needed:</p>
+
+<p><img src="/images/170111-effectively-final/string_constructor.png">
+<img src="/images/170111-effectively-final/string_lazy_hash.png"></p>
+
+<p>A String is considered effectively immutable because its internal state is completely encapsulated and its external state isn&rsquo;t changed after it has been published. Even though the hash field is not final, and is only assigned as it is required (a performance optimization), it is not modifiable by any client. The program can treat Strings as if they are immutable, even if they don&rsquo;t strictly fit all of the criteria.</p>
+
+<h3>How can I make my objects effectively immutable?</h3>
+
+<p>By ensuring that the internal state is completely encapsulated, and any mutable internal objects returned by a public method are copies, not references, you too can enjoy the benefits of at-will publication.</p>
+
+<p>```java
+public class ImmutableObject {</p>
+
+<p>  public static class EffectivelyImmutableObject {</p>
+
+<pre><code>private String[] stringArray = {"gotcha"};
+
+public String[] getStringArray() {
+  // return a COPY of the mutable object, not a reference
+  return Arrays.copyOf(stringArray, stringArray.length);
+}
+</code></pre>
+
+<p>  }</p>
+
+<p>  public static void main(String[] args) {</p>
+
+<pre><code>  EffectivelyImmutableObject eio = new EffectivelyImmutableObject();
+  String[] myPersonalStringArray = eio.getStringArray();
+
+  System.out.println(eio.getStringArray()[0]);
+
+  myPersonalStringArray[0] = "changed a copy only";
+
+  System.out.println(myPersonalStringArray[0]);
+  System.out.println(eio.getStringArray()[0]);
+</code></pre>
+
+<p>  }
+}
+/<em>
+* Console output:
+* gotcha
+* changed a copy only
+* gotcha
+</em>/
+```</p>
+
+<h4>RESOURCES</h4>
+
+<ul>
+<li><p>Peierls, Tim; Goetz, Brian; Bloch, Joshua; Bowbeer, Joseph; Lea, Doug; Holmes, David (2006-05-09). Java Concurrency in Practice. Pearson Education. Kindle Edition.</p></li>
+<li><p><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html">javadoc for String</a></p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Annotating Java]]></title>
+    <link href="http://www.katieleonard.ca/blog/2017/annotating-java/"/>
+    <updated>2017-01-08T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2017/annotating-java</id>
+    <content type="html"><![CDATA[<p>Annotations are a means of adding metadata to Java source code. They can be applied to declarations of classes, fields, methods, and types (as of Java8) in order to pass instructions to the compiler. Annotations can even be evaluated at Runtime.  <!--more-->For example, <code>@Inject</code> is an annotation from the Dagger dependency injection library used to indicate which constructor should be used to instantiate a class. <code>@Inject</code> also tells Dagger to create the dependencies identified in the constructor parameter list.</p>
+
+<h4>Provided by <code>java.lang</code></h4>
+
+<ul>
+<li><code>@Deprecated</code>: don&rsquo;t use the marked object. This annotation should be accompanied by a comment explaining the reason and alternative.</li>
+<li><code>@Override</code>: this method overrides a superclass method.</li>
+<li><code>@SuppressWarnings</code>: the compiler will not report warnings generated by this method.</li>
+</ul>
+
+
+<h2>Create your own</h2>
+
+<p>Annotations can be used to replace verbose code comment templates, and since they are ostensibly interfaces, they can be created the same way you would any other interface.</p>
+
+<p>```java
+// src/CustomAnnotation.java
+import java.lang.annotation.Documented;</p>
+
+<p>@Documented // Annotation of an Annotation &mdash; so meta! [1]
+@interface CustomAnnotation { // [2]</p>
+
+<pre><code>int id(); // [3]
+String description();
+String author() default "[unknown]"; // [4]
+</code></pre>
+
+<p>}
+<code>``
+1.</code>CustomAnnotation<code>has an annotation of its own! The</code>@Documented<code>annotation ensures that CustomAnnotation and its properties will be included in the Javadoc when it is generated.
+2. Declare a new annotation using</code>@interface<code>instead of</code>interface<code>
+3. Fields</code>id<code>and</code>description<code>are considered required because they are not given default values. Values for</code>id<code>and</code>description<code>must be provided when using</code>@CustomAnnotation<code>.
+4.</code>author` is an unrequired field because a default value will be used if one is not provided.</p>
+
+<h4>Annotations for Annotations</h4>
+
+<p>When defining an annotation, you can indicate how it should be used:</p>
+
+<ul>
+<li><code>@RetentionPolicy</code>: How should the annotation be stored? Only in source, included in the generated Class, or passed all the way to the JVM for Runtime evaluation?</li>
+<li><code>@Documented</code>: Include the annotation when generating Javadocs (default is false).</li>
+<li><code>@Target</code>: A list of locations where the annotation can be used (constructor, field, method, etc).</li>
+<li><code>@Inherited</code>: The annotation properties can be inherited from the superclass.</li>
+<li><code>@Repeatable</code>: The annotation can be used more than once (declaring multiple authors, for example).</li>
+</ul>
+
+
+<h2>Using your CustomAnnotation</h2>
+
+<p>Use <code>@CustomAnnotation</code> to decorate your code:</p>
+
+<p>```java
+// src/Main.java
+public class Main {</p>
+
+<pre><code>...
+
+@CustomAnnotation(id = 1, description = "Custom description")
+public void printSlogan() {
+    System.out.println("This method uses a @CustomAnnotation");
+}
+
+@CustomAnnotation(id = 2, description = "Custom banner", author = "keighty")
+public void printBanner() {
+    System.out.println("This is a printed banner for: " + message);
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>When you generate the javadoc for Main.class, the annotations will be included in the method descriptions:</p>
+
+<p><code>
+$  javadoc src/com/keighty/Main.java -d .
+</code></p>
+
+<p><img src="/images/170108-annotations/javadoc_annotated.png"></p>
+
+<h2>Annotating a field vs annotating a parameter</h2>
+
+<p>There are no hard rules about whether one should annotate a field or a constructor parameter, but which ever you choose you should use that pattern consistently.</p>
+
+<p><img src="/images/170108-annotations/nonnull_annotation.png"></p>
+
+<p>If you use the <code>@Nonnull</code> annotation in the constructor, the compiler will warn if there is any use of the constructor where the parameter could be null. If you use the <code>@Nonnull</code> annotation on the field, you will have to do your own null checking when assigning the field.</p>
+
+<h4>RESOURCES</h4>
+
+<ul>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/annotations/index.html">java tutorials</a></li>
+<li><a href="http://crunchify.com/understanding-java-annotation-annotation-examples/">crunchify.com</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Preflight Check With CORS -- chainPreflight Option]]></title>
