@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2017-01-12T19:47:51-08:00</updated>
+  <updated>2017-02-05T13:57:48-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,175 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Thread Safety]]></title>
+    <link href="http://www.katieleonard.ca/blog/2017/thread-safety/"/>
+    <updated>2017-02-04T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2017/thread-safety</id>
+    <content type="html"><![CDATA[<p>While wading into the wide world of high throughput production Java, I have been enjoying guidance from &ldquo;Java Concurrency in Practice&rdquo; by Brian Goetz, as well as my friend and coworker, David Copeland. In a recent talk, David boiled down the range of concurrency problems to three main issues: atomicity, visibility, and ordering conflicts.<!--more--></p>
+
+<h3>Atomicity</h3>
+
+<p>An atomic operation is one that executes in a single operation. A variable assignment (<code>int x = 2;</code>) is an example of an atomic operation (mostly* &mdash; see footnote). Incrementing a variable, on the other hand, is NOT an atomic operation.</p>
+
+<p>```java
+public class NonAtomicCounter {
+  private int count = 0;</p>
+
+<p>  public int getCount() { return count; }
+  public void doWork() { count++; }
+}
+```</p>
+
+<p>While <code>count++</code> <em>appears</em> to be a single action it is actually three:</p>
+
+<ul>
+<li>read count,</li>
+<li>modify count, and</li>
+<li>write count.</li>
+</ul>
+
+
+<p>If ThreadA and ThreadB share a NonAtomicCounter and both call <code>doWork()</code>, ThreadA can read the value of count while ThreadB is modifying it, making <code>count</code> vulnerable to lost updates.</p>
+
+<blockquote><p>Be suspicious of any shared state that is involved in <em>read-modify-write</em> or <em>test-then-act</em> sequences of actions.</p></blockquote>
+
+<h3>Visibility</h3>
+
+<p>Once a thread has read a value, there is no guarantee that it will ever check to see if another thread has modified that value.</p>
+
+<p>```java
+public class Main {</p>
+
+<pre><code>static boolean stop;
+
+public static void main(String[] args) throws InterruptedException {
+
+    new Thread(() -&gt; {
+        while (! stop) {
+            System.out.println("still working");
+        }
+    }).start();
+
+    new Thread(() -&gt; { stop = true; }).start();
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Each thread can cache a local copy of <code>stop</code>, which means they will read the value once and then never check to see if it has been changed.</p>
+
+<blockquote><p>Be suspicious of loops that are gated by a variable that is visible to other threads.</p></blockquote>
+
+<h3>Ordering</h3>
+
+<p>The JVM has a just-in-time compiler that optimizes execution at runtime. The memory model guarantees deterministic behaviour <em>within</em> a thread, but makes no promises about how instructions are ordered in the meantime.</p>
+
+<p>```java
+public class Main {</p>
+
+<pre><code>static int A;
+static int B;
+
+public static void main(String[] args) throws InterruptedException {
+
+    Thread t1 = new Thread(() -&gt; {
+        int localA = A;
+        B = 1;
+        System.out.println("local A: " + localA);
+    });
+
+    Thread t2 = new Thread(() -&gt; {
+        int localB = B;
+        A = 2;
+        System.out.println("local B: " + localB);
+    });
+
+    t1.start();
+    t2.start();
+}
+</code></pre>
+
+<p>}</p>
+
+<p>/<em> POSSIBLE LOCAL VALUES
+* localA: 0, localB: 0
+* &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;
+* localA: 0, localB: 1
+* &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+* localA: 2, localB: 1 => THIS SHOULD BE IMPOSSIBLE, RIGHT?
+* &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+* localA: 2, localB: 0 => WAT?
+</em>/
+```</p>
+
+<p>How is it possible that t1 sees that A = 2? From <a href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-17.html#jls-17.4">the docs</a>:</p>
+
+<blockquote><p>&ldquo;The semantics of the Java programming language allow compilers and microprocessors to perform optimizations that can interact with incorrectly synchronized code in ways that can produce behaviors that seem paradoxical.&rdquo;"</p></blockquote>
+
+<p>What this means, is that even though the instructions are written in such a way that localA should not be able to see the reassignment of A, the compiler can reorder instructions to optimize evaluation. As long as the result of the computation is deterministic <strong>within</strong> a thread, the compiler is free to change the execution order, inline assignments, simplify algebra, etc.</p>
+
+<p>In the above example,</p>
+
+<p><code>java
+int localB = B;
+A = 2;
+</code></p>
+
+<p>is the same as
+<code>java
+A = 2;
+int localB = B;
+</code></p>
+
+<p>When the instructions for thread1 and thread2 are interleaved, thread1 will occasionally see <code>A = 2</code>.</p>
+
+<blockquote><p>Be suspicious of operations involving multiple variables and ordering requirements.</p></blockquote>
+
+<h3>Thread Safety Analysis Guidelines</h3>
+
+<p>If you are dealing with a thread safety issue, ask these three questions:</p>
+
+<ol>
+<li>Do your threads share mutable state? Look for public getters and setters, or methods that return references to state rather than copies or primitive values.</li>
+<li>Do your threads share multi-variable states (invariants)? Can one component  change independently from others when they should always be treated as a single unit?</li>
+<li>For any publicly mutable state, is it an atomicity, visibility, or ordering issue?</li>
+</ol>
+
+
+<h3>Solutions for thread safety issues</h3>
+
+<p>The Java language has a few solutions to offer:</p>
+
+<h4>The <code>volatile</code> keyword</h4>
+
+<p>Adding the keyword <code>volatile</code> to a variable declaration tells the JVM not to use a cached value for any read operations. This keyword will ensure that writes to a variable are always visible to other threads, but will not fix atomicity or ordering issues.</p>
+
+<h4>The <code>synchronized</code> keyword</h4>
+
+<p>Using a <code>synchronized</code> lock around a variable will address all three issues, at the cost of concurrency. If only one thread at a time can access your data, your program is single threaded. Common lock-gotchas include locking writes but not reads!</p>
+
+<h4>The <code>final</code> keyword</h4>
+
+<p>Making variables <code>final</code> addresses all three issues, but requires your state to be immutable. This approach is most useful in composition with other techniques.</p>
+
+<h4>Use guava libraries</h4>
+
+<p>Google has published a library of thread-safe collections that handle concurrent access for you. ConcurrentHashMap is one of my favourites, and you can check out the <a href="https://github.com/google/guava/wiki">user guide</a> for more.</p>
+
+<hr />
+
+
+<h4>Note</h4>
+
+<blockquote><ul>
+<li>A variable&rsquo;s declaration and assignment are really two operations: the allocation of memory to hold the value, and the writing of that value into memory. If a variable is declared and assigned within an object constructor, the object will not be published without variable initialization. However, if it is declared and assigned anywhere else, there are no such guarantees. For the purpose of this example, I am completely ignoring these implications :D</li>
+</ul>
+</blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Effectively Final]]></title>

@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2017-01-12T19:47:51-08:00</updated>
+  <updated>2017-02-05T13:57:48-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,226 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Thread Safety]]></title>
+    <link href="http://www.katieleonard.ca/blog/2017/thread-safety/"/>
+    <updated>2017-02-04T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2017/thread-safety</id>
+    <content type="html"><![CDATA[<p>While wading into the wide world of high throughput production Java, I have been enjoying guidance from &ldquo;Java Concurrency in Practice&rdquo; by Brian Goetz, as well as my friend and coworker, David Copeland. In a recent talk, David boiled down the range of concurrency problems to three main issues: atomicity, visibility, and ordering conflicts.<!--more--></p>
+
+<h3>Atomicity</h3>
+
+<p>An atomic operation is one that executes in a single operation. A variable assignment (<code>int x = 2;</code>) is an example of an atomic operation (mostly* &mdash; see footnote). Incrementing a variable, on the other hand, is NOT an atomic operation.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">NonAtomicCounter</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getCount</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">count</span><span class="o">;</span> <span class="o">}</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doWork</span><span class="o">()</span> <span class="o">{</span> <span class="n">count</span><span class="o">++;</span> <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>While <code>count++</code> <em>appears</em> to be a single action it is actually three:</p>
+
+<ul>
+<li>read count,</li>
+<li>modify count, and</li>
+<li>write count.</li>
+</ul>
+
+
+<p>If ThreadA and ThreadB share a NonAtomicCounter and both call <code>doWork()</code>, ThreadA can read the value of count while ThreadB is modifying it, making <code>count</code> vulnerable to lost updates.</p>
+
+<blockquote><p>Be suspicious of any shared state that is involved in <em>read-modify-write</em> or <em>test-then-act</em> sequences of actions.</p></blockquote>
+
+<h3>Visibility</h3>
+
+<p>Once a thread has read a value, there is no guarantee that it will ever check to see if another thread has modified that value.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Main</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">static</span> <span class="kt">boolean</span> <span class="n">stop</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">new</span> <span class="nf">Thread</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
+</span><span class='line'>            <span class="k">while</span> <span class="o">(!</span> <span class="n">stop</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;still working&quot;</span><span class="o">);</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>        <span class="o">}).</span><span class="na">start</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">new</span> <span class="nf">Thread</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span> <span class="n">stop</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span> <span class="o">}).</span><span class="na">start</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Each thread can cache a local copy of <code>stop</code>, which means they will read the value once and then never check to see if it has been changed.</p>
+
+<blockquote><p>Be suspicious of loops that are gated by a variable that is visible to other threads.</p></blockquote>
+
+<h3>Ordering</h3>
+
+<p>The JVM has a just-in-time compiler that optimizes execution at runtime. The memory model guarantees deterministic behaviour <em>within</em> a thread, but makes no promises about how instructions are ordered in the meantime.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Main</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">static</span> <span class="kt">int</span> <span class="n">A</span><span class="o">;</span>
+</span><span class='line'>    <span class="kd">static</span> <span class="kt">int</span> <span class="n">B</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">Thread</span> <span class="n">t1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
+</span><span class='line'>            <span class="kt">int</span> <span class="n">localA</span> <span class="o">=</span> <span class="n">A</span><span class="o">;</span>
+</span><span class='line'>            <span class="n">B</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;local A: &quot;</span> <span class="o">+</span> <span class="n">localA</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">});</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">Thread</span> <span class="n">t2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
+</span><span class='line'>            <span class="kt">int</span> <span class="n">localB</span> <span class="o">=</span> <span class="n">B</span><span class="o">;</span>
+</span><span class='line'>            <span class="n">A</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;local B: &quot;</span> <span class="o">+</span> <span class="n">localB</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">});</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">t1</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">t2</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* POSSIBLE LOCAL VALUES</span>
+</span><span class='line'><span class="cm">* localA: 0, localB: 0</span>
+</span><span class='line'><span class="cm">* -------------</span>
+</span><span class='line'><span class="cm">* localA: 0, localB: 1</span>
+</span><span class='line'><span class="cm">* --------------</span>
+</span><span class='line'><span class="cm">* localA: 2, localB: 1 =&gt; THIS SHOULD BE IMPOSSIBLE, RIGHT?</span>
+</span><span class='line'><span class="cm">* --------------</span>
+</span><span class='line'><span class="cm">* localA: 2, localB: 0 =&gt; WAT?</span>
+</span><span class='line'><span class="cm">*/</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>How is it possible that t1 sees that A = 2? From <a href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-17.html#jls-17.4">the docs</a>:</p>
+
+<blockquote><p>&ldquo;The semantics of the Java programming language allow compilers and microprocessors to perform optimizations that can interact with incorrectly synchronized code in ways that can produce behaviors that seem paradoxical.&rdquo;&#8221;</p></blockquote>
+
+<p>What this means, is that even though the instructions are written in such a way that localA should not be able to see the reassignment of A, the compiler can reorder instructions to optimize evaluation. As long as the result of the computation is deterministic <strong>within</strong> a thread, the compiler is free to change the execution order, inline assignments, simplify algebra, etc.</p>
+
+<p>In the above example,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kt">int</span> <span class="n">localB</span> <span class="o">=</span> <span class="n">B</span><span class="o">;</span>
+</span><span class='line'><span class="n">A</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>is the same as</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">A</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">localB</span> <span class="o">=</span> <span class="n">B</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When the instructions for thread1 and thread2 are interleaved, thread1 will occasionally see <code>A = 2</code>.</p>
+
+<blockquote><p>Be suspicious of operations involving multiple variables and ordering requirements.</p></blockquote>
+
+<h3>Thread Safety Analysis Guidelines</h3>
+
+<p>If you are dealing with a thread safety issue, ask these three questions:</p>
+
+<ol>
+<li>Do your threads share mutable state? Look for public getters and setters, or methods that return references to state rather than copies or primitive values.</li>
+<li>Do your threads share multi-variable states (invariants)? Can one component  change independently from others when they should always be treated as a single unit?</li>
+<li>For any publicly mutable state, is it an atomicity, visibility, or ordering issue?</li>
+</ol>
+
+
+<h3>Solutions for thread safety issues</h3>
+
+<p>The Java language has a few solutions to offer:</p>
+
+<h4>The <code>volatile</code> keyword</h4>
+
+<p>Adding the keyword <code>volatile</code> to a variable declaration tells the JVM not to use a cached value for any read operations. This keyword will ensure that writes to a variable are always visible to other threads, but will not fix atomicity or ordering issues.</p>
+
+<h4>The <code>synchronized</code> keyword</h4>
+
+<p>Using a <code>synchronized</code> lock around a variable will address all three issues, at the cost of concurrency. If only one thread at a time can access your data, your program is single threaded. Common lock-gotchas include locking writes but not reads!</p>
+
+<h4>The <code>final</code> keyword</h4>
+
+<p>Making variables <code>final</code> addresses all three issues, but requires your state to be immutable. This approach is most useful in composition with other techniques.</p>
+
+<h4>Use guava libraries</h4>
+
+<p>Google has published a library of thread-safe collections that handle concurrent access for you. ConcurrentHashMap is one of my favourites, and you can check out the <a href="https://github.com/google/guava/wiki">user guide</a> for more.</p>
+
+<hr />
+
+
+<h4>Note</h4>
+
+<blockquote><ul>
+<li>A variable&rsquo;s declaration and assignment are really two operations: the allocation of memory to hold the value, and the writing of that value into memory. If a variable is declared and assigned within an object constructor, the object will not be published without variable initialization. However, if it is declared and assigned anywhere else, there are no such guarantees. For the purpose of this example, I am completely ignoring these implications :D</li>
+</ul>
+</blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Effectively Final]]></title>
@@ -2433,121 +2653,6 @@
 
 <p><img src="http://www.katieleonard.ca/images/150808-hunting-monkey-patches/step4-show-source-a1.png">
 <img src="http://www.katieleonard.ca/images/150808-hunting-monkey-patches/step4-show-source-a2.png"></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Don't Count Your Chickens if They Are ActiveRecord Objects]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/dont-count-your-chickens-if-they-are-active-record-objects/"/>
-    <updated>2015-05-07T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/dont-count-your-chickens-if-they-are-active-record-objects</id>
-    <content type="html"><![CDATA[<p>You may believe that <code>#length</code>, <code>#size</code>, and <code>#count</code> are fairly equivalent:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>irb(main):002:0&gt; yourRubyChickens =  %w{ Chantecler RedShaver RhodeIslandRed }
-</span><span class='line'>=&gt; ["Chantecler", "RedShaver", "RhodeIslandRed"]
-</span><span class='line'>irb(main):003:0&gt; yourRubyChickens.length
-</span><span class='line'>=&gt; 3
-</span><span class='line'>irb(main):004:0&gt; yourRubyChickens.size
-</span><span class='line'>=&gt; 3
-</span><span class='line'>irb(main):005:0&gt; yourRubyChickens.count
-</span><span class='line'>=&gt; 3</span></code></pre></td></tr></table></div></figure>
-
-
-<p>But, beware of <code>#count</code> in Rails!</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[1] pry(main)&gt; yourRailsChickens = Chicken.all
-</span><span class='line'>  Chicken Load (2.1ms)  SELECT "chickens".* FROM "chickens"
-</span><span class='line'>=&gt; [#&lt;ChanteclerChicken:0x007f98eafcd6d8
-</span><span class='line'>  id: 1,
-</span><span class='line'>  type: "ChanteclerChicken",
-</span><span class='line'>  color: "white",
-</span><span class='line'>  created_at: Thu, 07 May 2015 14:36:36 UTC +00:00,
-</span><span class='line'>  updated_at: Thu, 07 May 2015 14:36:36 UTC +00:00&gt;,
-</span><span class='line'> #&lt;RedShaverChicken:0x007f98e63a9428
-</span><span class='line'>  id: 2,
-</span><span class='line'>  type: "RedShaverChicken",
-</span><span class='line'>  color: "white",
-</span><span class='line'>  created_at: Thu, 07 May 2015 14:37:01 UTC +00:00,
-</span><span class='line'>  updated_at: Thu, 07 May 2015 14:37:01 UTC +00:00&gt;,
-</span><span class='line'> #&lt;RedShaverChicken:0x007f98e63a9248
-</span><span class='line'>  id: 3,
-</span><span class='line'>  type: "RedShaverChicken",
-</span><span class='line'>  color: "black",
-</span><span class='line'>  created_at: Thu, 07 May 2015 14:37:25 UTC +00:00,
-</span><span class='line'>  updated_at: Thu, 07 May 2015 14:37:25 UTC +00:00&gt;,
-</span><span class='line'> #&lt;RedShaverChicken:0x007f98e63a9068
-</span><span class='line'>  id: 4,
-</span><span class='line'>  type: "RedShaverChicken",
-</span><span class='line'>  color: "red",
-</span><span class='line'>  created_at: Thu, 07 May 2015 14:37:35 UTC +00:00,
-</span><span class='line'>  updated_at: Thu, 07 May 2015 14:37:35 UTC +00:00&gt;,
-</span><span class='line'> #&lt;RedShaverChicken:0x007f98e63a8e88
-</span><span class='line'>  id: 5,
-</span><span class='line'>  type: "RedShaverChicken",
-</span><span class='line'>  color: "white",
-</span><span class='line'>  created_at: Thu, 07 May 2015 14:37:53 UTC +00:00,
-</span><span class='line'>  updated_at: Thu, 07 May 2015 14:37:53 UTC +00:00&gt;]
-</span><span class='line'>
-</span><span class='line'>[2] pry(main)&gt; yourRailsChickens.length
-</span><span class='line'>=&gt; 5
-</span><span class='line'>[3] pry(main)&gt; yourRailsChickens.size
-</span><span class='line'>=&gt; 5
-</span><span class='line'>[4] pry(main)&gt; yourRailsChickens.count
-</span><span class='line'>   (0.2ms)  SELECT COUNT(*) FROM "chickens"
-</span><span class='line'>=&gt; 5</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>#size</code> and <code>#length</code> are largely equivalent, but <code>#count</code> issues an additional query to the database that can seriously damage performance for the unsuspecting developer.</p>
-
-<p>For more info, checkout the docs for <a href="http://www.rubydoc.info/docs/rails/4.0.0/ActiveRecord/Calculations:count">count</a> and <a href="http://www.rubydoc.info/docs/rails/4.0.0/ActiveRecord/Associations/CollectionAssociation:length">length</a>.</p>
 ]]></content>
   </entry>
   
