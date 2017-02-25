@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2017-02-05T20:45:11-08:00</updated>
+  <updated>2017-02-25T11:52:05-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,47 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Iptables: Middleware for Network Management]]></title>
+    <link href="http://www.katieleonard.ca/blog/2017/iptables/"/>
+    <updated>2017-02-25T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2017/iptables</id>
+    <content type="html"><![CDATA[<p>Some companies don&rsquo;t allow their employees to use social media at work, and some countries don&rsquo;t allow their citizens to access news outside of controlled outlets. How do these institutions control access to information that seems so available in other contexts? Through iptables. <!-- more --></p>
+
+<p>When you enter facebook.com in the address bar of your browser (or open the native app on your phone), the information exchanged between your device  and the servers at Facebook is broken up into tagged chunks of data called packets. Iptables contain chains of rules, and each rule contains a policy for how to handle the network packets sent to and from your computer.</p>
+
+<p>For example, a company that wants to block incoming Facebook data can set up a custom rule that sends all packets from Facebook to the garbage instead of delivering them to the browser.</p>
+
+<p><img src="http://www.katieleonard.ca/images/170225-iptables/iptables.png"></p>
+
+<p>If a packet fails to match any of the policy rules in the chain, it is usually dropped by default.</p>
+
+<p>Iptables are useful in many scenarios:</p>
+
+<ul>
+<li>to build your own firewalls,</li>
+<li>to restrict access to specific sites (like Facebook),</li>
+<li>to load balance incoming web traffic,</li>
+<li>to block a DoS attack, or</li>
+<li>to simulate a network or service failure in order to test the resilience of your system (my team uses this strategy for some game-day activities)</li>
+</ul>
+
+
+<p>Administrator privileges are required, but you can use <code>iptables</code> on linux or <code>pfctl</code> on mac to in order to inspect or change any of your iptable rules.</p>
+
+<p>While I am neither a system administrator, nor particularly interested in bespoke network management, I do occasionally install software that will help me focus by blocking my access to distracting sites &mdash; it is always good to know some of the magic going on under the hood.</p>
+
+<h3>Resources</h3>
+
+<ul>
+<li>for Linux: <a href="https://www.linode.com/docs/security/firewalls/control-network-traffic-with-iptables">control your network traffic</a></li>
+<li>for Mac: <a href="https://pleiades.ucsc.edu/hyades/PF_on_Mac_OS_X">how to use pfctl</a></li>
+<li>an <a href="http://www.thegeekstuff.com/2011/06/iptables-rules-examples">interesting primer</a> on common iptable rules</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Thread Safety]]></title>
@@ -2612,47 +2653,6 @@
 <p>I keep things like daily <a href="https://www.safaribooksonline.com/blog/2014/06/26/information-flow/">infobits</a>, backdoor patches, bits of scripts, and other things. Sometimes writing a note about something helps me remember it a little better, so I still keep my own notes, even if the info is already on the wiki.</p>
 
 <p>Checkout <a href="https://help.github.com/articles/ignoring-files/">this post on GitHub</a> for this and more ideas for fine tuning what git ignores.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hunting Monkey Patches]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/hunting-monkey-patches/"/>
-    <updated>2015-08-08T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/hunting-monkey-patches</id>
-    <content type="html"><![CDATA[<p>Ruby monkeypatching is a dangerous, but necessary tool. It is convenient to add new behaviours to  existing classes, or to replace existing methods with more customized or secure code. Once the patch is in place, however, it is easy to forget that it is there.</p>
-
-<p>Recently, I was trying to discern the origin of such a patch, and discovered a new (to me) function in pry, my favourite Ruby debugger: <code>show-source</code>.</p>
-
-<!--more-->
-
-
-<ol>
-<li>Put a <code>binding pry</code> below the monkeypatch so that it can be caught at boot time</li>
-<li>Use <code>cd</code> to change directories into the reopened class</li>
-<li>Use <code>show-source</code> to find the exact location where the method was originally defined</li>
-<li>Use <code>show-source -a</code> to show the source and location of EVERY MONKEYPATCH</li>
-</ol>
-
-
-<p>In action:</p>
-
-<h4>1. Debug your code at boot time</h4>
-
-<p><img src="http://www.katieleonard.ca/images/150808-hunting-monkey-patches/step1-pry.png"></p>
-
-<h4>2. Reopen the class</h4>
-
-<p><img src="http://www.katieleonard.ca/images/150808-hunting-monkey-patches/step2-cd.png"></p>
-
-<h4>3. Use &lsquo;show-source&rsquo;</h4>
-
-<p><img src="http://www.katieleonard.ca/images/150808-hunting-monkey-patches/step3-show-source.png"></p>
-
-<h4>4. Use &lsquo;show-source -a&rsquo;</h4>
-
-<p><img src="http://www.katieleonard.ca/images/150808-hunting-monkey-patches/step4-show-source-a1.png">
-<img src="http://www.katieleonard.ca/images/150808-hunting-monkey-patches/step4-show-source-a2.png"></p>
 ]]></content>
   </entry>
   
