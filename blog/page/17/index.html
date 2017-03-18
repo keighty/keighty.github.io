@@ -9,7 +9,7 @@
 	<meta name="author" content="katie leonard">
 
 	
-	<meta name="description" content="Aug 10th, 2013 eh Canadian Flair For my last month at code school, I have decided to learn what it takes to develop a new programming language. &hellip;">
+	<meta name="description" content="Aug 15th, 2013 eh Flex Your Lexer A Lexer is a ruby class with a single method: tokenize(). Its purpose is to label each chunk of code with a &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -126,6 +126,56 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-15T22:29:03-07:00" data-updated="true" itemprop="datePublished">Aug 15<span>th</span>, 2013</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/eh/'>eh</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2013/flex-your-lexer/" itemprop="url">Flex Your Lexer</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>A Lexer is a ruby class with a single method: tokenize(). Its purpose is to label each chunk of code with a particular token. Strings are labeled as strings, numbers as numbers, and class names as constants. For example,</p>
+
+<div>
+  <pre><code class='ruby'>Lexer.new.tokenize(&quot;string&quot;)
+# =&gt;[[:STRING, &quot;string&quot;]]
+Lexer.new.tokenize(&quot;True&quot;)
+# =&gt;[[:CONSTANT, &quot;True&quot;]]
+Lexer.new.tokenize(&quot;a Car&quot;)
+# =&gt;[[:A, &#39;a&#39;], [:CONSTANT, &#39;Car&#39;]])
+Lexer.new.tokenize(&quot;+&quot;)
+# =&gt;[[&quot;+&quot;, &quot;+&quot;]]</code></pre>
+</div>
+
+
+<p>&ldquo;Lexing&rdquo; is accomplished using regular expressions. The lexer treats the text string of your code like a shish kabob &ndash; it slides recognizable chunks off the skewer one at a time and categorizes them (onion, pepper, method definition, etc).</p>
+
+
+		
+		<a href="/blog/2013/flex-your-lexer/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -356,47 +406,6 @@ Using the principle of only committing atomic changes, and enjoying the fruits o
 
 		
 		<a href="/blog/2013/git-picking/" class="more-link">Read on &rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-22T00:00:00-07:00" data-updated="true" itemprop="datePublished"></time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/sinatra/'>sinatra</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2013/sinatra-in-a-console/" itemprop="url">Sinatra in a Console</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Sinatra does not have a default console like rails does. If you are writing in a rails environment and need to test out a helper method, or want to check on the state of a record in the database, dropping down into the rails console is as easy as typing:</p>
-
-<div>
-  <pre><code class='bash'>$ rails c</code></pre>
-</div>
-
-
-<p>How can we achieve the same ability in Sinatra?
-		
-		<a href="/blog/2013/sinatra-in-a-console/" class="more-link">Read on &rarr;</a>
 	</div>
 
 </article>

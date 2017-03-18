@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2017-02-25T12:05:58-08:00</updated>
+  <updated>2017-03-18T16:16:42-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,175 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Writing Test Cases in Java With Enums]]></title>
+    <link href="http://www.katieleonard.ca/blog/2017/writing-test-cases-with-enums/"/>
+    <updated>2017-03-18T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2017/writing-test-cases-with-enums</id>
+    <content type="html"><![CDATA[<p>I recently discovered some new (to me) features of enums, and so naturally I am now using them for everything. One of these new-to-me features is using a constructor to give enum members properties and behaviour.<!--more--></p>
+
+<p>For example, if I were making a list of colours, a simple enum would look like this:</p>
+
+<p>```java
+enum Colors {</p>
+
+<pre><code>RED,
+BLUE,
+YELLOW;
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Everywhere in my code where I used to use the string <code>"red"</code>, I could replace with a less-spelling-error-prone-and-IDE-friendly <code>Colors.RED</code>. If I want to iterate over all the colors in my collection, I can use the <code>values</code> method:</p>
+
+<p>```java
+&hellip;
+public void loopColorEnum() {</p>
+
+<pre><code>for (Color color : Color.values()) {
+    System.out.println(color);
+}
+</code></pre>
+
+<p>}
+&hellip;</p>
+
+<p>// console output:
+// RED
+// BLUE
+// YELLOW
+```</p>
+
+<p>If I wanted to store the hex value for each colour, I can add a constructor and provide arguments for each member of the enum:</p>
+
+<p>```java
+enum Color {</p>
+
+<pre><code>RED("#FF0000"),
+BLUE("#0000FF"),
+YELLOW("#FFFF00");
+
+final String hex;
+Color(String hexCode) {
+    this.hex = hexCode;
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Now I can access the hex property on all of my colours:</p>
+
+<p>```java
+&hellip;</p>
+
+<pre><code>public void loopColorEnum() {
+    for (Color color : Color.values()) {
+        System.out.println(color.hex);
+    }
+}
+</code></pre>
+
+<p>&hellip;</p>
+
+<p>// console output:
+// #FF0000
+// #0000FF
+// #FFFF00
+```</p>
+
+<p>Finally, if I wanted to create a custom output for my enum that included the hex value, I can add a <code>toString()</code> function:</p>
+
+<p>```java
+enum Color {</p>
+
+<pre><code>RED("#FF0000"),
+BLUE("#0000FF"),
+YELLOW("#FFFF00");
+
+String hex;
+Color(String hexCode) {
+    this.hex = hexCode;
+}
+
+public String toString() {
+    return String.format("Color: %s (Hex: %s)", super.toString(), hex);
+}
+</code></pre>
+
+<p>}</p>
+
+<p>&hellip;</p>
+
+<pre><code>public void loopColorEnum() {
+    for (Color color : Color.values()) {
+        System.out.println(color);
+    }
+}
+</code></pre>
+
+<p>&hellip;</p>
+
+<p>// console output:
+// Color: RED (Hex: #FF0000)
+// Color: BLUE (Hex: #0000FF)
+// Color: YELLOW (Hex: #FFFF00)
+```</p>
+
+<p>Pretty cool! Pair a constructor with the <code>values()</code> iterable, and you have yourself a handy-dandy test framework for repetitive but important tests. For example, I was re-visiting an old exercise from a data structures class and wanted to write a bunch of test cases without the repetitive boilerplate code for each one &mdash; so I built an enum:</p>
+
+<p>```java
+public class CalculatorTest extends InfixCalculator {</p>
+
+<pre><code>private enum Expression {
+    ADDITION("1+2+3", 6),
+    SUBTRACTION("9-4", 5),
+    MULTIPLICATION("5*4*2", 40),
+    DIVISION("9/3", 3),
+    ADDITION_WITH_SPACES("5 + 7", 12),
+    MULTI_DIGITS("12 + 3 - 5", 10);
+
+    final String expression;
+    final int result;
+    Expression(String expression, int result) {
+        this.expression = expression;
+        this.result = result;
+    }
+}
+
+@Test
+public void test_solves_an_expression() {
+    Calculator calc = new Calculator();
+    for (Expression exp : Expression.values()) {
+        assertEquals("for expression " + exp.expression,
+                exp.result,
+                calc.calculate(exp.expression));
+    }
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>When I create a new test case, I just add another member to the enum, and provide the string input and the expected result. Reducing the boilerplate made developing around edge cases far more wieldy, and I spent more time writing the actual code of the Calculator than I did creating tests.</p>
+
+<p>Adding a constructor, methods and properties to an enum makes it looks suspiciously like a class. In fact, that is how enums are implemented under the hood: they are classes with <em>benefits</em>, such as:</p>
+
+<ul>
+<li>retrieve the constant value with <code>valueOf</code>,</li>
+<li>guaranteed singletons,</li>
+<li>clarity in switch statements, and</li>
+<li>built in ordering of members &mdash; an enum can act like an array, and return the order of a member the <code>ordinal()</code> method</li>
+</ul>
+
+
+<p>Sure, you could accomplish most of these using a class with <code>public static final</code> constants and a few hand-rolled methods, but you will impress your neighbours more with a well crafted enum.</p>
+
+<p>Awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Thread Safety]]></title>
@@ -488,88 +657,6 @@ $  javadoc src/com/keighty/Main.java -d .
 <p>If the preflight request is NOT chained to the target resource, then the filter will add the necessary <code>Allows-*</code> headers and send a response back directly.</p>
 
 <p>Since I don&rsquo;t want to do anything with the OPTIONS preflight request, I can confidently set this option to false, saying &ldquo;whatever you&rsquo;ve got, send it over!&rdquo;</p>
-
-<p>Awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Serving Some Java]]></title>
-    <link href="http://www.katieleonard.ca/blog/2013/serving-some-java/"/>
-    <updated>2013-08-24T22:29:03-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2013/serving-some-java</id>
-    <content type="html"><![CDATA[<p>For a recent java coding challenge I was asked, among other things, to make a server. It has been several years since I last attempted it, and I had forgotten how easy it could be.</p>
-
-<!--more-->
-
-
-<h4>Server</h4>
-
-<p>A server, like any good conversationalist, is a good listener. A server is a program running on a computer that listens at a port, waiting to receive instructions.</p>
-
-<p><div>
-  <pre><code class='java'>public class Server {
-  private static String inputLine;&lt;/p&gt;
-
-&lt;p&gt;  public static void main(String[] args) {&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;private static final int PORT_NUMBER = 63400
-
-try {
-  // Socket variables
-  ServerSocket serverSocket = new ServerSocket(PORT_NUMBER);
-  Socket clientSocket = serverSocket.accept();
-
-  // IO variables
-  InputStreamReader inputReader = new InputStreamReader(clientSocket.getInputStream());
-  BufferedReader bReader = new BufferedReader(inputReader);
-
-  while ((inputLine = bReader.readLine()) != null) {
-    System.out.println(inputLine);
-  }
-
-} catch (Exception e) {
-  System.out.println(e);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-}</code></pre>
-</div>
-</p>
-
-<p>The server opens a socket on a specified port (in this case, port 63400). A socket is the point at which two-way communication happens between computer programs. The server opens a socket at a port and waits for a client to bind the socket so they can exchange information. It waits for input from the client, with instructions to print out anything the client puts in (line 18). So where is the client?</p>
-
-<h4>Client</h4>
-
-<p>The client is even simpler than the server: it finds the server at the specified port and connects to the socket.</p>
-
-<p><div>
-  <pre><code class='java'>public class Client {&lt;/p&gt;
-
-&lt;p&gt;  private static final int PORT_NUMBER = 63400&lt;/p&gt;
-
-&lt;p&gt;  public static void main(String[] args) {&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;try {
-
-  // Socket variables
-  Socket socket = new Socket(&quot;localhost&quot;, PORT_NUMBER);
-  PrintWriter pWriter = new PrintWriter(socket.getOutputStream(), true);
-
-  pWriter.println(&quot;Hello World!&quot;);
-
-} catch (Exception e) {
-  System.out.println(e);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-}</code></pre>
-</div>
-</p>
-
-<p>With a successful connection, it generates an output stream. If you start the server in one console it will look like it isn&rsquo;t doing anything, but when you start the client in another console you can watch them communicate. The client writes &ldquo;Hello World&rdquo; directly into the port where the server is listening (socket.getOutputStream()), and as instructed, the server obediently prints &ldquo;Hello World&rdquo; to the console.</p>
 
 <p>Awesome.</p>
 ]]></content>
