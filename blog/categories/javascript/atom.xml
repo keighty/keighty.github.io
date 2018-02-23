@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2017-03-18T16:16:42-07:00</updated>
+  <updated>2018-02-23T09:47:43-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,179 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Least Recently Used (LRU) Cache]]></title>
+    <link href="http://www.katieleonard.ca/blog/2018/least-recently-used/"/>
+    <updated>2018-02-23T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2018/least-recently-used</id>
+    <content type="html"><![CDATA[<p>I was recently challenged to implement a least recently used (LRU) cache in javascript, which taxed both my object-oriented javascripting chops as well as my hazy memory of how to implement a linked list.<!--more--> An LRU cache discards least recently used items first (<a href="https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_Recently_Used_(LRU">wikipedia</a>)). Not only do you have to limit the size of the list, but you have to track when an item has been accessed recently and ensure it is not removed before an item that has been accessed less recently.</p>
+
+<p>Judging from the scores of implementations available from my first Google search, this appears to be a fairly common interview question. Here is the approach that I took:</p>
+
+<ol>
+<li>Maintain performance by storing items in a hash map</li>
+<li>Use a queue-type linked list to keep track of access order: a new item is added to the end of the queue, while an existing item is removed from its place in the queue and re-added to the end of the queue.</li>
+<li>Keep the cache at the specified size by lopping off the head of the list (and removing those items from the map).</li>
+<li>Do it all using object oriented design principles.</li>
+</ol>
+
+
+<h3>The API/object design</h3>
+
+<p>A simple cache should not have too many bells and whistles. It needs a <code>get</code> and a <code>set</code>, and possbily a <code>size</code> (useful for testing, probably not something most users desperately need). It should take a specific <code>cacheSize</code> as well, so we can set limits on the cache at startup.</p>
+
+<p>```javascript
+const LRU = function (cacheSize) {
+  this._maxSize = cacheSize</p>
+
+<p>  this.get = (key) => {}
+  this.set = (key, value) => {}
+  this.size = () => {}
+}
+```</p>
+
+<h3>The data structures</h3>
+
+<p>To access stored values in the cache in the most performant way, we store them with a key in a hash map:</p>
+
+<p><code>javascript
+// ...
+this._map = new Map()
+// ...
+</code></p>
+
+<p>In order to keep track of order access, we need to keep references to the head and the tail of the list, as well as an object to store the cached value and its place in the queue:</p>
+
+<p>```javascript
+//&hellip;
+this.<em>head = null
+this.</em>tail = null
+//&hellip;</p>
+
+<p>const Node = function(key, value) {
+  this.key = key;
+  this.value = value;
+  this.next = null;
+  this.prev = null;
+};
+```</p>
+
+<h3>The implementaton</h3>
+
+<p>```javascript
+const LRU = function(cacheSize) {
+  this.<em>maxSize = cacheSize;
+  this.</em>map = new Map();
+  this.<em>head = null;
+  this.</em>tail = null;</p>
+
+<p>  this.size = () => this._map.size;</p>
+
+<p>  this.get = key => {</p>
+
+<pre><code>const item = this._map.get(key);
+
+if (item) {
+  this._dequeue(item);
+  this._enqueue(item);
+  return item.value;
+}
+return;
+</code></pre>
+
+<p>  };</p>
+
+<p>  this.set = (key, value) => {</p>
+
+<pre><code>const node = new Node(key, value);
+
+if (this._map.has(key)) {
+  const existingNode = this._map.get(key);
+  this._dequeue(existingNode);
+}
+
+this._enqueue(node);
+this._trimList();
+
+return value;
+</code></pre>
+
+<p>  };</p>
+
+<p>  this._trimList = () => {</p>
+
+<pre><code>if (this._map.size &gt; this._maxSize) {
+  this._dequeue(this._head);
+}
+</code></pre>
+
+<p>  };</p>
+
+<p>  this._enqueue = node => {</p>
+
+<pre><code>this._map.set(node.key, node);
+if (!this._head) {
+  this._head = node;
+  this._tail = node;
+} else {
+  this._tail.next = node;
+  node.prev = this._tail;
+  node.next = null;
+  this._tail = node;
+}
+return node.value;
+</code></pre>
+
+<p>  };</p>
+
+<p>  this._dequeue = node => {</p>
+
+<pre><code>if (this._head === node) {
+  const { next, key } = this._head;
+  if (next) {
+    this._head = next;
+    this._head.prev = null;
+  } else {
+    this._head = null;
+    this._tail = null;
+  }
+} else {
+  const { prev, next } = node;
+  prev.next = next;
+  next.prev = prev;
+}
+this._map.delete(node.key);
+</code></pre>
+
+<p>  };</p>
+
+<p>  this.toString = () => {</p>
+
+<pre><code>const itr = this._map.entries();
+const entries = [];
+for (let item of itr) {
+  const [key, node] = item;
+  const { value } = node;
+  entries.push([key, value]);
+}
+return entries;
+</code></pre>
+
+<p>  };
+};</p>
+
+<p>const Node = function(key, value) {
+  this.key = key;
+  this.value = value;
+};</p>
+
+<p>module.exports = LRU;
+```</p>
+
+<p>Checkout <a href="https://github.com/keighty/lru-cache">this repo</a> for the full implementation and tests.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Browser-sync Is the Easiest Webserver EVER]]></title>
@@ -544,7 +717,7 @@ callback(email)
 <p>// > before the async
 // > after the async
 // > during the async
-// > <a href="&#x6d;&#97;&#105;&#108;&#116;&#x6f;&#x3a;&#x6b;&#x65;&#105;&#x67;&#x68;&#x74;&#x79;&#x2e;&#108;&#101;&#x6f;&#x6e;&#97;&#x72;&#x64;&#64;&#101;&#120;&#x61;&#109;&#x70;&#108;&#101;&#x2e;&#x63;&#111;&#x6d;">&#107;&#101;&#x69;&#x67;&#x68;&#116;&#x79;&#x2e;&#x6c;&#101;&#111;&#110;&#x61;&#114;&#100;&#64;&#101;&#x78;&#x61;&#109;&#x70;&#x6c;&#101;&#46;&#99;&#111;&#109;</a>
+// > <a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#107;&#x65;&#x69;&#103;&#x68;&#x74;&#121;&#46;&#108;&#101;&#111;&#x6e;&#97;&#x72;&#x64;&#64;&#101;&#x78;&#x61;&#x6d;&#x70;&#x6c;&#x65;&#x2e;&#99;&#x6f;&#109;">&#x6b;&#101;&#x69;&#x67;&#104;&#116;&#121;&#46;&#x6c;&#x65;&#111;&#110;&#x61;&#x72;&#100;&#x40;&#x65;&#120;&#97;&#x6d;&#112;&#x6c;&#101;&#x2e;&#99;&#111;&#109;</a>
 ```</p>
 
 <p><code>createEmailAddress</code> is called. When execution reaches the setTimeout function, and the 2000ms have elapsed, the callback passed to setTimeout is placed in the event queue, awaiting its turn for execution. The thread is release and does not have to wait for the setTimeout period to elapse before continuing execution &mdash; it continues with the second console statement (&lsquo;after the async&rsquo;). When the setTimeout callback is finally processed, the <code>firstName</code> and <code>lastName</code> variables are still accessible because they exist in the function closure.</p>
@@ -560,160 +733,6 @@ callback(email)
 <hr />
 
 <p>More on the event loop and event-emitter observer pattern to come!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Importing and Exporting: Modular React]]></title>
-    <link href="http://www.katieleonard.ca/blog/2016/importing-and-exporting-modular-react/"/>
-    <updated>2016-08-18T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2016/importing-and-exporting-modular-react</id>
-    <content type="html"><![CDATA[<p>While working on rewriting my side-project (VirtualPlaybill) in React, I got hung up on a very basic plumbing concept: named exports. <!--more--></p>
-
-<p>With ES5 you can export in three ways and import in one:
-```javascript
-// EXPORT STYLE 1
-module.exports = {
-  crunchy: function () { console.log(&lsquo;CRUNCHY!&rsquo;) },
-  bacon: function () { console.log(&lsquo;BACON!&rsquo;) }
-};</p>
-
-<p>// EXPORT STYLE 2
-exports.crunchy = function() { console.log(&lsquo;CRUNCHY!&rsquo;) }
-exports.bacon = function() { console.log(&lsquo;BACON!&rsquo;) }</p>
-
-<p>// EXPORT STYLE 3 (and my personal favourite)
-var breakfast = {
-  crunchy: function () { console.log(&lsquo;CRUNCHY!&rsquo;) },
-  bacon: function () { console.log(&lsquo;BACON!&rsquo;) }
-}
-module.exports = breakfast
-```</p>
-
-<p>An export is a meaningful bundle of code. Importing takes a single form, providing a handle to the exported bundle:</p>
-
-<p>```javascript
-// IMPORT
-var breakfast = require(&lsquo;breakfast.js&rsquo;)</p>
-
-<p>breakfast.crunchy() // CRUNCHY!
-breakfast.bacon() // BACON!
-```</p>
-
-<p>In ES6 there is a lot more flexibility: exports can be named and imports can take many forms.</p>
-
-<h4>Named exports</h4>
-
-<p>Importing a named export allows you to grab only the functions you need from a module, leaving the rest behind. Use curly braces to import a named export:
-```javascript
-//&mdash;&mdash;-test.js&mdash;&mdash;&ndash;//
-export crunchy = () => { console.log(&lsquo;CRUNCHY!&rsquo;) }
-export bacon = () => { console.log(&lsquo;BACON!&rsquo;) }</p>
-
-<p>// IMPORT BY NAME
-//&mdash;&mdash;-main.js&mdash;&mdash;&ndash;//
-import { crunchy } from &lsquo;./test&rsquo;
-crunchy() // CRUNCHY!
-bacon() // Uncaught ReferenceError: bacon is not defined(…)
-```</p>
-
-<h4>Default exports</h4>
-
-<p>In addition to named exports, you can specify one <code>default</code> export per file. Simply importing that file provides a reference to the default export:</p>
-
-<p>```javascript
-//&mdash;&mdash;-test.js&mdash;&mdash;&ndash;//
-export crunchy = () => { console.log(&lsquo;CRUNCHY!&rsquo;) }
-default export bacon = () => { console.log(&lsquo;BACON!&rsquo;) }</p>
-
-<p>// IMPORT BY DEFAULT
-//&mdash;&mdash;-main.js&mdash;&mdash;&ndash;//
-import myFunc from &lsquo;./test&rsquo;
-myFunc() // BACON!
-```</p>
-
-<p>You can also import both default and named exports at the same time:
-<code>javascript
-import myFunc, { crunchy } from './test'
-crunchy() // CRUNCHY!
-myFunc() // BACON!
-</code></p>
-
-<p>For even more import options, checkout the section on imports from the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import">MDN docs</a>:</p>
-
-<p><code>javascript
-import defaultMember from "module-name";
-import * as name from "module-name";
-import { member } from "module-name";
-import { member as alias } from "module-name";
-import { member1 , member2 } from "module-name";
-import { member1 , member2 as alias2 , [...] } from "module-name";
-import defaultMember, { member [ , [...] ] } from "module-name";
-import defaultMember, * as name from "module-name";
-import "module-name"
-</code></p>
-
-<p>name</p>
-
-<blockquote><p>Name of the object that will receive the imported values.</p></blockquote>
-
-<p>member, memberN</p>
-
-<blockquote><p>Name of the exported members to be imported.</p></blockquote>
-
-<p>defaultMember</p>
-
-<blockquote><p>Name of the exported default to be imported.</p></blockquote>
-
-<p>alias, aliasN</p>
-
-<blockquote><p>Name of the object that will receive the imported property</p></blockquote>
-
-<p>module-name</p>
-
-<blockquote><p>The name of the module to import. This is a file name.</p></blockquote>
-
-<h4>What you CAN&rsquo;T do&hellip;</h4>
-
-<p>&hellip; is use ES5 syntax and expect the import to know what you mean:</p>
-
-<p>```javascript
-//&mdash;&mdash;&mdash;my-component.js&mdash;&mdash;&mdash;&ndash;//
-class MyComponent extends React.Component {
-  render() {</p>
-
-<pre><code>return &lt;p&gt;this is an awesome react component &lt;/p&gt;
-</code></pre>
-
-<p>  }
-}</p>
-
-<p>export default MyComponent</p>
-
-<p>//&mdash;&mdash;&mdash;main.js&mdash;&mdash;&mdash;&ndash;//
-import MyComponent from &lsquo;./my-component&rsquo;
-console.log(MyComponent) // undefined
-```</p>
-
-<p>I was trying to write ES5 in ES6! Without an explicit <code>export</code> in front of the class declaration, my default had no idea what I intended to export, so it did nothing. Adding <code>export</code> to the class definition, or even moving the whole <code>export default</code> to the class declaration does the job:</p>
-
-<p>```javascript
-//&mdash;&mdash;&mdash;my-component.js&mdash;&mdash;&mdash;&ndash;//
-default export class MyComponent extends React.Component {
-  render() {</p>
-
-<pre><code>return &lt;p&gt;this is an awesome react component &lt;/p&gt;
-</code></pre>
-
-<p>  }
-}</p>
-
-<p>//&mdash;&mdash;&mdash;main.js&mdash;&mdash;&mdash;&ndash;//
-import MyComponent from &lsquo;./my-component&rsquo;
-console.log(MyComponent) // function MyComponent() {&hellip;}
-```</p>
-
-<p>Thanks to <a href="http://stackoverflow.com/a/31853887">this stackoverflow answer</a> for pointing me in the right direction, and <a href="http://exploringjs.com/es6/ch_modules.html">exploringjs</a> for even greater detail!</p>
 ]]></content>
   </entry>
   

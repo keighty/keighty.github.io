@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2017-03-18T16:16:42-07:00</updated>
+  <updated>2018-02-23T09:47:43-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,271 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Least Recently Used (LRU) Cache]]></title>
+    <link href="http://www.katieleonard.ca/blog/2018/least-recently-used/"/>
+    <updated>2018-02-23T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2018/least-recently-used</id>
+    <content type="html"><![CDATA[<p>I was recently challenged to implement a least recently used (LRU) cache in javascript, which taxed both my object-oriented javascripting chops as well as my hazy memory of how to implement a linked list.<!--more--> An LRU cache discards least recently used items first (<a href="https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_Recently_Used_(LRU">wikipedia</a>)). Not only do you have to limit the size of the list, but you have to track when an item has been accessed recently and ensure it is not removed before an item that has been accessed less recently.</p>
+
+<p>Judging from the scores of implementations available from my first Google search, this appears to be a fairly common interview question. Here is the approach that I took:</p>
+
+<ol>
+<li>Maintain performance by storing items in a hash map</li>
+<li>Use a queue-type linked list to keep track of access order: a new item is added to the end of the queue, while an existing item is removed from its place in the queue and re-added to the end of the queue.</li>
+<li>Keep the cache at the specified size by lopping off the head of the list (and removing those items from the map).</li>
+<li>Do it all using object oriented design principles.</li>
+</ol>
+
+
+<h3>The API/object design</h3>
+
+<p>A simple cache should not have too many bells and whistles. It needs a <code>get</code> and a <code>set</code>, and possbily a <code>size</code> (useful for testing, probably not something most users desperately need). It should take a specific <code>cacheSize</code> as well, so we can set limits on the cache at startup.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">const</span> <span class="nx">LRU</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">cacheSize</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">_maxSize</span> <span class="o">=</span> <span class="nx">cacheSize</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{}</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">set</span> <span class="o">=</span> <span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{}</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">size</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>The data structures</h3>
+
+<p>To access stored values in the cache in the most performant way, we store them with a key in a hash map:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// ...</span>
+</span><span class='line'><span class="k">this</span><span class="p">.</span><span class="nx">_map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Map</span><span class="p">()</span>
+</span><span class='line'><span class="c1">// ...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In order to keep track of order access, we need to keep references to the head and the tail of the list, as well as an object to store the cached value and its place in the queue:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">//...</span>
+</span><span class='line'><span class="k">this</span><span class="p">.</span><span class="nx">_head</span> <span class="o">=</span> <span class="kc">null</span>
+</span><span class='line'><span class="k">this</span><span class="p">.</span><span class="nx">_tail</span> <span class="o">=</span> <span class="kc">null</span>
+</span><span class='line'><span class="c1">//...</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">Node</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">key</span> <span class="o">=</span> <span class="nx">key</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">prev</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>The implementaton</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">const</span> <span class="nx">LRU</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cacheSize</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">_maxSize</span> <span class="o">=</span> <span class="nx">cacheSize</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">_map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Map</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">_head</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">_tail</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">size</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">_map</span><span class="p">.</span><span class="nx">size</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="nx">key</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kr">const</span> <span class="nx">item</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_map</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">this</span><span class="p">.</span><span class="nx">_dequeue</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">this</span><span class="p">.</span><span class="nx">_enqueue</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nx">item</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">set</span> <span class="o">=</span> <span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kr">const</span> <span class="nx">node</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Node</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_map</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kr">const</span> <span class="nx">existingNode</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_map</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">this</span><span class="p">.</span><span class="nx">_dequeue</span><span class="p">(</span><span class="nx">existingNode</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">_enqueue</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">_trimList</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">_trimList</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_map</span><span class="p">.</span><span class="nx">size</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">_maxSize</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">this</span><span class="p">.</span><span class="nx">_dequeue</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_head</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">_enqueue</span> <span class="o">=</span> <span class="nx">node</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">_map</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">key</span><span class="p">,</span> <span class="nx">node</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">_head</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">this</span><span class="p">.</span><span class="nx">_head</span> <span class="o">=</span> <span class="nx">node</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">this</span><span class="p">.</span><span class="nx">_tail</span> <span class="o">=</span> <span class="nx">node</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">this</span><span class="p">.</span><span class="nx">_tail</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="nx">node</span><span class="p">;</span>
+</span><span class='line'>      <span class="nx">node</span><span class="p">.</span><span class="nx">prev</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_tail</span><span class="p">;</span>
+</span><span class='line'>      <span class="nx">node</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">this</span><span class="p">.</span><span class="nx">_tail</span> <span class="o">=</span> <span class="nx">node</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">_dequeue</span> <span class="o">=</span> <span class="nx">node</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_head</span> <span class="o">===</span> <span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kr">const</span> <span class="p">{</span> <span class="nx">next</span><span class="p">,</span> <span class="nx">key</span> <span class="p">}</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_head</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">_head</span> <span class="o">=</span> <span class="nx">next</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">_head</span><span class="p">.</span><span class="nx">prev</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">_head</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">this</span><span class="p">.</span><span class="nx">_tail</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kr">const</span> <span class="p">{</span> <span class="nx">prev</span><span class="p">,</span> <span class="nx">next</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">node</span><span class="p">;</span>
+</span><span class='line'>      <span class="nx">prev</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="nx">next</span><span class="p">;</span>
+</span><span class='line'>      <span class="nx">next</span><span class="p">.</span><span class="nx">prev</span> <span class="o">=</span> <span class="nx">prev</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">_map</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">key</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">toString</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kr">const</span> <span class="nx">itr</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_map</span><span class="p">.</span><span class="nx">entries</span><span class="p">();</span>
+</span><span class='line'>    <span class="kr">const</span> <span class="nx">entries</span> <span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">item</span> <span class="nx">of</span> <span class="nx">itr</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kr">const</span> <span class="p">[</span><span class="nx">key</span><span class="p">,</span> <span class="nx">node</span><span class="p">]</span> <span class="o">=</span> <span class="nx">item</span><span class="p">;</span>
+</span><span class='line'>      <span class="kr">const</span> <span class="p">{</span> <span class="nx">value</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">node</span><span class="p">;</span>
+</span><span class='line'>      <span class="nx">entries</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">]);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nx">entries</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">Node</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">key</span> <span class="o">=</span> <span class="nx">key</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">LRU</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Checkout <a href="https://github.com/keighty/lru-cache">this repo</a> for the full implementation and tests.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Writing Test Cases in Java With Enums]]></title>
@@ -2760,72 +3025,6 @@
 <p>A target has more in common with a commitment than an estimate &mdash; it can have no bearing on the time estimated to complete a project, but will often define the envelope of time. Like in the previous example, the target for delivery to the customer was six months, but the commitment could be four or five features, depending on the estimates for each feature.</p>
 
 <p>Estimation must come before planning, and before you really understand all of the requirements for the project. More often than not, events that happen during the project will have a big impact on the assumptions made to estimate the project at the beginning. Estimates are hard, but McConnell has some awesome advice on how to get it right.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The Clean Coder]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/the-clean-coder/"/>
-    <updated>2015-09-26T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/the-clean-coder</id>
-    <content type="html"><![CDATA[<p>In <a href="http://www.amazon.com/Clean-Coder-Conduct-Professional-Programmers/dp/0137081073/ref=sr_1_1?ie=UTF8&amp;qid=1443288322&amp;sr=8-1&amp;keywords=the+clean+coder">The Clean Coder: A Code of Conduct for Professional Programmers</a>, Bob Martin (Uncle Bob) tells you what it means to be a professional programmer. Much of what distinguishes a professional from a non-professional can be reduced to responsibility: a professional is responsible for their project, their team, and their own career. <!--more--></p>
-
-<p><a href="http://www.amazon.com/Clean-Coder-Conduct-Professional-Programmers/dp/0137081073/ref=sr_1_1?ie=UTF8&amp;qid=1443288322&amp;sr=8-1&amp;keywords=the+clean+coder"><img class="left" src="http://www.katieleonard.ca/images/150926-clean-coder/cleancoder.jpg"></a></p>
-
-<h2>Protect your projects</h2>
-
-<p>Your first responsibility, according to Uncle Bob, is to your employer, which means doing the job that you have been hired to do.</p>
-
-<ul>
-<li><p><strong>Make reasonable estimates.</strong> Your project does not exist in isolation from other parts of the company. An estimate is a probability distribution of likely outcomes, not a single point in time. Many stakeholders rely on your estimates for coordinating marketing, sales, and other downstream tasks.</p></li>
-<li><p><strong>Meet your commitments.</strong> Estimates are different from commitments. If you have committed to delivering a feature or a product by a target date, meet that date.</p></li>
-</ul>
-
-
-<blockquote><p>If it can&rsquo;t be done, you can still commit to actions that will bring you closer to the target. Finding out if it can be done can be one of the actions to commit to!</p></blockquote>
-
-<ul>
-<li><strong>Protect your time.</strong> An easy way to ensure the success of your project is to devote the time and energy you have already promised in your estimates. Meetings can be disruptive to your workflow, and you should decline any meeting that does not move your project forward. If you can&rsquo;t decline, ask for an agenda and clear goals before you accept.</li>
-</ul>
-
-
-<blockquote><p>Sometimes the meeting will be about something that interests you, but is not immediately necessary. You will have to choose whether you can afford the time. Be careful — there may be more than enough of these meetings to consume your days.</p></blockquote>
-
-<h2>Protect your team</h2>
-
-<blockquote><p>A team-player communicates frequently, keeps an eye out for his or her teammates, and executes his or her own responsibilities as well as possible.</p></blockquote>
-
-<ul>
-<li><strong>Stand by your original estimates</strong>, and don&rsquo;t confuse them with commitments. Your estimates should protect your team from long hours, undue management pressure, and unpleasant surprises. Don&rsquo;t promise what your team can&rsquo;t deliver.</li>
-</ul>
-
-
-<blockquote><p>Business likes to view estimates as commitments. Developers like to view estimates as guesses. The difference is profound.</p></blockquote>
-
-<ul>
-<li><strong>Mentor less experienced engineers.</strong> Contributing to the growth of everyone will make your team stronger. Don&rsquo;t wear your headphones to cut yourself off from interruptions. Making yourself available as a resource will get someone else on the team unstuck, which moves your project forward (Uncle Bob recommends using TDD instead of the Zone to pick up the stack if you have to drop it). “It is unprofessional to be a loner or a recluse on a team.&#8221;</li>
-</ul>
-
-
-<h2>Protect your career</h2>
-
-<p>Your employer is not responsible for keeping your skills up to date. They are not required to ensure that you are aware of cutting edge technologies and languages.</p>
-
-<blockquote><p>Your career is your responsibility. It is not your employer&rsquo;s responsibility to make sure you are marketable. It is not your employer&rsquo;s responsibility to train you, or to send you to conferences, or to buy you books. These things are your responsibility. Woe to the software developer who entrusts his career to his employer.</p></blockquote>
-
-<ul>
-<li><strong>Practice coding.</strong> Uncle Bob is a big proponent of practicing code. Performing code kata before starting work will put you in the right frame of mind.</li>
-</ul>
-
-
-<blockquote><p>Professionals practice. True professionals work hard to keep their skills sharp and ready. It is not enough to simply do your daily job and call that practice. Doing your job is daily performance, not practice. Practice is when you specifically exercise your skills outside of the performance of your job for the sole purpose of refining and enhancing those skills.</p></blockquote>
-
-<ul>
-<li><strong>Learn about the industry.</strong> Falling behind in new technologies will make you obsolete. You will not stay marketable to new employers (or even your current employer), if you do not stay current.</li>
-</ul>
-
-
-<p>Reading The Clean Coder was like sitting down with a mentor and asking how I can grow my career. I would recommend it for anyone entering the profession today!</p>
 ]]></content>
   </entry>
   
