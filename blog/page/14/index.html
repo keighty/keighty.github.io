@@ -9,7 +9,7 @@
 	<meta name="author" content="katie leonard">
 
 	
-	<meta name="description" content="Feb 5th, 2014 message queue First in, First Out Why use message queues? Message queues offer the benefits of high reliability at the cost of &hellip;">
+	<meta name="description" content="Feb 6th, 2014 message queue Fanout Continuing my exploration of message queues&hellip; A common MQ modality is publish/subscribe. A simplistic queue &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -127,6 +127,44 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-06T14:38:12-08:00" data-updated="true" itemprop="datePublished">Feb 6<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/message-queue/'>message queue</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/fanout/" itemprop="url">Fanout</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Continuing my exploration of message queues&hellip;</p>
+
+<p>A common MQ modality is publish/subscribe. A simplistic queue model has producers publishing messages directly to a queue and consumers taking messages off a queue. In the publish/subscribe model, the producer sends messages to an <strong>exchange</strong>, who&rsquo;s only job is to publish messages to queues. In this scenario, the exchange knows to which queue(s) the message should be published according to established rules. The relationship between an exchange and a queue is called a <strong>binding</strong>.</p>
+
+
+		
+		<a href="/blog/2014/fanout/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -341,40 +379,6 @@
 
 		
 		<a href="/blog/2014/git-retrieve/" class="more-link">Read on &rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-22T07:23:10-08:00" data-updated="true" itemprop="datePublished">Jan 22<span>nd</span>, 2014</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/mongodb/'>mongodb</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2014/maintaining-mongod/" itemprop="url">Mongod Maintenance</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>My laptop&rsquo;s battery died, and I let it. Not a big deal, it is an old laptop and is used to being abused. Every time it does a hard shut down like that I wonder if it will recover. The laptop recovered just fine, but mongo did not. When my computer coughed back to life, I politely requested a meteor server, to which meteor replied that it could not start my server because it could not find a running mongodb. My first instinct, naturally, was to start it up again
-		
-		<a href="/blog/2014/maintaining-mongod/" class="more-link">Read on &rarr;</a>
 	</div>
 
 </article>

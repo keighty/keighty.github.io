@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2018-02-23T09:56:13-08:00</updated>
+  <updated>2018-02-28T09:09:48-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,335 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Decorate Your Javascript]]></title>
+    <link href="http://www.katieleonard.ca/blog/2018/decorate-your-javascript/"/>
+    <updated>2018-02-28T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2018/decorate-your-javascript</id>
+    <content type="html"><![CDATA[<p>Javascript decorators are a form of metaprogramming: they add functionality to classes and properties. Unlike the <a href="https://en.wikipedia.org/wiki/Decorator_pattern">GoF pattern</a>, where decorators modify instances of a class, Javascript decorators are run when the class, method, or property is installed, modifying all instances.</p>
+
+<p>Decorators are useful for adding extra functionality to behaviours and properties that would otherwise look like boilerplate &mdash; such as cacheing, access control, logging, or instrumentation.<!--more--></p>
+
+<h3>How does it work?</h3>
+
+<p>A decorator function runs before the object it decorates is installed on the prototype. When you define an undecorated object like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">class</span> <span class="nx">ExampleWithoutDecoration</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">doWork</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;can\&#39;t you see I\&#39;m working here?&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The Javascript engine creates an object and installs the <code>doWork</code> method on its prototype:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span><span class="nx">ExampleWithoutDecoration</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="s1">&#39;doWork&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">value</span><span class="o">:</span> <span class="nx">specifiedFunction</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">enumerable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">writable</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When you define a DECORATED method like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">class</span> <span class="nx">ExampleWithDecoration</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="err">@</span><span class="nx">DecoratingIsFun</span>
+</span><span class='line'>  <span class="nx">doWork</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;can\&#39;t you see I\&#39;m working here?&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The Javascript engine saves some temporary state, runs the decorator function, and then installs the <code>doWork</code> method on the object&rsquo;s prototype.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">let</span> <span class="nx">methodDescription</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;method&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">initializer</span><span class="o">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">specifiedFunction</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">enumerable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">configurable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">writable</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">methodDescription</span> <span class="o">=</span> <span class="nx">DecoratingIsFun</span><span class="p">(</span><span class="nx">ExampleWithDecoration</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="s1">&#39;doWork&#39;</span><span class="p">,</span> <span class="nx">methodDescription</span><span class="p">)</span> <span class="o">||</span> <span class="nx">methodDescription</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">defineDecoratedProperty</span><span class="p">(</span><span class="nx">ExampleWithDecoration</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="s1">&#39;doWork&#39;</span><span class="p">,</span> <span class="nx">methodDescription</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">defineDecoratedProperty</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="p">{</span> <span class="nx">initializer</span><span class="p">,</span> <span class="nx">enumerable</span><span class="p">,</span> <span class="nx">configurable</span><span class="p">,</span> <span class="nx">writable</span> <span class="p">})</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="p">{</span> <span class="nx">value</span><span class="o">:</span> <span class="nx">initializer</span><span class="p">(),</span> <span class="nx">enumerable</span><span class="p">,</span> <span class="nx">configurable</span><span class="p">,</span> <span class="nx">writable</span> <span class="p">})</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this case, the <code>DecoratingIsFun</code> method is run with <code>this</code> set to the object prototype, and it has the opportunity to modify/return a methodDescription, or use the previously specified methodDescription.</p>
+
+<p>Consider <code>DecoratingMakesSense</code>, which makes the <code>doWork</code> method non-writeable:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">const</span> <span class="nx">DecoratingMakesSense</span> <span class="o">=</span> <span class="p">(</span><span class="nx">object</span><span class="p">,</span> <span class="nx">methodName</span><span class="p">,</span> <span class="nx">description</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Decorating makes sense&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">description</span><span class="p">.</span><span class="nx">writable</span> <span class="o">=</span> <span class="kc">false</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">description</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">class</span> <span class="nx">ExampleWithDetailedDecoration</span> <span class="p">{</span>
+</span><span class='line'>  <span class="err">@</span><span class="nx">DecoratingMakesSense</span>
+</span><span class='line'>  <span class="nx">doWork</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;can\&#39;t you see I\&#39;m working here?&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">makesSense</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ExampleWithDetailedDecoration</span><span class="p">()</span>
+</span><span class='line'><span class="nx">makesSense</span><span class="p">.</span><span class="nx">doWork</span><span class="p">()</span>
+</span><span class='line'><span class="nx">makesSense</span><span class="p">.</span><span class="nx">doWork</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;some other function&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; node build/main.js
+</span><span class='line'>Decorating makes sense
+</span><span class='line'>can<span class="s1">&#39;t you see I&#39;</span>m working here?
+</span><span class='line'>
+</span><span class='line'>/decorator-example/build/main.js:164
+</span><span class='line'>makesSense.doWork <span class="o">=</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>                  ^
+</span><span class='line'>
+</span><span class='line'>TypeError: Cannot assign to <span class="nb">read </span>only property <span class="s1">&#39;doWork&#39;</span> of object <span class="s1">&#39;#&lt;ExampleWithDetailedDecoration&gt;&#39;</span>
+</span><span class='line'>    at Object.defineProperty.value <span class="o">(</span>/decorator-example/build/main.js:164:19<span class="o">)</span>
+</span><span class='line'>...
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Getting started</h3>
+
+<p>Since decorators are currently in the <a href="https://tc39.github.io/proposal-decorators/">proposal stage</a>, getting started requires a little tweaking of your standard babel/webpack/linter configs.</p>
+
+<h4>Babel</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; npm install -g webpack
+</span><span class='line'>&gt; npm install --save-dev babel-core babel-loader babel-preset-es2015 babel-plugin-transform-decorators-legacy
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In your .babelrc</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">{</span>
+</span><span class='line'>  <span class="s2">&quot;presets&quot;</span>: <span class="o">[</span>
+</span><span class='line'>    <span class="s2">&quot;es2015&quot;</span>
+</span><span class='line'>  <span class="o">]</span>,
+</span><span class='line'>  <span class="s2">&quot;plugins&quot;</span>: <span class="o">[</span>
+</span><span class='line'>    <span class="s2">&quot;transform-decorators-legacy&quot;</span>
+</span><span class='line'>  <span class="o">]</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Webpack</h4>
+
+<p>Here is a barebones webpack.config.js example</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>var <span class="nv">path</span> <span class="o">=</span> require<span class="o">(</span><span class="s1">&#39;path&#39;</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>module.exports <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>  entry: <span class="s1">&#39;./index.js&#39;</span>,
+</span><span class='line'>  output: <span class="o">{</span>
+</span><span class='line'>    path: path.resolve<span class="o">(</span>__dirname, <span class="s1">&#39;build&#39;</span><span class="o">)</span>,
+</span><span class='line'>    filename: <span class="s1">&#39;main.js&#39;</span>
+</span><span class='line'>  <span class="o">}</span>,
+</span><span class='line'>  module: <span class="o">{</span>
+</span><span class='line'>      loaders: <span class="o">[</span>
+</span><span class='line'>    <span class="o">{</span>
+</span><span class='line'>      <span class="nb">test</span>: /<span class="se">\.</span>js<span class="nv">$/</span>,
+</span><span class='line'>      exclude: /node_modules/,
+</span><span class='line'>      loader: <span class="s1">&#39;babel-loader&#39;</span>,
+</span><span class='line'>      query: <span class="o">{</span>
+</span><span class='line'>        cacheDirectory: <span class="nb">true</span>,
+</span><span class='line'>        plugins: <span class="o">[</span>
+</span><span class='line'>          <span class="s1">&#39;transform-decorators-legacy&#39;</span>,
+</span><span class='line'>        <span class="o">]</span>,
+</span><span class='line'>        presets: <span class="o">[</span><span class="s1">&#39;es2015&#39;</span><span class="o">]</span>,
+</span><span class='line'>      <span class="o">}</span>,
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">]</span>
+</span><span class='line'>  <span class="o">}</span>,
+</span><span class='line'>  stats: <span class="o">{</span>
+</span><span class='line'>    colors: <span class="nb">true</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>(The important bit is to add &lsquo;transform-decorators-legacy&rsquo; to the plugins array.)</p>
+
+<h4>Linting error &mdash; or is it? 🤔</h4>
+
+<p>If you use VSCode, you will probably run across a linter error that says</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>js<span class="o">]</span> Experimental support <span class="k">for </span>decorators is a feature that is subject to
+</span><span class='line'>change in a future release. Set the <span class="s1">&#39;experimentalDecorators&#39;</span> option to
+</span><span class='line'>remove this warning.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is an error in the VSCode JS support, rather than a linter error.</p>
+
+<p>Add a jsconfig.json file to your project root with the following contents:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">{</span>
+</span><span class='line'>  <span class="s2">&quot;compilerOptions&quot;</span>: <span class="o">{</span>
+</span><span class='line'>    <span class="s2">&quot;experimentalDecorators&quot;</span>: <span class="nb">true</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Be sure to restart VSCode, and the problem should go away. If it doesn&rsquo;t, follow <a href="https://github.com/Microsoft/vscode/issues/28097">this thread</a> for further information.</p>
+
+<h3>Build and run</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; webpack
+</span><span class='line'>Hash: 63cf378bd6d165758ed8
+</span><span class='line'>Version: webpack 3.8.1
+</span><span class='line'>Time: 457ms
+</span><span class='line'>  Asset     Size  Chunks             Chunk Names
+</span><span class='line'>main.js  4.47 kB       0  <span class="o">[</span>emitted<span class="o">]</span>  main
+</span><span class='line'>   <span class="o">[</span>0<span class="o">]</span> ./index.js 1.7 kB <span class="o">{</span>0<span class="o">}</span> <span class="o">[</span>built<span class="o">]</span>
+</span><span class='line'>   <span class="o">[</span>1<span class="o">]</span> ./decorator.js 195 bytes <span class="o">{</span>0<span class="o">}</span> <span class="o">[</span>built<span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>&gt; node build/main.js
+</span><span class='line'>Decorating is fun
+</span><span class='line'>can<span class="s1">&#39;t you see I&#39;</span>m working here?
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For a detailed example checkout <a href="https://github.com/keighty/decorator--example">this repo</a>. For more examples and a deep dive, checkout <a href="https://github.com/wycats/javascript-decorators">wycats&rsquo;s decorator spec</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Least Recently Used (LRU) Cache]]></title>
@@ -2992,39 +3321,6 @@
 
 
 <p>From <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-8.10">the docs</a>: &ldquo;The Property Descriptor type is used to explain the manipulation and reification of named property attributes. Use Object.defineProperty for fine-grained control over the visibility and mutability of your object&rsquo;s properties.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Estimate != Commitment != Target]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/software-estimation-is-hard/"/>
-    <updated>2015-10-31T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/software-estimation-is-hard</id>
-    <content type="html"><![CDATA[<p>Software estimation is hard, but I didn&rsquo;t really understand why until I started reading <a href="http://www.amazon.com/Software-Estimation-Demystifying-Developer-Practices/dp/0735605351">Software Estimation: Demystifying the Black Art</a> by Steve McConnell. It was published in 2006, and is very much still relevant &mdash; there are more ways to do estimation wrong than to do it right.</p>
-
-<p>The biggest &ldquo;aha&rdquo; moment for me was learning the difference between estimates, targets, and commitments. <!--more-->I always thought that estimates were commitments and treated them like targets. If a task took longer than my estimate, I would worry that I had blown the project plan. The source of my stress was really semantics, and a deep misunderstanding of project plans in general.</p>
-
-<h4>1. An estimate is a range where there is a 90% chance of finding the completion date</h4>
-
-<p>An estimate is not a single point in time &mdash; that is a target. There is uncertainty in software development, and uncertainty about the uncertainty.</p>
-
-<blockquote><p>There is a limit to how well a project can go but no limit to how many problems can occur.</p></blockquote>
-
-<p>Estimates are probability distrubutions of possible outcomes:</p>
-
-<p><img class="left" src="http://www.katieleonard.ca/images/151031-software-estimation/estimation-chart.png"></p>
-
-<p>Most of my experience in estimating projects has been to break a feature down into small tasks and estimate those. Tightly defined requirements for a task make it easier to estimate, but there are always complications that can throw things off track. Thinking about an estimate as a range of possibilities between the best and worst case scenarios reduces stress about being right the first time.</p>
-
-<h4>2. A commitment is a promise to deliver defined functionality at a certain level of quality at a certain date.</h4>
-
-<p>You can use estimates to plan commitments, but not the other way around. If ten features take a year to develop, but your customer needs to have something in six months, you can commit to delivering four or five features by that target, but there is no way you can deliver ten.</p>
-
-<h4>3. A target is a single point in time, and is usually determined by business needs.</h4>
-
-<p>A target has more in common with a commitment than an estimate &mdash; it can have no bearing on the time estimated to complete a project, but will often define the envelope of time. Like in the previous example, the target for delivery to the customer was six months, but the commitment could be four or five features, depending on the estimates for each feature.</p>
-
-<p>Estimation must come before planning, and before you really understand all of the requirements for the project. More often than not, events that happen during the project will have a big impact on the assumptions made to estimate the project at the beginning. Estimates are hard, but McConnell has some awesome advice on how to get it right.</p>
 ]]></content>
   </entry>
   

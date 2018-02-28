@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2018-02-23T09:56:13-08:00</updated>
+  <updated>2018-02-28T09:09:48-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,249 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Decorate Your Javascript]]></title>
+    <link href="http://www.katieleonard.ca/blog/2018/decorate-your-javascript/"/>
+    <updated>2018-02-28T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2018/decorate-your-javascript</id>
+    <content type="html"><![CDATA[<p>Javascript decorators are a form of metaprogramming: they add functionality to classes and properties. Unlike the <a href="https://en.wikipedia.org/wiki/Decorator_pattern">GoF pattern</a>, where decorators modify instances of a class, Javascript decorators are run when the class, method, or property is installed, modifying all instances.</p>
+
+<p>Decorators are useful for adding extra functionality to behaviours and properties that would otherwise look like boilerplate &mdash; such as cacheing, access control, logging, or instrumentation.<!--more--></p>
+
+<h3>How does it work?</h3>
+
+<p>A decorator function runs before the object it decorates is installed on the prototype. When you define an undecorated object like this:</p>
+
+<p>```javascript
+class ExampleWithoutDecoration {
+  doWork() {</p>
+
+<pre><code>console.log('can\'t you see I\'m working here?')
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>The Javascript engine creates an object and installs the <code>doWork</code> method on its prototype:</p>
+
+<p><code>javascript
+Object.defineProperty(ExampleWithoutDecoration.prototype, 'doWork', {
+  value: specifiedFunction,
+  enumerable: false,
+  configurable: true,
+  writable: true
+})
+</code></p>
+
+<p>When you define a DECORATED method like this:</p>
+
+<p>```javascript
+class ExampleWithDecoration {</p>
+
+<p>  @DecoratingIsFun
+  doWork() {</p>
+
+<pre><code>console.log('can\'t you see I\'m working here?')
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>The Javascript engine saves some temporary state, runs the decorator function, and then installs the <code>doWork</code> method on the object&rsquo;s prototype.</p>
+
+<p>```javascript
+let methodDescription = {
+  type: &lsquo;method&rsquo;,
+  initializer: () => specifiedFunction,
+  enumerable: false,
+  configurable: true,
+  writable: true
+};</p>
+
+<p>methodDescription = DecoratingIsFun(ExampleWithDecoration.prototype, &lsquo;doWork&rsquo;, methodDescription) || methodDescription</p>
+
+<p>defineDecoratedProperty(ExampleWithDecoration.prototype, &lsquo;doWork&rsquo;, methodDescription);</p>
+
+<p>function defineDecoratedProperty(target, { initializer, enumerable, configurable, writable }) {
+  Object.defineProperty(target, { value: initializer(), enumerable, configurable, writable })
+}
+```</p>
+
+<p>In this case, the <code>DecoratingIsFun</code> method is run with <code>this</code> set to the object prototype, and it has the opportunity to modify/return a methodDescription, or use the previously specified methodDescription.</p>
+
+<p>Consider <code>DecoratingMakesSense</code>, which makes the <code>doWork</code> method non-writeable:</p>
+
+<p>```javascript
+const DecoratingMakesSense = (object, methodName, description) => {
+  console.log(&lsquo;Decorating makes sense&rsquo;)</p>
+
+<p>  description.writable = false
+  return description
+}</p>
+
+<p>class ExampleWithDetailedDecoration {
+  @DecoratingMakesSense
+  doWork() {</p>
+
+<pre><code>console.log('can\'t you see I\'m working here?')
+</code></pre>
+
+<p>  }
+}</p>
+
+<p>const makesSense = new ExampleWithDetailedDecoration()
+makesSense.doWork()
+makesSense.doWork = () => console.log(&lsquo;some other function&rsquo;)
+```</p>
+
+<p>```bash</p>
+
+<blockquote><p>node build/main.js
+Decorating makes sense
+can&rsquo;t you see I&rsquo;m working here?</p></blockquote>
+
+<p>/decorator-example/build/main.js:164
+makesSense.doWork = function () {</p>
+
+<pre><code>              ^
+</code></pre>
+
+<p>TypeError: Cannot assign to read only property &lsquo;doWork&rsquo; of object &lsquo;#<ExampleWithDetailedDecoration>&rsquo;</p>
+
+<pre><code>at Object.defineProperty.value (/decorator-example/build/main.js:164:19)
+</code></pre>
+
+<p>&hellip;
+```</p>
+
+<h3>Getting started</h3>
+
+<p>Since decorators are currently in the <a href="https://tc39.github.io/proposal-decorators/">proposal stage</a>, getting started requires a little tweaking of your standard babel/webpack/linter configs.</p>
+
+<h4>Babel</h4>
+
+<p>```</p>
+
+<blockquote><p>npm install -g webpack
+npm install &mdash;save-dev babel-core babel-loader babel-preset-es2015 babel-plugin-transform-decorators-legacy
+```</p></blockquote>
+
+<p>In your .babelrc</p>
+
+<p>```
+{
+  &ldquo;presets&rdquo;: [</p>
+
+<pre><code>"es2015"
+</code></pre>
+
+<p>  ],
+  &ldquo;plugins&rdquo;: [</p>
+
+<pre><code>"transform-decorators-legacy"
+</code></pre>
+
+<p>  ]
+}
+```</p>
+
+<h4>Webpack</h4>
+
+<p>Here is a barebones webpack.config.js example</p>
+
+<p>```
+var path = require(&lsquo;path&rsquo;)</p>
+
+<p>module.exports = {
+  entry: &lsquo;./index.js&rsquo;,
+  output: {</p>
+
+<pre><code>path: path.resolve(__dirname, 'build'),
+filename: 'main.js'
+</code></pre>
+
+<p>  },
+  module: {</p>
+
+<pre><code>  loaders: [
+{
+  test: /\.js$/,
+  exclude: /node_modules/,
+  loader: 'babel-loader',
+  query: {
+    cacheDirectory: true,
+    plugins: [
+      'transform-decorators-legacy',
+    ],
+    presets: ['es2015'],
+  },
+}
+</code></pre>
+
+<p>  ]
+  },
+  stats: {</p>
+
+<pre><code>colors: true
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>(The important bit is to add &lsquo;transform-decorators-legacy&rsquo; to the plugins array.)</p>
+
+<h4>Linting error &mdash; or is it? 🤔</h4>
+
+<p>If you use VSCode, you will probably run across a linter error that says</p>
+
+<p><code>
+[js] Experimental support for decorators is a feature that is subject to
+change in a future release. Set the 'experimentalDecorators' option to
+remove this warning.
+</code></p>
+
+<p>This is an error in the VSCode JS support, rather than a linter error.</p>
+
+<p>Add a jsconfig.json file to your project root with the following contents:</p>
+
+<p>```
+{
+  &ldquo;compilerOptions&rdquo;: {</p>
+
+<pre><code>"experimentalDecorators": true
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>Be sure to restart VSCode, and the problem should go away. If it doesn&rsquo;t, follow <a href="https://github.com/Microsoft/vscode/issues/28097">this thread</a> for further information.</p>
+
+<h3>Build and run</h3>
+
+<p>```</p>
+
+<blockquote><p>webpack
+Hash: 63cf378bd6d165758ed8
+Version: webpack 3.8.1
+Time: 457ms
+  Asset     Size  Chunks             Chunk Names
+main.js  4.47 kB       0  [emitted]  main
+   [0] ./index.js 1.7 kB {0} [built]
+   [1] ./decorator.js 195 bytes {0} [built]</p>
+
+<p>node build/main.js
+Decorating is fun
+can&rsquo;t you see I&rsquo;m working here?
+```</p></blockquote>
+
+<p>For a detailed example checkout <a href="https://github.com/keighty/decorator--example">this repo</a>. For more examples and a deep dive, checkout <a href="https://github.com/wycats/javascript-decorators">wycats&rsquo;s decorator spec</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Least Recently Used (LRU) Cache]]></title>
@@ -631,108 +874,6 @@ Matched hello blah in file fileA.txt
 <p>Why did the files process in what seems to be reverse order? The event demultiplexer adds work to the event loop as it fulfills I/O requests. When <code>readfile()</code> is given three files &mdash; a file with content (fileA), an empty file (fileB), and a non-existent file (fileC) &mdash; it is reasonable to assume that the I/O request for a non-existent file will return first, as there is no file to read. It is also reasonable that an empty file will  return next, as there is very little work to be done reading an empty file. Finally, the I/O request for the file with content returns &mdash; it requires more work to read a file with content than an empty file.</p>
 
 <p>For more about the event emitter pattern in Node, check out <a href="https://www.amazon.com/Node-js-Design-Patterns-Mario-Casciaro/dp/1785885588/ref=sr_1_1/161-7210115-5247461?ie=UTF8&amp;qid=1476284148&amp;sr=8-1&amp;keywords=node.js+design+patterns">Node.js Design Patterns</a> by Mario Casciaro and Luciano Mammino.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Callbacks and the Event Loop]]></title>
-    <link href="http://www.katieleonard.ca/blog/2016/clarified-callbacks/"/>
-    <updated>2016-10-12T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2016/clarified-callbacks</id>
-    <content type="html"><![CDATA[<p>When I started writing javascript in earnest a couple of years ago, I was stuck in a very procedural way of thinking &mdash; all of my functions executed synchronously. If you replaced <code>function</code> with <code>def</code> and removed all <code>var</code> keywords, you would be reading Ruby (true story: yesterday I was debugging an issue with a React module and put in a <code>binding.pry</code> instead of <code>debugger</code> :facepalm: Old habits die hard).</p>
-
-<p>Last year, I joined a team that writes javascript in the Node.js style, using callbacks for flow control. While I became familiar with the pattern pretty quickly, the whys and wherefores were missing from my understanding. Today I am filling in the gaps by reading <a href="https://www.amazon.com/Node-js-Design-Patterns-Mario-Casciaro/dp/1785885588/ref=sr_1_1/161-7210115-5247461?ie=UTF8&amp;qid=1476284148&amp;sr=8-1&amp;keywords=node.js+design+patterns">Node.js Design Patterns</a> by Mario Casciaro and Luciano Mammino.<!--more--></p>
-
-<h3>The Event Loop</h3>
-
-<p>The first step to understanding asynchronous javascript is to understand the event loop. It is a single thread that processes one message at a time, as they appear in the FIFO event queue.</p>
-
-<p><img src="/images/161012-callbacks/event-loop.png">
-<em>image credit: Mario Casciaro and Luciano Mammino from Node.js Design Patterns. Colour notations are mine.</em></p>
-
-<ol>
-<li>An I/O request is sent to the event demultiplexer.</li>
-<li>The event demultiplexer queues the I/O instructions along with the context and a callback function that contains the instructions for what do to with the result once it is received.</li>
-<li>When the I/O order is filled, the event demultiplexer pops an event on to the event queue, with the filled I/O request, and the callback handler.</li>
-<li>The event loop pulls the event off of the event queue and applies the result to the callback function.</li>
-<li>The event loop either sends the result of the callback operation to the application, or generates more I/O work for the event demultiplexer.</li>
-</ol>
-
-
-<p>When I check my email in the morning, I go through a similar process:</p>
-
-<ul>
-<li>My inbox is the event demultiplexer, where requests for resources are made.</li>
-<li>I (as the event loop) process emails from in the queue from oldest to newest, and I only process one at at time.</li>
-<li>For each message I read the context and perform one of two actions (callback):
-
-<ul>
-<li>Process the message and return to the queue to pick up another message.</li>
-<li>Add a new action to my todo list event queue along with the a reminder to attach the result of the new action to the email when I respond (callback).</li>
-</ul>
-</li>
-</ul>
-
-
-<p>When I am finished with my email inbox I start on my todo list, performing the actions required and responding to the email. Sometimes the action will generate additional actions, which I append to the end of my todo list. While the idea of an infinite todo list is a little disheartening to a human, this is how the V8 javascript engine was designed: it performs the work with maximum efficiency, and can do so with only a single thread.</p>
-
-<h3>The difference between synchronous and asynchronous javascript</h3>
-
-<p>Synchronous javascript can be easily identified by the use of a <code>return</code> statement, which returns control back to the caller.</p>
-
-<p>```javascript
-function introduction (firstName, lastName) {
-  return &lsquo;Hello, my name is &rsquo; + firstName + &lsquo; &rsquo; + lastName
-}</p>
-
-<p>introduction(&lsquo;Keighty&rsquo;, &lsquo;Leonard&rsquo;)
-// &ldquo;hello! my name is Keighty Leonard&rdquo;
-```</p>
-
-<p>Asynchronous javascript uses a &lsquo;continuous passing pattern&rsquo;, where the result of a function is passed to a handler for further processing.</p>
-
-<p>```javascript
-function createEmailAddress (firstName, lastName, callback) {
-  // create asynchronous call
-  console.log(&lsquo;before the async&rsquo;)
-  setTimeout(function () {</p>
-
-<pre><code>// do some work
-var email = firstName.toLowerCase() + '.' + lastName.toLowerCase() + '@example.com'
-console.log('during the async')
-// pass the result of the work to the callback
-callback(email)
-</code></pre>
-
-<p>  }, 2000)
-  console.log(&lsquo;after the async&rsquo;)
-}</p>
-
-<p>var cb = function (result) {
-  console.log(result)
-}</p>
-
-<p>createEmailAddress(&lsquo;Keighty&rsquo;, &lsquo;Leonard&rsquo;, cb)</p>
-
-<p>// > before the async
-// > after the async
-// > during the async
-// > <a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#x3a;&#107;&#x65;&#x69;&#103;&#x68;&#116;&#x79;&#46;&#108;&#x65;&#111;&#x6e;&#97;&#114;&#100;&#x40;&#x65;&#120;&#97;&#x6d;&#112;&#x6c;&#x65;&#x2e;&#x63;&#111;&#x6d;">&#x6b;&#x65;&#105;&#103;&#x68;&#x74;&#x79;&#x2e;&#108;&#x65;&#111;&#110;&#x61;&#114;&#100;&#64;&#101;&#120;&#x61;&#x6d;&#112;&#x6c;&#x65;&#x2e;&#99;&#111;&#109;</a>
-```</p>
-
-<p><code>createEmailAddress</code> is called. When execution reaches the setTimeout function, and the 2000ms have elapsed, the callback passed to setTimeout is placed in the event queue, awaiting its turn for execution. The thread is release and does not have to wait for the setTimeout period to elapse before continuing execution &mdash; it continues with the second console statement (&lsquo;after the async&rsquo;). When the setTimeout callback is finally processed, the <code>firstName</code> and <code>lastName</code> variables are still accessible because they exist in the function closure.</p>
-
-<p>Javascript has many features that make the continuous passing pattern easy:</p>
-
-<ul>
-<li>Closures allow you to access the environment on which a function was created, no matter when the callback is invoked.</li>
-<li>Functions are first class data types, meaning they can be assigned to variables, passed as parameters, and stored in data structures.</li>
-</ul>
-
-
-<hr />
-
-<p>More on the event loop and event-emitter observer pattern to come!</p>
 ]]></content>
   </entry>
   
