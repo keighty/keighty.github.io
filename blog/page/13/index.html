@@ -9,7 +9,7 @@
 	<meta name="author" content="katie leonard">
 
 	
-	<meta name="description" content="Feb 17th, 2014 read How to Live on 24 Hours a Day How to Live on 24 Hours a Day, by Arnold Bennett (published in 1910) Arnold Bennett&rsquo;s &hellip;">
+	<meta name="description" content="Feb 20th, 2014 d3, javascript Functional Arguing The arguments variable is a hidden parameter in javascript functions that contains all the &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -127,6 +127,72 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-20T00:00:00-08:00" data-updated="true" itemprop="datePublished">Feb 20<span>th</span>, 2014</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/d3/'>d3</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2014/functional-arguing/" itemprop="url">Functional Arguing</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>The <code>arguments</code> variable is a hidden parameter in javascript functions that contains all the arguments for the invocation in a pseudo-array (ie: it does not have array functions other than length and indexing).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">instance</span><span class="p">.</span><span class="nx">headline</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">h</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="k">return</span> <span class="nx">headline</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">headline</span> <span class="o">=</span> <span class="nx">h</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">instance</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Even though the function specifically calls for an argument (<code>h</code>), it can still be called without one. This construction has a ruby equivalent, <code>attr_accessor :headline</code>, which behaves as a getter and a setter, depending on the arguments provided (none, or <code>headline = new_value</code>).</p>
+
+<p>This &ldquo;variable-parameter&rdquo; function design is what enables method chaining. When the function is called as a getter it returns a string, but when it is called as a setter it returns the invoking object, passing itself along to the next method:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">widget</span> <span class="o">=</span> <span class="nx">SimpleWidget</span><span class="p">({</span> <span class="nx">color</span><span class="o">:</span> <span class="s2">&quot;#6439ed&quot;</span> <span class="p">})</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">headline</span><span class="p">(</span><span class="s2">&quot;SimpleWidget&quot;</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">description</span><span class="p">(</span><span class="s2">&quot;This is a simple widget&quot;</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+
+		
+		<a href="/blog/2014/functional-arguing/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -387,42 +453,6 @@
 
 		
 		<a href="/blog/2014/augmented-types/" class="more-link">Read on &rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-07T00:00:00-08:00" data-updated="true" itemprop="datePublished">Feb 7<span>th</span>, 2014</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/i-didnt-know-that/'>I didn&#8217;t know that</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2014/global-abatement/" itemprop="url">Global Abatement</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h3>or, What the heck is global abatement?</h3>
-
-<p><strong>tldr</strong>: Global variables are <a href="http://en.wikipedia.org/wiki/Code_smell">code smells</a>. Declaring variables inside an application-level function serves to namespace the variables and minimizes the use of global variables. 
-		
-		<a href="/blog/2014/global-abatement/" class="more-link">Read on &rarr;</a>
 	</div>
 
 </article>

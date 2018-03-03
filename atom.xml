@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2018-02-28T09:09:48-08:00</updated>
+  <updated>2018-03-03T11:34:46-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,309 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Styled Components and Storybooks]]></title>
+    <link href="http://www.katieleonard.ca/blog/2018/styled-components-and-storybooks/"/>
+    <updated>2018-03-02T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2018/styled-components-and-storybooks</id>
+    <content type="html"><![CDATA[<p>I recently discovered two new react development tools that have changed how I approach React component development: <a href="https://storybook.js.org/basics/introduction/">Storybook</a> and <a href="https://www.styled-components.com/docs/basics#getting-started">styled-components</a>. <!--more-->I can quickly prototype a component with its data requirements, styles, and behaviour in one file, and in isolation from the rest of my application. This rapid prototyping has greatly increased my development cycle time, as I spend more time in code and less time flipping between the browser window, the browser console, css files, jsx files, and my terminal.</p>
+
+<p>Using these libraries has also had the pleasant side-effect of helping me design more pure components: instead of using whatever context is available in my giant application, I think about my component interface with real encapsulation in mind.</p>
+
+<h3>Storybook</h3>
+
+<p>Storybook creates a hot-reloading development sandbox outside of your running application, where you can create components free from global app dependencies. Building a component outside of your application context makes you think about what props are really needed to render a component. Is one component actually two components? What is the least amount of information your component needs to be a single atom.</p>
+
+<p>Writing a story for storybook is like writing a spec: you describe the features of the component variant (&ldquo;with long title&rdquo;), and provide a callback that renders your component with props that you specify.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">storiesOf</span><span class="p">(</span><span class="s2">&quot;Playbill&quot;</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">&quot;basic&quot;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">(</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="nx">Playbill</span>
+</span><span class='line'>      <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">action</span><span class="p">(</span><span class="s2">&quot;navigate to playbill&quot;</span><span class="p">)}</span>
+</span><span class='line'>      <span class="nx">title</span><span class="o">=</span><span class="s2">&quot;foo&quot;</span>
+</span><span class='line'>      <span class="nx">imageUrl</span><span class="o">=</span><span class="s2">&quot;https://virtualplaybill.s3.amazonaws.com/1517893742975_Magellanica&quot;</span>
+</span><span class='line'>    <span class="o">/&gt;</span>
+</span><span class='line'>  <span class="p">))</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">&quot;with long title&quot;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">(</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="nx">Playbill</span>
+</span><span class='line'>      <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">action</span><span class="p">(</span><span class="s2">&quot;navigate to playbill&quot;</span><span class="p">)}</span>
+</span><span class='line'>      <span class="nx">title</span><span class="o">=</span><span class="s2">&quot;we are proud to present a presentation&quot;</span>
+</span><span class='line'>      <span class="nx">imageUrl</span><span class="o">=</span><span class="s2">&quot;https://virtualplaybill.s3.amazonaws.com/1517893742975_Magellanica&quot;</span>
+</span><span class='line'>    <span class="o">/&gt;</span>
+</span><span class='line'>  <span class="p">));</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can interact with your components and see the consequences of those interactions in the action pane below.</p>
+
+<p><img src="http://www.katieleonard.ca/images/180303-styled-components/styled-components.png"></p>
+
+<h3>Styled-components</h3>
+
+<p>Styled-components remove the disconnect between styles and components (they are literally connected with a hyphen 😄). Before styled-components, there were clear sides to the Great CSS debate: why do we even need CSS if we inline component styles? Is it just for performance? Why not use the React render cycle to handle dynamic styles?</p>
+
+<p>I am coming pretty late to the party here, but as a solid supporter of CSS over inline styles, styled components have completely won me over. Instead of filling your markup with <code>style=</code> attributes, you create a new component that expresses the styles you specify.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">import</span> <span class="nx">styled</span> <span class="nx">from</span> <span class="s2">&quot;styled-components&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">PlaybillContainer</span> <span class="o">=</span> <span class="nx">styled</span><span class="p">.</span><span class="nx">div</span><span class="err">`</span>
+</span><span class='line'>  <span class="nx">height</span><span class="o">:</span> <span class="mi">415</span><span class="nx">px</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">width</span><span class="o">:</span> <span class="mi">250</span><span class="nx">px</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">border</span><span class="o">:</span> <span class="mi">1</span><span class="nx">px</span> <span class="nx">solid</span> <span class="nx">black</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">display</span><span class="o">:</span> <span class="nx">flex</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">flex</span><span class="o">-</span><span class="nx">direction</span><span class="o">:</span> <span class="nx">column</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">justify</span><span class="o">-</span><span class="nx">content</span><span class="o">:</span> <span class="nx">space</span><span class="o">-</span><span class="nx">between</span><span class="p">;</span>
+</span><span class='line'><span class="err">`</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">Playbill</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="o">&lt;</span><span class="nx">PlaybillContainer</span> <span class="o">/&gt;</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Under the hood, styled-components will generate a stylesheet and inject it into the head of your page:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">data-styled-components=</span><span class="s">&quot;fAjaVQ cjXYkN ktobWA bNUGoX fSQmFU sPlKa jPyvbr cDsQtG ddUpJT buzCko llbHNh wUSUC eapGFo gcivQF llqivM cHJMlW&quot;</span> <span class="na">data-styled-components-is-local=</span><span class="s">&quot;true&quot;</span> <span class="na">nonce=</span><span class="s">&quot;undefined&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="o">...</span>
+</span><span class='line'><span class="c">/* sc-component-id: sc-fjdhpX */</span>
+</span><span class='line'><span class="nc">.sc-fjdhpX</span> <span class="p">{}</span><span class="nc">.cHJMlW</span><span class="p">{</span><span class="k">display</span><span class="o">:</span><span class="k">block</span><span class="p">;</span><span class="k">height</span><span class="o">:</span><span class="m">300px</span><span class="p">;</span><span class="k">width</span><span class="o">:</span><span class="m">250px</span><span class="p">;}</span><span class="nt">&lt;/style&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Styled-components have effectively put an end to the styles-in-Javascript debate. They are an expressive way to have the best of both worlds: inline styles and cascading style sheets.</p>
+
+<h3>Quick start with both Storybook and styled-components</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># install create-react-app</span>
+</span><span class='line'><span class="c"># for babel boilerplate</span>
+</span><span class='line'>&gt; npm i -g create-react-app
+</span><span class='line'>&gt; create-react-app storybook-test-app
+</span><span class='line'>&gt; <span class="nb">cd </span>storybook-test-app
+</span><span class='line'>&gt; npm i
+</span><span class='line'>
+</span><span class='line'><span class="c"># install storybook and styled-components</span>
+</span><span class='line'>&gt; npm i -g @storybook/cli
+</span><span class='line'>&gt; getstorybook
+</span><span class='line'>&gt; npm i styled-components
+</span><span class='line'>&gt; npm run storybook
+</span><span class='line'>
+</span><span class='line'><span class="c"># open your new storybook at</span>
+</span><span class='line'><span class="c"># http://localhost:9009/</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Your stories are saved in <code>src/stories</code>, and you can import them from an adjacent components folder for both quick development, and quick incorporation into your application.</p>
+
+<h3>Example</h3>
+
+<p>I am doing a React rebuild of my side project Virtual-Playbill, and storybook is the perfect place to play around with tweaks to the UI.</p>
+
+<h4>My component</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">import</span> <span class="nx">React</span> <span class="nx">from</span> <span class="s2">&quot;react&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="kr">import</span> <span class="nx">styled</span> <span class="nx">from</span> <span class="s2">&quot;styled-components&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">PlaybillContainer</span> <span class="o">=</span> <span class="nx">styled</span><span class="p">.</span><span class="nx">div</span><span class="err">`</span>
+</span><span class='line'>  <span class="nx">height</span><span class="o">:</span> <span class="mi">415</span><span class="nx">px</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">width</span><span class="o">:</span> <span class="mi">250</span><span class="nx">px</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">border</span><span class="o">:</span> <span class="mi">1</span><span class="nx">px</span> <span class="nx">solid</span> <span class="nx">black</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">display</span><span class="o">:</span> <span class="nx">flex</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">flex</span><span class="o">-</span><span class="nx">direction</span><span class="o">:</span> <span class="nx">column</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">justify</span><span class="o">-</span><span class="nx">content</span><span class="o">:</span> <span class="nx">space</span><span class="o">-</span><span class="nx">between</span><span class="p">;</span>
+</span><span class='line'><span class="err">`</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">PlaybillHeader</span> <span class="o">=</span> <span class="nx">styled</span><span class="p">.</span><span class="nx">div</span><span class="err">`</span>
+</span><span class='line'>  <span class="nx">padding</span><span class="o">:</span> <span class="mi">10</span><span class="nx">px</span> <span class="mi">0</span> <span class="mi">10</span><span class="nx">px</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">font</span><span class="o">-</span><span class="nx">size</span><span class="o">:</span> <span class="nx">x</span><span class="o">-</span><span class="nx">large</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">max</span><span class="o">-</span><span class="nx">height</span><span class="o">:</span> <span class="mi">2</span><span class="nx">em</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">text</span><span class="o">-</span><span class="nx">align</span><span class="o">:</span> <span class="nx">center</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">width</span><span class="o">:</span> <span class="mi">100</span><span class="o">%</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">background</span><span class="o">-</span><span class="nx">color</span><span class="o">:</span> <span class="nx">yellow</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">border</span><span class="o">-</span><span class="nx">bottom</span><span class="o">:</span> <span class="mf">1.5</span><span class="nx">px</span> <span class="nx">solid</span> <span class="nx">black</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">text</span><span class="o">-</span><span class="nx">transform</span><span class="o">:</span> <span class="nx">uppercase</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">font</span><span class="o">-</span><span class="nx">weight</span><span class="o">:</span> <span class="nx">bold</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">letter</span><span class="o">-</span><span class="nx">spacing</span><span class="o">:</span> <span class="mf">2.5</span><span class="nx">px</span><span class="p">;</span>
+</span><span class='line'><span class="err">`</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">PlaybillTitle</span> <span class="o">=</span> <span class="nx">styled</span><span class="p">.</span><span class="nx">div</span><span class="err">`</span>
+</span><span class='line'>  <span class="nx">text</span><span class="o">-</span><span class="nx">align</span><span class="o">:</span> <span class="nx">center</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">font</span><span class="o">-</span><span class="nx">weight</span><span class="o">:</span> <span class="nx">bold</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">font</span><span class="o">-</span><span class="nx">size</span><span class="o">:</span> <span class="nx">large</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">max</span><span class="o">-</span><span class="nx">width</span><span class="o">:</span> <span class="mi">95</span><span class="o">%</span><span class="p">;</span>
+</span><span class='line'><span class="err">`</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">PlaybillImage</span> <span class="o">=</span> <span class="nx">styled</span><span class="p">.</span><span class="nx">img</span><span class="err">`</span>
+</span><span class='line'>  <span class="nx">display</span><span class="o">:</span> <span class="nx">block</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">height</span><span class="o">:</span> <span class="mi">300</span><span class="nx">px</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">width</span><span class="o">:</span> <span class="mi">250</span><span class="nx">px</span><span class="p">;</span>
+</span><span class='line'><span class="err">`</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">const</span> <span class="nx">Playbill</span> <span class="o">=</span> <span class="p">({</span> <span class="nx">title</span><span class="p">,</span> <span class="nx">imageUrl</span><span class="p">,</span> <span class="nx">onClick</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">(</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="nx">PlaybillContainer</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">onClick</span><span class="p">}</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nx">PlaybillHeader</span><span class="o">&gt;</span><span class="nx">Virtual</span> <span class="nx">Playbill</span><span class="o">&lt;</span><span class="err">/PlaybillHeader&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nx">PlaybillTitle</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">title</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/PlaybillTitle&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nx">PlaybillImage</span> <span class="nx">src</span><span class="o">=</span><span class="p">{</span><span class="nx">imageUrl</span><span class="p">}</span> <span class="o">/&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="err">/PlaybillContainer&gt;</span>
+</span><span class='line'>  <span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">export</span> <span class="k">default</span> <span class="nx">Playbill</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>My stories</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">import</span> <span class="nx">React</span> <span class="nx">from</span> <span class="s2">&quot;react&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">import</span> <span class="p">{</span> <span class="nx">storiesOf</span> <span class="p">}</span> <span class="nx">from</span> <span class="s2">&quot;@storybook/react&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="kr">import</span> <span class="p">{</span> <span class="nx">action</span> <span class="p">}</span> <span class="nx">from</span> <span class="s2">&quot;@storybook/addon-actions&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">import</span> <span class="nx">Playbill</span> <span class="nx">from</span> <span class="s2">&quot;../components/playbill&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">storiesOf</span><span class="p">(</span><span class="s2">&quot;Playbill&quot;</span><span class="p">,</span> <span class="nx">module</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">&quot;basic&quot;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">(</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="nx">Playbill</span>
+</span><span class='line'>      <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">action</span><span class="p">(</span><span class="s2">&quot;navigate to playbill&quot;</span><span class="p">)}</span>
+</span><span class='line'>      <span class="nx">title</span><span class="o">=</span><span class="s2">&quot;foo&quot;</span>
+</span><span class='line'>      <span class="nx">imageUrl</span><span class="o">=</span><span class="s2">&quot;https://virtualplaybill.s3.amazonaws.com/1517893742975_Magellanica&quot;</span>
+</span><span class='line'>    <span class="o">/&gt;</span>
+</span><span class='line'>  <span class="p">))</span>
+</span><span class='line'>  <span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">&quot;with long title&quot;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">(</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="nx">Playbill</span>
+</span><span class='line'>      <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">action</span><span class="p">(</span><span class="s2">&quot;navigate to playbill&quot;</span><span class="p">)}</span>
+</span><span class='line'>      <span class="nx">title</span><span class="o">=</span><span class="s2">&quot;we are proud to present a presentation&quot;</span>
+</span><span class='line'>      <span class="nx">imageUrl</span><span class="o">=</span><span class="s2">&quot;https://virtualplaybill.s3.amazonaws.com/1517893742975_Magellanica&quot;</span>
+</span><span class='line'>    <span class="o">/&gt;</span>
+</span><span class='line'>  <span class="p">));</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Between styled-components and storybook, I don&rsquo;t need to leave my component file until the component is finished. Feedback cycles are tight, which means I can try out different variations quickly before dropping the component into my application.</p>
+
+<p>Awesome! 😎</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Decorate Your Javascript]]></title>
@@ -3176,151 +3479,6 @@
 <li><a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching?hl=en">Optimizing Content Efficiency Using HTTP Caching</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Javascript Object Property Meta Properties]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/javascript-object-property-meta-properties/"/>
-    <updated>2015-11-07T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/javascript-object-property-meta-properties</id>
-    <content type="html"><![CDATA[<p>JavaScript Objects are complex types, and even defined properties have a control panel of their own. You can view the content of the control panel using <code>Object.getOwnPropertyDescriptor()</code>, and flip their switches using <code>Object.defineProperty()</code>. <!--more--></p>
-
-<blockquote><p>Note: These property descriptors are for <code>own properties</code> &mdash; that is, properties that are directly defined on an object, not those that come along for the ride on the object&rsquo;s prototype chain.</p></blockquote>
-
-<h3>The property descriptor holds meta data</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; var me = {
-</span><span class='line'>  name: "Katie"
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>&gt; Object.getOwnPropertyDescriptor( me, "name" )
-</span><span class='line'>{
-</span><span class='line'>  value: "Katie", // the value associated with the property
-</span><span class='line'>  writable: true,   // true if the value of the property can be changed
-</span><span class='line'>  enumerable: true, // true if the property shows up during enumeration of the properties
-</span><span class='line'>  configurable: true // true if any of these meta properties can be changed
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Change the property value</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Object.defineProperty( me, "name", {
-</span><span class='line'>  value: "keighty"
-</span><span class='line'>})
-</span><span class='line'>
-</span><span class='line'>me.name // "keighty"</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Make the property read only</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Object.defineProperty(me, "name", {
-</span><span class='line'>  writable: false
-</span><span class='line'>})
-</span><span class='line'>
-</span><span class='line'>me.name = "k80"
-</span><span class='line'>me.name  //"keighty" -- actual value of me.name did not change</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Make the property hidden from for-loops (or any enumeration)</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>me.hobbies = ["bridge", "curling", "tap dancing"]
-</span><span class='line'>me // Object {hobbies: Array[3], name: "keighty"}
-</span><span class='line'>
-</span><span class='line'>for(fact in me) {
-</span><span class='line'> console.log(fact)
-</span><span class='line'>}
-</span><span class='line'>// All the properties defined on me are written to the console:
-</span><span class='line'>// name
-</span><span class='line'>// hobbies
-</span><span class='line'>
-</span><span class='line'>Object.defineProperty(me, "name", {
-</span><span class='line'> enumerable: false
-</span><span class='line'>})
-</span><span class='line'>
-</span><span class='line'>for(fact in me) {
-</span><span class='line'> console.log(fact)
-</span><span class='line'>}
-</span><span class='line'>// Actually.. only enumerable properties are written to the console:
-</span><span class='line'>// hobbies</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Freeze the property</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Object.defineProperty(me, "name", {
-</span><span class='line'> configurable: false
-</span><span class='line'>})
-</span><span class='line'>
-</span><span class='line'>Object.getOwnPropertyDescriptor(me, "name")
-</span><span class='line'>// { value: "keighty",
-</span><span class='line'>//   writable: false,
-</span><span class='line'>//   enumerable: false,
-</span><span class='line'>//   configurable: false }
-</span><span class='line'>
-</span><span class='line'>Object.defineProperty(me, "name", {
-</span><span class='line'> writable: true
-</span><span class='line'>})
-</span><span class='line'>
-</span><span class='line'>Uncaught TypeError: Cannot redefine property: name(…)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>From <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-8.10">the docs</a>: &ldquo;The Property Descriptor type is used to explain the manipulation and reification of named property attributes. Use Object.defineProperty for fine-grained control over the visibility and mutability of your object&rsquo;s properties.</p>
 ]]></content>
   </entry>
   

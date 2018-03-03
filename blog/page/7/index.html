@@ -9,7 +9,7 @@
 	<meta name="author" content="katie leonard">
 
 	
-	<meta name="description" content="Jan 4th, 2015 read, tdd TDD and the Senior Software Engineer Many developers embrace test-driven development (TDD) as an ideal but rarely put it &hellip;">
+	<meta name="description" content="Jan 10th, 2015 read Cleaning the Campground If you work in a code base with many other contributors, you may have learned the scouting philosophy to &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -127,6 +127,44 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-10T00:00:00-08:00" data-updated="true" itemprop="datePublished">Jan 10<span>th</span>, 2015</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/read/'>read</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2015/cleaning-the-campground/" itemprop="url">Cleaning the Campground</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>If you work in a code base with many other contributors, you may have learned the scouting philosophy to &ldquo;leave the campground cleaner than you found it.&rdquo; Sometimes the code you are working in can seem so entangled and complex that it is hard to know where to begin, but <a href="http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882/ref=sr_1_1?ie=UTF8&amp;qid=1420928385&amp;sr=8-1&amp;keywords=clean+code">Robert C. Martin&rsquo;s foundational book, *Clean Code</a>*, tells us that very small changes can improve the readability and maintainability of a piece of code.</p>
+
+<blockquote><p>&ldquo;It is not enough to write the code well. The code has to be <em>kept clean</em> over time.&rdquo;</p></blockquote>
+
+
+		
+		<a href="/blog/2015/cleaning-the-campground/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -618,143 +656,6 @@
 
 
 <p>Awesome.</p>
-
-		
-		
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-10-09T00:00:00-07:00" data-updated="true" itemprop="datePublished">Oct 9<span>th</span>, 2014</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/angular/'>angular</a>, <a class='category' href='/blog/categories/mongo/'>mongo</a>, <a class='category' href='/blog/categories/node/'>node</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2014/sort_things_with_mongoose/" itemprop="url">Sort All the Things With Mongo and node.js</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Sorting shouldn&rsquo;t be difficult, but through my experience learning meteor I discovered that if mongo likes sort commands one way:</p>
-
-<p><code>db.posts.find().sort({submitted: -1})</code></p>
-
-<p>meteor would like them a different way:</p>
-
-<p><code>Posts.find({}, {sort: {submitted : -1}}</code></p>
-
-<p>I am adapting one of my meteor projects to use mongo and node.js, connected through mongoose, and fitting in the callback required for node sent me to the google. After a few stackoverflow searches I turned up a several options:</p>
-
-<figure class='code'><figcaption><span>Option 1 (spoiler.. it didn&#8217;t work) </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Post.find({}, {sort:[['submitted',-1]]}, function(err, doc) {
-</span><span class='line'>  response.send(doc);
-</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This option returned a object containing only the entry ids, not the full documents:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>0: {_id:2tcte4Srd8QMSqrKt}
-</span><span class='line'>1: {_id:5c3FdWphiYiMQzukw}
-</span><span class='line'>2: {_id:62vAt5ewucKm542DH}
-</span><span class='line'>3: {_id:AWNYsxBgFnv9Z4NSA}
-</span><span class='line'>...</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Another option suggested that converting the result to an Array would complete the query:</p>
-
-<figure class='code'><figcaption><span>Option2 (spoiler.. also didn&#8217;t work) </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Post.find({},{sort: [['submitted',-1]]}).toArray(function(e, results){
-</span><span class='line'>  response.send(results);
-</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This option resulted in <code>TypeError: Object #&lt;Query&gt; has no method 'toArray'</code>.</p>
-
-<p>Rather than continuing to search for a snippet to steal, I turned to the source, and it turns out that querying mongo from mongoose is simpler than either of these strategies.</p>
-
-<figure class='code'><figcaption><span>Option3 &#8211; just right </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Post.find()
-</span><span class='line'>  .sort("-submitted")
-</span><span class='line'>  .exec(function(err, doc) {
-</span><span class='line'>    response.send(doc);
-</span><span class='line'>  });</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Success! Why? Because while mongo itself returns a cursor object which can be transformed into documents using <code>toArray()</code>, or <code>fetch()</code> in the case of meteor, mongoose returns a <a href="http://mongoosejs.com/docs/queries.html">Query</a> object, which will return the full documents once it is passed a callback.</p>
-
-<p>A Query object can be built using <a href="https://github.com/LearnBoost/mongoose/blob/master/lib/query.js#L211-L216">method chaining</a> &mdash;
- each method (find | where | limit | select | sort) returns a new Query object, which allows you to build in stages:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Post
-</span><span class='line'>.find({ title: /the/ }) // query
-</span><span class='line'>.where('cost').gt(17).lt(66)  // query
-</span><span class='line'>.where('location').in(['Schnitz', 'Armory'])  // query
-</span><span class='line'>.limit(10)  // query
-</span><span class='line'>.sort('-ticketDate')  // query
-</span><span class='line'>.select('title company')  // query
-</span><span class='line'>.exec(callback);  // EXECUTE THE QUERY</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Another fun bit of javascript/mongoose magic, is that you can indicate <a href="https://github.com/LearnBoost/mongoose/blob/master/lib/query.js#L1295-L1297">sorting in descending order</a> by prefacing the sort string with a &ldquo;&ndash;&rdquo; :</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Post
-</span><span class='line'>.find({ title: /the/ }) // query
-</span><span class='line'>.sort('-ticketDate')  // DESC!
-</span><span class='line'>.exec(callback);  // EXECUTE THE QUERY</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Awesome.</p>
-
-<h3>Resources</h3>
-
-<p><a href="http://docs.mongodb.org/manual/reference/operator/meta/orderby/">mongo docs</a></p>
-
-<p><a href="http://stackoverflow.com/a/20859457">stackoverflow</a></p>
 
 		
 		

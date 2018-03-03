@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2018-02-28T09:09:48-08:00</updated>
+  <updated>2018-03-03T11:34:46-08:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,210 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Styled Components and Storybooks]]></title>
+    <link href="http://www.katieleonard.ca/blog/2018/styled-components-and-storybooks/"/>
+    <updated>2018-03-02T00:00:00-08:00</updated>
+    <id>http://www.katieleonard.ca/blog/2018/styled-components-and-storybooks</id>
+    <content type="html"><![CDATA[<p>I recently discovered two new react development tools that have changed how I approach React component development: <a href="https://storybook.js.org/basics/introduction/">Storybook</a> and <a href="https://www.styled-components.com/docs/basics#getting-started">styled-components</a>. <!--more-->I can quickly prototype a component with its data requirements, styles, and behaviour in one file, and in isolation from the rest of my application. This rapid prototyping has greatly increased my development cycle time, as I spend more time in code and less time flipping between the browser window, the browser console, css files, jsx files, and my terminal.</p>
+
+<p>Using these libraries has also had the pleasant side-effect of helping me design more pure components: instead of using whatever context is available in my giant application, I think about my component interface with real encapsulation in mind.</p>
+
+<h3>Storybook</h3>
+
+<p>Storybook creates a hot-reloading development sandbox outside of your running application, where you can create components free from global app dependencies. Building a component outside of your application context makes you think about what props are really needed to render a component. Is one component actually two components? What is the least amount of information your component needs to be a single atom.</p>
+
+<p>Writing a story for storybook is like writing a spec: you describe the features of the component variant (&ldquo;with long title&rdquo;), and provide a callback that renders your component with props that you specify.</p>
+
+<p>```javascript
+storiesOf(&ldquo;Playbill&rdquo;, module)
+  .add(&ldquo;basic&rdquo;, () => (</p>
+
+<pre><code>&lt;Playbill
+  onClick={action("navigate to playbill")}
+  title="foo"
+  imageUrl="https://virtualplaybill.s3.amazonaws.com/1517893742975_Magellanica"
+/&gt;
+</code></pre>
+
+<p>  ))
+  .add(&ldquo;with long title&rdquo;, () => (</p>
+
+<pre><code>&lt;Playbill
+  onClick={action("navigate to playbill")}
+  title="we are proud to present a presentation"
+  imageUrl="https://virtualplaybill.s3.amazonaws.com/1517893742975_Magellanica"
+/&gt;
+</code></pre>
+
+<p>  ));
+```</p>
+
+<p>You can interact with your components and see the consequences of those interactions in the action pane below.</p>
+
+<p><img src="/images/180303-styled-components/styled-components.png"></p>
+
+<h3>Styled-components</h3>
+
+<p>Styled-components remove the disconnect between styles and components (they are literally connected with a hyphen 😄). Before styled-components, there were clear sides to the Great CSS debate: why do we even need CSS if we inline component styles? Is it just for performance? Why not use the React render cycle to handle dynamic styles?</p>
+
+<p>I am coming pretty late to the party here, but as a solid supporter of CSS over inline styles, styled components have completely won me over. Instead of filling your markup with <code>style=</code> attributes, you create a new component that expresses the styles you specify.</p>
+
+<p>```javascript
+import styled from &ldquo;styled-components&rdquo;;</p>
+
+<p>const PlaybillContainer = styled.div<code>
+  height: 415px;
+  width: 250px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+</code>;</p>
+
+<p>const Playbill = () => {
+  return <PlaybillContainer />;
+};
+```</p>
+
+<p>Under the hood, styled-components will generate a stylesheet and inject it into the head of your page:</p>
+
+<p>```html</p>
+
+
+
+<p>```</p>
+
+<p>Styled-components have effectively put an end to the styles-in-Javascript debate. They are an expressive way to have the best of both worlds: inline styles and cascading style sheets.</p>
+
+<h3>Quick start with both Storybook and styled-components</h3>
+
+<p>```bash</p>
+
+<h1>install create-react-app</h1>
+
+<h1>for babel boilerplate</h1>
+
+<blockquote><p>npm i -g create-react-app
+create-react-app storybook-test-app
+cd storybook-test-app
+npm i</p></blockquote>
+
+<h1>install storybook and styled-components</h1>
+
+<blockquote><p>npm i -g @storybook/cli
+getstorybook
+npm i styled-components
+npm run storybook</p></blockquote>
+
+<h1>open your new storybook at</h1>
+
+<h1><a href="http://localhost:9009/">http://localhost:9009/</a></h1>
+
+<p>```</p>
+
+<p>Your stories are saved in <code>src/stories</code>, and you can import them from an adjacent components folder for both quick development, and quick incorporation into your application.</p>
+
+<h3>Example</h3>
+
+<p>I am doing a React rebuild of my side project Virtual-Playbill, and storybook is the perfect place to play around with tweaks to the UI.</p>
+
+<h4>My component</h4>
+
+<p>```javascript
+import React from &ldquo;react&rdquo;;
+import styled from &ldquo;styled-components&rdquo;;</p>
+
+<p>const PlaybillContainer = styled.div<code>
+  height: 415px;
+  width: 250px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+</code>;</p>
+
+<p>const PlaybillHeader = styled.div<code>
+  padding: 10px 0 10px 0;
+  font-size: x-large;
+  max-height: 2em;
+  text-align: center;
+  width: 100%;
+  background-color: yellow;
+  border-bottom: 1.5px solid black;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 2.5px;
+</code>;</p>
+
+<p>const PlaybillTitle = styled.div<code>
+  text-align: center;
+  font-weight: bold;
+  font-size: large;
+  max-width: 95%;
+</code>;</p>
+
+<p>const PlaybillImage = styled.img<code>
+  display: block;
+  height: 300px;
+  width: 250px;
+</code>;</p>
+
+<p>const Playbill = ({ title, imageUrl, onClick }) => {
+  return (</p>
+
+<pre><code>&lt;PlaybillContainer onClick={onClick}&gt;
+  &lt;PlaybillHeader&gt;Virtual Playbill&lt;/PlaybillHeader&gt;
+  &lt;PlaybillTitle&gt;{title}&lt;/PlaybillTitle&gt;
+  &lt;PlaybillImage src={imageUrl} /&gt;
+&lt;/PlaybillContainer&gt;
+</code></pre>
+
+<p>  );
+};</p>
+
+<p>export default Playbill;
+```</p>
+
+<h4>My stories</h4>
+
+<p>```javascript
+import React from &ldquo;react&rdquo;;</p>
+
+<p>import { storiesOf } from &ldquo;@storybook/react&rdquo;;
+import { action } from &ldquo;@storybook/addon-actions&rdquo;;</p>
+
+<p>import Playbill from &ldquo;../components/playbill&rdquo;;</p>
+
+<p>storiesOf(&ldquo;Playbill&rdquo;, module)
+  .add(&ldquo;basic&rdquo;, () => (</p>
+
+<pre><code>&lt;Playbill
+  onClick={action("navigate to playbill")}
+  title="foo"
+  imageUrl="https://virtualplaybill.s3.amazonaws.com/1517893742975_Magellanica"
+/&gt;
+</code></pre>
+
+<p>  ))
+  .add(&ldquo;with long title&rdquo;, () => (</p>
+
+<pre><code>&lt;Playbill
+  onClick={action("navigate to playbill")}
+  title="we are proud to present a presentation"
+  imageUrl="https://virtualplaybill.s3.amazonaws.com/1517893742975_Magellanica"
+/&gt;
+</code></pre>
+
+<p>  ));
+```</p>
+
+<p>Between styled-components and storybook, I don&rsquo;t need to leave my component file until the component is finished. Feedback cycles are tight, which means I can try out different variations quickly before dropping the component into my application.</p>
+
+<p>Awesome! 😎</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Decorate Your Javascript]]></title>
@@ -753,127 +957,6 @@ External: http://10.0.0.8:3000
 <li>and the <a href="https://github.com/mdn/sw-test/">example</a> <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers">https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The EventEmitter Pattern and the Event Loop -- a Timeline]]></title>
-    <link href="http://www.katieleonard.ca/blog/2016/event-emitter-and-event-loop/"/>
-    <updated>2016-10-14T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2016/event-emitter-and-event-loop</id>
-    <content type="html"><![CDATA[<p>The EventEmitter pattern is a derivative of the Observer pattern: an object can notify a set of observers when a change in its state occurs.<!--more--> Consider the following example using the EventEmitter pattern:</p>
-
-<p>```javascript
-const EventEmitter = require(&lsquo;events&rsquo;).EventEmitter
-const fs = require(&lsquo;fs&rsquo;)</p>
-
-<p>const findPattern = (files, regex) => {
-  const emitter = new EventEmitter()</p>
-
-<p>  files.forEach(file => {</p>
-
-<pre><code>fs.readFile(file, 'utf8', (err, content) =&gt; {
-  if (err) return emitter.emit('error', err)
-
-  emitter.emit('fileread', file)
-
-  let match
-  if (match = content.match(regex)) {
-    match.forEach(elem =&gt; {
-      emitter.emit('found', file, elem)
-    })
-  }
-})
-</code></pre>
-
-<p>  })
-  return emitter
-}</p>
-
-<p>// fileA.txt contains the words &ldquo;hello blah blah blah&rdquo;
-// fileB.json is empty
-// fileC.md does not exist
-const files = [&lsquo;fileA.txt&rsquo;, &lsquo;fileB.json&rsquo;, &lsquo;fileC.md&rsquo;]</p>
-
-<p>findPattern(files, /hello \w+/g)
-  .on(&lsquo;fileread&rsquo;, file => {console.log(<code>${file} was read</code>)})
-  .on(&lsquo;found&rsquo;, (file, match) => {console.log(<code>Matched ${match} in file ${file}</code>)})
-  .on(&lsquo;error&rsquo;, err => {console.log(<code>Error emitted: ${err.message}</code>)})
-```</p>
-
-<p>Some of the script is executed synchronously, but the real work is done asynchronously. The EventEmitter pattern takes advantage of the event loop to work efficiently.</p>
-
-<p>Keep the following schematic in mind as you parse through the execution of this script:</p>
-
-<p><img src="/images/161012-callbacks/event-loop.png"></p>
-
-<p><em>image credit: Mario Casciaro and Luciano Mammino from Node.js Design Patterns. Colour notations are mine.</em></p>
-
-<p>The first set of operations happen synchronously:</p>
-
-<ul>
-<li>call <code>findPattern</code> with the file list and regex pattern</li>
-<li>create a new event emitter</li>
-<li>submit <code>readFile</code> I/O request for fileA.txt to the event demultiplexer</li>
-<li>submit <code>readFile</code> I/O request for fileB.json to the event demultiplexer</li>
-<li>submit <code>readFile</code> I/O request for fileC.md to the event demultiplexer</li>
-<li>return the event emitter</li>
-<li>register <code>fileread</code> listener on the event emitter</li>
-<li>register <code>found</code> listener on the event emitter</li>
-<li>register <code>error</code> listener on the event emitter</li>
-</ul>
-
-
-<p><img src="/images/161014-event-emitter/event-emitter-1.png"></p>
-
-<p>Once the I/O operations are submitted to the event demultiplexer, they will return in the order in which the requests are fulfilled. In this example, fileC.md does not exist, so the event demultiplexer submits the result along with the handler to the Event loop.</p>
-
-<ul>
-<li>The event loop runs the result through the callback for fileC.md, which <strong>emits an error event</strong> (line 9)! The EventEmitter adds the error handler to the event loop.</li>
-</ul>
-
-
-<p><img src="/images/161014-event-emitter/event-emitter-2.png"></p>
-
-<p>In the meantime, the event demultiplexer has fulfilled the I/O request for fileB.json, and added the result and the callback to the event loop.</p>
-
-<ul>
-<li>The event loop runs the result through the callback for fileB, which emits a <code>fileread</code> event (line 11). The EventEmitter adds the <code>fileread</code> handler to the event loop.</li>
-</ul>
-
-
-<p>The event demultiplexer also fulfills the I/O request for fileA.txt and adds the result and the callback to the event loop.</p>
-
-<ul>
-<li>The event loop runs the result through the callback for fileA, which emits a <code>fileread</code> event (line 11) AND a <code>found</code> event (line 16). The EventEmitter adds the <code>fileread</code> and <code>found</code> handlers to the event loop.</li>
-</ul>
-
-
-<p>The event loop is busily processing all of these events in the order of arrival:</p>
-
-<ul>
-<li>run the listener callback for the <code>error</code> event (fileC)</li>
-<li>run the listener callback for the <code>fileread</code> event (fileB)</li>
-<li>run the listener callback for the <code>fileread</code> event (fileA)</li>
-<li>FINALLY &mdash; run the listener callback for the <code>found</code> event (fileA)</li>
-</ul>
-
-
-<p>The result of running this script on the command line:</p>
-
-<p><code>text
-$ node --use_strict events.js
-Error emitted: ENOENT: no such file or directory, open 'fileC.md'
-fileB.json was read
-fileA.txt was read
-Matched hello blah in file fileA.txt
-</code></p>
-
-<p><em>Side note: set the flag <code>--use-strict</code> to run scripts using ES6 syntax</em></p>
-
-<p>Why did the files process in what seems to be reverse order? The event demultiplexer adds work to the event loop as it fulfills I/O requests. When <code>readfile()</code> is given three files &mdash; a file with content (fileA), an empty file (fileB), and a non-existent file (fileC) &mdash; it is reasonable to assume that the I/O request for a non-existent file will return first, as there is no file to read. It is also reasonable that an empty file will  return next, as there is very little work to be done reading an empty file. Finally, the I/O request for the file with content returns &mdash; it requires more work to read a file with content than an empty file.</p>
-
-<p>For more about the event emitter pattern in Node, check out <a href="https://www.amazon.com/Node-js-Design-Patterns-Mario-Casciaro/dp/1785885588/ref=sr_1_1/161-7210115-5247461?ie=UTF8&amp;qid=1476284148&amp;sr=8-1&amp;keywords=node.js+design+patterns">Node.js Design Patterns</a> by Mario Casciaro and Luciano Mammino.</p>
 ]]></content>
   </entry>
   
