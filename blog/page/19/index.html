@@ -9,7 +9,7 @@
 	<meta name="author" content="katie leonard">
 
 	
-	<meta name="description" content="git Best Practices - Pull Requests Learning how to contribute to open source projects has been really exciting. Adding value to existing projects, &hellip;">
+	<meta name="description" content="rails A Flash of Understanding My page wouldn&rsquo;t flash the user. Trundling along the Hartl railstutorial, I needed to write some logic to allow &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -127,6 +127,44 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-13T00:00:00-07:00" data-updated="true" itemprop="datePublished"></time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/rails/'>rails</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2013/a-flash-of-understanding/" itemprop="url">A Flash of Understanding</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>My page wouldn&rsquo;t flash the user.</p>
+
+<p>Trundling along the <a href="http://ruby.railstutorial.org/chapters/updating-showing-and-deleting-users?version=4.0#top">Hartl railstutorial</a>, I needed to write some logic to allow a user to update their information.</p>
+
+<p>As a <a href="http://www.katieleonard.ca/tdd/testing/2013/06/14/TDD-is-the-way-to-be/">loyal TDD-er</a>, I wrote a test to check that users see a success message if they are able to update their infomation:
+		
+		<a href="/blog/2013/a-flash-of-understanding/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -362,65 +400,6 @@ end</code></pre>
 <p>Also similar to RSpec, Jasmine allows you to spy on behavior.
 		
 		<a href="/blog/2013/javascript-has-spies/" class="more-link">Read on &rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-19T00:00:00-07:00" data-updated="true" itemprop="datePublished"></time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/javascript/'>javascript</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2013/jquery-objects-vs-strings/" itemprop="url">jQuery Objects vs Strings</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h2>Object blocker!!</h2>
-
-<p>My pair was stuck for the longest time on the following code snip:</p>
-
-<div>
-  <pre><code class='javascript'>$(function(){
-  var new_square = &#39;$(&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;)&#39;;
-
-  $(&#39;body&#39;).on(&#39;click&#39;,&#39;.square&#39;, function(){
-    // var my_square = $(this);
-    $(this).toggleClass(&#39;blue&#39;);
-
-    b = $(new_square)
-      .insertAfter(this);
-    a = $(new_square)
-      .insertBefore(this);
-    b.toggleClass(&#39;blue&#39;);
-    a.toggleClass(&#39;blue&#39;);
-  });
-});</code></pre>
-</div>
-
-
-
-
-
-		
-		<a href="/blog/2013/jquery-objects-vs-strings/" class="more-link">Read on &rarr;</a>
 	</div>
 
 </article>

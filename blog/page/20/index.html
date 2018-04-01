@@ -9,8 +9,7 @@
 	<meta name="author" content="katie leonard">
 
 	
-	<meta name="description" content="jQuery Namespaces and jQuery Namespaces in jQuery getting you down? Chuck taught me a great trick today &mdash; how to avoid namespace
-conflicts in &hellip;">
+	<meta name="description" content="javascript jQuery Objects vs Strings Object blocker!! My pair was stuck for the longest time on the following code snip: $(function(){ var &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -128,6 +127,65 @@ conflicts in &hellip;">
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-19T00:00:00-07:00" data-updated="true" itemprop="datePublished"></time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/javascript/'>javascript</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2013/jquery-objects-vs-strings/" itemprop="url">jQuery Objects vs Strings</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<h2>Object blocker!!</h2>
+
+<p>My pair was stuck for the longest time on the following code snip:</p>
+
+<div>
+  <pre><code class='javascript'>$(function(){
+  var new_square = &#39;$(&lt;div class=&quot;square&quot;&gt;&lt;/div&gt;)&#39;;
+
+  $(&#39;body&#39;).on(&#39;click&#39;,&#39;.square&#39;, function(){
+    // var my_square = $(this);
+    $(this).toggleClass(&#39;blue&#39;);
+
+    b = $(new_square)
+      .insertAfter(this);
+    a = $(new_square)
+      .insertBefore(this);
+    b.toggleClass(&#39;blue&#39;);
+    a.toggleClass(&#39;blue&#39;);
+  });
+});</code></pre>
+</div>
+
+
+
+
+
+		
+		<a href="/blog/2013/jquery-objects-vs-strings/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">

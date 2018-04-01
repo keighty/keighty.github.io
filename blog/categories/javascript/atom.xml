@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | keighty]]></title>
   <link href="http://www.katieleonard.ca/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2018-04-01T15:14:42-07:00</updated>
+  <updated>2018-04-01T15:28:20-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,115 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Recursive Rendering and Event Bubbling]]></title>
+    <link href="http://www.katieleonard.ca/blog/2018/rendering-recursion-and-event-bubbling/"/>
+    <updated>2018-04-01T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2018/rendering-recursion-and-event-bubbling</id>
+    <content type="html"><![CDATA[<p>I have been working with dense tree structures recently, and rendering them using React. Trees lend themselves well to recursion, so I set about making a component that could render itself and all subsequent children with ease. I thought I was being mightily clever, until I tried to add some behaviour to my recursive component.<!-- more --> Things were not behaving as they should, and I was stumped for quite some time. When I finally stepped back from the trees to see the forest (pun intended), I had to step all the way back to HTML-101 to find the answer.</p>
+
+<p>Here is my clever component:</p>
+
+<p>```javascript
+export default class ListItem extends PureComponent {
+  renderChildren = arr => {</p>
+
+<pre><code>return &lt;ul&gt;{arr.map(this.renderChild)}&lt;/ul&gt;;
+</code></pre>
+
+<p>  };</p>
+
+<p>  renderChild = item => <ListItem {...item} />;</p>
+
+<p>  render() {</p>
+
+<pre><code>const { name, children } = this.props;
+
+return (
+  &lt;li&gt;
+    {name}
+    {children &amp;&amp; this.renderChildren(children)}
+  &lt;/li&gt;
+);
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>When called from the parent container with the root of the tree, this component will render all nodes of the tree as unordered lists of items:</p>
+
+<p><img src='https://raw.githubusercontent.com/keighty/react-recursion/master/images/unordered-lists.png'></p>
+
+<p>Of course, with very deep trees, it is useful to clear away visual noise by collapsing parts of the tree, so I added an <code>onClick</code> handler to each list item with children:</p>
+
+<p>```javascript
+export default class ListItem extends PureComponent {
+  state = {</p>
+
+<pre><code>showChildren: true
+</code></pre>
+
+<p>  };</p>
+
+<p>  onClick = e => {</p>
+
+<pre><code>this.setState({ showChildren: !this.state.showChildren });
+</code></pre>
+
+<p>  };</p>
+
+<p>&hellip;</p>
+
+<p>  render() {</p>
+
+<pre><code>const { name, children } = this.props;
+const { showChildren } = this.state;
+
+return (
+  &lt;li onClick={this.onClick}&gt;
+    {name}
+    {children &amp;&amp; showChildren &amp;&amp; this.renderChildren(children)}
+  &lt;/li&gt;
+);
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>Setting a <code>showChildren</code> state on the ListItem instance will hide parts of the list by simply not rendering them, rather than hiding them using traditional CSS. You can imagine my chagrin, then, when I clicked on an item, and the entire tree collapsed into the root:</p>
+
+<p><img src='https://raw.githubusercontent.com/keighty/react-recursion/master/images/collapsed-lists.png'></p>
+
+<p>Troubleshooting recursion is tricky. Was the state change leaking from one instance of ListItem to another? They should be independent instances, but what if they shared a state reference?</p>
+
+<p>Finally, I turned my suspicions on the click handler.</p>
+
+<p>I left the React docs behind and went back to <a href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events">the primer</a> on how the DOM handles events. This is where I found the answer to the overzealous-click problem &mdash; it wasn&rsquo;t ocurring because of using recursion, it was happening because of event bubbling (:face-palm:).</p>
+
+<blockquote><p>[When a user clicks on a ListItem, t]he browser checks to see if the element that was actually clicked on has an onclick event handler registered on it in the bubbling phase, and runs it if so&hellip; <strong>Then it moves on to the next immediate ancestor element and does the same thing</strong>, then the next one, and so on until it reaches the &lt;html&gt; element.</p></blockquote>
+
+<p>Because there was a click handler registered on every list item, a click on any one of them would be handled by <strong>every one of them</strong>.
+Fortunately, Javascript-Events-101 also prescribes a solution: <code>e.stopPropagation()</code>, which stops the event from bubbling up the ancestry tree.</p>
+
+<p>My final <code>onClick</code> handler:</p>
+
+<p>```javascript
+onClick = e => {
+  e.stopPropagation();</p>
+
+<p>  const { showChildren } = this.state;
+  this.setState({ showChildren: !showChildren });
+};
+```</p>
+
+<p>And the nested result I wanted:</p>
+
+<p><img src='https://raw.githubusercontent.com/keighty/react-recursion/master/images/proper-collapsing.png'></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Styled Components and Storybooks]]></title>
@@ -814,149 +923,6 @@ module.exports = {</p>
 <p>Click on <code>Proceed to localhost (unsafe)</code> to load your content.</p>
 
 <p>Easy peasy.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Service Workers]]></title>
-    <link href="http://www.katieleonard.ca/blog/2016/service-workers/"/>
-    <updated>2016-10-15T00:00:00-07:00</updated>
-    <id>http://www.katieleonard.ca/blog/2016/service-workers</id>
-    <content type="html"><![CDATA[<p>A service worker is a script that sits between a web page and the network, acting as a proxy for network requests: if the network is available, the request is passed on to the target url; if the network is not available, the service worker will handle the request itself by checking cached responses or or queuing the request for synchronization once the network is available. Service workers are bridging the gap between native mobile applications and traditional web applications that require a network connection to function. Sometimes called progressive web apps, these applications enable a seamless offline experience when the user is not connected to a network.</p>
-
-<!--more-->
-
-
-<p>Service workers can be used for data synchronization in the background, but data fetching and sync-ing are only one of the ways we can leverage this API. We can:</p>
-
-<ul>
-<li>use background resources to perform client-side compilation of assets  (useful for web development)</li>
-<li>pre-fetch data that the user is likely going to need in the near future (think photo albums or playlists)</li>
-<li>share large data sets between multiple pages</li>
-<li>notify mobile users of updates via push notifications</li>
-</ul>
-
-
-<p>For example, <a href="https://www.washingtonpost.com/">The Washington Post</a> uses service workers to send push notifications of breaking news content to users of their web application on android.</p>
-
-<h2>How do they work?</h2>
-
-<p>Service workers rely on the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise API</a> &mdash; a Promise is a proxy for &ldquo;a value that may be  available now, or in the future, or never.&rdquo; They also use the event emitter pattern, where listeners are registered to handle specific events, such as <code>fetch</code> requests.</p>
-
-<p>To employ a service worker you must first register a script with the service worker API: <code>navigator.serviceWorker.register('./sw.js')</code>. Checkout the following example (<a href="https://gist.github.com/keighty/ec1a37a0f6475d7cdf2db64b01eff445.js">get the gist</a>):</p>
-
-<p>```html</p>
-
-<!-- index.html references the javascript application -->
-
-
-<p><html>
-  <body></p>
-
-<pre><code>&lt;h1&gt;Service worker test app&lt;/h1&gt;
-&lt;script src="./app.js"&gt;&lt;/script&gt;
-</code></pre>
-
-<p>  </body>
-</html>
-<code>
-</code>javascript
-// app.js
-.register(&lsquo;sw.js&rsquo;) // register a worker script with the service
-navigator.serviceWorker
-  .then(function(reg) {</p>
-
-<pre><code>// do the following if registration is successful
-if(reg.installing) {
-  // first visit or fresh reload of the worker
-  console.log('Service worker installing on registration.');
-} else if(reg.waiting) {
-  // a worker may be installed but waiting for another worker to stop
-  console.log('Service worker already installed on registration.');
-} else if(reg.active) {
-  // pages from the same origin may share a service worker
-  console.log('Service worker already active on registration.');
-}
-</code></pre>
-
-<p>  }).catch(function(error) {</p>
-
-<pre><code>// if registration is unsuccessful, tell us why
-console.log('Registration failed with ' + error);
-</code></pre>
-
-<p>  });
-<code>
-</code>javascript
-// sw.js
-console.log(&lsquo;inside registration script&rsquo;)</p>
-
-<p>this.addEventListener(&lsquo;install&rsquo;, function(event) {
-  console.log(&lsquo;Service worker installed.&rsquo;)
-});</p>
-
-<p>this.addEventListener(&lsquo;activate&rsquo;, function (event) {
-  console.log(&lsquo;Service worker activated.&rsquo;)
-})
-```</p>
-
-<p>Service workers can be registered with a specific origin and path to watch. Since they run in a background thread with a context separate from the application javascript, service workers have no DOM access. So don&rsquo;t try to perform synchronous work (like accessing LocalStorage) or update the DOM from a service worker.</p>
-
-<p>Running this example code sends some output to the console:
-<img src="/images/161015-service-workers/service-worker-demo1.png"></p>
-
-<h4>NOTE: A single service worker can control many pages (so be careful with global variables).</h4>
-
-<p><img src="/images/161015-service-workers/service-worker-demo2.png"></p>
-
-<h2>Developing with service workers</h2>
-
-<p>Service workers can only function in a secure context, which means that you can only register a service worker from a web application that is served over <code>https</code>. One option is to use <a href="https://pages.github.com/">GitHub pages</a> to deploy your application, as these pages are generally served over <code>https</code>. Another option is to use a local web server (<code>localhost</code> is considered semi-secure).</p>
-
-<p>I use <a href="https://www.browsersync.io/">Browser-sync</a>, a super light-weight easy to start web server. In my project directory, I start the browser-sync server and set it to watch my javascript files:</p>
-
-<p>```bash
-$ npm install -g browser-sync
-$ browser-sync start &mdash;server &mdash;files *.js
-[BS] Access URLs:</p>
-
-<hr />
-
-<pre><code>   Local: http://localhost:3000
-External: http://10.0.0.8:3000
-</code></pre>
-
-<hr />
-
-<pre><code>      UI: http://localhost:3001
-</code></pre>
-
-<p> UI External: <a href="http://10.0.0.8:3001">http://10.0.0.8:3001</a></p>
-
-<hr />
-
-<p>[BS] Serving files from: ./
-[BS] Watching files&hellip;
-```</p>
-
-<p>Browser-sync is so helpful, it will even open a browser window for you. :awthanks:</p>
-
-<p>Don&rsquo;t forget to checkout the Chrome developer tools, which can be super helpful in creating different states for your service worker</p>
-
-<p><img src="/images/161015-service-workers/service-worker-dev-tools.png"></p>
-
-<hr />
-
-<h2>MOAR Resources</h2>
-
-<p>For more about the service worker API, checkout these resources:</p>
-
-<ul>
-<li>the <a href="https://www.w3.org/TR/service-workers/">W3C spec</a></li>
-<li>the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API">MDN docs</a></li>
-<li>and the <a href="https://github.com/mdn/sw-test/">example</a> <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers">https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers</a></li>
-</ul>
-
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2018-04-01T15:14:42-07:00</updated>
+  <updated>2018-04-01T15:28:20-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,147 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Recursive Rendering and Event Bubbling]]></title>
+    <link href="http://www.katieleonard.ca/blog/2018/rendering-recursion-and-event-bubbling/"/>
+    <updated>2018-04-01T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2018/rendering-recursion-and-event-bubbling</id>
+    <content type="html"><![CDATA[<p>I have been working with dense tree structures recently, and rendering them using React. Trees lend themselves well to recursion, so I set about making a component that could render itself and all subsequent children with ease. I thought I was being mightily clever, until I tried to add some behaviour to my recursive component.<!-- more --> Things were not behaving as they should, and I was stumped for quite some time. When I finally stepped back from the trees to see the forest (pun intended), I had to step all the way back to HTML-101 to find the answer.</p>
+
+<p>Here is my clever component:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">export</span> <span class="k">default</span> <span class="kr">class</span> <span class="nx">ListItem</span> <span class="kr">extends</span> <span class="nx">PureComponent</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">renderChildren</span> <span class="o">=</span> <span class="nx">arr</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="o">&lt;</span><span class="nx">ul</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">arr</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">renderChild</span><span class="p">)}</span><span class="o">&lt;</span><span class="err">/ul&gt;;</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">renderChild</span> <span class="o">=</span> <span class="nx">item</span> <span class="o">=&gt;</span> <span class="o">&lt;</span><span class="nx">ListItem</span> <span class="p">{...</span><span class="nx">item</span><span class="p">}</span> <span class="o">/&gt;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kr">const</span> <span class="p">{</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">children</span> <span class="p">}</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="p">(</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nx">li</span><span class="o">&gt;</span>
+</span><span class='line'>        <span class="p">{</span><span class="nx">name</span><span class="p">}</span>
+</span><span class='line'>        <span class="p">{</span><span class="nx">children</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">renderChildren</span><span class="p">(</span><span class="nx">children</span><span class="p">)}</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="err">/li&gt;</span>
+</span><span class='line'>    <span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When called from the parent container with the root of the tree, this component will render all nodes of the tree as unordered lists of items:</p>
+
+<p><img src='https://raw.githubusercontent.com/keighty/react-recursion/master/images/unordered-lists.png'></p>
+
+<p>Of course, with very deep trees, it is useful to clear away visual noise by collapsing parts of the tree, so I added an <code>onClick</code> handler to each list item with children:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">export</span> <span class="k">default</span> <span class="kr">class</span> <span class="nx">ListItem</span> <span class="kr">extends</span> <span class="nx">PureComponent</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">showChildren</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">onClick</span> <span class="o">=</span> <span class="nx">e</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="nx">showChildren</span><span class="o">:</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">showChildren</span> <span class="p">});</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kr">const</span> <span class="p">{</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">children</span> <span class="p">}</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">;</span>
+</span><span class='line'>    <span class="kr">const</span> <span class="p">{</span> <span class="nx">showChildren</span> <span class="p">}</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="p">(</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nx">li</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">onClick</span><span class="p">}</span><span class="o">&gt;</span>
+</span><span class='line'>        <span class="p">{</span><span class="nx">name</span><span class="p">}</span>
+</span><span class='line'>        <span class="p">{</span><span class="nx">children</span> <span class="o">&amp;&amp;</span> <span class="nx">showChildren</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">renderChildren</span><span class="p">(</span><span class="nx">children</span><span class="p">)}</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="err">/li&gt;</span>
+</span><span class='line'>    <span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Setting a <code>showChildren</code> state on the ListItem instance will hide parts of the list by simply not rendering them, rather than hiding them using traditional CSS. You can imagine my chagrin, then, when I clicked on an item, and the entire tree collapsed into the root:</p>
+
+<p><img src='https://raw.githubusercontent.com/keighty/react-recursion/master/images/collapsed-lists.png'></p>
+
+<p>Troubleshooting recursion is tricky. Was the state change leaking from one instance of ListItem to another? They should be independent instances, but what if they shared a state reference?</p>
+
+<p>Finally, I turned my suspicions on the click handler.</p>
+
+<p>I left the React docs behind and went back to <a href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events">the primer</a> on how the DOM handles events. This is where I found the answer to the overzealous-click problem &mdash; it wasn&rsquo;t ocurring because of using recursion, it was happening because of event bubbling (:face-palm:).</p>
+
+<blockquote><p>[When a user clicks on a ListItem, t]he browser checks to see if the element that was actually clicked on has an onclick event handler registered on it in the bubbling phase, and runs it if so&hellip; <strong>Then it moves on to the next immediate ancestor element and does the same thing</strong>, then the next one, and so on until it reaches the &lt;html&gt; element.</p></blockquote>
+
+<p>Because there was a click handler registered on every list item, a click on any one of them would be handled by <strong>every one of them</strong>.
+Fortunately, Javascript-Events-101 also prescribes a solution: <code>e.stopPropagation()</code>, which stops the event from bubbling up the ancestry tree.</p>
+
+<p>My final <code>onClick</code> handler:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">onClick</span> <span class="o">=</span> <span class="nx">e</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kr">const</span> <span class="p">{</span> <span class="nx">showChildren</span> <span class="p">}</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="nx">showChildren</span><span class="o">:</span> <span class="o">!</span><span class="nx">showChildren</span> <span class="p">});</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And the nested result I wanted:</p>
+
+<p><img src='https://raw.githubusercontent.com/keighty/react-recursion/master/images/proper-collapsing.png'></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Styled Components and Storybooks]]></title>
@@ -3317,168 +3458,6 @@
 <h4>RESOURCES</h4>
 
 <p>Interested in making your own infographic? Try <a href="http://www.canva.com/">canva</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Faster Asset Loading With Cache-Control]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/faster-asset-loading-with-cache-control/"/>
-    <updated>2015-11-27T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/faster-asset-loading-with-cache-control</id>
-    <content type="html"><![CDATA[<p>My side project (Virtual Playbill) is an image-heavy application, and I used YSlow to find a few quick performance wins. The first &lsquo;F&rsquo; I got was for No Expires Headers:</p>
-
-<p><img src="http://www.katieleonard.ca/images/151127-cache-control/add-expires-headers.png"></p>
-
-<h3>What is an Expires Header?</h3>
-
-<p>Loading the page requires slow and expensive network calls to download all the JavaScript, CSS, and image files. If someone visits the page more than once, I can avoid using the network by storing a local copy of the files in their browser cache &mdash; temporary local storage that is designed for quick retrieval. I can tell the browser to cache a copy of files that don&rsquo;t change very often by setting Expires headers.</p>
-
-<!--more-->
-
-
-<p>When a web server receives a request it adds some metadata to the response in the form of HTTP headers. Headers are key-value pairs that tell the browser information about the file it has received, such as how big it is (<code>Content-Length</code>), what kind it is (<code>Content-Type</code>), and how long the browser should cache the response (<code>Cache-Control</code>).</p>
-
-<p>In the case of Virtual Playbill, all the images are served from AWS Simple Storage Service (S3), and there are a couple of ways to add headers.</p>
-
-<h3>1. Tedious Manual Addition</h3>
-
-<p>You can add headers manually to a single asset stored in S3 using the metadata section:
-<img src="http://www.katieleonard.ca/images/151127-cache-control/add-metadata-in-s3-0.png">
-<img src="http://www.katieleonard.ca/images/151127-cache-control/add-metadata-in-s3-1.png">
-<img src="http://www.katieleonard.ca/images/151127-cache-control/add-metadata-in-s3-2.png"></p>
-
-<p>But I have more than a hundred files to change (yawn).</p>
-
-<h3>2. Write a Nodejs Script using <code>aws-sdk</code></h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">aws</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;aws-sdk&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">s3</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">aws</span><span class="p">.</span><span class="nx">S3</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">Bucket</span><span class="o">:</span> <span class="s1">&#39;Your_bucket_name&#39;</span><span class="p">,</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">new</span> <span class="nx">Promise</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">s3</span><span class="p">.</span><span class="nx">listObjects</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Something went wrong when retrieving the list of objects: &#39;</span> <span class="o">+</span> <span class="nx">err</span><span class="p">)</span>
-</span><span class='line'>    <span class="nx">resolve</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">Contents</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">image</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">image</span><span class="p">.</span><span class="nx">Key</span> <span class="p">}))</span>
-</span><span class='line'>  <span class="p">})</span>
-</span><span class='line'><span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">imageList</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">collectImageParams</span><span class="p">(</span><span class="nx">imageList</span><span class="p">)</span>
-</span><span class='line'><span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">imageChangeParams</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">imageChangeParams</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">params</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">s3</span><span class="p">.</span><span class="nx">copyObject</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Oops! Something went wrong with copy/replace for &quot;</span> <span class="o">+</span> <span class="nx">params</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">})</span>
-</span><span class='line'>  <span class="p">})</span>
-</span><span class='line'><span class="p">})</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// Duplicating a file in S3 will change the metadata.</span>
-</span><span class='line'><span class="c1">// You can make sure the new file has the same</span>
-</span><span class='line'><span class="c1">// access control by passing through the right permissions</span>
-</span><span class='line'><span class="c1">// and ContentType along with the new CacheControl header</span>
-</span><span class='line'><span class="kd">function</span> <span class="nx">collectImageParams</span><span class="p">(</span><span class="nx">imageList</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">imageList</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">imageName</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">imageParams</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>      <span class="s1">&#39;Bucket&#39;</span><span class="o">:</span> <span class="nx">params</span><span class="p">.</span><span class="nx">Bucket</span><span class="p">,</span>
-</span><span class='line'>      <span class="s1">&#39;ACL&#39;</span><span class="o">:</span> <span class="s1">&#39;public-read&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="s1">&#39;MetadataDirective&#39;</span><span class="o">:</span> <span class="s1">&#39;REPLACE&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="s1">&#39;CacheControl&#39;</span><span class="o">:</span> <span class="s1">&#39;max-age=2592000&#39;</span><span class="p">,</span>
-</span><span class='line'>      <span class="s1">&#39;ContentType&#39;</span><span class="o">:</span> <span class="s1">&#39;image/jpeg&#39;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="nx">imageParams</span><span class="p">.</span><span class="nx">Key</span> <span class="o">=</span> <span class="nx">imageName</span>
-</span><span class='line'>    <span class="nx">imageParams</span><span class="p">.</span><span class="nx">CopySource</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">imageParams</span><span class="p">.</span><span class="nx">Bucket</span> <span class="o">+</span><span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">imageParams</span><span class="p">.</span><span class="nx">Key</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">imageParams</span>
-</span><span class='line'>  <span class="p">})</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Still.. I don&rsquo;t want to have to run this script every time I upload a new file (yawn)&hellip;</p>
-
-<h3>3. Add Headers Every Time You Upload</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">S3Upload</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">uploadToS3</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="nx">url</span><span class="p">,</span> <span class="nx">public_url</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">this_s3upload</span><span class="p">,</span> <span class="nx">xhr</span><span class="p">;</span>
-</span><span class='line'>  <span class="nx">this_s3upload</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-</span><span class='line'>  <span class="nx">xhr</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">createCORSRequest</span><span class="p">(</span><span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="nx">url</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">...</span>
-</span><span class='line'>  <span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">type</span><span class="p">);</span>
-</span><span class='line'>  <span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">&#39;x-amz-acl&#39;</span><span class="p">,</span> <span class="s1">&#39;public-read&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// Set the Cache-Control header for every file upload</span>
-</span><span class='line'>  <span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">&#39;Cache-Control&#39;</span><span class="p">,</span> <span class="s1">&#39;max-age=2592000&#39;</span><span class="p">);</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">file</span><span class="p">);</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Great Results</h3>
-
-<p>No matter how you add the Cache-Control header, the result is amazing:
-<img src="http://www.katieleonard.ca/images/151127-cache-control/cache-control.png"></p>
-
-<h3>Resources</h3>
-
-<p>For more information about HTTP headers and the browser cache, check out these useful resources:</p>
-
-<ul>
-<li><a href="http://www.mobify.com/blog/beginners-guide-to-http-cache-headers/">Beginners Guide to HTTP Cache Headers</a></li>
-<li><a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching?hl=en">Optimizing Content Efficiency Using HTTP Caching</a></li>
-</ul>
-
 ]]></content>
   </entry>
   
