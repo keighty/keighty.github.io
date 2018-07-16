@@ -9,7 +9,7 @@
 	<meta name="author" content="katie leonard">
 
 	
-	<meta name="description" content="Sep 12th, 2016 git Git Squash to Speed Up Your Workflow I am a big fan of work-in-progress (WIP) commits. When I am working through a prototype or a &hellip;">
+	<meta name="description" content="Oct 12th, 2016 javascript Callbacks and the Event Loop When I started writing javascript in earnest a couple of years ago, I was stuck in a very &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -127,6 +127,42 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-10-12T00:00:00-07:00" data-updated="true" itemprop="datePublished">Oct 12<span>th</span>, 2016</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/javascript/'>javascript</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2016/clarified-callbacks/" itemprop="url">Callbacks and the Event Loop</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>When I started writing javascript in earnest a couple of years ago, I was stuck in a very procedural way of thinking &mdash; all of my functions executed synchronously. If you replaced <code>function</code> with <code>def</code> and removed all <code>var</code> keywords, you would be reading Ruby (true story: yesterday I was debugging an issue with a React module and put in a <code>binding.pry</code> instead of <code>debugger</code> :facepalm: Old habits die hard).</p>
+
+<p>Last year, I joined a team that writes javascript in the Node.js style, using callbacks for flow control. While I became familiar with the pattern pretty quickly, the whys and wherefores were missing from my understanding. Today I am filling in the gaps by reading <a href="https://www.amazon.com/Node-js-Design-Patterns-Mario-Casciaro/dp/1785885588/ref=sr_1_1/161-7210115-5247461?ie=UTF8&amp;qid=1476284148&amp;sr=8-1&amp;keywords=node.js+design+patterns">Node.js Design Patterns</a> by Mario Casciaro and Luciano Mammino.
+		
+		<a href="/blog/2016/clarified-callbacks/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -326,48 +362,6 @@
 		<p>2015 has been a very eventful year. Not only did I write and launch an ebook about my code school experience, but I have also built and launched a book site, competed in a national <a href="acbl.com">Bridge</a> tournament in New Orleans, celebrated 10 years of wedded bliss with <a href="http://virtual-playbill.herokuapp.com/about">Krista Garver</a>, spent 3 weeks traveling in the Mediterranean, and joined a new team at work where I get to deep-dive into JavaScript and browsers. Checkout my <a href="http://katieleonard.ca/images/151226-year-in-review/2015-year-in-review-infographic.png">infographic</a> for more!
 		
 		<a href="/blog/2015/keightys-2015-by-the-numbers/" class="more-link">Read on &rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-11-27T00:00:00-08:00" data-updated="true" itemprop="datePublished">Nov 27<span>th</span>, 2015</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/web-development/'>web development</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2015/faster-asset-loading-with-cache-control/" itemprop="url">Faster Asset Loading With Cache-Control</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>My side project (Virtual Playbill) is an image-heavy application, and I used YSlow to find a few quick performance wins. The first &lsquo;F&rsquo; I got was for No Expires Headers:</p>
-
-<p><img src="/images/151127-cache-control/add-expires-headers.png"></p>
-
-<h3>What is an Expires Header?</h3>
-
-<p>Loading the page requires slow and expensive network calls to download all the JavaScript, CSS, and image files. If someone visits the page more than once, I can avoid using the network by storing a local copy of the files in their browser cache &mdash; temporary local storage that is designed for quick retrieval. I can tell the browser to cache a copy of files that don&rsquo;t change very often by setting Expires headers.</p>
-
-
-		
-		<a href="/blog/2015/faster-asset-loading-with-cache-control/" class="more-link">Read on &rarr;</a>
 	</div>
 
 </article>

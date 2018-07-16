@@ -4,7 +4,7 @@
   <title><![CDATA[keighty]]></title>
   <link href="http://www.katieleonard.ca/atom.xml" rel="self"/>
   <link href="http://www.katieleonard.ca/"/>
-  <updated>2018-04-01T15:28:20-07:00</updated>
+  <updated>2018-07-16T09:12:41-07:00</updated>
   <id>http://www.katieleonard.ca/</id>
   <author>
     <name><![CDATA[katie leonard]]></name>
@@ -12,6 +12,85 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The Power of Moments]]></title>
+    <link href="http://www.katieleonard.ca/blog/2018/the-power-of-moments/"/>
+    <updated>2018-07-16T00:00:00-07:00</updated>
+    <id>http://www.katieleonard.ca/blog/2018/the-power-of-moments</id>
+    <content type="html"><![CDATA[<p>Time perception is subjective. The hours can slip by unnoticed when you are caught up in a task you enjoy (see <a href="https://en.wikipedia.org/wiki/Flow_(psychology">Flow</a>). Months and years can also escape if they are not marked by distinguishing milestones. In their book, <a href="https://www.amazon.com/Power-Moments-Certain-Experiences-Extraordinary/dp/1501147765">&ldquo;The Power of Moments,&rdquo; Chip and Dan Heath</a> explain why moments are important, how they occur naturally, and how we can create more of them. <!--more--></p>
+
+<h2>What are moments and why are they important?</h2>
+
+<p>A moment is an occasion of heightened emotion: a peak, a pit, or a transition. It can be a large or small achievement that is recognized and rewarded, a disaster that shakes your identity to its foundations, or a transitional milestone you recall clearly for years after the event, carving a clear line between life before and life after.</p>
+
+<p>If you look back on your career, you will likely not remember any one specific day unless it contained a peak, a pit, or a transition. What you <em>will</em> remember are the moments you were promoted, layed off, or decided to change career paths entirely. Moments are important because they make up our mesh of memories, change our perception of time, and form our identities.</p>
+
+<h2>You can manufacture moments</h2>
+
+<p>40% of memories from college are from the month of September. It is a time of transition, yes, but also a period of novelty: new classes, new friends, new schedule. Once these firsts become routine, they stop standing out as moments. The authors share a lot of research about how moments occur naturally, and recommend a few strategies for recreating the conditions.</p>
+
+<h4>Break the Script</h4>
+
+<p>Do something spontaneous and out of the ordinary.</p>
+
+<ul>
+<li>take a different path on your commute to work</li>
+<li>buy a weird vegetable at the grocery store and learn how to cook it</li>
+</ul>
+
+
+<h4>Stretch for insight</h4>
+
+<p>Create an &lsquo;aha&rsquo; moment for yourself or someone else.</p>
+
+<ul>
+<li>solicit feedback from your peers</li>
+<li>read a book from the other side of the political spectrum</li>
+</ul>
+
+
+<h4>Recognize others</h4>
+
+<p>Pull your head out of your navel and notice the moments that your friends and coworkers are experiencing.</p>
+
+<ul>
+<li>create a moment for a coworker by sharing how their work has positively impacted you</li>
+<li>send unsolicited positive feedback to a coworker&rsquo;s manager</li>
+</ul>
+
+
+<h4>Set and celebrate small milestones.</h4>
+
+<p>We celebrate Big Decade™ birthdays because they are round numbers. What other round numbers do you encounter in your life that could be celebrated?</p>
+
+<ul>
+<li>I am 9 short of reaching 100 pull requests on personal projects on GitHub, and 127 away from reaching 1000 PRs on GitHub at work.</li>
+<li>A teammate just celebrated their 4th work-anniversary.</li>
+<li>I have visited 10 National Parks in the last year, and I celebrate by adding to my National Park sticker collection!</li>
+</ul>
+
+
+<h4>Do something scary</h4>
+
+<p>Heighten your emotional state by pushing yourself out of your comfort zone. Identify a fear and make a plan to tackle it:</p>
+
+<ul>
+<li>Afraid of traveling alone? Try a day of exploring your city alone.</li>
+<li>Afraid of public speaking? Submit a talk proposal for a conference you want to attend.</li>
+<li>Afraid of being embarassed or making a mistake at work? Make a personal commitment to ask a clarifying question in every meeting.</li>
+</ul>
+
+
+<h4>Build connections</h4>
+
+<p>Experiences become moments when we share them with someone else. We celebrate together, share videos that make us laugh, or say &ldquo;did you see that?&rdquo; Find ways to build connections with the people around you.</p>
+
+<h2>Read more about moments</h2>
+
+<p>I don&rsquo;t want to look back at a stretch of years that were indistinguishable, and I love learning new strategies for keeping my life out of a rut. &ldquo;The Power of Moments&rdquo; contains an awesome reading list, including <a href="https://www.amazon.com/Chasing-Daylight-Forthcoming-Death-Transformed/dp/0071499938">&ldquo;Chasing Daylight&rdquo;, Andrew Postman&rsquo;s</a> reflections on life, relationships, and moments, after he was diagnosed with terminal cancer and given three to six months to live. He lived his last months with deliberate attention to his relationships, joys, and values, creating moments that stretched each hour into a day, each week into a month, and each month into a year. Postman acknowledges that it would be exhausting to live every day with such intensity when you believe you have years stretching ahead of you, but taking the time to create moments will make your years distinguishable and memorable.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Recursive Rendering and Event Bubbling]]></title>
@@ -3443,21 +3522,6 @@ Fortunately, Javascript-Events-101 also prescribes a solution: <code>e.stopPropa
 <li>Find out what web browsers support CORS at <a href="http://caniuse.com/#search=CORS">caniuse.com</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Keighty's 2015 - by the Numbers]]></title>
-    <link href="http://www.katieleonard.ca/blog/2015/keightys-2015-by-the-numbers/"/>
-    <updated>2015-12-26T00:00:00-08:00</updated>
-    <id>http://www.katieleonard.ca/blog/2015/keightys-2015-by-the-numbers</id>
-    <content type="html"><![CDATA[<p>2015 has been a very eventful year. Not only did I write and launch an ebook about my code school experience, but I have also built and launched a book site, competed in a national <a href="acbl.com">Bridge</a> tournament in New Orleans, celebrated 10 years of wedded bliss with <a href="http://virtual-playbill.herokuapp.com/about">Krista Garver</a>, spent 3 weeks traveling in the Mediterranean, and joined a new team at work where I get to deep-dive into JavaScript and browsers. Checkout my <a href="http://katieleonard.ca/images/151226-year-in-review/2015-year-in-review-infographic.png">infographic</a> for more!<!--more--></p>
-
-<p><img src="http://www.katieleonard.ca/images/151226-year-in-review/2015-year-in-review-infographic.png"></p>
-
-<h4>RESOURCES</h4>
-
-<p>Interested in making your own infographic? Try <a href="http://www.canva.com/">canva</a></p>
 ]]></content>
   </entry>
   

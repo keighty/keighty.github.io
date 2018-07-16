@@ -9,7 +9,7 @@
 	<meta name="author" content="katie leonard">
 
 	
-	<meta name="description" content="Nov 7th, 2015 javascript Javascript Object Property Meta Properties JavaScript Objects are complex types, and even defined properties have a control &hellip;">
+	<meta name="description" content="Nov 27th, 2015 web development Faster Asset Loading With Cache-Control My side project (Virtual Playbill) is an image-heavy application, and I used &hellip;">
 	
 
   <!-- http://t.co/dKP3o1e -->
@@ -127,6 +127,48 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <div itemscope itemtype="http://schema.org/Blog">
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="meta">
+		<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-11-27T00:00:00-08:00" data-updated="true" itemprop="datePublished">Nov 27<span>th</span>, 2015</time></div>
+		<div class="tags">
+
+
+	<a class='category' href='/blog/categories/web-development/'>web development</a>
+
+
+</div>
+		
+	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2015/faster-asset-loading-with-cache-control/" itemprop="url">Faster Asset Loading With Cache-Control</a></h1>
+	<div class="entry-content" itemprop="articleBody">
+		<p>My side project (Virtual Playbill) is an image-heavy application, and I used YSlow to find a few quick performance wins. The first &lsquo;F&rsquo; I got was for No Expires Headers:</p>
+
+<p><img src="/images/151127-cache-control/add-expires-headers.png"></p>
+
+<h3>What is an Expires Header?</h3>
+
+<p>Loading the page requires slow and expensive network calls to download all the JavaScript, CSS, and image files. If someone visits the page more than once, I can avoid using the network by storing a local copy of the files in their browser cache &mdash; temporary local storage that is designed for quick retrieval. I can tell the browser to cache a copy of files that don&rsquo;t change very often by setting Expires headers.</p>
+
+
+		
+		<a href="/blog/2015/faster-asset-loading-with-cache-control/" class="more-link">Read on &rarr;</a>
+	</div>
+
+</article>
 
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
@@ -443,42 +485,6 @@
 
 		
 		
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-04-22T00:00:00-07:00" data-updated="true" itemprop="datePublished">Apr 22<span>nd</span>, 2015</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/backend/'>backend</a>, <a class='category' href='/blog/categories/nginx/'>nginx</a>, <a class='category' href='/blog/categories/rails/'>rails</a>
-
-
-</div>
-		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2015/local-load-balancing/" itemprop="url">Local Load Balancing</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<p>You can mimic the end-user&rsquo;s UI experience accurately enough by running application code locally, but what about the backend? Once your code is deployed to production, requests will be divided between dozens of servers. If there is variation in the code paths running on each server (like during a feature rollout, for example), it is useful to determine beforehand if there are any dangerous conflicts. Enter local load-balancing.</p>
-
-
-		
-		<a href="/blog/2015/local-load-balancing/" class="more-link">Read on &rarr;</a>
 	</div>
 
 </article>
